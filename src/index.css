@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+body {
+margin: 0;
+padding: 0;
+overflow-x: hidden;
+overflow-y: auto;
+font-family: Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+   text-size-adjust: 100%;
+ }
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.gradient-border-animate {
+  background-size: 300% 300%;
+  animation: gradientFlow 3s ease infinite;
+}
+
+
+
+

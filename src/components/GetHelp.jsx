@@ -1,0 +1,23 @@
+import React, { Suspense, lazy } from 'react';
+import Img from "../assets/GetHelp.webp";
+const HoverCards = lazy(() => import('./HoverCards'));
+const GetHelp = () => {
+    return (
+        <div className="py-8 sm:py-12 md:py-5 flex flex-col items-center px-6 sm:px-6">
+        <div className="w-full">
+        <div className="text-center mb-6 sm:mb-8 md:mb-10">
+        <h1 className='text-2xl sm:text-3xl md:text-4xl font-medium text-[#242424] mb-4'>
+                Get Help on the Go in 3 Simple Steps
+            </h1>
+        <p className='text-sm sm:text-base text-[#5C5C5C] mt-4'>
+                Find nearby services, make a quick payment, and let our provider reach you — right where you are.
+                </p>
+            </div>
+                <Suspense fallback={<div className="flex items-center justify-center py-4"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]"></div></div>}>
+                    <HoverCards />
+                </Suspense>
+            </div>
+        </div>
+    );
+}
+export default GetHelp;

@@ -1,0 +1,30 @@
+import React from "react";
+import FacebookIcon from "../assets/FacebookIcon.webp";
+import InstaIcon from "../assets/InstaIcon.webp";
+import XIcon from "../assets/XIcon.webp";
+import LinkedInIcon from "../assets/LinkedInIcon.webp"
+const IconCircle = ({ src, alt, link }) => {
+    return (
+        <a href={link}>
+            <div className="bg-white w-8 sm:w-10 h-8 sm:h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
+                <img loading="lazy" src={src} alt={alt} className="w-4 sm:w-5 h-4 sm:h-5 object-contain" />
+            </div>
+        </a>
+    );
+};
+const FooterIcons = () => {
+    const socialData = [
+        { src: InstaIcon, alt: "Instagram", link: "/" },
+        { src: LinkedInIcon, alt: "X", link: "/" },
+        { src: FacebookIcon, alt: "Facebook", link: "/" },
+        { src: XIcon, alt: "X", link: "/" },
+    ];
+    return (
+        <div className="flex space-x-2 sm:space-x-3 mt-2">
+            {socialData.map((item, idx) => (
+                <IconCircle key={idx} src={item.src} alt={item.alt} link={item.link} />
+            ))}
+        </div>
+    );
+};
+export default FooterIcons;
