@@ -1,5 +1,5 @@
 import React from "react";
-import carGrey from "../assets/Carfade.webp";
+import carGrey from "../assets/CarFade.webp";
 import carColor from "../assets/CarFill.webp";
 import bikeGrey from "../assets/BikeFade.webp";
 import bikeColor from "../assets/BikeFill.webp";
