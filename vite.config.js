@@ -15,12 +15,13 @@ export default defineConfig({
       gzipSize: true,
       brotliSize: true,
     }),
+
   ].filter(Boolean),
   
   server: {
     port: 8003,
     host: '0.0.0.0',
-    allowedHosts: 'all'
+    allowedHosts: ['qa-web.vahanwire.com']
   },
   
   build: {
