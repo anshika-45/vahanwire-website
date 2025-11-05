@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { verifyPayment } from "../api/authApi";
+import { verifyPayment } from "../api/paymentApi";
 import SuccessPurchase from "../popup/SuccessPurchase";
 import FailedPurchase from "../popup/FailedPurchase";
 
