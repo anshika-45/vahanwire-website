@@ -39,7 +39,7 @@ const Header = () => {
   return (
     <div className="fixed top-6 md:top-[28px] left-0 right-0 flex justify-between items-center w-full h-20 md:h-[100px] px-4 md:px-8 lg:px-[100px] py-4 md:py-[26px] bg-white mx-auto z-50 gap-2 sm:gap-4">
       <Logo />
-      <div className="hidden md:block flex-1" fetchPriority="high"
+      <div className="flex-1 ml-40" fetchPriority="high"
         decoding="async">
         <SearchBar />
       </div>

@@ -12,36 +12,37 @@ const servicesData = [
     title: "AMC",
     desc: "Locate verified mechanics near you for instant repairs at home or on-road.",
     linkText: "Buy AMC",
+    linkHref: "/vehicle-amc",
   },
   {
     icon: mechanicIcon,
     title: "Find Mechanic",
     desc: "Locate verified mechanics near you for instant repairs at home or on-road.",
-    linkText: "Find Now",
+    linkText: "View Details",
   },
   {
     icon: patrolIcon,
     title: "Patrol Pump",
     desc: "Find nearby fuel stations and get fuel delivery in select areas.",
-    linkText: "Find Now",
+    linkText: "View Details",
   },
   {
     icon: towtruckIcon,
     title: "Tow Truck",
     desc: "Stuck on the road? Get fast, GPS-tracked towing support anytime.",
-    linkText: "Find Now",
+    linkText: "View Details",
   },
   {
     icon: serviceIcon,
     title: "Service Centre",
     desc: "Book appointments with trusted car & bike service centers in your city.",
-    linkText: "Book Service",
+    linkText: "View Details",
   },
   {
     icon: ecommerceIcon,
     title: "E-Commerce",
     desc: "Get exclusive deals on automotive parts and accessories online.",
-    linkText: "Book Service",
+    linkText: "View Details",
   },
 ];
 const Services = React.memo(() => {

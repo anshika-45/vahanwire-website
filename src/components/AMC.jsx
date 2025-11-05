@@ -1,5 +1,6 @@
 import React from "react";
-import VehicleToggle from "./VehicleToggle";
+import VehicleToggle from "./VehicleToggle.jsx";
+
 const AMC = ({ vehicleType = "car", setVehicleType, isFilter = false }) => {
   return (
     <section className="bg-[#172E53] text-white w-full py-6 sm:py-8 md:py-10 lg:py-12 text-center">
@@ -19,4 +20,5 @@ const AMC = ({ vehicleType = "car", setVehicleType, isFilter = false }) => {
     </section>
   );
 };
+
 export default AMC;

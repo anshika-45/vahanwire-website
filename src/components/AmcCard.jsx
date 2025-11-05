@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getAMCPlansByCategory } from "../api/amcApi";
 import { Check } from "lucide-react";
 import VerifyNumberPopup from "../popup/VerifyNumberPopup";
 import essentialPlanImg from "../assets/Essentialplan.webp";
+
 const AMCCard = ({
   title,
   vehicleNumber,
@@ -31,20 +33,23 @@ const AMCCard = ({
         }}
       >
         <div className="absolute left-0 top-4 bg-white rounded-r-full w-20 h-13 flex items-center justify-end pr-5 shadow-md z-10">
-          <img loading="lazy"
+          <img
+            loading="lazy"
             src="/src/assets/Logo1.webp"
             alt="Logo"
             className="w-9 h-9 object-contain"
           />
         </div>
         <div className="flex justify-end items-start mb-4 relative">
-          <img loading="lazy"
+          <img
+            loading="lazy"
             src="/src/assets/back-logo.webp"
             alt="Background Logo"
             className="absolute right-8 -top-10 w-34 h-32 object-contain opacity-60"
           />
           <div>
-            <img loading="lazy"
+            <img
+              loading="lazy"
               src={
                 vehicleType === "bike"
                   ? "/src/assets/BikeAMC.webp"
@@ -99,11 +104,12 @@ const AMCCard = ({
           onClick={onBuy}
           className="w-full bg-white text-[#266DDF] font-semibold py-3 text-sm rounded-lg hover:bg-gray-50 transition-colors"
         >
-          Buy Now
+         Buy Now
         </button>
       </div>
       {isEssential && (
-        <img loading="lazy"
+        <img
+          loading="lazy"
           src={essentialPlanImg}
           alt="Essential Plan"
           className="absolute top-52 -right-2 h-7 w-auto z-20"
@@ -112,8 +118,12 @@ const AMCCard = ({
     </div>
   );
 };
-const AMCCards = ({ vehicleType = "car", onBuy }) => {
+
+const AMCCards = ({ vehicleType = "car", amcType = "luxury", onBuy }) => {
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const handleBuy = (card) => {
     if (onBuy) {
       onBuy(card);
@@ -121,57 +131,71 @@ const AMCCards = ({ vehicleType = "car", onBuy }) => {
       setIsVerifyOpen(true);
     }
   };
-  const cards = [
-    {
-      title: "Premium Care",
-      vehicleNumber: "00-00",
-      validFor: "12 Months",
-      price: 3499,
-      originalPrice: 4999,
-      discount: "30% Off",
-      periodLabel: "/per year",
-      features: [
-        "Plan Start After 72 Hours",
-        "Validity 365 Days",
-        "Unlimited Services",
-      ],
-      bgColor: "linear-gradient(to bottom right, #8F6521, #A3762D)",
-      hoverBgColor: "linear-gradient(to bottom right, #A3762D, #8F6521)",
-      isEssential: false,
-    },
-    {
-      title: "Standard Care",
-      vehicleNumber: "00-00",
-      validFor: "12 Months",
-      price: 2549,
-      originalPrice: 3999,
-      discount: "15% Off",
-      periodLabel: "/per year",
-      features: [
-        "Plan Start After 72 Hours",
-        "Validity 365 Days",
-        "Unlimited Services",
-      ],
-      bgColor: "linear-gradient(to bottom right, #252525, #404040)",
-      hoverBgColor: "linear-gradient(to bottom right, #404040, #252525)",
-      isEssential: true,
-    },
-    {
-      title: "Basic Care",
-      vehicleNumber: "00-00",
-      validFor: "12 Months",
-      price: 999,
-      periodLabel: "/per year",
-      features: [
-        "Plan Start After 72 Hours",
-        "Validity 365 Days",
-        "Unlimited Services",
-      ],
-      bgColor: "linear-gradient(to bottom right, #3A5353, #4E7777)",
-      hoverBgColor: "linear-gradient(to bottom right, #4E7777, #3A5353)",
-      isEssential: false,
-    },
-  ];
+
+  useEffect(() => {
+    const fetchAMCPlans = async () => {
+      setLoading(true);
+      try {
+        const res = await getAMCPlansByCategory(vehicleType, amcType);
+        if (res.success && Array.isArray(res.data)) {
+          const mappedPlans = res.data.map((plan) => ({
+            _id: plan._id,
+            title: plan.planName,
+            vehicleNumber: "00-00",
+            validFor: `${plan.planDurationInMonth} Months`,
+            price: plan.planBookingAmount || plan.planTotalAmount,
+            originalPrice: plan.planTotalAmount,
+            discount: plan.planBookingAmount
+              ? `${Math.round(
+                  ((plan.planTotalAmount - plan.planBookingAmount) /
+                    plan.planTotalAmount) *
+                    100
+                )}% Off`
+              : null,
+            periodLabel: "/per year",
+            features:
+              typeof plan.planFeatures[0] === "string"
+                ? plan.planFeatures[0].split(",")
+                : plan.planFeatures,
+            bgColor:
+              plan.planSubCategory === "premium"
+                ? "linear-gradient(to bottom right, #8F6521, #A3762D)"
+                : plan.planSubCategory === "standard"
+                ? "linear-gradient(to bottom right, #252525, #404040)"
+                : "linear-gradient(to bottom right, #3A5353, #4E7777)",
+            hoverBgColor:
+              plan.planSubCategory === "premium"
+                ? "linear-gradient(to bottom right, #A3762D, #8F6521)"
+                : plan.planSubCategory === "standard"
+                ? "linear-gradient(to bottom right, #404040, #252525)"
+                : "linear-gradient(to bottom right, #4E7777, #3A5353)",
+            isEssential: plan.planSubCategory === "standard",
+            planSubCategory: plan.planSubCategory?.toLowerCase(),
+          }));
+
+          const order = { premium: 1, standard: 2, basic: 3 };
+          mappedPlans.sort(
+            (a, b) => (order[a.planSubCategory] || 4) - (order[b.planSubCategory] || 4)
+          );
+
+          setCards(mappedPlans);
+        }
+      } catch (error) {
+        console.error("Error fetching AMC plans:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAMCPlans();
+  }, [vehicleType, amcType]);
+
+  if (loading) {
+    return (
+      <div className="text-center py-10 text-gray-500">Loading plans...</div>
+    );
+  }
+
   return (
     <div className="bg-gray-50 mt-0">
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 md:px-8">
@@ -195,4 +219,5 @@ const AMCCards = ({ vehicleType = "car", onBuy }) => {
     </div>
   );
 };
+
 export default AMCCards;

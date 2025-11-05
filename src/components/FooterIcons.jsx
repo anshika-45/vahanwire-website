@@ -14,10 +14,10 @@ const IconCircle = ({ src, alt, link }) => {
 };
 const FooterIcons = () => {
     const socialData = [
-        { src: InstaIcon, alt: "Instagram", link: "/" },
-        { src: LinkedInIcon, alt: "X", link: "/" },
-        { src: FacebookIcon, alt: "Facebook", link: "/" },
-        { src: XIcon, alt: "X", link: "/" },
+        { src: InstaIcon, alt: "Instagram", link: "https://www.instagram.com/vahanwireofficial/#" },
+        { src: LinkedInIcon, alt: "X", link: "https://in.linkedin.com/company/vahanwire" },
+        { src: FacebookIcon, alt: "Facebook", link: "https://www.facebook.com/vahanwire/" },
+        { src: XIcon, alt: "X", link: "https://x.com/vahanwire" },
     ];
     return (
         <div className="flex space-x-2 sm:space-x-3 mt-2">

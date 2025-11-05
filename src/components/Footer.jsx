@@ -65,22 +65,22 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/about-us" className="hover:text-white transition">
                   About
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/contact-us" className="hover:text-white transition">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/privacy-policy" className="hover:text-white transition">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/terms-condition" className="hover:text-white transition">
                   Terms & Conditions
                 </Link>
               </li>
@@ -189,7 +189,7 @@ const Footer = () => {
                   <MapPin size={14} className="text-[#000000] sm:w-4 md:w-4" />
                 </div>
                 <a href="#" className="hover:text-white transition text-xs sm:text-sm">
-                  TOWER-B, Noida One, 819,<br /> Industrial Area, Sector 62,<br /> Noida,
+                  Tower-B, Noida One, 819,<br /> Industrial Area, Sector 62,<br /> Noida,
                   Uttar Pradesh 201309
                 </a>
               </li>

@@ -1,5 +1,6 @@
 import React from "react";
 import bannerImg from "../assets/HomeBanner.webp";
+import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import AnimatedText from "./AnimatedText";
 const bannerTexts = [
@@ -9,6 +10,7 @@ const bannerTexts = [
   "Emergency Fuel",
 ];
 const Banner = React.memo(() => {
+  const navigate = useNavigate();
   return (
     <div className="mt-8 sm:mt-16 md:mt-[100px] relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px]">
       <picture>
@@ -46,7 +48,10 @@ const Banner = React.memo(() => {
         <div className="ml-0 sm:ml-[-15px] md:ml-[-20px] lg:ml-[-30px] h-28 flex items-center">
         <AnimatedText
         texts={bannerTexts}
-        interval={1000}
+        interval={500}
+        duration={1000}
+        outMs={360}
+        inMs={540}
         animationClass="scale-90"
         className="transform origin-center transition-transform duration-400 overflow-visible"
         />
@@ -58,8 +63,9 @@ const Banner = React.memo(() => {
         </p>
         <Button
           text="Book Now"   
-          className="px-3 sm:px-4 w-28 sm:w-34 text-sm sm:text-md font-semibold bg-[#266DDF]"
-        />
+          className="px-3 sm:px-4 w-28 sm:w-34 px-3 py-1 mt-3 text-sm sm:text-md font-semibold bg-[#266DDF]"
+          onClick={()=> navigate("/vehicle-amc")}
+        />  
       </div>
     </div>
   );

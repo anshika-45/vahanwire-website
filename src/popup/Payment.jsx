@@ -1,64 +1,123 @@
-import React from "react";
-import Button from "../components/Button";
+import React, { useEffect, useState } from 'react';
 
-const Payment = ({ onPaymentSuccess }) => {
+const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (paymentData?.payuData && paymentData?.payuUrl) {
+      submitToPayU();
+    } else {
+      console.log("No payment data available");
+    }
+  }, [paymentData]);
+
+  const submitToPayU = () => {
+    if (!paymentData?.payuData || !paymentData?.payuUrl) {
+      alert('Payment data not available');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    const requiredParams = ['key', 'txnid', 'amount', 'productinfo', 'firstname', 'email', 'phone', 'surl', 'furl', 'hash'];
+    const missingParams = requiredParams.filter(param => !paymentData.payuData[param]);
+    
+    if (missingParams.length > 0) {
+      alert(`Missing required parameters: ${missingParams.join(', ')}`);
+      setIsSubmitting(false);
+      return;
+    }
+
+    console.log("Submitting to PayU with data:", paymentData.payuData);
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = paymentData.payuUrl;
+    form.style.display = 'none';
+
+    Object.keys(paymentData.payuData).forEach(key => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = paymentData.payuData[key];
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    
+    // Add small delay to ensure form is properly appended
+    setTimeout(() => {
+      form.submit();
+    }, 100);
+  };
+
+  const handleManualPayment = () => {
+    submitToPayU();
+  };
+
   return (
-    <div className="flex flex-col gap-6 mt-4">
-      {/* ===== Layout Wrapper ===== */}
-      <div className="flex flex-col md:flex-row gap-6">
-        {/* ===== Left Section - Price Info ===== */}
-        <div className="w-full md:w-1/3 border border-gray-200 rounded-lg p-6 bg-gray-50">
-          <div className="flex items-center gap-3 mb-6">
-            <div>
-              <p className="font-semibold text-gray-800 text-lg">Vahanwire</p>
-              <p className="text-gray-500 text-sm">Payable Now</p>
+    <div className="flex flex-col items-center justify-center p-6">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          {isSubmitting ? "Redirecting to PayU..." : "Ready for Payment"}
+        </h2>
+        
+        {!isSubmitting ? (
+          <>
+            <p className="text-gray-600 mb-6">
+              You will be redirected to PayU payment gateway for secure payment processing.
+            </p>
+            
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <p className="text-blue-800 text-sm">
+                <strong>Transaction ID:</strong> {paymentData?.payuData?.txnid}<br/>
+                <strong>Amount:</strong> ₹{paymentData?.payuData?.amount}<br/>
+                <strong>Plan:</strong> {paymentData?.payuData?.productinfo}
+              </p>
             </div>
-          </div>
 
-          <p className="text-2xl font-bold text-gray-800 mb-8">₹999</p>
-
-          <p className="text-xs text-gray-500 flex items-center gap-1">
-            <span role="img" loading="lazy" aria-label="lock">🔒</span> Secure Checkout
-          </p>
-
-          <p className="text-[11px] text-gray-400 mt-2 leading-snug">
-            Transaction ID:{" "}
-            <span className="font-medium">#16b64318239485b5a9</span>
-          </p>
-        </div>
-
-        {/* ===== Right Section - Payment Options ===== */}
-        <div className="w-full md:w-2/3">
-          <h2 className="text-gray-800 font-semibold text-lg mb-4">
-            All Payment Options
-          </h2>
-
-          <div className="space-y-3">
-            {[
-              "Net Banking",
-              "Cards (Credit/Debit)",
-              "Wallet",
-              "UPI",
-              "Pay By Rewards",
-            ].map((option, index) => (
-              <div
-                key={index}
-                className="flex justify-between items-center p-3 border border-gray-200 rounded-lg hover:border-blue-400 cursor-pointer transition"
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={onBack}
+                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
               >
-                <span className="text-gray-700 font-medium">{option}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+                Back
+              </button>
+              <button
+                onClick={handleManualPayment}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                Proceed to PayU
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <p className="text-yellow-800 text-sm">
+                Please wait while we redirect you to PayU...
+              </p>
+            </div>
+            
+            <div className="mt-6">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="text-gray-500 text-sm mt-2">Redirecting to payment gateway...</p>
+            </div>
+          </>
+        )}
 
-      {/* ===== Proceed Button ===== */}
-      <div className="mt-8 mb-20">
-        <Button
-          text="Proceed to Payment"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-700 transition"
-          onClick={onPaymentSuccess}
-        />
+        {/* {process.env.NODE_ENV === 'development' && paymentData && (
+          <div className="mt-6 p-4 bg-gray-100 rounded-lg text-left max-w-md mx-auto">
+            <h3 className="font-semibold mb-2 text-sm">Debug Info:</h3>
+            <pre className="text-xs overflow-auto">
+              {JSON.stringify({
+                hasPayuUrl: !!paymentData.payuUrl,
+                hasPayuData: !!paymentData.payuData,
+                parameters: Object.keys(paymentData.payuData || {})
+              }, null, 2)}
+            </pre>
+          </div>
+        )} */}
       </div>
     </div>
   );

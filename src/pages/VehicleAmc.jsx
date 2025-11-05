@@ -31,7 +31,7 @@ const VehicleAmc = () => {
       <BreadcrumbBar />
       <AMC vehicleType={vehicleType} setVehicleType={setVehicleType} />
       <AmcTabs amcType={amcType} setAmcType={setAmcType} tabs={getAmcTabs} vehicleType={vehicleType} />
-      <AmcCard vehicleType={vehicleType} onBuy={handleBuy} />
+      <AmcCard vehicleType={vehicleType} amcType={amcType} onBuy={handleBuy} />
       <CompareTable plans={comparePlans} features={features} onBuy={handleBuy} />
       <LatestOffer/>
       <div className="flex flex-col space-y-30">

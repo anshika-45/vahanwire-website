@@ -4,14 +4,37 @@ import { Check, X } from "lucide-react";
 import detailIcon from "../assets/info-circle.webp";
 import PlanSummaryPage from "../popup/PlanSummaryPage";
 import "../index.css";
+
 const CompareTable = ({ plans, features, onBuy }) => {
-const [hoveredCol, setHoveredCol] = useState(null);
-const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [hoveredCol, setHoveredCol] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
-return (
-<div className="relative w-full max-w-[1400px] h-auto min-h-[1200px] md:min-h-[1200px] lg:min-h-[1100px] mx-auto md:mt-[100px] px-4 sm:px-6 md:px-8 lg:px-10 pb-20 rounded-2xl">
+  const [selectedPlan, setSelectedPlan] = useState(null);
+
+  const handleBuy = (plan) => {
+    if (onBuy) {
+      onBuy(plan);
+    } else {
+      const mappedPlan = {
+        ...plan,
+        _id: plan._id, 
+        title: plan.name,
+        validFor: plan.validFor || "12 Months",
+      };
+      setSelectedPlan(mappedPlan);
+      setIsPopupOpen(true);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+    setSelectedPlan(null);
+  };
+
+  return (
+    <div className="relative w-full max-w-[1400px] h-auto min-h-[1200px] md:min-h-[1200px] lg:min-h-[1100px] mx-auto md:mt-[100px] px-4 sm:px-6 md:px-8 lg:px-10 pb-20 rounded-2xl">
       <div className="min-w-[800px] border border-[#E0EDFF] overflow-x-auto overflow-y-hidden relative">
-      {hoveredCol !== null && (
+        {hoveredCol !== null && (
           <div
             className="absolute top-0 bottom-0 z-25 pointer-events-none transition-all duration-300 gradient-border-animate"
             style={{
@@ -67,13 +90,7 @@ return (
                       className={`mt-6 w-full h-full border-2 border-[#4184ED] px-4 py-2 rounded transition-colors duration-300 ${
                         hoveredCol === colIndex ? 'bg-[#4184ED] text-white' : 'bg-white text-[#242424] hover:bg-[#0961f0] hover:text-white'
                       }`}
-                      onClick={() => {
-                      if (onBuy) {
-                        onBuy(plan);
-                        } else {
-                           setIsPopupOpen(true);
-                         }
-                       }}
+                      // onClick={() => handleBuy(plan)}
                     />
                   </div>
                 </th>
@@ -147,9 +164,11 @@ return (
       </div>
       <PlanSummaryPage
         isOpen={isPopupOpen}
-        onClose={() => setIsPopupOpen(false)}
+        onClose={handleClosePopup}
+        plan={selectedPlan}
       />
     </div>
   );
 };
+
 export default CompareTable;
