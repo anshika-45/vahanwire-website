@@ -1,7 +1,7 @@
 export const pricingData = {
   car: {
     luxury: {
-      premium: { name: "Premium Care", price: 3499, originalPrice: 4999, discount: "30% Off" },
+      premium: { name: "Premium Care", price: 3499, originalPrice: 5999, discount: "30% Off" },
       standard: { name: "Standard Care", price: 2549, originalPrice: 3999, discount: "15% Off" },
       basic: { name: "Basic Care", price: 1999, originalPrice: null, discount: null },
     },
