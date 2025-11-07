@@ -1,5 +1,10 @@
 import { useState, useMemo } from "react";
-import { comparePlans, featuresCar, featuresBike, pricingData } from "../constants/amcData";
+import {
+  comparePlans,
+  featuresCar,
+  featuresBike,
+  pricingData,
+} from "../constants/amcDatas";
 
 const useAmcData = () => {
   const [vehicleType, setVehicleType] = useState("car");
@@ -23,12 +28,29 @@ const useAmcData = () => {
   }, [vehicleType]);
 
   const getComparePlans = useMemo(() => {
-    console.log("getComparePlans recalculating for vehicleType:", vehicleType, "amcType:", amcType);
+    console.log(
+      "getComparePlans recalculating for vehicleType:",
+      vehicleType,
+      "amcType:",
+      amcType
+    );
     const plans = pricingData[vehicleType][amcType];
     return [
-      { key: "silver", name: plans.premium.name, price: plans.premium.price.toLocaleString() },
-      { key: "gold", name: plans.standard.name, price: plans.standard.price.toLocaleString() },
-      { key: "platinum", name: plans.basic.name, price: plans.basic.price.toLocaleString() },
+      {
+        key: "silver",
+        name: plans.premium.name,
+        price: plans.premium.price.toLocaleString(),
+      },
+      {
+        key: "gold",
+        name: plans.standard.name,
+        price: plans.standard.price.toLocaleString(),
+      },
+      {
+        key: "platinum",
+        name: plans.basic.name,
+        price: plans.basic.price.toLocaleString(),
+      },
     ];
   }, [vehicleType, amcType]);
 

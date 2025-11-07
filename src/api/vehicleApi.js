@@ -32,10 +32,21 @@ export const addUserVehicle = async (vehicleData) => {
 };
 
 export const searchUserVehicle = async (vehicleNumber) => {
-  console.log("iuwhiuvhu");
-  const res = await axiosInstance.get(
-    `/vehicle/search?vehicleNumber=${vehicleNumber}`
-  );
-  console.log(res.data);
-  return res.data;
+  try {
+    const res = await axiosInstance.get(
+      `/vehicle/search?vehicleNumber=${vehicleNumber}`
+    );
+    return res.data;
+  } catch (error) {
+    if (error.response?.status === 404) {
+      return {
+        success: true,
+        data: {
+          found: false,
+          vehicle: null
+        }
+      };
+    }
+    throw error;
+  }
 };

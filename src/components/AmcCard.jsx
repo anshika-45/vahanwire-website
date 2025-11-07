@@ -9,11 +9,11 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
   const [isHovered, setIsHovered] = useState(false);
   
   return (
-    <div className="relative overflow-visible flex justify-center">
+    <div className="relative overflow-visible flex justify-center flex-shrink-0">
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="rounded-lg p-4 shadow-lg text-white flex flex-col h-full w-[300px] relative transition-all duration-700 ease-in-out"
+        className={`rounded-lg p-4 shadow-lg text-white flex flex-col h-full w-[270px] sm:w-[300px] md:w-[320px] relative transition-all duration-700 ease-in-out`}
         style={{
           backgroundImage: isHovered ? hoverBgColor : bgColor,
           backgroundSize: "200% 200%",
@@ -26,7 +26,7 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
         <div className="flex justify-end items-start mb-4 relative">
           <img loading="lazy" src="/src/assets/back-logo.webp" alt="" className="absolute right-8 -top-10 w-34 h-32 object-contain opacity-60" />
           <div>
-            <img loading="lazy" src={vehicleType === "bike" ? "/src/assets/BikeAMC.webp" : "/src/assets/carAMC.webp"} alt={vehicleType === "bike" ? "Bike" : "Car"} className="w-20 h-16 object-contain relative z-10" />
+            <img loading="lazy" src={vehicleType === "bike" ? "/src/assets/BikeAMC.webp" : "/src/assets/CarAMC.webp"} alt={vehicleType === "bike" ? "Bike" : "Car"} className="w-20 h-16 object-contain relative z-10" />
           </div>
         </div>
         <h3 className="text-2xl font-semibold mb-3">{title}</h3>
@@ -158,14 +158,25 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
 
   return (
     <div className="bg-gray-50 mt-0">
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 md:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 justify-items-center">
+        <div className="max-w-[1180px] mx-auto px-4 sm:px-6 md:px-8">
+        <div className="flex overflow-x-auto scroll-smooth gap-4 sm:gap-6 pb-4 max-w-[1180px] justify-around">
           {cards.map((card, index) => (
             <AMCCard key={card._id || index} {...card} onBuy={() => handleBuy(card)} vehicleType={vehicleType} />
           ))}
         </div>
       </div>
       {!onBuy && <VerifyNumberPopup isOpen={isVerifyOpen} onClose={() => setIsVerifyOpen(false)} />}
+      <style>
+        {`
+          .flex::-webkit-scrollbar {
+            display: none;
+          }
+          .flex {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}
+      </style>
     </div>
   );
 };

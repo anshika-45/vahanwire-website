@@ -47,8 +47,8 @@ const servicesData = [
 ];
 const Services = React.memo(() => {
   return (
-    <div className="justify-items-center py-8 sm:py-12 md:py-[75px] h-auto bg-[#FFFFFF]">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-6 md:px-8">
+    <div className="justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]">
+      <div className="container">
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]">
           Our Main Services
         </h1>
@@ -56,7 +56,7 @@ const Services = React.memo(() => {
           Explore a full range of essential vehicle and home services —<br />
           from mechanic support to doorstep repairs, towing, payments, and more.
         </p>
-        <div className="mt-6 sm:mt-8 md:mt-12 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
+        <div className="mt-6 sm:mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
           {servicesData.map((service, index) => (
             <Tile key={index} {...service} />
           ))}
@@ -65,5 +65,5 @@ const Services = React.memo(() => {
     </div>
   );
 });
-Services.displayName = 'Services';
+Services.displayName = "Services";
 export default Services;

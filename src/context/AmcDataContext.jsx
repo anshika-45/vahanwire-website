@@ -1,6 +1,5 @@
-
 import React, { createContext, useContext, useState, useMemo } from "react";
-import { pricingData, featuresCar, featuresBike } from "../constants/amcData";
+import { pricingData, featuresCar, featuresBike } from "../constants/amcDatas";
 
 const AmcDataContext = createContext();
 
@@ -15,8 +14,8 @@ export const useAmcData = () => {
 export const AmcDataProvider = ({ children }) => {
   const [vehicleType, setVehicleType] = useState("car");
   const [amcType, setAmcType] = useState("luxury");
-  console.log("vewjbvbeuirbui",vehicleType);
-  console.log("amkbeqjbfeb",amcType);
+  console.log("vewjbvbeuirbui", vehicleType);
+  console.log("amkbeqjbfeb", amcType);
   const getAmcTabs = useMemo(() => {
     if (vehicleType === "bike") {
       return [
@@ -33,9 +32,21 @@ export const AmcDataProvider = ({ children }) => {
   const getComparePlans = useMemo(() => {
     const plans = pricingData[vehicleType][amcType];
     return [
-      { key: "silver", name: plans.premium.name, price: plans.premium.price.toLocaleString() },
-      { key: "gold", name: plans.standard.name, price: plans.standard.price.toLocaleString() },
-      { key: "platinum", name: plans.basic.name, price: plans.basic.price.toLocaleString() },
+      {
+        key: "silver",
+        name: plans.premium.name,
+        price: plans.premium.price.toLocaleString(),
+      },
+      {
+        key: "gold",
+        name: plans.standard.name,
+        price: plans.standard.price.toLocaleString(),
+      },
+      {
+        key: "platinum",
+        name: plans.basic.name,
+        price: plans.basic.price.toLocaleString(),
+      },
     ];
   }, [vehicleType, amcType]);
 

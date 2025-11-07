@@ -1,10 +1,7 @@
 import React from "react";
 import VehicleToggle from "./VehicleToggle.jsx";
-import { useAmcData } from "../context/AmcDataContext";
 
-const AMC = ({ isFilter = false }) => {
-  const { vehicleType, setVehicleType } = useAmcData();
-
+const AMC = ({ vehicleType = "car", setVehicleType, isFilter = false }) => {
   return (
     <section className="bg-[#172E53] text-white w-full py-6 sm:py-8 md:py-10 lg:py-12 text-center">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-8">
@@ -13,7 +10,11 @@ const AMC = ({ isFilter = false }) => {
           Compare and choose the perfect AMC plan for your vehicle
         </p>
         <div className="mt-6 sm:mt-7 md:mt-8 lg:mt-9">
-          <VehicleToggle vehicleType={vehicleType} setVehicleType={setVehicleType} disabled={isFilter} />
+          <VehicleToggle
+            vehicleType={vehicleType}
+            setVehicleType={setVehicleType}
+            disabled={isFilter}
+          />
         </div>
       </div>
     </section>

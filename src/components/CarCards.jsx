@@ -7,6 +7,7 @@ import deleteIcon from "../assets/adelete.webp";
 import editIcon from "../assets/aedit.webp";
 import checkIcon from "../assets/circle-check-filled.webp";
 import { getUserVehicles, deleteUserVehicle } from "../api/vehicleApi";
+
 const VehicleCard = ({
   title,
   vehicleNumber,
@@ -17,6 +18,7 @@ const VehicleCard = ({
   onDelete,
 }) => {
   return (
+    
     <div className="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm">
       <div
         className={`${tone} p-3 sm:p-4 md:p-6 flex items-center justify-center`}
@@ -24,52 +26,88 @@ const VehicleCard = ({
         <img
           loading="lazy"
           src={image}
-          alt={title}
-          className="h-24 sm:h-32 md:h-40 object-contain"
+          alt={`${title} image`}
+          decoding="async"
+          className="block h-24 sm:h-32 md:h-40 object-contain"
         />
       </div>
+
       <div className="p-3 sm:p-4 md:p-5 space-y-1.5 sm:space-y-2">
         <h3 className="text-xs sm:text-sm font-semibold text-slate-800">
           {title}
         </h3>
+
         <p className="text-xs text-slate-600">
-          Vehicle Number: {vehicleNumber}
+          Vehicle Number:{" "}
+          <span className="font-medium text-slate-700">{vehicleNumber}</span>
         </p>
+
         {amcLabel && (
           <p className="text-xs text-slate-600 flex items-center gap-2">
-            <span className="text-green-600">
-              <img
-                loading="lazy"
-                src={checkIcon}
-                alt="Check"
-                className="w-4 sm:w-5 h-4 sm:h-5"
-              />
-            </span>
-            {amcLabel}
+            <img
+              loading="lazy"
+              src={checkIcon}
+              alt="AMC active"
+              className="w-4 sm:w-5 h-4 sm:h-5"
+              decoding="async"
+            />
+            <span className="truncate">{amcLabel}</span>
           </p>
         )}
-        <div className="mt-3 sm:mt-4 md:mt-4 flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+
+        <div
+          className="
+    mt-3 sm:mt-4
+    grid grid-cols-1
+    sm:grid-cols-1
+    md:grid-cols-2
+    gap-2 sm:gap-3 md:gap-4
+  "
+        >
           <button
             onClick={onDelete}
-            className="flex h-8 sm:h-9 px-4 sm:px-6 md:px-23 justify-center rounded-lg pt-1 border border-[#FB0200] text-[#FB0200] hover:bg-rose-50 text-xs sm:text-sm w-full sm:w-auto"
+            aria-label={`Delete ${title}`}
+            className="
+      flex items-center justify-center
+      h-9 sm:h-10
+      px-4 sm:px-6
+      rounded-lg border border-[#FB0200] text-[#FB0200]
+      hover:bg-rose-50
+      text-xs sm:text-sm
+      whitespace-nowrap
+      w-full
+    "
           >
             <img
               loading="lazy"
               src={deleteIcon}
-              alt="delete"
-              className="w-4 sm:w-5 h-4 sm:h-5 mr-1"
+              alt="Delete icon"
+              className="w-4 sm:w-5 h-4 sm:h-5 mr-2"
+              decoding="async"
             />
             Delete
           </button>
+
           <button
             onClick={onEdit}
-            className="flex h-8 sm:h-9 px-4 sm:px-6 md:px-23 rounded-lg justify-center pt-1 border border-[#266DDF] text-[#266DDF] hover:bg-[#D9E7FE] text-xs sm:text-sm w-full sm:w-auto"
+            aria-label={`Edit ${title}`}
+            className="
+      flex items-center justify-center
+      h-9 sm:h-10
+      px-4 sm:px-6
+      rounded-lg border border-[#266DDF] text-[#266DDF]
+      hover:bg-[#D9E7FE]
+      text-xs sm:text-sm
+      whitespace-nowrap
+      w-full
+    "
           >
             <img
               loading="lazy"
               src={editIcon}
-              alt="edit"
-              className="w-4 sm:w-5 h-4 sm:h-5 mr-1"
+              alt="Edit icon"
+              className="w-4 sm:w-5 h-4 sm:h-5 mr-2"
+              decoding="async"
             />
             Edit
           </button>
@@ -85,14 +123,12 @@ const CarCards = () => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
- 
 
-  console.log("jehbdwjhbcj",cars);
   const fetchVehicles = async () => {
     try {
       setLoading(true);
       const vehicles = await getUserVehicles();
-  
+
       const formatted = vehicles.map((v, index) => ({
         id: v._id,
         title: `${v.brand} (${v.model})`,
@@ -101,7 +137,7 @@ const CarCards = () => {
         image: index % 2 === 0 ? vehicleImage1 : vehicleImage2,
         tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
       }));
-  
+
       setCars(formatted);
     } catch (error) {
       console.error("Error fetching vehicles:", error);
@@ -109,7 +145,6 @@ const CarCards = () => {
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchVehicles();
@@ -138,14 +173,15 @@ const CarCards = () => {
         }}
         initial={current}
       />
+
       <AddVehicleModal
-  open={addModalOpen}
-  onClose={() => setAddModalOpen(false)}
-  onSubmit={() => {
-    setAddModalOpen(false);
-    fetchVehicles();
-  }}
-/>
+        open={addModalOpen}
+        onClose={() => setAddModalOpen(false)}
+        onSubmit={() => {
+          setAddModalOpen(false);
+          fetchVehicles();
+        }}
+      />
 
       {loading ? (
         <p className="text-center text-sm text-gray-500 py-6">
@@ -156,7 +192,7 @@ const CarCards = () => {
           No vehicles found.
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
           {cars.map((car) => (
             <VehicleCard
               key={car.id}
@@ -175,10 +211,18 @@ const CarCards = () => {
         </div>
       )}
 
-      <div className="flex items-center justify-between mt-4 sm:mt-6 md:mt-4 px-3 sm:px-4 md:px-0">
+      <div className="flex items-center justify-between mt-4 sm:mt-6 md:mt-6 px-3 sm:px-4 md:px-0">
         <button
           onClick={() => setAddModalOpen(true)}
-          className="h-9 sm:h-10 px-4 sm:px-6 rounded-lg bg-[#266DDF] text-white hover:bg-blue-700 text-xs sm:text-sm w-full sm:w-auto"
+          aria-label="Add new vehicle"
+          className="
+            inline-flex items-center justify-center
+            h-10 sm:h-10 px-4 sm:px-6
+            rounded-lg bg-[#266DDF] text-white hover:bg-blue-700
+            text-xs sm:text-sm whitespace-nowrap
+            w-full sm:w-auto
+            focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[#cfe0ff]
+          "
         >
           Add New Vehicle
         </button>

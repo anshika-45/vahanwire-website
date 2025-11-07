@@ -39,8 +39,8 @@ function App() {
                   <Route path="/contact-us" element={<ContactUs />} />
                   <Route path="/terms-condition" element={<TermsCondition />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/my-account" element={<MyAccount />} />
                 </Route>
-                <Route path="/my-account" element={<MyAccount />} />
                 <Route path="/payment-status" element={<PaymentStatus />} />
               </Routes>
             </Suspense>

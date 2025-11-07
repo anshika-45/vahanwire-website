@@ -19,15 +19,15 @@ const Footer = () => {
     });
   };
   return (
-    <footer className="relative h-auto sm:h-[600px] md:h-[700px] text-white">
+    <footer className="relative h-auto text-white">
       <div className="absolute inset-0 bg-black z-0"></div>
       <div
         className="absolute inset-0 bg-cover bg-center opacity-80 z-0"
         style={{ backgroundImage: `url(${bgImg})` }}
       ></div>
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-6 md:px-10 py-12 sm:py-20 md:py-50 h-full flex flex-col justify-between">
-        <div className="flex flex-wrap justify-between pt-3 sm:pt-6">
-          <div className="w-full sm:w-[300px] md:w-[300px] lg:w-1/4 h-auto md:h-[50px] mb-8 sm:mb-6 md:mb-0">
+      <div className="relative container flex flex-col justify-between">
+        <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-12 md:pt-40 md:mt-30 pt-10">
+          <div className="h-auto mb-8 sm:mb-6 md:mb-0">
             <img loading="lazy" src={logo} alt="Logo" className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6" />{" "}
             <p className="text-gray-300 text-xs sm:text-sm leading-tight mb-4 sm:mb-6 space-y-0.5">
               VahanWire connects you to nearby
@@ -41,7 +41,7 @@ const Footer = () => {
               <FooterIcons />
             </div>
           </div>
-          <div className="w-full md:w-1/6 mb-6 md:mb-0">
+          <div className="  mb-6 md:mb-0">
             <button
               onClick={() => toggleSection("quickLinks")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
@@ -86,7 +86,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className="w-full md:w-1/6 mb-6 md:mb-0">
+          <div className="  mb-6 md:mb-0">
             <button
               onClick={() => toggleSection("forUser")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
@@ -126,7 +126,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className="w-full md:w-1/6 mb-6 md:mb-0">
+          <div className="  mb-6 md:mb-0">
             <button
               onClick={() => toggleSection("forMechanic")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
@@ -166,7 +166,7 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className="w-full md:w-1/4 mb-6 md:mb-0">
+          <div className="  mb-6 md:mb-0">
             <button
               onClick={() => toggleSection("contact")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import locationIcon from "../assets/location-pin.webp";
 import dropdownIcon from "../assets/down-arrow.webp";
+import { SearchIcon } from "lucide-react";
 function LocationDropdown() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("Select Location");
@@ -10,41 +11,62 @@ function LocationDropdown() {
     "Delhi CP",
     "Gurgaon MG Road",
   ];
+  const handleClick = () => {
+    setOpen(!open);
+  };
+  const handleLocationClick = (e, index) => {
+    const selectedLocation = locations[index];
+    setSelected(selectedLocation);
+    setOpen(false);
+  };
+
   return (
-    <div className="relative inline-block text-left pl-4 sm:pl-8 md:pl-50">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-32 sm:w-40 md:w-[220px] h-10 md:h-[45px] bg-white text-black px-3 md:pl-[20px] md:pr-4 gap-2 md:gap-[20px] rounded-[6px] border border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC] text-xs md:text-base"
+    <div className="relative">
+      <div
+        id="webScreen"
+        className="hidden md:block border text-sm min-w-[250px] py-2 px-7 rounded-[6px] border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
       >
-        <div className="flex items-center gap-2 md:gap-[10px]">
-          <img src={locationIcon} alt="location" loading="lazy" className="w-4 sm:w-5 h-4 sm:h-5" />
-          <span className="truncate">{selected}</span>
+        <div className=" absolute left-0 top-1/2 -translate-y-1/2 p-1 ">
+          <img className="w-5 h-5 object-contain" src={locationIcon} alt="Image" />
         </div>
-        <img
-          src={dropdownIcon}
-          size={15}
-          loading="lazy"
-          alt="locationDropdown"
-          className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0"
-        />
-      </button>
-      {open && (
-        <ul className="absolute mt-1 w-32 sm:w-40 md:w-[349px] bg-white border rounded shadow-lg z-10">
-          {locations.map((location, index) => (
-            <li
-              key={index}
-              className="px-3 md:px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center gap-2 md:gap-[10px] text-xs md:text-base"
-              onClick={() => {
-                setSelected(location);
-                setOpen(false);
-              }}
-            >
-              <img loading="lazy" src={locationIcon} alt="location" className="w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0" />
-              <span className="truncate">{location}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+        <span className="" onClick={handleClick}>
+          {selected}
+        </span>
+        <div
+          role="button"
+          id="dropdownIcon"
+          onClick={handleClick}
+          className="absolute z-50 right-0 top-1/2 -translate-y-1/2 p-1"
+        >
+          <img className="w-5 h-5" src={dropdownIcon} alt="Image" />
+        </div>
+      </div>
+      <div id="mobileScreen" className="md:hidden block">
+        <div onClick={handleClick} role="button" className="">
+          <img className="w-5 h-5 object-contain" src={locationIcon} alt="Image" />
+        </div>
+      </div>
+      <section id="locationMenu">
+        {open && (
+          <ul className="absolute top-full min-w-[250px] md:left-0 md:right-0 md:translate-x-0 left-1/2 -translate-x-1/2 z-50 bg-white">
+            {locations.map((location, index) => {
+              return (
+                <>
+                  <li
+                    onClick={(e) => {
+                      handleLocationClick(e, index);
+                    }}
+                    className="px-3 py-1 border-b-[0.5px] border-gray-300"
+                    key={index}
+                  >
+                    {location}
+                  </li>
+                </>
+              );
+            })}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }
