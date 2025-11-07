@@ -1,18 +1,15 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { comparePlans, featuresCar, featuresBike, pricingData } from "../constants/amcData";
+
 const useAmcData = () => {
-  const [vehicleType, setVehicleType] = useState(localStorage.getItem("vehicleType") || "car");
-  const [amcType, setAmcType] = useState(localStorage.getItem("amcType") || "luxury");
+  const [vehicleType, setVehicleType] = useState("car");
+  const [amcType, setAmcType] = useState("luxury");
 
-  useEffect(() => {
-    localStorage.setItem("vehicleType", vehicleType);
-  }, [vehicleType]);
-
-  useEffect(() => {
-    localStorage.setItem("amcType", amcType);
-  }, [amcType]);
+  console.log("useAmcData - vehicleType:", vehicleType);
+  console.log("useAmcData - amcType:", amcType);
 
   const getAmcTabs = useMemo(() => {
+    console.log("getAmcTabs recalculating for vehicleType:", vehicleType);
     if (vehicleType === "bike") {
       return [
         { label: "Luxury Bike AMC", value: "luxury" },
@@ -26,6 +23,7 @@ const useAmcData = () => {
   }, [vehicleType]);
 
   const getComparePlans = useMemo(() => {
+    console.log("getComparePlans recalculating for vehicleType:", vehicleType, "amcType:", amcType);
     const plans = pricingData[vehicleType][amcType];
     return [
       { key: "silver", name: plans.premium.name, price: plans.premium.price.toLocaleString() },
@@ -35,6 +33,7 @@ const useAmcData = () => {
   }, [vehicleType, amcType]);
 
   const getFeatures = useMemo(() => {
+    console.log("getFeatures recalculating for vehicleType:", vehicleType);
     return vehicleType === "bike" ? featuresBike : featuresCar;
   }, [vehicleType]);
 
@@ -48,4 +47,5 @@ const useAmcData = () => {
     features: getFeatures,
   };
 };
+
 export default useAmcData;

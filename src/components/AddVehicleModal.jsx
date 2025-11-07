@@ -57,7 +57,7 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
       const res = await addUserVehicle(payload);
       console.log("ressss",res);
       if (res?.data?.data?.success || res?.data?.success) {
-        alert("✅ Vehicle added successfully!");
+        alert("Vehicle added successfully!");
         onSubmit?.();
         onClose();
       } else {

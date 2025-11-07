@@ -1,25 +1,19 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAmcData } from "../context/AmcDataContext";
 import carIcon from "../assets/car.webp";
 import carIconDark from "../assets/car-1.webp";
 import bikeIcon from "../assets/motorbike.webp";
 import bikeIconDark from "../assets/motorbike-1.webp";
 
-
-const AmcTabs = ({ amcType, setAmcType, showRemoveFilter, tabs, vehicleType }) => {
+const AmcTabs = ({ showRemoveFilter }) => {
+  const { amcType, setAmcType, getAmcTabs, vehicleType } = useAmcData();
   const navigate = useNavigate();
-  const activeTabs = tabs || [
-    { label: "Luxury Car AMC", value: "luxury" },
-    { label: "Premium Car AMC", value: "premium" },
-  ];
 
-
-
-  
   return (
     <div className="relative flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-0 sm:gap-0 w-full sm:w-fit mx-auto mt-4 sm:mt-8 mb-4 sm:mb-8 bg-[#F2F2F2] border-[#d8d8d8] rounded-full px-2 sm:px-2 py-2 sm:py-0">
       <div className="flex items-center gap-0 flex-wrap sm:flex-nowrap justify-center">
-        {activeTabs
+        {getAmcTabs
           .filter((tab) => !showRemoveFilter || amcType === tab.value)
           .map((tab) => {
             const isSelected = amcType === tab.value;

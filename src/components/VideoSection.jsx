@@ -19,7 +19,6 @@ const VideoSection = React.memo(() => {
         <video
           ref={videoRef}
           src={demoVideo}
-          controls
           autoPlay
           loop
           muted

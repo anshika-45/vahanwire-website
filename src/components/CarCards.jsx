@@ -85,7 +85,9 @@ const CarCards = () => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
+ 
 
+  console.log("jehbdwjhbcj",cars);
   const fetchVehicles = async () => {
     try {
       setLoading(true);

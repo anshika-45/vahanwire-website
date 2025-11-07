@@ -28,9 +28,6 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug'],
         passes: 2,
         unsafe: true,
         unsafe_comps: true,
@@ -72,7 +69,6 @@ export default defineConfig({
   },
   
   esbuild: {
-    drop: ['console', 'debugger'],
     minify: true,
     minifyIdentifiers: true,
     minifySyntax: true,

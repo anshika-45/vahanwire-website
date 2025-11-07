@@ -90,7 +90,6 @@ const CompareTable = ({ plans, features, onBuy }) => {
                       className={`mt-6 w-full h-full border-2 border-[#4184ED] px-4 py-2 rounded transition-colors duration-300 ${
                         hoveredCol === colIndex ? 'bg-[#4184ED] text-white' : 'bg-white text-[#242424] hover:bg-[#0961f0] hover:text-white'
                       }`}
-                      // onClick={() => handleBuy(plan)}
                     />
                   </div>
                 </th>

@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import brezzaImg from "../assets/vehicle.webp";
 import verifyIcon from "../assets/verify.webp";
 import { searchUserVehicle, addUserVehicle } from "../api/vehicleApi";
-
+import { selectAMCVehicle } from "../api/amcApi";
 const SelectVehicle = ({
   isOpen,
   onClose,
   onBack,
   onSelectVehicle,
   addedVehicleNumber,
+  addedVehicleBrand,
   addedVehicleModel,
+  plan
 }) => {
   const navigate = useNavigate();
+  const { vehicleType, amcType } = useAmcData();
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [vehicleModel, setVehicleModel] = useState("");
@@ -25,13 +29,39 @@ const SelectVehicle = ({
   const [showModel, setShowModel] = useState(false);
   const [addedVehicles, setAddedVehicles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isProceeding, setIsProceeding] = useState(false);
+
+  const handleSelectAMCVehicle = async (vehicleData) => {
+    try {
+      setIsProceeding(true);
+      const requestData = {
+        vehicleNumber: vehicleData.number,
+        brand: vehicleData.brand,
+        model: vehicleData.model,
+        vehicleType: vehicleType,
+        amcPlanCategory: amcType
+      };
+      const response = await selectAMCVehicle(requestData);
+      return response;
+    } catch (error) {
+      console.error("Select AMC Vehicle Error:", error);
+      if (error.response) {
+        throw new Error(error.response.data.message || "Failed to select vehicle");
+      } else if (error.request) {
+        throw new Error("No response from server. Please check your connection.");
+      } else {
+        throw error;
+      }
+    } finally {
+      setIsProceeding(false);
+    }
+  };
 
   const verifyVehicleNumber = async (regNumber) => {
     try {
       setIsLoading(true);
       const data = await searchUserVehicle(regNumber);
       setIsLoading(false);
-      
       if (data.found && data.vehicle) {
         return { found: true, vehicle: data.vehicle };
       } else {
@@ -49,24 +79,21 @@ const SelectVehicle = ({
       setNumberError("Please enter the vehicle number");
       return;
     }
-
     setNumberError("");
     const result = await verifyVehicleNumber(vehicleNumber);
-
     if (result.found) {
       const vehicleDisplay = `${result.vehicle.brand} ${result.vehicle.model}`;
-      setAddedVehicles(prev => [...prev, { 
+      const newVehicle = { 
         number: result.vehicle.vehicleNumber, 
         model: vehicleDisplay,
-        brand: result.vehicle.brand
-      }]);
+        brand: result.vehicle.brand,
+        originalModel: result.vehicle.model
+      };
+      setAddedVehicles(prev => [...prev, newVehicle]);
       setVehicleNumber("");
       setShowModel(false);
       if (onSelectVehicle) {
-        onSelectVehicle({ 
-          number: result.vehicle.vehicleNumber, 
-          model: vehicleDisplay 
-        });
+        onSelectVehicle(newVehicle);
       }
     } else {
       setShowModel(true);
@@ -75,19 +102,15 @@ const SelectVehicle = ({
 
   const handleAddVehicle = async () => {
     let hasError = false;
-    
     if (!brand.trim()) {
       setBrandError("Please enter the vehicle brand");
       hasError = true;
     }
-    
     if (!vehicleModel.trim()) {
       setModelError("Please enter the vehicle model");
       hasError = true;
     }
-    
     if (hasError) return;
-    
     try {
       setIsLoading(true);
       const vehicleData = {
@@ -95,23 +118,23 @@ const SelectVehicle = ({
         brand: brand.trim(),
         model: vehicleModel.trim(),
       };
-      
       const response = await addUserVehicle(vehicleData);
       setIsLoading(false);
-      
       if (response.status === 201) {
         const vehicleDisplay = `${brand} ${vehicleModel}`;
-        setAddedVehicles(prev => [...prev, { 
-          number: vehicleNumber, 
+        const newVehicle = { 
+          number: vehicleNumber.toUpperCase().trim(), 
           model: vehicleDisplay,
-          brand: brand
-        }]);
+          brand: brand.trim(),
+          originalModel: vehicleModel.trim()
+        };
+        setAddedVehicles(prev => [...prev, newVehicle]);
         setVehicleNumber("");
         setVehicleModel("");
         setBrand("");
         setShowModel(false);
         if (onSelectVehicle) {
-          onSelectVehicle({ number: vehicleNumber, model: vehicleDisplay });
+          onSelectVehicle(newVehicle);
         }
       }
     } catch (error) {
@@ -125,6 +148,50 @@ const SelectVehicle = ({
     }
   };
 
+  const handleProceed = async () => {
+    if (!selectedVehicle) {
+      alert("Please select a vehicle to proceed");
+      return;
+    }
+    try {
+      let vehicleData;
+      if (selectedVehicle === addedVehicleNumber) {
+        vehicleData = {
+          number: addedVehicleNumber,
+          model: addedVehicleModel,
+          brand: addedVehicleBrand || addedVehicleModel.split(' ')[0], 
+          originalModel: addedVehicleModel
+        };
+      } else {
+        vehicleData = addedVehicles.find(vehicle => vehicle.number === selectedVehicle);
+      }
+      if (!vehicleData) {
+        alert("Vehicle data not found");
+        return;
+      }
+      const response = await handleSelectAMCVehicle(vehicleData);
+      if (response.success) {
+        const { hasActiveAMC, activeAMC, plans, vehicle } = response.data;
+        if (hasActiveAMC) {
+          alert("This vehicle already has an active AMC plan");
+        } else {
+          navigate("/vehicle-amc-filter", { 
+            state: { 
+              plans,
+              vehicle,
+              selectedPlan: plan 
+            }
+          });
+        }
+      } else {
+        alert(response.message || "Failed to process vehicle selection");
+      }
+    } catch (error) {
+      console.error("Proceed error:", error);
+      alert(error.message || "Failed to proceed. Please try again.");
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
       <div className="w-full max-w-[550px] flex flex-col items-center p-1">
@@ -132,84 +199,41 @@ const SelectVehicle = ({
           <img src={verifyIcon} alt="verify" loading="lazy" className="w-5 h-5" />
           <span className="font-medium text-sm text-[#333333]">Account is Verified</span>
         </div>
-
         <div className="w-full bg-white rounded-xl p-6 mb-4">
-          <h2 className="text-xl font-semibold text-[#242424] mb-4">
-            Select a Vehicle to Subscribe
-          </h2>
+          <h2 className="text-xl font-semibold text-[#242424] mb-4">Select a Vehicle to Subscribe</h2>
           <div
             className={`flex items-center gap-4 bg-[#F8F8F8] rounded-xl border ${
-              selectedVehicle === addedVehicleNumber
-                ? "border-[#266DDF]"
-                : "border-[#C4D9F9]"
+              selectedVehicle === addedVehicleNumber ? "border-[#266DDF]" : "border-[#C4D9F9]"
             } p-4 shadow-sm cursor-pointer transition-all`}
             onClick={() => setSelectedVehicle(addedVehicleNumber)}
           >
-            <img loading="lazy"
-              src={brezzaImg}
-              alt="Maruti Suzuki Brezza"
-              className="w-22 h-12 object-cover rounded ml-2"
-            />
+            <img loading="lazy" src={brezzaImg} alt="Maruti Suzuki Brezza" className="w-22 h-12 object-cover rounded ml-2" />
             <div className="flex-1">
-              <div className="font-medium text-[#242424]">
-                {addedVehicleModel || "Added Vehicle"}
-              </div>
-              <div className="text-xs text-[#6C6F73]">
-                {addedVehicleNumber}
-              </div>
+              <div className="font-medium text-[#242424]">{addedVehicleModel || "Added Vehicle"}</div>
+              <div className="text-xs text-[#6C6F73]">{addedVehicleNumber}</div>
             </div>
-            <input
-              type="checkbox"
-              checked={selectedVehicle === addedVehicleNumber}
-              readOnly
-              className="w-5 h-5 accent-[#266DDF] bg-white border-[#5C5C5C]"
-            />
+            <input type="checkbox" checked={selectedVehicle === addedVehicleNumber} readOnly className="w-5 h-5 accent-[#266DDF] bg-white border-[#5C5C5C]" />
           </div>
           {addedVehicles.map((vehicle, index) => (
             <div
               key={index}
               className={`flex items-center gap-4 bg-white rounded-xl border ${
-                selectedVehicle === vehicle.number
-                  ? "border-[#266DDF]"
-                  : "border-[#C4D9F9]"
+                selectedVehicle === vehicle.number ? "border-[#266DDF]" : "border-[#C4D9F9]"
               } p-4 shadow-sm cursor-pointer transition-all mt-4`}
               onClick={() => setSelectedVehicle(vehicle.number)}
             >
-              <img
-                src={brezzaImg}
-                alt={vehicle.model}
-                loading="lazy"
-                className="w-20 h-12 object-cover rounded"
-              />
+              <img src={brezzaImg} alt={vehicle.model} loading="lazy" className="w-20 h-12 object-cover rounded" />
               <div className="flex-1">
-                <div className="font-medium text-gray-900">
-                  {vehicle.model}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {vehicle.number}
-                </div>
+                <div className="font-medium text-gray-900">{vehicle.brand}{vehicle.model}</div>
+                <div className="text-xs text-gray-500">{vehicle.number}</div>
               </div>
-              <input
-                type="checkbox"
-                checked={selectedVehicle === vehicle.number}
-                readOnly
-                className="w-5 h-5 accent-[#266DDF]"
-              />
+              <input type="checkbox" checked={selectedVehicle === vehicle.number} readOnly className="w-5 h-5 accent-[#266DDF]" />
             </div>
           ))}
         </div>
-
         <div className="bg-white rounded-xl p-10 w-full flex flex-col items-center border border-gray-100 mb-10">
-          <h2 className="text-2xl font-semibold text-[#242424] mb-4 w-full text-left">
-            Add Vehicle
-          </h2>
-
-          <label
-            htmlFor="vehicleNumber"
-            className="w-full text-xs text-gray-700 mb-1"
-          >
-            Enter Vehicle Number
-          </label>
+          <h2 className="text-2xl font-semibold text-[#242424] mb-4 w-full text-left">Add Vehicle</h2>
+          <label htmlFor="vehicleNumber" className="w-full text-xs text-gray-700 mb-1">Enter Vehicle Number</label>
           <input
             id="vehicleNumber"
             type="text"
@@ -222,20 +246,10 @@ const SelectVehicle = ({
             className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-4 focus:outline-none focus:ring-1 focus:ring-[#BCD2F5] text-xs"
             disabled={isLoading}
           />
-          {numberError && (
-            <div className="text-[#CB0200] text-xs mb-2 w-full text-left">
-              {numberError}
-            </div>
-          )}
-
+          {numberError && <div className="text-[#CB0200] text-xs mb-2 w-full text-left">{numberError}</div>}
           {showModel && (
             <>
-              <label
-                htmlFor="brand"
-                className="w-full text-xs text-gray-700 mb-1"
-              >
-                Enter Vehicle Brand
-              </label>
+              <label htmlFor="brand" className="w-full text-xs text-gray-700 mb-1">Enter Vehicle Brand</label>
               <input
                 id="brand"
                 type="text"
@@ -247,18 +261,8 @@ const SelectVehicle = ({
                 }}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-2 focus:outline-none focus:ring-1 focus:ring-[#BCD2F5] text-xs"
               />
-              {brandError && (
-                <div className="text-[#CB0200] text-xs mb-2 w-full text-left">
-                  {brandError}
-                </div>
-              )}
-
-              <label
-                htmlFor="vehicleModel"
-                className="w-full text-xs text-gray-700 mb-1"
-              >
-                Enter Vehicle Model
-              </label>
+              {brandError && <div className="text-[#CB0200] text-xs mb-2 w-full text-left">{brandError}</div>}
+              <label htmlFor="vehicleModel" className="w-full text-xs text-gray-700 mb-1">Enter Vehicle Model</label>
               <input
                 id="vehicleModel"
                 type="text"
@@ -270,14 +274,9 @@ const SelectVehicle = ({
                 }}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-4 focus:outline-none focus:ring-1 focus:ring-[#BCD2F5] text-xs"
               />
-              {modelError && (
-                <div className="text-[#CB0200] text-xs mb-4 w-full text-left">
-                  {modelError}
-                </div>
-              )}
+              {modelError && <div className="text-[#CB0200] text-xs mb-4 w-full text-left">{modelError}</div>}
             </>
           )}
-
           <Button
             text={isLoading ? "Searching..." : showModel ? "Add Vehicle" : "Search"}
             className="self-start w-1/2 bg-[#266DDF] text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -285,18 +284,12 @@ const SelectVehicle = ({
             disabled={isLoading}
           />
         </div>
-
         {selectedVehicle && (
           <Button
-            text="Proceed"
-            className="w-full bg-[#266DDF] text-white font-semibold py-3 mt-2 rounded-lg hover:bg-blue-700 transition-colors sticky bottom-4"
-            onClick={() => {
-              if (selectedVehicle) {
-                navigate("/vehicle-amc-filter");
-              } else {
-                alert("Please select a vehicle to proceed");
-              }
-            }}
+            text={isProceeding ? "Processing..." : "Proceed"}
+            className="w-full bg-[#266DDF] text-white font-semibold py-3 mt-2 rounded-lg hover:bg-blue-700 transition-colors sticky bottom-4 disabled:opacity-50"
+            onClick={handleProceed}
+            disabled={isProceeding}
           />
         )}
       </div>
