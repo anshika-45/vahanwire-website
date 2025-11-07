@@ -1,23 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
 export default function AnimatedTextTicker({
   texts = [],
-  interval = 1600,  
-  outMs = 360,     
-  inMs = 560,        
-  className = "",   
+  interval = 1600,
+  outMs = 360,
+  inMs = 560,
+  className = "",
 }) {
-  const [index, setIndex] = useState(0);              
-  const [phase, setPhase] = useState("idle");         
-  const [incomingIndex, setIncomingIndex] = useState(1); 
+  const [index, setIndex] = useState(0);
+  const [phase, setPhase] = useState("idle");
+  const [incomingIndex, setIncomingIndex] = useState(1);
   const timerRef = useRef(null);
   if (!texts || texts.length === 0) return null;
   if (texts.length === 1) {
     return (
-      <div className={`relative overflow-visible h-20 sm:h-24 md:h-26 pl-4 ${className}`} style={{ lineHeight: 1 }}>
-        <span className="absolute inset-0 flex items-center
+      <div
+        className={`relative overflow-visible h-20 sm:h-24 md:h-26 pl-4 ${className}`}
+        style={{ lineHeight: 1 }}
+      >
+        <span
+          className="absolute inset-0 flex items-center
                          text-5xl sm:text-7xl md:text-8xl font-md tracking-tight
                          bg-gradient-to-r from-[#1E9600] via-[#FFF200] to-[#FF0000]
-                         bg-clip-text text-transparent whitespace-nowrap">
+                         bg-clip-text text-transparent whitespace-nowrap"
+        >
           {texts[0]}
         </span>
       </div>
@@ -51,15 +56,17 @@ export default function AnimatedTextTicker({
 
   return (
     <div
-      className={`relative overflow-hidden h-18 sm:h-20 md:h-24 pl-5 ${className}`}
+      className={`relative overflow-hidden h-15 sm:h-16 md:h-20 ${className}`}
       style={{ lineHeight: 1 }}
       aria-live="polite"
     >
       {phase === "idle" && (
-        <div className="absolute inset-0 flex items-center pl-5">
-          <span className="text-5xl sm:text-7xl md:text-8xl font-md tracking-tight
+        <div className="absolute inset-0 flex items-center">
+          <span
+            className="text-2xl sm:text-5xl md:text-8xl font-md tracking-tight
                            bg-gradient-to-r from-[#1E9600] via-[#FFF200] to-[#FF0000]
-                           bg-clip-text text-transparent whitespace-nowrap">
+                           bg-clip-text text-transparent whitespace-nowrap"
+          >
             {currentText}
           </span>
         </div>
@@ -67,26 +74,32 @@ export default function AnimatedTextTicker({
 
       {phase === "out" && (
         <div
-          className="absolute inset-0 flex items-center will-change-transform pl-5"
+          className="absolute inset-0 flex items-center will-change-transform"
           style={{ animation: `fadeUpOut ${outMs}ms ease-in forwards` }}
           onAnimationEnd={handleOutEnd}
         >
-          <span className="text-5xl sm:text-7xl md:text-8xl font-md tracking-tight
+          <span
+            className="text-2xl sm:text-5xl md:text-8xl font-md tracking-tight
                            bg-gradient-to-r from-[#1E9600] via-[#FFF200] to-[#FF0000]
-                           bg-clip-text text-transparent whitespace-nowrap">
+                           bg-clip-text text-transparent whitespace-nowrap"
+          >
             {currentText}
           </span>
         </div>
       )}
       {phase === "in" && (
         <div
-          className="absolute inset-0 flex items-center will-change-transform pl-5"
-          style={{ animation: `slideUpInBounce ${inMs}ms cubic-bezier(0.22,1,0.36,1) forwards` }}
+          className="absolute inset-0 flex items-center will-change-transform "
+          style={{
+            animation: `slideUpInBounce ${inMs}ms cubic-bezier(0.22,1,0.36,1) forwards`,
+          }}
           onAnimationEnd={handleInEnd}
         >
-          <span className="text-5xl sm:text-7xl md:text-8xl font-md tracking-tight
+          <span
+            className="text-2xl sm:text-5xl md:text-8xl font-md tracking-tight
                            bg-gradient-to-r from-[#1E9600] via-[#FFF200] to-[#FF0000]
-                           bg-clip-text text-transparent whitespace-nowrap">
+                           bg-clip-text text-transparent whitespace-nowrap"
+          >
             {texts[incomingIndex]}
           </span>
         </div>
@@ -111,5 +124,3 @@ export default function AnimatedTextTicker({
     </div>
   );
 }
-
-

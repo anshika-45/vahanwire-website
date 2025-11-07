@@ -4,7 +4,7 @@ import logo from "../assets/blurlogo.webp";
 import Button from "./Button";
 const AmcBanner = ({ onBuy }) => {
     return (
-        <section className="w-full py-6 sm:py-8 md:py-10 bg-white flex justify-center mb-6 sm:mb-8">
+        <section className="w-full mt-25 py-6 sm:py-8 md:py-10 bg-white flex justify-center mb-6 sm:mb-8">
             <div className="relative w-[95%] sm:w-[90%] md:w-[85%] max-w-7xl rounded-3xl overflow-hidden shadow-lg">
                 <img
                     src={amcImage}

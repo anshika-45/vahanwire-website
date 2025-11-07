@@ -1,8 +1,8 @@
 import React from "react";
 const Announcementbanner = () => {
   return (
-    <div>
-      <p className="fixed top-0 left-0 w-full text-center py-2 px-4 sm:px-8 md:px-16 lg:px-[120px] text-white text-xs bg-[#1B4D9E] z-40">
+    <div className="h-auto ">
+      <p className=" text-center text-white md:text-[16px] text-[14px] bg-[#1B4D9E] py-1">
         Get started with VahanWire and unlock ₹100 off your first Annual
         Maintenance Contract!
       </p>

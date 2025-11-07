@@ -24,12 +24,14 @@ const VideoSection = React.memo(() => {
           loop
           muted
           playsInline
-          preload="metadata" 
-          className="shadow-lg w-full mx-auto"
+          preload="metadata"
+          className="shadow-lg w-full mx-auto select-none pointer-events-none"
         />
       </div>
     </section>
   );
 });
-VideoSection.displayName = 'VideoSection';
+VideoSection.displayName = "VideoSection";
 export default VideoSection;
+
+
