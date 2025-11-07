@@ -9,11 +9,12 @@ const Tile = React.memo(function Tile({
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
+      id="tile"
       className={`tile ${isHovered ? "hovered" : ""}
         flex flex-col justify-between w-full
         max-w-[300px] sm:max-w-[350px] md:max-w-[400px]
-        h-45 sm:h-50 md:h-50 lg:h-50
-        rounded-[12px] p-4 sm:p-5 md:p-6 lg:p-7 xl:p-[30px]
+         h-auto
+        rounded-[12px] p-4 xl:p-[30px]
         bg-white cursor-pointer
       `}
       onMouseEnter={() => setIsHovered(true)}

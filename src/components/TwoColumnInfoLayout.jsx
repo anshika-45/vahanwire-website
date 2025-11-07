@@ -26,7 +26,7 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
   return (
     <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-[450px_1fr] gap-6 md:gap-10">
       {/* Sidebar */}
-      <aside className="bg-white rounded-lg h-fit sticky top-[180px] self-start shadow-sm border border-[#E9F0FC] max-h-[600px] overflow-y-auto">
+      <aside className="bg-white rounded-lg md:h-fit h-[400px] md:sticky top-[180px] self-start shadow-sm border border-[#E9F0FC] max-h-[600px] overflow-y-auto">
         <h3 className="text-sm font-semibold text-[#242424] px-4 py-4 border-b border-[#E9F0FC]">
           {title}
         </h3>
@@ -63,7 +63,7 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
       <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="max-h-[600px] overflow-y-auto pr-2 md:pr-4 space-y-8 scroll-smooth custom-scrollbar"
+          className="max-h-[600px] md:h-auto h-[300px] overflow-y-auto pr-2 md:pr-4 space-y-8 scroll-smooth custom-scrollbar"
         >
           {sections.map((section, index) => {
             const isActive = activeIndex === index;

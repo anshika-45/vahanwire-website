@@ -3,7 +3,7 @@ import Img from "../assets/GetHelp.webp";
 const HoverCards = lazy(() => import('./HoverCards'));
 const GetHelp = () => {
     return (
-        <div className="py-8 sm:py-12 md:py-5 flex flex-col items-center">
+        <div className="py-8 sm:py-12 md:py-5 flex flex-col items-center mt-4 sm:mt-6 md:mt-4">
         <div className="w-full">
         <div className="text-center mb-6 sm:mb-8 md:mb-10">
         <h1 className='text-2xl sm:text-3xl md:text-4xl font-medium text-[#242424] mb-4'>

@@ -1,6 +1,6 @@
 import React from "react";
 import bannerImg from "../assets/HomeBanner.webp";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import AnimatedText from "./AnimatedText";
 const bannerTexts = [
@@ -12,63 +12,48 @@ const bannerTexts = [
 const Banner = React.memo(() => {
   const navigate = useNavigate();
   return (
-    <div className="mt-8 sm:mt-16 md:mt-[100px] relative w-full h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px]">
-      <picture>
-        <source
-          media="(max-width: 640px)"
-          srcSet={`${bannerImg} 640w`}
-          sizes="100vw"
-        />
-        <source
-          media="(max-width: 1024px)"
-          srcSet={`${bannerImg} 1024w`}
-          sizes="100vw"
-        />
-        <source
-          media="(max-width: 1920px)"
-          srcSet={`${bannerImg} 1920w`}
-          sizes="100vw"
-        />
-        <img
-          loading="eager"
-          src={bannerImg}
-          width="1920"
-          height="700"
-          className="w-full h-full object-cover"
-          alt="VahanWire - Your One-Stop Solution for Car Service, Bike Repairs, Towing Help, and Emergency Fuel"
-          fetchPriority="high"
-          decoding="async"
-        />
-      </picture>
-      <div className="absolute top-30 sm:top-32 md:top-40 lg:top-[200px] left-0 w-full px-6 sm:px-8 md:px-16 lg:px-[100px] text-left text-white overflow-visible">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-medium mb-1 sm:mb-2">
-          Your One-Stop
-          <br /> Solution for
-        </h1>
-        <div className="ml-0 sm:ml-[-15px] md:ml-[-20px] lg:ml-[-30px] h-28 flex items-center">
-        <AnimatedText
-        texts={bannerTexts}
-        interval={500}
-        duration={1000}
-        outMs={360}
-        inMs={540}
-        animationClass="scale-90"
-        className="transform origin-center transition-transform duration-400 overflow-visible"
-        />
+    <div className="relative w-full">
+      <div className="pt-[calc(var(--header-height,4rem)+var(--announcement-height,2rem))]">
+        <div
+          className="relative w-full h-[79vh] sm:h-[80vh] md:h-[100vh] bg-center bg-cover overflow-hidden"
+          style={{
+            backgroundImage: `url(${bannerImg})`,
+          }}
+        >
+          <div className="container">
+            {" "}
+            <div className="absolute left-0 top-1/2 -translate-y-1/2  text-white  w-full">
+              <div className="container">
+                <h1 className="text-2xl md:text-5xl  leading-tight drop-shadow-lg py-1 md:my-5">
+                  Your One-Stop <br /> Solution for
+                </h1>
+                <div className="max-w-[300px]">
+                  <AnimatedText
+                    texts={bannerTexts}
+                    interval={500}
+                    duration={1000}
+                    outMs={360}
+                    inMs={540}
+                    animationClass="scale-90"
+                    className="transform origin-center  transition-transform duration-400 overflow-visible"
+                  />
+                </div>
+
+                <p className="md:my-3 py-4 text-xs md:text-[17px] max-w-xl drop-shadow-md">
+                  Book trusted professionals near you for on-time, affordable,
+                  <br />
+                  and hassle-free vehicle & home services — anytime, anywhere.
+                </p>
+                <button className="md:my-3  text-[17px] bg-[#266DDF] text-white rounded-md transition">
+                 <Link className="px-4 py-2 block" to={'/vehicle-amc'}>Book Now</Link>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <p className="text-xs sm:text-sm md:text-base mb-3 sm:mb-4 mt-0 sm:mt-1 md:mt-0 leading-snug sm:leading-normal">
-          Book trusted professionals near you for on-time, affordable,
-          <br />
-          and hassle-free vehicle & home services — anytime, anywhere.
-        </p>
-        <Button
-          text="Book Now"   
-          className="px-3 sm:px-4 w-28 sm:w-34 px-3 py-1 mt-3 text-sm sm:text-md font-semibold bg-[#266DDF]"
-          onClick={()=> navigate("/vehicle-amc")}
-        />  
       </div>
     </div>
   );
 });
-Banner.displayName = 'Banner';
+Banner.displayName = "Banner";
 export default Banner;

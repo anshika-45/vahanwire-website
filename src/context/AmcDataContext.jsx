@@ -1,20 +1,22 @@
-import { useState, useMemo } from "react";
-import {
-  comparePlans,
-  featuresCar,
-  featuresBike,
-  pricingData,
-} from "../constants/amcDatas";
+import React, { createContext, useContext, useState, useMemo } from "react";
+import { pricingData, featuresCar, featuresBike } from "../constants/amcDatas";
 
-const useAmcData = () => {
+const AmcDataContext = createContext();
+
+export const useAmcData = () => {
+  const context = useContext(AmcDataContext);
+  if (!context) {
+    throw new Error("useAmcData must be used within AmcDataProvider");
+  }
+  return context;
+};
+
+export const AmcDataProvider = ({ children }) => {
   const [vehicleType, setVehicleType] = useState("car");
   const [amcType, setAmcType] = useState("luxury");
-
-  console.log("useAmcData - vehicleType:", vehicleType);
-  console.log("useAmcData - amcType:", amcType);
-
+  console.log("vewjbvbeuirbui", vehicleType);
+  console.log("amkbeqjbfeb", amcType);
   const getAmcTabs = useMemo(() => {
-    console.log("getAmcTabs recalculating for vehicleType:", vehicleType);
     if (vehicleType === "bike") {
       return [
         { label: "Luxury Bike AMC", value: "luxury" },
@@ -28,12 +30,6 @@ const useAmcData = () => {
   }, [vehicleType]);
 
   const getComparePlans = useMemo(() => {
-    console.log(
-      "getComparePlans recalculating for vehicleType:",
-      vehicleType,
-      "amcType:",
-      amcType
-    );
     const plans = pricingData[vehicleType][amcType];
     return [
       {
@@ -55,19 +51,22 @@ const useAmcData = () => {
   }, [vehicleType, amcType]);
 
   const getFeatures = useMemo(() => {
-    console.log("getFeatures recalculating for vehicleType:", vehicleType);
     return vehicleType === "bike" ? featuresBike : featuresCar;
   }, [vehicleType]);
 
-  return {
-    vehicleType,
-    setVehicleType,
-    amcType,
-    setAmcType,
-    getAmcTabs,
-    comparePlans: getComparePlans,
-    features: getFeatures,
-  };
+  return (
+    <AmcDataContext.Provider
+      value={{
+        vehicleType,
+        setVehicleType,
+        amcType,
+        setAmcType,
+        getAmcTabs,
+        comparePlans: getComparePlans,
+        features: getFeatures,
+      }}
+    >
+      {children}
+    </AmcDataContext.Provider>
+  );
 };
-
-export default useAmcData;

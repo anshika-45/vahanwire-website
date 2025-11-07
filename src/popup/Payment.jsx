@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  console.log(paymentData);
   useEffect(() => {
     if (paymentData?.payuData && paymentData?.payuUrl) {
       submitToPayU();

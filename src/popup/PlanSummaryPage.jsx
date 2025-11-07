@@ -8,12 +8,13 @@ import SuccessPurchase from "./SuccessPurchase";
 import { initiatePayment } from "../api/paymentApi";
 import { toast } from "react-toastify";
 
-const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
+const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
   const [currentView, setCurrentView] = useState("summary");
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
 
+  console.log("vehicle",vehicle);
   useEffect(() => {
     if (isOpen) {
       setCurrentView("summary");
@@ -63,11 +64,16 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
 
   const handleProceedToPayment = async () => {
     console.log("Plan data:", plan);
-    console.log("User data:", user);
+    
 
 
-    if (!plan?._id || !plan?.price) {
+    if (!plan?._id) {
       alert("Plan information is incomplete. Missing ID or price.");
+      return;
+    }
+
+    if (!vehicle?.vehicleNumber) {
+      alert("Vehicle information is missing. Please select a vehicle.");
       return;
     }
 
@@ -75,8 +81,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
     try {
       const paymentResponse = await initiatePayment({
         planId: plan._id,
-        amount: plan.price,
-        planName: plan.title
+        vehicleNumber: vehicle.vehicleNumber 
       });
 
       console.log("Payment response:", paymentResponse);
@@ -114,6 +119,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
           onPaymentSuccess={handlePaymentSuccess}
           paymentData={paymentData}
           plan={plan}
+          vehicle={vehicle}
         />
       );
     }

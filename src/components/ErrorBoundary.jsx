@@ -1,19 +1,23 @@
 import React from 'react';
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false, error: null, errorInfo: null };
   }
+
   static getDerivedStateFromError(error) {
     return { hasError: true };
   }
+
   componentDidCatch(error, errorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     this.setState({
-      error: error,
-      errorInfo: errorInfo
+      error,
+      errorInfo,
     });
   }
+
   render() {
     if (this.state.hasError) {
       return (
@@ -31,15 +35,16 @@ class ErrorBoundary extends React.Component {
             >
               Refresh Page
             </button>
+
             {process.env.NODE_ENV === 'development' && (
               <details className="mt-4 text-left">
                 <summary className="cursor-pointer text-red-700 hover:text-red-800">
                   Error Details (Development Only)
                 </summary>
                 <pre className="mt-2 text-xs text-red-600 bg-red-100 p-2 rounded overflow-auto">
-                  {this.state.error && this.state.error.toString()}
+                  {this.state.error?.toString() || 'Unknown error'}
                   <br />
-                  {this.state.errorInfo.componentStack}
+                  {this.state.errorInfo?.componentStack || 'No stack trace available'}
                 </pre>
               </details>
             )}
@@ -47,7 +52,9 @@ class ErrorBoundary extends React.Component {
         </div>
       );
     }
+
     return this.props.children;
   }
 }
+
 export default ErrorBoundary;

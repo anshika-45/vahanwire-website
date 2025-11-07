@@ -18,7 +18,7 @@ export const getMyProfile = async () => {
 };
 
 export const updateMyProfile = async (updateData) => {
-    console.log("updateeeee");
+  console.log("updateeeee");
   const res = await axiosInstance.put("/users/profile", updateData);
   console.log(res);
   return res.data;
@@ -39,19 +39,6 @@ export const uploadProfileImage = async (file) => {
   );
   return res.data;
 };
-
-export const getMyAMCPlans = async () => {
-  try {
-    console.log("getmyamc");
-    const response = await axiosInstance.get("/amcplan/user/my-plans");
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Get payment status error:', error);
-    throw error;
-  }
-};
-
 
 export const createContact = async (contactData) => {
   try {

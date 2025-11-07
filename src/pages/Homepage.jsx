@@ -15,56 +15,57 @@ const ComponentFallback = () => (
   </div>
 );
 const Homepage = () => {
+  const classStyle = 'mt-4 sm:mt-6 md:mt-4 duration-300 transition-all ease-in';
   return (
-    <div>
+    <div className="">
       <Suspense fallback={<ComponentFallback />}>
         <Banner />
       </Suspense>
-      <div className="mt-4 sm:mt-6 md:mt-4">
+      
         <Suspense fallback={<ComponentFallback />}>
           <Services />
         </Suspense>
-      </div>
-      <div className="mt-4 sm:mt-6 md:mt-4">
+      
+      
         <Suspense fallback={<ComponentFallback />}>
           <LatestOffer />
         </Suspense>
-      </div>
-      <div className="mt-4 sm:mt-6 md:mt-4">
+      
+      
         <Suspense fallback={<ComponentFallback />}>
           <TrustandResult />
         </Suspense>
-      </div>
-      <div className="mt-4 sm:mt-6 md:mt-4">
+     
+      
         <Suspense fallback={<ComponentFallback />}>
           <WhyChooseUs />
         </Suspense>
-      </div>
-      <div className="mt-4 sm:mt-6 md:mt-4">
+      
+      
         <Suspense fallback={<ComponentFallback />}>
           <GetHelp />
         </Suspense>
-      </div>
-      <div className="mt-4 sm:mt-6 md:mt-4">
+     
+      
         <Suspense fallback={<ComponentFallback />}>
           <AmcBanner />
         </Suspense>
-      </div>
-      <div className="mt-4 sm:mt-6 md:mt-4">
+      
+      
         <Suspense fallback={<ComponentFallback />}>
           <VideoSection />
         </Suspense>
-      </div>
-      <div className="mt-4 sm:mt-6 md:mt-4">
+     
+      
         <Suspense fallback={<ComponentFallback />}>
           <Faq />
         </Suspense>
-      </div>
-      <div className="mt-20">
+      
+      
         <Suspense fallback={<ComponentFallback />}>
           <AddBanner />
         </Suspense>
-      </div>
+     
     </div>
   );
 };

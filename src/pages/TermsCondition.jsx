@@ -162,7 +162,7 @@ const TermsCondition = () => {
 
   return (
     <div className="bg-[rgba(244,244,244,1)]">
-      <div className="mt-[60px] sm:mt-[60px] md:mt-[60px]">
+      <div className="mt-[60px] sm:mt-[60px] md:mt-[80px]">
         <Suspense fallback={<ComponentFallback />}>
           <PageBanner title="Terms & Conditions" image={termsConditionBanner} />
         </Suspense>
@@ -178,11 +178,13 @@ const TermsCondition = () => {
         </Suspense>
       </div>
 
-      <div className="mt-20">
-        <Suspense fallback={<ComponentFallback />}>
+      
+       
+         <Suspense fallback={<ComponentFallback />}>
           <AddBanner />
         </Suspense>
-      </div>
+       
+      
     </div>
   );
 };

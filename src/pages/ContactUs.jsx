@@ -47,7 +47,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="mt-[60px] sm:mt-[60px] md:mt-[60px]">
+    <div className="mt-[60px] sm:mt-[60px] md:mt-[80px]">
       <Suspense fallback={<ComponentFallback />}>
         <PageBanner title="Contact Us" image={contactBanner} />
       </Suspense>

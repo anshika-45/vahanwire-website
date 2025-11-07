@@ -27,6 +27,13 @@ font-family: Roboto, sans-serif;
   animation: gradientFlow 3s ease infinite;
 }
 
+.container{
+  padding: 0 15px;
+  margin:0 auto;
+  @apply max-w-screen-xl
+}
+
+
 
 
 

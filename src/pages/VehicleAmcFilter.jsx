@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { verifyPayment } from "../api/paymentApi";
 import BreadcrumbBar from "../components/BreadcrumbBar";
 import AMC from "../components/AMC";
@@ -14,13 +14,32 @@ import PlanSummaryPage from "../popup/PlanSummaryPage";
 import SuccessPurchase from "../popup/SuccessPurchase";
 import FailedPurchase from "../popup/FailedPurchase";
 import useAmcData from "../hooks/useAmcData";
-
+import { createAMCPurchase } from "../api/amcApi";
 const VehicleAmcFilter = () => {
   const { setIsLoggedIn } = useAuth();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { vehicleType, setVehicleType, amcType, setAmcType, getAmcTabs, comparePlans, features } = useAmcData();
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  const location = useLocation();
+
+  const {
+    plans,
+    vehicle,
+    selectedPlan: initialSelectedPlan,
+  } = location.state || {};
+
+ 
+
+  const {
+    vehicleType,
+    setVehicleType,
+    amcType,
+    setAmcType,
+    getAmcTabs,
+    comparePlans,
+    features,
+  } = useAmcData();
+
+  const [selectedPlanState, setSelectedPlanState] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -64,13 +83,39 @@ const VehicleAmcFilter = () => {
     handlePaymentStatus();
   }, [status, txnid]);
 
-  const handleBuyNow = (plan) => {
-    setSelectedPlan(plan);
-    setIsPopupOpen(true);
+  const handleBuyNow = async (plan) => {
+    try {
+
+      if (!vehicle?.vehicleNumber) {
+        alert("Please select a vehicle first.");
+        return;
+      }
+      const purchaseResponse = await createAMCPurchase({
+        planId: plan._id,
+        vehicleNumber: vehicle.vehicleNumber,
+      });
+
+      console.log("AMC purchase API response:", purchaseResponse);
+
+      if (!purchaseResponse.success) {
+        alert(purchaseResponse.message || "Failed to create AMC purchase");
+        return;
+      }
+      const purchaseData = purchaseResponse.data;
+      setSelectedPlanState({
+        ...plan,
+        purchaseId: purchaseData._id,
+        vehicleNumber: vehicle.vehicleNumber,
+      });
+      setIsPopupOpen(true);
+    } catch (error) {
+      console.error("Buy Now Error:", error);
+      alert(error?.message || "Something went wrong while creating purchase.");
+    }
   };
 
   const handleClosePopup = () => {
-    setSelectedPlan(null);
+    setSelectedPlanState(null);
     setIsPopupOpen(false);
   };
 
@@ -87,10 +132,32 @@ const VehicleAmcFilter = () => {
   return (
     <section className="bg-white w-full min-h-screen">
       <BreadcrumbBar />
-      <AMC vehicleType={vehicleType} setVehicleType={setVehicleType} isFilter={true} />
-      <AmcTabs amcType={amcType} setAmcType={setAmcType} showRemoveFilter tabs={getAmcTabs} vehicleType={vehicleType} />
-      <AmcCard vehicleType={vehicleType} onBuy={handleBuyNow} />
-      <CompareTable plans={comparePlans} features={features} onBuyNow={handleBuyNow} />
+      <AMC
+        vehicleType={vehicleType}
+        setVehicleType={setVehicleType}
+        isFilter={true}
+      />
+      <AmcTabs
+        amcType={amcType}
+        setAmcType={setAmcType}
+        showRemoveFilter
+        tabs={getAmcTabs}
+        vehicleType={vehicleType}
+      />
+
+      <AmcCard
+        vehicleType={vehicleType}
+        onBuy={handleBuyNow}
+        plans={plans}
+        vehicle={vehicle}
+      />
+
+      <CompareTable
+        plansAre={plans}
+        features={features}
+        onBuyNow={handleBuyNow}
+        vehicle={vehicle}
+      />
       <LatestOffer />
       <div className="flex flex-col space-y-10">
         <AmcBanner onBuy={handleBuyNow} />
@@ -98,7 +165,12 @@ const VehicleAmcFilter = () => {
       </div>
 
       {isPopupOpen && (
-        <PlanSummaryPage isOpen={isPopupOpen} plan={selectedPlan} onClose={handleClosePopup} />
+        <PlanSummaryPage
+          isOpen={isPopupOpen}
+          plan={selectedPlanState}
+          onClose={handleClosePopup}
+          vehicle={vehicle}
+        />
       )}
 
       {isVerifying && (

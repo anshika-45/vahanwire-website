@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import privacyPolicyBanner from "../assets/privacy-policy-banner.webp";
-
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 const TwoColumnInfoLayout = React.lazy(() =>
@@ -85,7 +84,7 @@ const PrivacyPolicy = () => {
 
   return (
     <div className="bg-[rgba(244,244,244,1)]">
-      <div className="mt-[60px] sm:mt-[60px] md:mt-[60px]">
+      <div className="mt-[60px] sm:mt-[60px] md:mt-[80px]">
         <Suspense fallback={<ComponentFallback />}>
           <PageBanner title="Privacy Policy" image={privacyPolicyBanner} />
         </Suspense>

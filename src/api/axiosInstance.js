@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const BASE_URL = "https://qa-api.vahanwire.com/api";
+export const BASE_URL = "http://localhost:6600/api";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

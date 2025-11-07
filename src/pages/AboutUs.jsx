@@ -13,7 +13,7 @@ const ComponentFallback = () => (
 const AboutUs = () => {
   return (
     <>
-      <div className="mt-[34px] sm:mt-[30px] md:mt-[60px] ">
+      <div className="mt-[34px] sm:mt-[30px] md:mt-[80px] ">
         <Suspense fallback={<ComponentFallback />}>
           <PageBanner title="About Us" image={aboutBanner} />
         </Suspense>
@@ -53,7 +53,7 @@ const AboutUs = () => {
               <img
                 src={aboutAppImage}
                 alt="VahanWire App Interface"
-                className="w-[260px] md:w-[260px] lg:w-[300px] drop-shadow-2xl h-full rounded-[2rem] scale-200"
+                className="w-[260px] md:w-[260px] lg:w-[300px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200"
                 loading="lazy"
               />
             </div>
