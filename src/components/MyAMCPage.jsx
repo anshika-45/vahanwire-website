@@ -147,7 +147,7 @@ export default function MyAMCPage() {
                       className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium"
                     >
                       <Eye size={16} />
-                      View Coverage
+                      View Coverages
                     </button>
 
                     <button className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium">
