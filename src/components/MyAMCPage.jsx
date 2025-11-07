@@ -107,7 +107,7 @@ export default function MyAMCPage() {
                   validity={`${item.planDuration} Months`}
                   bgColor="bg-gradient-to-br from-[#8F6521] to-[#A3762D]"
                   logoSrc="/src/assets/Logo1.webp"
-                  carImageSrc="/src/assets/carAMC.webp"
+                  carImageSrc="/src/assets/CarAMC.webp"
                 />
 
                 <div className="flex-1 flex flex-col justify-between">
