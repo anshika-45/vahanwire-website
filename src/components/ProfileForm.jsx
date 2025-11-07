@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import uploadIcon from "../assets/upload.webp";
-import { getMyProfile, updateMyProfile, uploadProfileImage } from "../api/authApi";
+import Button from "./Button";
+import {
+  getMyProfile,
+  updateMyProfile,
+  uploadProfileImage,
+} from "../api/authApi";
 
 const ProfileForm = () => {
   const [isEditing, setIsEditing] = useState(true);
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-  });
+  const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
   const [previewUrl, setPreviewUrl] = useState("https://i.pravatar.cc/160");
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -24,15 +25,12 @@ const ProfileForm = () => {
             phone: data.phone || "",
             email: data.email || "",
           });
-          if (data.profileUrl) {
-            setPreviewUrl(data.profileUrl);
-          }
+          if (data.profileUrl) setPreviewUrl(data.profileUrl);
         }
       } catch (err) {
         console.error("Failed to fetch profile:", err);
       }
     };
-
     fetchProfile();
   }, []);
 
@@ -52,7 +50,6 @@ const ProfileForm = () => {
       const res = await uploadProfileImage(file);
       const imageUrl = res?.data?.profileUrl || res?.profileUrl;
       if (imageUrl) setPreviewUrl(imageUrl);
-      console.log("Image uploaded successfully:", res);
     } catch (err) {
       console.error("Image upload failed:", err);
     }
@@ -62,21 +59,7 @@ const ProfileForm = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await updateMyProfile({
-        name: formData.name,
-        email: formData.email,
-      });
-
-      const updatedData = res?.data || res;
-      if (updatedData) {
-        setFormData((prev) => ({
-          ...prev,
-          name: updatedData.name || prev.name,
-          email: updatedData.email || prev.email,
-        }));
-      }
-
-      console.log("Profile updated successfully:", res);
+      await updateMyProfile({ name: formData.name, email: formData.email });
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
@@ -84,27 +67,29 @@ const ProfileForm = () => {
       setLoading(false);
     }
   };
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
 
   return (
-    <section className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 md:p-10 mb-0">
-      <div className="flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8 md:gap-10">
-        <div className="flex flex-col items-center md:w-1/3 gap-4 mt-10 sm:mt-[60px] md:mt-[80px] w-full">
+    <section className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 md:p-8 lg:p-10">
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+        <div className="flex flex-col items-center md:w-1/3 gap-4 w-full mt-4 md:mt-6">
           <div className="relative">
             <img
               src={previewUrl}
               alt="Avatar"
-              loading="lazy"
-              className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow"
+              className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-white shadow"
             />
+
             <label
               htmlFor="upload"
               className="absolute -bottom-1 right-2 px-2 py-2 sm:px-3 sm:py-3 rounded-full bg-[#266DDF] hover:bg-blue-700 text-white shadow cursor-pointer"
             >
-              <img src={uploadIcon} loading="lazy" alt="Upload" className="w-3 h-3 sm:w-4 sm:h-4" />
+              <img
+                src={uploadIcon}
+                alt="Upload"
+                className="w-3 h-3 sm:w-4 sm:h-4"
+              />
             </label>
+
             <input
               id="upload"
               type="file"
@@ -113,78 +98,101 @@ const ProfileForm = () => {
               onChange={handleImageChange}
             />
           </div>
-          <div className="flex items-center gap-2 text-amber-500 mt-2">
+
+          <div className="flex items-center gap-2 text-amber-500">
             <span>★</span>
-            <span className="text-slate-700 text-base sm:text-lg font-medium">4.8</span>
+            <span className="text-slate-700 text-sm sm:text-base md:text-lg font-medium">
+              4.8
+            </span>
           </div>
         </div>
 
         <div className="md:w-2/3 w-full">
           {isEditing ? (
-            <form onSubmit={handleUpdate} className="flex flex-col gap-4 sm:gap-5 md:gap-6">
+            <form
+              onSubmit={handleUpdate}
+              className="flex flex-col gap-4 sm:gap-5"
+            >
               <div>
-                <label className="block text-sm font-medium text-[#333333] mb-2">Name*</label>
+                <label className="block text-sm md:text-base text-[#333] mb-1">
+                  Name*
+                </label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Enter your name"
-                  className="w-full h-10 sm:h-11 md:h-12 rounded-lg border border-[#D9E7FE] text-[#000000] px-3 sm:px-4 focus:outline-none focus:ring-2 focus:ring-[#D9E7FE]"
+                  className="w-full h-11 md:h-12 rounded-lg border border-[#D9E7FE] px-3 sm:px-4 text-sm md:text-base focus:ring-2 focus:ring-[#D9E7FE] outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#333333] mb-2">Phone Number*</label>
+                <label className="block text-sm md:text-base text-[#333] mb-1">
+                  Phone*
+                </label>
                 <input
                   type="tel"
-                  name="phone"
                   value={formData.phone}
                   disabled
-                  className="w-full h-10 sm:h-11 md:h-12 rounded-lg border border-[#D9E7FE] text-[#000000] px-3 sm:px-4 bg-gray-100 cursor-not-allowed"
+                  className="w-full h-11 md:h-12 rounded-lg border border-[#D9E7FE] bg-gray-100 px-3 sm:px-4 text-sm md:text-base cursor-not-allowed"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#333333] mb-2">Email Address*</label>
+                <label className="block text-sm md:text-base text-[#333] mb-1">
+                  Email*
+                </label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Enter your email address"
-                  className="w-full h-10 sm:h-11 md:h-12 rounded-lg border bg-white border-[#D9E7FE] text-[#000000] px-3 sm:px-4 focus:outline-none focus:ring-2 focus:ring-[#D9E7FE]"
+                  className="w-full h-11 md:h-12 rounded-lg border border-[#D9E7FE] px-3 sm:px-4 text-sm md:text-base focus:ring-2 focus:ring-[#D9E7FE] outline-none"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="mt-4 bg-[#266DDF] hover:bg-blue-700 text-white rounded-lg py-2 sm:py-3 font-medium shadow w-full sm:w-1/2 md:w-1/3"
+                className="bg-[#266DDF] hover:bg-blue-700 text-white rounded-lg py-2.5 sm:py-2 md:py-3 font-medium w-full sm:w-[200px] px-4 whitespace-nowrap"
               >
                 {loading ? "Updating..." : "Update Profile"}
               </button>
             </form>
           ) : (
-            <div className="flex flex-col gap-4 sm:gap-5 md:gap-6">
+            <div className="flex flex-col gap-4 sm:gap-5">
               <div>
-                <p className="text-sm text-[#333333] mb-1">Name</p>
-                <p className="text-base sm:text-lg font-semibold text-[#000000]">{formData.name}</p>
+                <p className="text-xs text-[#666] mb-1">Name</p>
+                <p className="text-sm sm:text-base md:text-lg font-semibold">
+                  {formData.name}
+                </p>
               </div>
+
               <div>
-                <p className="text-sm text-[#333333] mb-1">Phone Number</p>
-                <p className="text-base sm:text-lg font-semibold text-[#000000]">{formData.phone}</p>
+                <p className="text-xs text-[#666] mb-1">Phone</p>
+                <p className="text-sm sm:text-base md:text-lg font-semibold">
+                  {formData.phone}
+                </p>
               </div>
+
               <div>
-                <p className="text-sm text-[#333333] mb-1">Email Address</p>
-                <p className="text-base sm:text-lg font-semibold text-[#000000]">{formData.email}</p>
+                <p className="text-xs text-[#666] mb-1">Email</p>
+                <p className="text-sm sm:text-base md:text-lg font-semibold">
+                  {formData.email}
+                </p>
               </div>
-              <button
-                onClick={handleEdit}
-                className="mt-4 bg-[#266DDF] hover:bg-blue-700 text-white rounded-lg py-2 sm:py-3 font-medium shadow w-full sm:w-1/2 md:w-1/3"
-              >
-                Edit Profile
-              </button>
+
+              <Button
+                type="button"
+                onClick={() => setIsEditing(true)}
+                className="
+    w-full sm:w-[200px] px-4 lg:w-1/3
+    py-2.5 md:py-3 
+    bg-[#266DDF] hover:bg-blue-700
+    text-white rounded-lg font-medium
+    focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[#D9E7FE] whitespace-nowrap"
+                text="Edit Profile"
+              />
             </div>
           )}
         </div>
