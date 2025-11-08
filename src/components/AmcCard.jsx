@@ -72,37 +72,6 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
   );
 };
 
-const fetchAMCPlansData = async (vehicleType, amcType, setCards, setLoading) => {
-  setLoading(true);
-  try {
-    const res = await getAMCPlansByCategory(vehicleType, amcType);
-    if (res.success && Array.isArray(res.data)) {
-      const mappedPlans = res.data.map((plan) => ({
-        _id: plan._id,
-        title: plan.planName,
-        vehicleNumber: "00-00",
-        validFor: `${plan.planDurationInMonth} Months`,
-        price: plan.planBookingAmount || plan.planTotalAmount,
-        originalPrice: plan.planTotalAmount,
-        discount: plan.planBookingAmount ? `${Math.round(((plan.planTotalAmount - plan.planBookingAmount) / plan.planTotalAmount) * 100)}% Off` : null,
-        periodLabel: "/per year",
-        features: typeof plan.planFeatures[0] === "string" ? plan.planFeatures[0].split(",") : plan.planFeatures,
-        bgColor: plan.planSubCategory === "premium" ? "linear-gradient(to bottom right, #8F6521, #A3762D)" : plan.planSubCategory === "standard" ? "linear-gradient(to bottom right, #252525, #404040)" : "linear-gradient(to bottom right, #3A5353, #4E7777)",
-        hoverBgColor: plan.planSubCategory === "premium" ? "linear-gradient(to bottom right, #A3762D, #8F6521)" : plan.planSubCategory === "standard" ? "linear-gradient(to bottom right, #404040, #252525)" : "linear-gradient(to bottom right, #4E7777, #3A5353)",
-        isEssential: plan.planSubCategory === "standard",
-        planSubCategory: plan.planSubCategory?.toLowerCase(),
-      }));
-      const order = { premium: 1, standard: 2, basic: 3 };
-      mappedPlans.sort((a, b) => (order[a.planSubCategory] || 4) - (order[b.planSubCategory] || 4));
-      setCards(mappedPlans);
-    }
-  } catch (error) {
-    console.error("Error fetching AMC plans:", error);
-  } finally {
-    setLoading(false);
-  }
-};
-
 const mapPlansToCards = (plans, vehicle) => {
   if (!plans || !Array.isArray(plans)) return [];
   return plans.map((plan) => ({
@@ -110,7 +79,7 @@ const mapPlansToCards = (plans, vehicle) => {
     title: plan.planName,
     vehicleNumber: vehicle?.vehicleNumber || "00-00",
     validFor: `${plan.planDurationInMonth} Months`,
-    price: plan.planBookingAmount || plan.planTotalAmount,
+    price: plan.planTotalAmount,
     originalPrice: plan.planTotalAmount,
     discount: plan.planBookingAmount ? `${Math.round(((plan.planTotalAmount - plan.planBookingAmount) / plan.planTotalAmount) * 100)}% Off` : null,
     periodLabel: "/per year",
@@ -120,6 +89,18 @@ const mapPlansToCards = (plans, vehicle) => {
     isEssential: plan.planSubCategory === "standard",
     planSubCategory: plan.planSubCategory?.toLowerCase(),
   }));
+};
+
+const fetchAMCPlansData = async (vehicleType, amcType, setCards, setLoading) => {
+  setLoading(true);
+  const res = await getAMCPlansByCategory(vehicleType, amcType);
+  if (res.success && Array.isArray(res.data)) {
+    const mappedPlans = mapPlansToCards(res.data);
+    const order = { premium: 1, standard: 2, basic: 3 };
+    mappedPlans.sort((a, b) => (order[a.planSubCategory] || 4) - (order[b.planSubCategory] || 4));
+    setCards(mappedPlans);
+  }
+  setLoading(false);
 };
 
 const AMCCards = ({ onBuy, plans, vehicle }) => {
@@ -158,7 +139,7 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
 
   return (
     <div className="bg-gray-50 mt-0">
-        <div className="max-w-[1180px] mx-auto px-4 sm:px-6 md:px-8">
+      <div className="max-w-[1180px] mx-auto px-4 sm:px-6 md:px-8">
         <div className="flex overflow-x-auto scroll-smooth gap-4 sm:gap-6 pb-4 max-w-[1180px] justify-around">
           {cards.map((card, index) => (
             <AMCCard key={card._id || index} {...card} onBuy={() => handleBuy(card)} vehicleType={vehicleType} />

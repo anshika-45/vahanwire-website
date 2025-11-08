@@ -10,28 +10,24 @@ import {
 const ProfileForm = () => {
   const [isEditing, setIsEditing] = useState(true);
   const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
-  const [previewUrl, setPreviewUrl] = useState("https://i.pravatar.cc/160");
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const fetchUserProfile = async () => {
+    const res = await getMyProfile();
+    const data = res?.data;
+    if (data) {
+      setFormData({
+        name: data.name || "",
+        phone: data.phone || "",
+        email: data.email || "",
+      });
+      if (data.profileUrl) setSelectedFile(data.profileUrl);
+    }
+  };
+
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await getMyProfile();
-        const data = res?.data || res;
-        if (data) {
-          setFormData({
-            name: data.name || "",
-            phone: data.phone || "",
-            email: data.email || "",
-          });
-          if (data.profileUrl) setPreviewUrl(data.profileUrl);
-        }
-      } catch (err) {
-        console.error("Failed to fetch profile:", err);
-      }
-    };
-    fetchProfile();
+    fetchUserProfile();
   }, []);
 
   const handleChange = (e) => {
@@ -43,29 +39,21 @@ const ProfileForm = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setPreviewUrl(URL.createObjectURL(file));
-    setSelectedFile(file);
-
-    try {
-      const res = await uploadProfileImage(file);
-      const imageUrl = res?.data?.profileUrl || res?.profileUrl;
-      if (imageUrl) setPreviewUrl(imageUrl);
-    } catch (err) {
-      console.error("Image upload failed:", err);
+    setLoading(true);
+    const res = await uploadProfileImage(file);
+    const imageUrl = res?.data?.profileUrl;
+    if (imageUrl) {
+      setSelectedFile(imageUrl);
     }
+    setLoading(false);
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     setLoading(true);
-    try {
-      await updateMyProfile({ name: formData.name, email: formData.email });
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Failed to update profile:", error);
-    } finally {
-      setLoading(false);
-    }
+    await updateMyProfile({ name: formData.name, email: formData.email });
+    setIsEditing(false);
+    setLoading(false);
   };
 
   return (
@@ -74,7 +62,7 @@ const ProfileForm = () => {
         <div className="flex flex-col items-center md:w-1/3 gap-4 w-full mt-4 md:mt-6">
           <div className="relative">
             <img
-              src={previewUrl}
+              src={selectedFile}
               alt="Avatar"
               className="w-24 h-24 sm:w-32 sm:h-32 md:w-30 md:h-30 lg:w-36 lg:h-36 rounded-full object-cover border-4 border-white shadow"
             />
@@ -97,13 +85,6 @@ const ProfileForm = () => {
               className="hidden"
               onChange={handleImageChange}
             />
-          </div>
-
-          <div className="flex items-center gap-2 text-amber-500">
-            <span>★</span>
-            <span className="text-slate-700 text-sm sm:text-base md:text-lg font-medium">
-              4.8
-            </span>
           </div>
         </div>
 
@@ -163,21 +144,21 @@ const ProfileForm = () => {
             <div className="flex flex-col gap-4 sm:gap-5">
               <div>
                 <p className="text-xs text-[#666] mb-1">Name</p>
-                <p className="text-sm sm:text-base md:text-lg font-semibold">
+                <p className="text-sm sm:text-base md:text-lg">
                   {formData.name}
                 </p>
               </div>
 
               <div>
                 <p className="text-xs text-[#666] mb-1">Phone</p>
-                <p className="text-sm sm:text-base md:text-lg font-semibold">
+                <p className="text-sm sm:text-base md:text-lg">
                   {formData.phone}
                 </p>
               </div>
 
               <div>
                 <p className="text-xs text-[#666] mb-1">Email</p>
-                <p className="text-sm sm:text-base md:text-lg font-semibold">
+                <p className="text-sm sm:text-base md:text-lg">
                   {formData.email}
                 </p>
               </div>

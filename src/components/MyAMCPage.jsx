@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Eye, Edit } from "lucide-react";
 import ServiceCovrageDetails from "./ServiceCovrageDetails";
 import MyAMCCard from "./MyAMCCard";
-import { getMyAMCPlans } from "../api/authApi";
+import { getMyAMCPlans } from "../api/amcApi";
 import { toast } from "react-toastify";
 
 export default function MyAMCPage() {

@@ -4,17 +4,16 @@ import detailIcon from "../assets/info-circle.webp";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import Payment from "./Payment";
-import SuccessPurchase from "./SuccessPurchase";
 import { initiatePayment } from "../api/paymentApi";
 import { toast } from "react-toastify";
+const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
 const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
   const [currentView, setCurrentView] = useState("summary");
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
-
-  console.log("vehicle",vehicle);
+  
   useEffect(() => {
     if (isOpen) {
       setCurrentView("summary");
@@ -63,10 +62,6 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
   const total = plan?.price;
 
   const handleProceedToPayment = async () => {
-    console.log("Plan data:", plan);
-    
-
-
     if (!plan?._id) {
       alert("Plan information is incomplete. Missing ID or price.");
       return;
@@ -84,8 +79,6 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
         vehicleNumber: vehicle.vehicleNumber 
       });
 
-      console.log("Payment response:", paymentResponse);
-
       if (paymentResponse.success) {
         setPaymentData(paymentResponse.data);
         setCurrentView("payment");
@@ -101,9 +94,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
   };
 
   const handlePaymentSuccess = () => {
-    console.log("Payment successful, showing success modal");
     setCurrentView("success");
-    
   };
 
   const handlePaymentBack = () => {
@@ -130,7 +121,6 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
 
     return (
       <div className="flex flex-col gap-6">
-        {/* Your existing JSX content remains the same */}
         <div className="bg-[#266DDF] text-white text-md rounded-lg mt-1 px-4 py-3">
           <div className="flex justify-between items-start">
             <div>
@@ -182,6 +172,9 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
                     alt="Details"
                     loading="lazy"
                     className="w-5 h-5 cursor-pointer"
+                    width={20}
+                    height={20}
+                    decoding="async"
                   />
                   {hoveredIcon === i && (
                     <div className={`absolute left-8 bg-[#F7FAFF] border-1 border-[#c9dcfd] text-black text-xs px-4 py-4 rounded-lg z-50 w-64 ${i > 3 ? 'top-[-6rem]' : 'top-0'}`}>
@@ -222,9 +215,9 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
 
   if (currentView === "success") {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-        <SuccessPurchase onClose={onClose} plan={plan} />
-      </div>
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <SuccessPurchase onClose={onClose} plan={plan} />
+    </React.Suspense>
     );
   }
 

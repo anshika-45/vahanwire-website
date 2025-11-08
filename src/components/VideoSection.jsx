@@ -14,23 +14,19 @@ const VideoSection = React.memo(() => {
     };
   }, []);
   return (
-   
-      <div className="max-w-full text-center mt-4 sm:mt-6 md:mt-4">
-        <video
-          ref={videoRef}
-          src={demoVideo}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          className="shadow-lg w-full mx-auto select-none pointer-events-none"
-        />
-      </div>
-   
+    <div className="max-w-full text-center mt-4 sm:mt-6 md:mt-4">
+      <video
+        ref={videoRef}
+        src={demoVideo}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="metadata"
+        className="shadow-lg w-full mx-auto select-none pointer-events-none"
+      />
+    </div>
   );
 });
 VideoSection.displayName = "VideoSection";
 export default VideoSection;
-
-

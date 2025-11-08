@@ -6,10 +6,7 @@ export const getUserVehicles = async () => {
 };
 
 export const updateUserVehicle = async (vehicleId, updateData) => {
-  const res = await axiosInstance.put(
-    `/vehicle/user-vehicles/${vehicleId}`,
-    updateData
-  );
+  const res = await axiosInstance.put(`/vehicle/user-vehicles/${vehicleId}`, updateData);
   return res.data;
 };
 
@@ -24,29 +21,12 @@ export const getVehicleData = async () => {
 };
 
 export const addUserVehicle = async (vehicleData) => {
-  const res = await axiosInstance.post(
-    "/vehicle/add-user-vehicles",
-    vehicleData
-  );
+  const res = await axiosInstance.post("/vehicle/add-user-vehicles", vehicleData);
   return res;
 };
 
 export const searchUserVehicle = async (vehicleNumber) => {
-  try {
-    const res = await axiosInstance.get(
-      `/vehicle/search?vehicleNumber=${vehicleNumber}`
-    );
+    const res = await axiosInstance.get(`/vehicle/search?vehicleNumber=${vehicleNumber}`);
     return res.data;
-  } catch (error) {
-    if (error.response?.status === 404) {
-      return {
-        success: true,
-        data: {
-          found: false,
-          vehicle: null
-        }
-      };
-    }
-    throw error;
-  }
 };
+

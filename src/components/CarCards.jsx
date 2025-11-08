@@ -7,7 +7,6 @@ import deleteIcon from "../assets/adelete.webp";
 import editIcon from "../assets/aedit.webp";
 import checkIcon from "../assets/circle-check-filled.webp";
 import { getUserVehicles, deleteUserVehicle } from "../api/vehicleApi";
-
 const VehicleCard = ({
   title,
   vehicleNumber,
@@ -18,7 +17,6 @@ const VehicleCard = ({
   onDelete,
 }) => {
   return (
-    
     <div className="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm">
       <div
         className={`${tone} p-3 sm:p-4 md:p-6 flex items-center justify-center`}
@@ -55,28 +53,11 @@ const VehicleCard = ({
           </p>
         )}
 
-        <div
-          className="
-    mt-3 sm:mt-4
-    grid grid-cols-1
-    sm:grid-cols-1
-    md:grid-cols-2
-    gap-2 sm:gap-3 md:gap-4
-  "
-        >
+        <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
           <button
             onClick={onDelete}
             aria-label={`Delete ${title}`}
-            className="
-      flex items-center justify-center
-      h-9 sm:h-10
-      px-4 sm:px-6
-      rounded-lg border border-[#FB0200] text-[#FB0200]
-      hover:bg-rose-50
-      text-xs sm:text-sm
-      whitespace-nowrap
-      w-full
-    "
+            className="flex items-center justify-center h-9 sm:h-10 px-4 sm:px-6 rounded-lg border border-[#FB0200] text-[#FB0200] hover:bg-rose-50 text-xs sm:text-sm whitespace-nowrap w-full"
           >
             <img
               loading="lazy"
@@ -91,16 +72,7 @@ const VehicleCard = ({
           <button
             onClick={onEdit}
             aria-label={`Edit ${title}`}
-            className="
-      flex items-center justify-center
-      h-9 sm:h-10
-      px-4 sm:px-6
-      rounded-lg border border-[#266DDF] text-[#266DDF]
-      hover:bg-[#D9E7FE]
-      text-xs sm:text-sm
-      whitespace-nowrap
-      w-full
-    "
+            className="flex items-center justify-center h-9 sm:h-10 px-4 sm:px-6 rounded-lg border border-[#266DDF] text-[#266DDF] hover:bg-[#D9E7FE] text-xs sm:text-sm whitespace-nowrap w-full"
           >
             <img
               loading="lazy"
@@ -123,43 +95,46 @@ const CarCards = () => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const fetchVehicles = async () => {
-    try {
-      setLoading(true);
-      const vehicles = await getUserVehicles();
-
-      const formatted = vehicles.map((v, index) => ({
-        id: v._id,
-        title: `${v.brand} (${v.model})`,
-        vehicleNumber: v.vehicleNumber,
-        amcLabel: "No AMC Plan Assigned",
-        image: index % 2 === 0 ? vehicleImage1 : vehicleImage2,
-        tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
-      }));
-
-      setCars(formatted);
-    } catch (error) {
-      console.error("Error fetching vehicles:", error);
-    } finally {
-      setLoading(false);
-    }
+ 
+  const fetchUserVehicles = async () => {
+    setLoading(true);
+    const vehicles = await getUserVehicles();
+    const formatted = vehicles.map((v, index) => ({
+      _id: v._id,
+      id: v._id,
+      title: `${v.brand} ${v.model}`,
+      vehicleNumber: v.vehicleNumber,
+      vehicleType: v.vehicleType,
+      brand: v.brand,
+      model: v.model,
+      fuelType: v.fuelType,
+      amcLabel: "",
+      image: index % 2 === 0 ? vehicleImage1 : vehicleImage2,
+      tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
+    }));
+    setCars(formatted);
+    setLoading(false);
   };
-
+  
   useEffect(() => {
-    fetchVehicles();
+    fetchUserVehicles();
   }, []);
 
   const handleDelete = async (vehicleId) => {
     if (window.confirm("Are you sure you want to delete this vehicle?")) {
-      try {
-        await deleteUserVehicle(vehicleId);
-        setCars((prev) => prev.filter((car) => car.id !== vehicleId));
-      } catch (error) {
-        console.error("Delete failed:", error);
-        alert("Failed to delete vehicle. Please try again later.");
-      }
+      await deleteUserVehicle(vehicleId);
+      setCars((prev) => prev.filter((car) => car.id !== vehicleId));
     }
+  };
+
+  const handleEditSubmit = () => {
+    setOpen(false);
+    fetchUserVehicles();
+  };
+
+  const handleAddSubmit = () => {
+    setAddModalOpen(false);
+    fetchUserVehicles();
   };
 
   return (
@@ -167,20 +142,14 @@ const CarCards = () => {
       <EditVehicleModal
         open={open}
         onClose={() => setOpen(false)}
-        onSubmit={() => {
-          setOpen(false);
-          fetchVehicles();
-        }}
+        onSubmit={handleEditSubmit}
         initial={current}
       />
 
       <AddVehicleModal
         open={addModalOpen}
         onClose={() => setAddModalOpen(false)}
-        onSubmit={() => {
-          setAddModalOpen(false);
-          fetchVehicles();
-        }}
+        onSubmit={handleAddSubmit}
       />
 
       {loading ? (
@@ -198,7 +167,6 @@ const CarCards = () => {
               key={car.id}
               title={car.title}
               vehicleNumber={car.vehicleNumber}
-              amcLabel={car.amcLabel}
               image={car.image}
               tone={car.tone}
               onEdit={() => {
@@ -215,14 +183,7 @@ const CarCards = () => {
         <button
           onClick={() => setAddModalOpen(true)}
           aria-label="Add new vehicle"
-          className="
-            inline-flex items-center justify-center
-            h-10 sm:h-10 px-4 sm:px-6
-            rounded-lg bg-[#266DDF] text-white hover:bg-blue-700
-            text-xs sm:text-sm whitespace-nowrap
-            w-full sm:w-auto
-            focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[#cfe0ff]
-          "
+          className="inline-flex items-center justify-center h-10 sm:h-10 px-4 sm:px-6 rounded-lg bg-[#266DDF] text-white hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[#cfe0ff]"
         >
           Add New Vehicle
         </button>

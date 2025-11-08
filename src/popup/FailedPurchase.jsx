@@ -10,6 +10,10 @@ const FailedPurchase = ({ onClose, reason }) => {
           src={failureIcon}
           alt="Payment Failed"
           className="w-30 h-30 mb-6 mx-auto"
+          loading="lazy" 
+          width={120}     
+          height={120}    
+          decoding="async"
         />
 
         <h2 className="text-3xl font-bold text-gray-800 mb-3">
