@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log(paymentData);
   useEffect(() => {
     if (paymentData?.payuData && paymentData?.payuUrl) {
       submitToPayU();
@@ -28,8 +27,6 @@ const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
       return;
     }
 
-    console.log("Submitting to PayU with data:", paymentData.payuData);
-
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = paymentData.payuUrl;
@@ -45,7 +42,6 @@ const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
 
     document.body.appendChild(form);
     
-    // Add small delay to ensure form is properly appended
     setTimeout(() => {
       form.submit();
     }, 100);
@@ -79,13 +75,13 @@ const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
             <div className="flex gap-4 justify-center">
               <button
                 onClick={onBack}
-                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Back
               </button>
               <button
                 onClick={handleManualPayment}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 Proceed to PayU
               </button>
@@ -105,19 +101,6 @@ const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
             </div>
           </>
         )}
-
-        {/* {process.env.NODE_ENV === 'development' && paymentData && (
-          <div className="mt-6 p-4 bg-gray-100 rounded-lg text-left max-w-md mx-auto">
-            <h3 className="font-semibold mb-2 text-sm">Debug Info:</h3>
-            <pre className="text-xs overflow-auto">
-              {JSON.stringify({
-                hasPayuUrl: !!paymentData.payuUrl,
-                hasPayuData: !!paymentData.payuData,
-                parameters: Object.keys(paymentData.payuData || {})
-              }, null, 2)}
-            </pre>
-          </div>
-        )} */}
       </div>
     </div>
   );

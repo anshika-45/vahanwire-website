@@ -47,32 +47,26 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    try {
-      const payload = { ...form, vehicleType };
-      const res = await addUserVehicle(payload);
-      if (res?.data?.data?.success || res?.data?.success) {
-        alert("Vehicle added successfully!");
-        onSubmit?.();
-        onClose();
-      } else {
-        setError(res?.data?.message || "Failed to add vehicle");
-      }
-    } catch (err) {
-      console.error("Add Vehicle Failed:", err);
-      setError(
-        err?.response?.data?.message ||
-          "Something went wrong, please try again."
-      );
-    } finally {
-      setLoading(false);
+    
+    const payload = { ...form, vehicleType };
+    const res = await addUserVehicle(payload);
+    
+    if (res?.data?.data?.success || res?.data?.success) {
+      alert("Vehicle added successfully!");
+      onSubmit?.();
+      onClose();
+    } else {
+      setError(res?.data?.message || "Failed to add vehicle");
     }
+    
+    setLoading(false);
   };
 
   return (
     <>
       <Backdrop onClose={onClose} />
       <div className="fixed inset-0 z-[9999] grid place-items-center p-3 sm:p-4">
-        <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-slate-200 /* no max-h, no overflow */">
+        <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-slate-200">
           <div className="relative px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 bg-[#D9E7FE] rounded-t-2xl">
             <h2 className="absolute left-1/2 -translate-x-1/2 text-sm sm:text-base font-semibold text-slate-800">
               Add New Vehicle Details

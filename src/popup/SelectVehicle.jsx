@@ -51,69 +51,36 @@ const SelectVehicle = ({
   }, [addedVehicleNumber, addedVehicleBrand, addedVehicleModel]);
 
   const verifyVehicleNumber = async (regNumber) => {
-    try {
-      setIsLoading(true);
-      const response = await searchUserVehicle(regNumber);
-      
-      if (response.success && response.data.found && response.data.vehicle) {
-        return { 
-          found: true, 
-          vehicle: response.data.vehicle 
-        };
-      } else {
-        return { 
-          found: false 
-        };
-      }
-    } catch (error) {
-      console.error("Search Vehicle API Error:", error);
-      let errorMessage = "Failed to search vehicle";
-      
-      if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.request) {
-        errorMessage = "No response from server. Please check your connection.";
-      }
-      
-      setNumberError(errorMessage);
-      return { found: false };
-    } finally {
-      setIsLoading(false);
+    setIsLoading(true);
+    const response = await searchUserVehicle(regNumber);
+    setIsLoading(false);
+    if (response.success && response.data.found && response.data.vehicle) {
+      return { 
+        found: true, 
+        vehicle: response.data.vehicle 
+      };
+    } else {
+      return { 
+        found: false 
+      };
     }
   };
 
   const handleAddNewVehicle = async (vehicleData) => {
-    try {
-      setIsLoading(true);
-      const response = await addUserVehicle(vehicleData);
-      
-      if (response.status === 201) {
-        return { 
-          success: true, 
-          data: response.data 
-        };
-      } else {
-        return { 
-          success: false, 
-          message: "Failed to add vehicle" 
-        };
-      }
-    } catch (error) {
-      console.error("Add Vehicle API Error:", error);
-      let errorMessage = "Failed to add vehicle";
-      
-      if (error.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      } else if (error.response?.status === 400) {
-        errorMessage = "Vehicle already exists";
-      }
-      
+    setIsLoading(true);
+    const response = await addUserVehicle(vehicleData);
+    setIsLoading(false);
+    
+    if (response.status === 201) {
+      return { 
+        success: true, 
+        data: response.data 
+      };
+    } else {
       return { 
         success: false, 
-        message: errorMessage 
+        message: "Failed to add vehicle" 
       };
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -223,11 +190,9 @@ const SelectVehicle = ({
 
   const handleVehicleSelect = (vehicleNumber) => {
     setSelectedVehicle(vehicleNumber);
-    
     const selectedVehicleData = addedVehicles.find(
       vehicle => vehicle.number === vehicleNumber
     );
-    
     if (selectedVehicleData && onSelectVehicle) {
       onSelectVehicle(selectedVehicleData);
     }
@@ -256,33 +221,17 @@ const SelectVehicle = ({
   }, [isOpen]);
 
   const handleSelectAMCVehicle = async (vehicleData) => {
-    try {
-      setIsProceeding(true);
-      const requestData = {
-        vehicleNumber: vehicleData.number,
-        brand: vehicleData.brand,
-        model: vehicleData.model,
-        vehicleType: vehicleType,
-        amcPlanCategory: amcType,
-      };
-      const response = await selectAMCVehicle(requestData);
-      return response;
-    } catch (error) {
-      console.error("Select AMC Vehicle Error:", error);
-      if (error.response) {
-        throw new Error(
-          error.response.data.message || "Failed to select vehicle"
-        );
-      } else if (error.request) {
-        throw new Error(
-          "No response from server. Please check your connection."
-        );
-      } else {
-        throw error;
-      }
-    } finally {
-      setIsProceeding(false);
-    }
+    setIsProceeding(true);
+    const requestData = {
+      vehicleNumber: vehicleData.number,
+      brand: vehicleData.brand,
+      model: vehicleData.model,
+      vehicleType: vehicleType,
+      amcPlanCategory: amcType,
+    };
+    const response = await selectAMCVehicle(requestData);
+    setIsProceeding(false);
+    return response;
   };
 
   const handleProceed = async () => {
@@ -291,36 +240,31 @@ const SelectVehicle = ({
       return;
     }
     
-    try {
-      const vehicleData = addedVehicles.find(
-        vehicle => vehicle.number === selectedVehicle
-      );
-      
-      if (!vehicleData) {
-        alert("Vehicle data not found");
-        return;
-      }
-      
-      const response = await handleSelectAMCVehicle(vehicleData);
-      if (response.success) {
-        const { hasActiveAMC, activeAMC, plans, vehicle } = response.data;
-        if (hasActiveAMC) {
-          alert("This vehicle already has an active AMC plan");
-        } else {
-          navigate("/vehicle-amc-filter", {
-            state: {
-              plans,
-              vehicle,
-              selectedPlan: plan,
-            },
-          });
-        }
+    const vehicleData = addedVehicles.find(
+      vehicle => vehicle.number === selectedVehicle
+    );
+    
+    if (!vehicleData) {
+      alert("Vehicle data not found");
+      return;
+    }
+    
+    const response = await handleSelectAMCVehicle(vehicleData);
+    if (response.success) {
+      const { hasActiveAMC, activeAMC, plans, vehicle } = response.data;
+      if (hasActiveAMC) {
+        alert("This vehicle already has an active AMC plan");
       } else {
-        alert(response.message || "Failed to process vehicle selection");
+        navigate("/vehicle-amc-filter", {
+          state: {
+            plans,
+            vehicle,
+            selectedPlan: plan,
+          },
+        });
       }
-    } catch (error) {
-      console.error("Proceed error:", error);
-      alert(error.message || "Failed to proceed. Please try again.");
+    } else {
+      alert(response.message || "Failed to process vehicle selection");
     }
   };
 
@@ -333,6 +277,9 @@ const SelectVehicle = ({
             alt="verify"
             loading="lazy"
             className="w-5 h-5"
+            width={20} 
+            height={20}
+            decoding="async"
           />
           <span className="font-medium text-sm text-[#333333]">
             Account is Verified
@@ -361,6 +308,9 @@ const SelectVehicle = ({
                 alt={vehicle.model}
                 loading="lazy"
                 className="w-20 h-12 object-cover rounded"
+                width={88} 
+                height={48}
+                decoding="async"
               />
               <div className="flex-1">
                 {vehicle.brand === vehicle.model ? (

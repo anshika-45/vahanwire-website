@@ -20,9 +20,13 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const handleChange = (e) => {
+    setQuery(e.target.value);
+  };
   const dropdownRef = useRef(null);
   const handleProfileClick = () => {
-    setIsProfileModalOpen(!isProfileModalOpen);
+    setIsProfileModalOpen(true);
   };
   const handleSidebarSelect = (view) => {
     setIsProfileModalOpen(false);
@@ -46,14 +50,14 @@ const Header = () => {
     setOpen(!open);
   };
   return (
-    <div className=" bg-white mx-auto md:h-26 h-20 transition-all duration-300 ease-in z-50 gap-2 sm:gap-4 flex  items-center">
+    <div className={` bg-white mx-auto md:py-4 py-2.5 z-50 gap-2 sm:gap-4`}>
       <div className="container">
         <div className="flex items-center">
           <div className="flex w-full justify-between">
             <Suspense fallback={<LazyFallback />}>
               <Logo />
             </Suspense>
-            <div className=" hidden md:flex items-center justify-end">
+            <div className="md:flex items-center justify-end">
               <Suspense fallback={<LazyFallback />}>
                 <SearchBar />
               </Suspense>
@@ -64,10 +68,9 @@ const Header = () => {
               <div
                 role="button"
                 onClick={handleClick}
-                className="md:hidden block"
+                className="md:hidden block mr-2 border-r border-gray-400 pr-2"
               >
                 <img
-                id="searchIcon"
                   className="w-4 h-4 object-contain"
                   src={searchIcon}
                   alt="searchicon"
@@ -124,6 +127,32 @@ const Header = () => {
             isFromLogin={true}
           />
         </Suspense>
+      </div>
+      <div
+        id="headerSearchbar"
+        className={`${
+          open ? "max-h-7 py-1 my-2 opacity-100" : "max-h-0 opacity-0 "
+        } duration-300 ease-in transition-all `}
+      >
+        <div className="relative">
+          <img
+            src={searchIcon}
+            loading="lazy"
+            alt="Search"
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
+          />
+          <input
+            className={`py-2 pl-10 pr-4 ${
+              open
+                ? "w-full rounded-[6px] border-2 border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
+                : ""
+            }`}
+            value={query}
+            onChange={handleChange}
+            type="text"
+            placeholder="Search..."
+          />
+        </div>
       </div>
     </div>
   );

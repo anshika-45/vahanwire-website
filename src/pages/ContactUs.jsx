@@ -1,8 +1,8 @@
 import React, { useState, Suspense } from "react";
 import { createContact } from "../api/authApi";
+import { MailOpen, Phone, MapPin } from "lucide-react";
 import contactBanner from "../assets/contact-us-banner.webp";
 import contactImage from "../assets/contact-us-card.webp";
-import { MailOpen, Phone, MapPin } from "lucide-react";
 
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
@@ -12,7 +12,6 @@ const ComponentFallback = () => (
     <div className="animate-pulse bg-gray-200 rounded-lg h-32 w-full max-w-4xl"></div>
   </div>
 );
-
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -53,7 +52,6 @@ const ContactUs = () => {
       </Suspense>
 
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 items-stretch">
-        {/* Left Info Section */}
         <div className="bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl p-8 flex flex-col justify-end">
           <div className="md:flex md:items-end md:space-x-6">
             <div className="md:w-2/5">
@@ -97,12 +95,14 @@ const ContactUs = () => {
                 alt="Contact Illustration"
                 className="w-[180px] sm:w-[220px] md:w-[280px] object-contain"
                 loading="lazy"
+                width={280}  
+                height={200}
+                decoding="async"
               />
             </div>
           </div>
         </div>
 
-        {/* Right Form Section */}
         <div className="bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl p-8 flex flex-col justify-center">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
             Welcome to <span className="text-[#266DDF]">VahanWire!</span>

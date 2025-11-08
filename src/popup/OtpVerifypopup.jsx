@@ -3,10 +3,9 @@ import Modal from "../components/Modal";
 import Button from "../components/Button";
 import otpImg from "../assets/AnimationPhone.webp";
 import { LucideEdit } from "lucide-react";
-import EnterVehicleNumber from "./EnterVehicleNumber";
 import { useAuth } from "../context/AuthContext";
 import { verifyOtp } from "../api/authApi";
-
+const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
 const OtpVerifypopup = ({
   isOpen,
   onClose,
@@ -46,8 +45,9 @@ const OtpVerifypopup = ({
       inputRefs[idx - 1].current.focus();
   };
 
-  const handleSubmit = async () => {
-    const fullOtp = otp.join("");
+  const handleOtpSubmit = async () => {
+    const fullOtp = otp.join("").trim();
+
     if (fullOtp.length !== 4) {
       setError("Please enter the 4-digit OTP");
       return;
@@ -58,24 +58,30 @@ const OtpVerifypopup = ({
       setError("");
 
       const response = await verifyOtp(phoneNumber, fullOtp);
-      console.log("OTP verify response:", response);
 
-      if (response.success) {
-        if (response.data?.accessToken) {
-          localStorage.setItem("token", response.data.accessToken);
+      if (response?.success && response?.data) {
+        const { accessToken, user } = response.data;
+
+        if (accessToken) {
+          localStorage.setItem("token", accessToken);
         }
+
+        if (user) {
+          localStorage.setItem("user", JSON.stringify(user));
+        }
+
         setIsLoggedIn(true);
-        if (isFromLogin) {
-          onClose();
-        } else {
-          setShowVehiclePopup(true);
-        }
+
+        isFromLogin ? onClose() : setShowVehiclePopup(true);
       } else {
-        setError(response.message || "Invalid OTP. Try again.");
+        setError(response?.message || "Invalid OTP. Try again.");
       }
     } catch (err) {
-      console.error("OTP verify error:", err);
-      setError(err?.response?.data?.message || "Failed to verify OTP");
+      console.error("OTP verification failed:", err);
+      setError(
+        err?.response?.data?.message ||
+          "Failed to verify OTP. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -87,12 +93,15 @@ const OtpVerifypopup = ({
     <>
       {!showVehiclePopup && (
         <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
-          <div className="bg-white rounded-xl p-10 w-[500px] max-w-lg flex flex-col items-center m-4">
+          <div className="bg-white rounded-xl p-5  flex flex-col items-center m-4">
             <img
               src={otpImg}
               loading="lazy"
               alt="OTP Animation"
-              className="w-60 h-60 mb-4"
+              className="md:w-60 md:h-60 w-40 h-40 mb-4"
+              width={160}
+              height={160}
+              decoding="async"
             />
             <h1 className="text-xl font-semibold text-[#242424] text-center mb-2">
               Verify Your Number
@@ -127,7 +136,9 @@ const OtpVerifypopup = ({
               ))}
             </div>
 
-            {error && <div className="text-[#CB0200] text-xs mb-2">{error}</div>}
+            {error && (
+              <div className="text-[#CB0200] text-xs mb-2">{error}</div>
+            )}
 
             <div className="text-xs text-[#666] mb-4">
               Resend OTP in {timer}s
@@ -137,18 +148,26 @@ const OtpVerifypopup = ({
               text={loading ? "Verifying..." : "Submit"}
               disabled={loading}
               className="w-full bg-[#266DDF] text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-colors mt-2 disabled:opacity-60"
-              onClick={handleSubmit}
+              onClick={handleOtpSubmit}
             />
           </div>
         </Modal>
       )}
 
       {showVehiclePopup && (
-        <EnterVehicleNumber
-          isOpen={showVehiclePopup}
-          onClose={onClose}
-          onBack={() => setShowVehiclePopup(false)}
-        />
+        <React.Suspense
+          fallback={
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="text-white">Loading vehicle entry...</div>
+            </div>
+          }
+        >
+          <EnterVehicleNumber
+            isOpen={showVehiclePopup}
+            onClose={onClose}
+            onBack={() => setShowVehiclePopup(false)}
+          />
+        </React.Suspense>
       )}
     </>
   );

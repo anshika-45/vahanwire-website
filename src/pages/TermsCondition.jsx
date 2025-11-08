@@ -2,9 +2,7 @@ import React, { Suspense } from "react";
 import termsConditionBanner from "../assets/termcondition-banner.webp";
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
-const TwoColumnInfoLayout = React.lazy(() =>
-  import("../components/TwoColumnInfoLayout")
-);
+const TwoColumnInfoLayout = React.lazy(() => import("../components/TwoColumnInfoLayout"));
 
 const ComponentFallback = () => (
   <div className="flex items-center justify-center py-8">
@@ -168,7 +166,6 @@ const TermsCondition = () => {
         </Suspense>
       </div>
 
-
       <div>
         <Suspense fallback={<ComponentFallback />}>
           <TwoColumnInfoLayout
@@ -178,13 +175,9 @@ const TermsCondition = () => {
         </Suspense>
       </div>
 
-      
-       
-         <Suspense fallback={<ComponentFallback />}>
-          <AddBanner />
-        </Suspense>
-       
-      
+      <Suspense fallback={<ComponentFallback />}>
+        <AddBanner />
+      </Suspense>
     </div>
   );
 };

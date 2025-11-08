@@ -55,6 +55,9 @@ const AboutUs = () => {
                 alt="VahanWire App Interface"
                 className="w-[260px] md:w-[260px] lg:w-[300px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200"
                 loading="lazy"
+                width={300}  
+                height={600}
+                decoding="async"
               />
             </div>
           </div>
