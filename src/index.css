@@ -28,7 +28,7 @@ font-family: Roboto, sans-serif;
 }
 
 .container{
-  padding: 0 15px;
+  padding: 0 6px;
   margin:0 auto;
   @apply max-w-screen-xl
 }

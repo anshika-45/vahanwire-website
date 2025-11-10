@@ -44,12 +44,11 @@ const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false }) => {
   };
 
   const handleOtpBack = () => setShowOtp(false);
-
   return (
     <>
       {!showOtp && (
         <Modal isOpen={isOpen} onClose={onClose}>
-          <div className="bg-white rounded-xl p-6 sm:p-8 md:p-9 flex flex-col items-center mx-auto my-6">
+          <div className="bg-white rounded-xl p-8 sm:p-8 md:p-14 flex flex-col items-center m-6 my-10">
             <div className="flex justify-center mb-5 sm:mb-7">
               <img
                 src={phoneGif}
@@ -60,7 +59,7 @@ const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false }) => {
                 decoding="async"
               />
             </div>
-            <h1 className="text-lg sm:text-xl font-semibold text-[#242424] text-center mb-3 sm:mb-4">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#242424] text-center mb-3 sm:mb-4">
               Verify Your Number
             </h1>
             <label
@@ -84,7 +83,7 @@ const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false }) => {
         px-3 py-2 sm:py-3 
         mb-2 
         focus:outline-none focus:ring-1 focus:ring-[#BCD2F5] 
-        text-left text-sm bg-[#F8F8F8]
+        text-left text-sm bg-[#F8F8F8] text-[#A1A1A1]
       "
             />
 

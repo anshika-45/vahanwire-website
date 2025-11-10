@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import Modal from "../components/Modal";
 import brezzaImg from "../assets/vehicle.webp";
 import verifyIcon from "../assets/verify.webp";
-import { searchUserVehicle, addUserVehicle } from "../api/vehicleApi";
+import { searchUserVehicle, addUserVehicle, getUserVehicles } from "../api/vehicleApi";
 import { selectAMCVehicle } from "../api/amcApi";
 
 const SelectVehicle = ({
@@ -35,17 +35,44 @@ const SelectVehicle = ({
   const initialized = useRef(false);
   
   useEffect(() => {
-    if (!initialized.current && addedVehicleNumber && addedVehicleModel) {
-      const preAddedVehicle = {
-        number: addedVehicleNumber,
-        model: addedVehicleModel,
-        brand: addedVehicleBrand || addedVehicleModel.split(" ")[0],
-        originalModel: addedVehicleModel,
-        isPreAdded: true
-      };
+    if (!initialized.current) {
+      // If vehicles are passed via props (from EnterVehicleNumber)
+      if (addedVehicleNumber && addedVehicleModel) {
+        const preAddedVehicle = {
+          number: addedVehicleNumber,
+          model: addedVehicleModel,
+          brand: addedVehicleBrand || addedVehicleModel.split(" ")[0],
+          originalModel: addedVehicleModel,
+          isPreAdded: true
+        };
+        
+        setAddedVehicles([preAddedVehicle]);
+        setSelectedVehicle(addedVehicleNumber);
+      } else {
+        // Load existing user vehicles if no props provided
+        const loadExistingVehicles = async () => {
+          try {
+            const vehicles = await getUserVehicles();
+            if (vehicles && vehicles.length > 0) {
+              const formattedVehicles = vehicles.map(v => ({
+                number: v.vehicleNumber,
+                model: v.model,
+                brand: v.brand,
+                originalModel: v.model,
+              }));
+              setAddedVehicles(formattedVehicles);
+              if (formattedVehicles.length > 0) {
+                setSelectedVehicle(formattedVehicles[0].number);
+              }
+            }
+          } catch (err) {
+            console.error("Failed to load vehicles:", err);
+          }
+        };
+        
+        loadExistingVehicles();
+      }
       
-      setAddedVehicles([preAddedVehicle]);
-      setSelectedVehicle(addedVehicleNumber);
       initialized.current = true;
     }
   }, [addedVehicleNumber, addedVehicleBrand, addedVehicleModel]);
