@@ -53,11 +53,10 @@ const VehicleAmc = () => {
   };
 
   return (
-    <section className="w-full pt-15  bg-gray-50">
+    <section className="w-full pt-9 bg-gray-50">
       <BreadcrumbBar />
       <AMC vehicleType={vehicleType} setVehicleType={setVehicleType} />
-
-      <div className="container space-y-8 sm:space-y-10 mb-12">
+      <div classame="container space-y-8 sm:space-y-10 mb-12">
       <Suspense fallback={<ComponentLoader/>}>
       <AmcTabs />
       </Suspense>

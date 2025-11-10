@@ -9,12 +9,12 @@ const PlanSummaryPage = React.lazy(() => import("../popup/PlanSummaryPage"));
 const SuccessPurchase = React.lazy(() => import("../popup/SuccessPurchase"));
 const FailedPurchase = React.lazy(() => import("../popup/FailedPurchase"));
 import { useAuth } from "../context/AuthContext";
-import { verifyPayment } from "../api/paymentApi";
 import { createAMCPurchase } from "../api/amcApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import BreadcrumbBar from "../components/BreadcrumbBar";
 import AMC from "../components/AMC";
 import useAmcData from "../hooks/useAmcData";
+
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
 );
@@ -29,9 +29,10 @@ const ComponentLoader = () => (
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]"></div>
   </div>
 );
+
 const VehicleAmcFilter = () => {
   const { setIsLoggedIn } = useAuth();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -54,14 +55,12 @@ const VehicleAmcFilter = () => {
   const [selectedPlanState, setSelectedPlanState] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
-  const [isVerifying, setIsVerifying] = useState(false);
 
   const status = searchParams.get("status");
   const txnid = searchParams.get("txnid");
 
   useEffect(() => {
     setIsLoggedIn(true);
-
     document.body.style.overflow = "auto";
     document.documentElement.style.overflow = "auto";
     return () => {
@@ -70,24 +69,11 @@ const VehicleAmcFilter = () => {
     };
   }, [setIsLoggedIn]);
 
-  const handlePaymentStatus = async () => {
-    if (status === "success" && txnid) {
-      setIsVerifying(true);
-      const res = await verifyPayment(txnid);
-      if (res?.success && res?.data?.transaction?.status === "success") {
-        setShowPopup("success");
-      } else {
-        setShowPopup("failed");
-      }
-      setIsVerifying(false);
-    } else if (status === "failed") {
-      setShowPopup("failed");
-    }
-  };
-
   useEffect(() => {
-    handlePaymentStatus();
-  }, [status, txnid]);
+    if (status === "success" || status === "failed") {
+      setShowPopup(status);
+    }
+  }, [status]);
 
   const handleBuyNow = async (plan) => {
     if (!vehicle?.vehicleNumber) {
@@ -121,12 +107,16 @@ const VehicleAmcFilter = () => {
 
   const handleClosePaymentPopup = () => {
     setShowPopup(null);
-    navigate("/", { replace: true });
+    searchParams.delete("status");
+    searchParams.delete("txnid");
+    setSearchParams(searchParams, { replace: true });
   };
 
   const handleRetry = () => {
     setShowPopup(null);
-    navigate("/plans", { replace: true });
+    searchParams.delete("status");
+    searchParams.delete("txnid");
+    setSearchParams(searchParams, { replace: true });
   };
 
   return (
@@ -184,12 +174,6 @@ const VehicleAmcFilter = () => {
             vehicle={vehicle}
           />
         </Suspense>
-      )}
-
-      {isVerifying && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="text-white text-xl">Verifying your payment...</div>
-        </div>
       )}
 
       {showPopup === "success" && (

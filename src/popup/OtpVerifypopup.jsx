@@ -155,19 +155,11 @@ const OtpVerifypopup = ({
       )}
 
       {showVehiclePopup && (
-        <React.Suspense
-          fallback={
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="text-white">Loading vehicle entry...</div>
-            </div>
-          }
-        >
           <EnterVehicleNumber
             isOpen={showVehiclePopup}
             onClose={onClose}
             onBack={() => setShowVehiclePopup(false)}
           />
-        </React.Suspense>
       )}
     </>
   );

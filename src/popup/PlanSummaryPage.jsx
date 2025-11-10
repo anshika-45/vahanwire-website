@@ -13,7 +13,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
-  
+
   useEffect(() => {
     if (isOpen) {
       setCurrentView("summary");
@@ -215,9 +215,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
 
   if (currentView === "success") {
     return (
-    <React.Suspense fallback={<div>Loading...</div>}>
       <SuccessPurchase onClose={onClose} plan={plan} />
-    </React.Suspense>
     );
   }
 

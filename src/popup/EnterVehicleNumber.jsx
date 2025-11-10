@@ -257,7 +257,7 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
         <Suspense
           fallback={
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="text-white">Loading vehicle selection...</div>
+              <div className="text-white"></div>
             </div>
           }
         >
