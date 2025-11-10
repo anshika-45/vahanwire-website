@@ -29,7 +29,7 @@ const HoverCards = () => {
 
       {/* Content */}
       <div className="container relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-4 py-16">
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 lg:-mb-100 -mb-10">
+        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 lg:-mb-150 -mb-10">
           {steps.map((step, index) => (
             <div
               key={index}

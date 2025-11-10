@@ -82,7 +82,7 @@ const PrivacyPolicy = () => {
 
   return (
     <div className="bg-[rgba(244,244,244,1)]">
-      <div className="mt-[60px] sm:mt-[60px] md:mt-[80px]">
+      <div>
         <Suspense fallback={<ComponentFallback />}>
           <PageBanner title="Privacy Policy" image={privacyPolicyBanner} />
         </Suspense>
@@ -92,11 +92,11 @@ const PrivacyPolicy = () => {
           <TwoColumnInfoLayout title="Privacy Policy" sections={sections} />
         </Suspense>
       </div>
-      <div className="mt-20">
+      {/* <div className="mt-20">
         <Suspense fallback={<ComponentFallback />}>
           <AddBanner />
         </Suspense>
-      </div>
+      </div> */}
     </div>
   );
 };

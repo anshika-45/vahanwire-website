@@ -13,7 +13,7 @@ const ComponentFallback = () => (
 const AboutUs = () => {
   return (
     <>
-      <div className="mt-[34px] sm:mt-[30px] md:mt-[80px] ">
+      <div>
         <Suspense fallback={<ComponentFallback />}>
           <PageBanner title="About Us" image={aboutBanner} />
         </Suspense>
@@ -63,11 +63,11 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-      <div className="mt-20">
+      {/* <div className="mt-20">
         <Suspense fallback={<ComponentFallback />}>
           <AddBanner />
         </Suspense>
-      </div>
+      </div> */}
     </>
   );
 };

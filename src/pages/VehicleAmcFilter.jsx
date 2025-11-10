@@ -9,12 +9,12 @@ const PlanSummaryPage = React.lazy(() => import("../popup/PlanSummaryPage"));
 const SuccessPurchase = React.lazy(() => import("../popup/SuccessPurchase"));
 const FailedPurchase = React.lazy(() => import("../popup/FailedPurchase"));
 import { useAuth } from "../context/AuthContext";
+import { useAmcData } from "../context/AmcDataContext";
 import { verifyPayment } from "../api/paymentApi";
 import { createAMCPurchase } from "../api/amcApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import BreadcrumbBar from "../components/BreadcrumbBar";
 import AMC from "../components/AMC";
-import useAmcData from "../hooks/useAmcData";
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
 );
@@ -31,6 +31,7 @@ const ComponentLoader = () => (
 );
 const VehicleAmcFilter = () => {
   const { setIsLoggedIn } = useAuth();
+  const { addPurchasedCard } = useAmcData();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -55,6 +56,7 @@ const VehicleAmcFilter = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [purchaseData, setPurchaseData] = useState(null);
 
   const status = searchParams.get("status");
   const txnid = searchParams.get("txnid");
@@ -75,6 +77,24 @@ const VehicleAmcFilter = () => {
       setIsVerifying(true);
       const res = await verifyPayment(txnid);
       if (res?.success && res?.data?.transaction?.status === "success") {
+        // Prepare purchase data for context
+        if (selectedPlanState) {
+          const cardData = {
+            id: Date.now(),
+            plan: selectedPlanState.name,
+            vehicle: vehicle?.vehicleNumber,
+            validity: selectedPlanState.validity,
+            orderId: selectedPlanState.purchaseId,
+            description: selectedPlanState.description,
+            status: "Active",
+            statusBadge: "Active AMC",
+            bgColor: selectedPlanState.bgColor,
+            vehicleInfo: vehicle?.vehicleNumber,
+            logoSrc: selectedPlanState.logoSrc,
+            carImageSrc: selectedPlanState.carImageSrc,
+          };
+          setPurchaseData(cardData);
+        }
         setShowPopup("success");
       } else {
         setShowPopup("failed");
@@ -128,10 +148,8 @@ const VehicleAmcFilter = () => {
     setShowPopup(null);
     navigate("/plans", { replace: true });
   };
-
   return (
     <section className="bg-white w-full min-h-screen">
-      <BreadcrumbBar />
       <AMC
         vehicleType={vehicleType}
         setVehicleType={setVehicleType}
@@ -170,9 +188,9 @@ const VehicleAmcFilter = () => {
         <Suspense fallback={<BannerLoader />}>
           <AmcBanner onBuy={handleBuyNow} />
         </Suspense>
-        <Suspense fallback={<BannerLoader />}>
+        {/* <Suspense fallback={<BannerLoader />}>
           <AddBanner />
-        </Suspense>
+        </Suspense> */}
       </div>
 
       {isPopupOpen && (
@@ -195,7 +213,14 @@ const VehicleAmcFilter = () => {
       {showPopup === "success" && (
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <Suspense fallback={<div className="text-white">Loading...</div>}>
-            <SuccessPurchase onClose={handleClosePaymentPopup} />
+            <SuccessPurchase 
+              onClose={(data) => {
+                if (data) {
+                  addPurchasedCard(data);
+                }
+              }}
+              purchaseData={purchaseData}
+            />
           </Suspense>
         </div>
       )}

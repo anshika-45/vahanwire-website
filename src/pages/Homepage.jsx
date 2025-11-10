@@ -1,4 +1,6 @@
 import React, { Suspense } from "react";
+import { useNavigate } from "react-router-dom";
+
 const Faq = React.lazy(() => import("../components/Faq"));
 const Banner = React.lazy(() => import("../components/Banner"));
 const GetHelp = React.lazy(() => import("../components/GetHelp"));
@@ -16,9 +18,16 @@ const ComponentFallback = () => (
   </div>
 );
 const Homepage = () => {
-  const classStyle = "mt-4 sm:mt-6 md:mt-4 duration-300 transition-all ease-in";
+  const navigate = useNavigate();
+  const classStyle = "duration-300 transition-all ease-in";
+
+  const handleBuyAmc = () => {
+    navigate("/vehicle-amc");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <div className="">
+    <div>
       <Suspense fallback={<ComponentFallback />}>
         <Banner />
       </Suspense>
@@ -44,7 +53,7 @@ const Homepage = () => {
       </Suspense>
 
       <Suspense fallback={<ComponentFallback />}>
-        <AmcBanner />
+        <AmcBanner onBuy={handleBuyAmc} />
       </Suspense>
 
       <Suspense fallback={<ComponentFallback />}>
@@ -55,9 +64,7 @@ const Homepage = () => {
         <Faq />
       </Suspense>
 
-      <Suspense fallback={<ComponentFallback />}>
-        <AddBanner />
-      </Suspense>
+
     </div>
   );
 };

@@ -7,7 +7,7 @@ const Logo = React.memo(() => {
         src={logoImg}
         loading="eager"
         alt="VahanWire Logo"
-        className="w-[210px] object-contain"
+        className="w-[270px] object-contain"
         width="270"
         height="40"
         decoding="async"
