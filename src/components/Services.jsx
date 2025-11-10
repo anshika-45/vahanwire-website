@@ -47,7 +47,7 @@ const servicesData = [
 ];
 const Services = React.memo(() => {
   return (
-    <div className="justify-items-center pt-10 pb-12 h-auto bg-[#FFFFFF]">
+    <div className="justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]">
       <div className="container">
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]">
           Our Main Services

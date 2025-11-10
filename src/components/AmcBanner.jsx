@@ -4,13 +4,13 @@ import logo from "../assets/blurlogo.webp";
 import Button from "./Button";
 const AmcBanner = ({ onBuy }) => {
     return (
-        <section className="w-full mt-25 py-6 sm:py-8 md:py-10 bg-white flex justify-center mb-6 sm:mb-8">
+        <section className="w-full py-6 sm:py-8 md:py-8 bg-white flex justify-center mb-6 sm:mb-8 mt-2 md:mt-8">
             <div className="relative w-[95%] sm:w-[90%] md:w-[85%] max-w-7xl rounded-3xl overflow-hidden shadow-lg">
                 <img
                     src={amcImage}
                     alt="Vahanwire AMC"
                     loading="eager"
-                    className="w-full h-[200px] sm:h-[280px] md:h-[380px] object-cover"
+                    className="w-full h-[200px] sm:h-[280px] md:h-[350px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#AD0100]/40 via-[#000000]/10 to-transparent"></div>
                 <div className="absolute inset-0 flex flex-col text-justify justify-center px-4 sm:px-8 md:px-10 lg:px-16 text-white">

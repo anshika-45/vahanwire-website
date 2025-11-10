@@ -3,7 +3,7 @@ import { Download } from "lucide-react";
 
 const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc }) => {
   return (
-    <div className="flex flex-col items-center w-full max-w-[320px] sm:max-w-[360px] md:max-w-[400px] lg:max-w-[420px] mx-auto">
+    <div className="flex flex-col items-center w-full lg:basis-[40%] basis-full mx-auto">
       <div
         className={`${bgColor} rounded-t-xl p-4 md:p-6 w-full relative overflow-visible min-h-[170px] sm:min-h-[200px] md:min-h-[230px]`}
       >

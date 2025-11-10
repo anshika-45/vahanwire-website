@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Outlet } from "react-router-dom";
+import AddBanner from "../components/AddBanner";
 
 const Announcementbanner = lazy(() =>
   import("../components/Announcementbanner")
@@ -17,12 +18,6 @@ const ComponentFallback = () => (
 export default function MainLayout() {
   return (
     <div className="flex flex-col min-h-screen">
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50"
-      >
-        Skip to main content
-      </a>
       <div className="fixed w-full top-0 left-0 right-0 z-40">
         <Suspense fallback={<ComponentFallback />}>
           <Announcementbanner />
@@ -41,6 +36,7 @@ export default function MainLayout() {
         <Outlet />
       </main>
       <Suspense fallback={<ComponentFallback />}>
+     
         <Footer />
       </Suspense>
     </div>

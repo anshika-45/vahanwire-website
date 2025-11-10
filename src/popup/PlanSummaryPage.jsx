@@ -4,10 +4,9 @@ import detailIcon from "../assets/info-circle.webp";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import Payment from "./Payment";
-import SuccessPurchase from "./SuccessPurchase";
 import { initiatePayment } from "../api/paymentApi";
-import { toast } from "react-toastify";
 
+const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
   const [currentView, setCurrentView] = useState("summary");
   const [hoveredIcon, setHoveredIcon] = useState(null);
@@ -44,13 +43,41 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
   ];
 
   const features = [
-    { label: "Flat Tyre (Tube)", details: "Emergency roadside assistance for flat tyre replacement with tube-type tyres. Includes tyre changing and basic repairs." },
-    { label: "Flat Tyre (Tubeless)", details: "Emergency roadside assistance for flat tyre replacement with tubeless tyres. Includes tyre changing and basic repairs." },
-    { label: "Battery Jumpstart", details: "On-site battery jumpstart service when your vehicle battery is dead. Includes battery testing and jumpstart assistance." },
-    { label: "Custody Service", details: "Vehicle custody and secure parking services when you need to leave your vehicle temporarily for repairs or other reasons." },
-    { label: "Key Unlock Assistance", details: "Emergency key unlock service if you lock your keys inside the vehicle. Professional locksmith assistance." },
-    { label: "Fuel Delivery", details: "Emergency fuel delivery service when you run out of fuel. Up to 5 liters of fuel delivered to your location." },
-    { label: "Starting Problem", details: "Assistance for vehicle starting issues including battery problems, starter motor issues, and basic electrical diagnostics." },
+    {
+      label: "Flat Tyre (Tube)",
+      details:
+        "Emergency roadside assistance for flat tyre replacement with tube-type tyres. Includes tyre changing and basic repairs.",
+    },
+    {
+      label: "Flat Tyre (Tubeless)",
+      details:
+        "Emergency roadside assistance for flat tyre replacement with tubeless tyres. Includes tyre changing and basic repairs.",
+    },
+    {
+      label: "Battery Jumpstart",
+      details:
+        "On-site battery jumpstart service when your vehicle battery is dead. Includes battery testing and jumpstart assistance.",
+    },
+    {
+      label: "Custody Service",
+      details:
+        "Vehicle custody and secure parking services when you need to leave your vehicle temporarily for repairs or other reasons.",
+    },
+    {
+      label: "Key Unlock Assistance",
+      details:
+        "Emergency key unlock service if you lock your keys inside the vehicle. Professional locksmith assistance.",
+    },
+    {
+      label: "Fuel Delivery",
+      details:
+        "Emergency fuel delivery service when you run out of fuel. Up to 5 liters of fuel delivered to your location.",
+    },
+    {
+      label: "Starting Problem",
+      details:
+        "Assistance for vehicle starting issues including battery problems, starter motor issues, and basic electrical diagnostics.",
+    },
   ];
 
   const billing = [
@@ -65,7 +92,6 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
     console.log("Plan data:", plan);
     console.log("User data:", user);
 
-
     if (!plan?._id || !plan?.price) {
       alert("Plan information is incomplete. Missing ID or price.");
       return;
@@ -76,7 +102,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
       const paymentResponse = await initiatePayment({
         planId: plan._id,
         amount: plan.price,
-        planName: plan.title
+        planName: plan.title,
       });
 
       console.log("Payment response:", paymentResponse);
@@ -98,7 +124,6 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
   const handlePaymentSuccess = () => {
     console.log("Payment successful, showing success modal");
     setCurrentView("success");
-    
   };
 
   const handlePaymentBack = () => {
@@ -124,7 +149,6 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
 
     return (
       <div className="flex flex-col gap-6">
-        {/* Your existing JSX content remains the same */}
         <div className="bg-[#266DDF] text-white text-md rounded-lg mt-1 px-4 py-3">
           <div className="flex justify-between items-start">
             <div>
@@ -176,10 +200,19 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
                     alt="Details"
                     loading="lazy"
                     className="w-5 h-5 cursor-pointer"
+                    width={20} 
+                    height={20} 
+                    decoding="async"
                   />
                   {hoveredIcon === i && (
-                    <div className={`absolute left-8 bg-[#F7FAFF] border-1 border-[#c9dcfd] text-black text-xs px-4 py-4 rounded-lg z-50 w-64 ${i > 3 ? 'top-[-6rem]' : 'top-0'}`}>
-                      <h5 className="text-center font-bold text-sm mb-2">{feature.label}</h5>
+                    <div
+                      className={`absolute left-8 bg-[#F7FAFF] border-1 border-[#c9dcfd] text-black text-xs px-4 py-4 rounded-lg z-50 w-64 ${
+                        i > 3 ? "top-[-6rem]" : "top-0"
+                      }`}
+                    >
+                      <h5 className="text-center font-bold text-sm mb-2">
+                        {feature.label}
+                      </h5>
                       <p className="text-center">{feature.details}</p>
                     </div>
                   )}
@@ -216,9 +249,12 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
 
   if (currentView === "success") {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      // <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+      //   <SuccessPurchase onClose={onClose} plan={plan} />
+      // </div>
+      <React.Suspense fallback={<div>Loading...</div>}>
         <SuccessPurchase onClose={onClose} plan={plan} />
-      </div>
+      </React.Suspense>
     );
   }
 
@@ -226,9 +262,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      onBack={
-        currentView === "payment" ? handlePaymentBack : onBack
-      }
+      onBack={currentView === "payment" ? handlePaymentBack : onBack}
       proceedButton={
         currentView === "summary" ? (
           <Button

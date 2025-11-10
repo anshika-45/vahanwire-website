@@ -54,15 +54,16 @@ function Navbar() {
           ))}
         </ul>
       </nav>
-      <nav
-        className="md:hidden fixed flex items-center w-full bg-[#E9F0FC]"
+      <nav id="mobileNav"
+        className="md:hidden fixed flex flex-col justify-center items-center w-full bg-[#E9F0FC]"
         role="navigation"
         aria-label="Mobile navigation"
       >
-        <button
+        <header className="self-end">
+          <button
           onClick={() => setIsOpen(!isOpen)}
           aria-label={isOpen ? "Close menu" : "Open menu"}
-          className="flex items-center justify-center w-10 h-10"
+          className="flex items-center justify-center w-10 h-10 self-start"
         >
           {isOpen ? (
             <X size={24} className="text-[#242424]" />
@@ -70,8 +71,9 @@ function Navbar() {
             <Menu size={24} className="text-[#242424]" />
           )}
         </button>
-        {isOpen && (
-          <ul className="flex flex-col gap-0 text-[#242424] bg-white rounded-lg mt-2 shadow-lg border border-gray-200">
+        </header>
+        <main className="w-full">{isOpen && (
+          <ul className="flex flex-col gap-0 w-full text-[#242424] bg-white rounded-lg mt-2 shadow-lg border border-gray-200">
             {menuItems.map((item, index) => (
               <li
                 key={index}
@@ -108,7 +110,7 @@ function Navbar() {
               </li>
             ))}
           </ul>
-        )}
+        )}</main>
       </nav>
     </>
   );

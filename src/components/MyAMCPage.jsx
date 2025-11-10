@@ -101,7 +101,7 @@ export default function MyAMCPage() {
               key={item._id}
               className="flex flex-col gap-3 md:gap-4 bg-white rounded-xl p-3 md:p-6"
             >
-              <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+              <div className="flex lg:flex-row flex-wrap flex-col gap-3">
                 <MyAMCCard
                   plan={item.planName}
                   validity={`${item.planDuration} Months`}
@@ -110,7 +110,7 @@ export default function MyAMCPage() {
                   carImageSrc="/src/assets/carAMC.webp"
                 />
 
-                <div className="flex-1 flex flex-col justify-between">
+                <div className="flex-1 flex flex-col justify-between ">
                   <div>
                     <div className="flex flex-col md:flex-row justify-between items-start gap-2 md:gap-0 md:items-start mb-2">
                       <h3 className="text-lg md:text-xl font-bold text-gray-900">
@@ -144,7 +144,7 @@ export default function MyAMCPage() {
                   <div className="flex flex-col md:flex-row gap-2 md:gap-4 p-2 md:p-3 mt-2 flex-wrap">
                     <button
                       onClick={() => handleViewCoverage(item)}
-                      className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium"
+                      className="flex items-center justify-center gap-2 px-3 md:px-4 py-3 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium"
                     >
                       <Eye size={16} />
                       View Coverage

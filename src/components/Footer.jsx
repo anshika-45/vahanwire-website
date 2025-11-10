@@ -1,11 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "../assets/Footerlogo.webp";
 import bgImg from "../assets/Footerbg.webp";
 import { Link } from "react-router-dom";
 import FooterIcons from "./FooterIcons";
 import { MapPin, Phone, MailOpenIcon, ChevronDown } from "lucide-react";
+
+// Custom hook for lazy loading background images
+const useLazyBackground = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: '100px', // Load when 100px away from viewport
+        threshold: 0.1
+      }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, []);
+
+  return [ref, isVisible];
+};
+
 const Footer = () => {
   const [expandedSections, setExpandedSections] = useState({});
+  const [backgroundRef, isBackgroundVisible] = useLazyBackground();
+
   const toggleSection = (section) => {
     setExpandedSections((prev) => {
       const newState = {
@@ -18,15 +54,21 @@ const Footer = () => {
       return newState;
     });
   };
+
   return (
-    <footer className="relative h-auto text-white">
+    <footer className="relative h-auto text-white" ref={backgroundRef}>
       <div className="absolute inset-0 bg-black z-0"></div>
+      
+      {/* Lazy loaded background image */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-80 z-0"
-        style={{ backgroundImage: `url(${bgImg})` }}
+        style={{ 
+          backgroundImage: isBackgroundVisible ? `url(${bgImg})` : 'none'
+        }}
       ></div>
-      <div className="relative container  flex flex-col justify-between">
-        <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-12 md:pt-40 md:mt-30 sm:pt-6">
+      
+      <div className="relative container flex flex-col justify-between">
+        <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-12 md:pt-40 md:mt-30 pt-10">
           <div className="h-auto mb-8 sm:mb-6 md:mb-0">
             <img loading="lazy" src={logo} alt="Logo" className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6" />{" "}
             <p className="text-gray-300 text-xs sm:text-sm leading-tight mb-4 sm:mb-6 space-y-0.5">
@@ -243,4 +285,5 @@ const Footer = () => {
     </footer>
   );
 };
+
 export default Footer;

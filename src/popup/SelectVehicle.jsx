@@ -31,7 +31,7 @@ const SelectVehicle = ({
       setIsLoading(true);
       const data = await searchUserVehicle(regNumber);
       setIsLoading(false);
-      
+
       if (data.found && data.vehicle) {
         return { found: true, vehicle: data.vehicle };
       } else {
@@ -55,17 +55,20 @@ const SelectVehicle = ({
 
     if (result.found) {
       const vehicleDisplay = `${result.vehicle.brand} ${result.vehicle.model}`;
-      setAddedVehicles(prev => [...prev, { 
-        number: result.vehicle.vehicleNumber, 
-        model: vehicleDisplay,
-        brand: result.vehicle.brand
-      }]);
+      setAddedVehicles((prev) => [
+        ...prev,
+        {
+          number: result.vehicle.vehicleNumber,
+          model: vehicleDisplay,
+          brand: result.vehicle.brand,
+        },
+      ]);
       setVehicleNumber("");
       setShowModel(false);
       if (onSelectVehicle) {
-        onSelectVehicle({ 
-          number: result.vehicle.vehicleNumber, 
-          model: vehicleDisplay 
+        onSelectVehicle({
+          number: result.vehicle.vehicleNumber,
+          model: vehicleDisplay,
         });
       }
     } else {
@@ -75,19 +78,19 @@ const SelectVehicle = ({
 
   const handleAddVehicle = async () => {
     let hasError = false;
-    
+
     if (!brand.trim()) {
       setBrandError("Please enter the vehicle brand");
       hasError = true;
     }
-    
+
     if (!vehicleModel.trim()) {
       setModelError("Please enter the vehicle model");
       hasError = true;
     }
-    
+
     if (hasError) return;
-    
+
     try {
       setIsLoading(true);
       const vehicleData = {
@@ -95,17 +98,20 @@ const SelectVehicle = ({
         brand: brand.trim(),
         model: vehicleModel.trim(),
       };
-      
+
       const response = await addUserVehicle(vehicleData);
       setIsLoading(false);
-      
+
       if (response.status === 201) {
         const vehicleDisplay = `${brand} ${vehicleModel}`;
-        setAddedVehicles(prev => [...prev, { 
-          number: vehicleNumber, 
-          model: vehicleDisplay,
-          brand: brand
-        }]);
+        setAddedVehicles((prev) => [
+          ...prev,
+          {
+            number: vehicleNumber,
+            model: vehicleDisplay,
+            brand: brand,
+          },
+        ]);
         setVehicleNumber("");
         setVehicleModel("");
         setBrand("");
@@ -118,7 +124,9 @@ const SelectVehicle = ({
       setIsLoading(false);
       console.error("Add Vehicle Error:", error);
       if (error.response?.status === 400) {
-        setNumberError(error.response?.data?.message || "Vehicle already exists");
+        setNumberError(
+          error.response?.data?.message || "Vehicle already exists"
+        );
       } else {
         setNumberError("Failed to add vehicle");
       }
@@ -129,8 +137,18 @@ const SelectVehicle = ({
     <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
       <div className="w-full max-w-[550px] flex flex-col items-center p-1">
         <div className="w-full flex items-center gap-2 bg-green-50 border border-green-200 text-[#21830F] rounded-lg px-4 py-4 mb-4">
-          <img src={verifyIcon} alt="verify" loading="lazy" className="w-5 h-5" />
-          <span className="font-medium text-sm text-[#333333]">Account is Verified</span>
+          <img
+            src={verifyIcon}
+            alt="verify"
+            loading="lazy"
+            className="w-5 h-5"
+            width={20} // 🟢 YEH LINE ADD
+            height={20} // 🟢 YEH LINE ADD
+            decoding="async" // 🟢 YEH LINE ADD
+          />
+          <span className="font-medium text-sm text-[#333333]">
+            Account is Verified
+          </span>
         </div>
 
         <div className="w-full bg-white rounded-xl p-6 mb-4">
@@ -145,18 +163,20 @@ const SelectVehicle = ({
             } p-4 shadow-sm cursor-pointer transition-all`}
             onClick={() => setSelectedVehicle(addedVehicleNumber)}
           >
-            <img loading="lazy"
+            <img
+              loading="lazy"
               src={brezzaImg}
               alt="Maruti Suzuki Brezza"
               className="w-22 h-12 object-cover rounded ml-2"
+              width={88} // 🟢 YEH LINE ADD
+              height={48} // 🟢 YEH LINE ADD
+              decoding="async" // 🟢 YEH LINE ADD
             />
             <div className="flex-1">
               <div className="font-medium text-[#242424]">
                 {addedVehicleModel || "Added Vehicle"}
               </div>
-              <div className="text-xs text-[#6C6F73]">
-                {addedVehicleNumber}
-              </div>
+              <div className="text-xs text-[#6C6F73]">{addedVehicleNumber}</div>
             </div>
             <input
               type="checkbox"
@@ -180,14 +200,13 @@ const SelectVehicle = ({
                 alt={vehicle.model}
                 loading="lazy"
                 className="w-20 h-12 object-cover rounded"
+                width={80} 
+                height={48} 
+                decoding="async" 
               />
               <div className="flex-1">
-                <div className="font-medium text-gray-900">
-                  {vehicle.model}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {vehicle.number}
-                </div>
+                <div className="font-medium text-gray-900">{vehicle.model}</div>
+                <div className="text-xs text-gray-500">{vehicle.number}</div>
               </div>
               <input
                 type="checkbox"
@@ -279,7 +298,9 @@ const SelectVehicle = ({
           )}
 
           <Button
-            text={isLoading ? "Searching..." : showModel ? "Add Vehicle" : "Search"}
+            text={
+              isLoading ? "Searching..." : showModel ? "Add Vehicle" : "Search"
+            }
             className="self-start w-1/2 bg-[#266DDF] text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={showModel ? handleAddVehicle : handleSearch}
             disabled={isLoading}

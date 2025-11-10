@@ -1,7 +1,6 @@
 import React from "react";
 import bannerImg from "../assets/HomeBanner.webp";
-import { useNavigate } from "react-router-dom";
-import Button from "./Button";
+import { Link } from "react-router-dom";
 import AnimatedText from "./AnimatedText";
 const bannerTexts = [
   "Car Service",
@@ -10,7 +9,6 @@ const bannerTexts = [
   "Emergency Fuel",
 ];
 const Banner = React.memo(() => {
-  const navigate = useNavigate();
   return (
     <div className="relative w-full">
       <div className="pt-[calc(var(--header-height,4rem)+var(--announcement-height,2rem))]">
@@ -44,8 +42,8 @@ const Banner = React.memo(() => {
                   <br />
                   and hassle-free vehicle & home services — anytime, anywhere.
                 </p>
-                <button className="md:my-3 px-4 py-2 text-[17px] bg-[#266DDF] text-white rounded-md transition">
-                  Book Now
+                <button className="md:my-3  text-[17px] bg-[#266DDF] text-white rounded-md transition">
+                 <Link className="px-4 py-2 block" to={'/vehicle-amc'}>Book Now</Link>
                 </button>
               </div>
             </div>

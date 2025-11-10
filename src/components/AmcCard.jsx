@@ -20,12 +20,13 @@ const AMCCard = ({
   vehicleType = "car",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <div className="relative overflow-visible flex justify-center">
+    <div className="relative overflow-visible flex justify-center flex-shrink-0">
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`rounded-lg p-4 shadow-lg text-white flex flex-col h-full w-[300px] relative transition-all duration-700 ease-in-out`}
+        className={`rounded-lg p-4 shadow-lg text-white flex flex-col h-full w-[270px] sm:w-[300px] md:w-[320px] relative transition-all duration-700 ease-in-out`}
         style={{
           backgroundImage: isHovered ? hoverBgColor : bgColor,
           backgroundSize: "200% 200%",
@@ -40,6 +41,7 @@ const AMCCard = ({
             className="w-9 h-9 object-contain"
           />
         </div>
+
         <div className="flex justify-end items-start mb-4 relative">
           <img
             loading="lazy"
@@ -53,13 +55,14 @@ const AMCCard = ({
               src={
                 vehicleType === "bike"
                   ? "/src/assets/BikeAMC.webp"
-                  : "/src/assets/carAMC.webp"
+                  : "/src/assets/CarAMC.webp"
               }
               alt={vehicleType === "bike" ? "Bike" : "Car"}
               className="w-20 h-16 object-contain relative z-10"
             />
           </div>
         </div>
+
         <h3 className="text-2xl font-semibold mb-3">{title}</h3>
         <div className="flex justify-between mb-3 pb-3 border-b border-white/30 border-dashed text-xs">
           <div>
@@ -71,22 +74,22 @@ const AMCCard = ({
             <div className="font-semibold text-base">{validFor}</div>
           </div>
         </div>
+
         <div className="mb-3">
           <div className="flex items-baseline gap-2 mb-0.5">
-            <span className="text-2xl font-semibold">
-              ₹ {price.toLocaleString()}
-            </span>
+            <span className="text-2xl font-semibold">₹ {price}</span>
           </div>
           <div className="flex items-center gap-2 text-xs">
             {originalPrice && (
               <span className="line-through text-white/70">
-                ₹{originalPrice.toLocaleString()}
+                ₹{originalPrice}
               </span>
             )}
             {discount && <span className="text-white/90">{discount}</span>}
             <span className="text-white/80">{periodLabel}</span>
           </div>
         </div>
+
         <div className="mb-3 flex-grow">
           <div className="font-normal mb-2 text-md">Plan Features</div>
           <div className="space-y-2">
@@ -100,13 +103,15 @@ const AMCCard = ({
             ))}
           </div>
         </div>
+
         <button
           onClick={onBuy}
           className="w-full bg-white text-[#266DDF] font-semibold py-3 text-sm rounded-lg hover:bg-gray-50 transition-colors"
         >
-         Buy Now
+          Buy Now
         </button>
       </div>
+
       {isEssential && (
         <img
           loading="lazy"
@@ -125,11 +130,8 @@ const AMCCards = ({ vehicleType = "car", amcType = "luxury", onBuy }) => {
   const [loading, setLoading] = useState(true);
 
   const handleBuy = (card) => {
-    if (onBuy) {
-      onBuy(card);
-    } else {
-      setIsVerifyOpen(true);
-    }
+    if (onBuy) onBuy(card);
+    else setIsVerifyOpen(true);
   };
 
   useEffect(() => {
@@ -190,16 +192,15 @@ const AMCCards = ({ vehicleType = "car", amcType = "luxury", onBuy }) => {
     fetchAMCPlans();
   }, [vehicleType, amcType]);
 
-  if (loading) {
+  if (loading)
     return (
       <div className="text-center py-10 text-gray-500">Loading plans...</div>
     );
-  }
 
   return (
     <div className="bg-gray-50 mt-0">
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 md:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 justify-items-center">
+      <div className="container">
+        <div className="flex overflow-x-auto scroll-smooth gap-4 sm:gap-6 pb-4 max-w-[1180px] justify-around">
           {cards.map((card, index) => (
             <AMCCard
               key={index}
@@ -210,12 +211,25 @@ const AMCCards = ({ vehicleType = "car", amcType = "luxury", onBuy }) => {
           ))}
         </div>
       </div>
+
       {!onBuy && (
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
         />
       )}
+
+      <style>
+        {`
+          .flex::-webkit-scrollbar {
+            display: none;
+          }
+          .flex {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}
+      </style>
     </div>
   );
 };

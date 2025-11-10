@@ -3,9 +3,10 @@ import Modal from "../components/Modal";
 import Button from "../components/Button";
 import otpImg from "../assets/AnimationPhone.webp";
 import { LucideEdit } from "lucide-react";
-import EnterVehicleNumber from "./EnterVehicleNumber";
 import { useAuth } from "../context/AuthContext";
 import { verifyOtp } from "../api/authApi";
+
+const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
 
 const OtpVerifypopup = ({
   isOpen,
@@ -87,12 +88,15 @@ const OtpVerifypopup = ({
     <>
       {!showVehiclePopup && (
         <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
-          <div className="bg-white rounded-xl p-10 w-[500px] max-w-lg flex flex-col items-center m-4">
+          <div className="bg-white rounded-xl p-5  flex flex-col items-center m-4">
             <img
               src={otpImg}
               loading="lazy"
               alt="OTP Animation"
-              className="w-60 h-60 mb-4"
+              className="md:w-60 md:h-60 w-40 h-40 mb-4"
+              width={160}     
+              height={160}    
+              decoding="async" 
             />
             <h1 className="text-xl font-semibold text-[#242424] text-center mb-2">
               Verify Your Number
@@ -144,11 +148,18 @@ const OtpVerifypopup = ({
       )}
 
       {showVehiclePopup && (
-        <EnterVehicleNumber
-          isOpen={showVehiclePopup}
-          onClose={onClose}
-          onBack={() => setShowVehiclePopup(false)}
-        />
+
+        <React.Suspense fallback={
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="text-white">Loading vehicle entry...</div>
+          </div>
+        }>
+          <EnterVehicleNumber
+            isOpen={showVehiclePopup}
+            onClose={onClose}
+            onBack={() => setShowVehiclePopup(false)}
+          />
+        </React.Suspense>
       )}
     </>
   );

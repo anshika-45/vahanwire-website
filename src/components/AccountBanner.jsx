@@ -6,7 +6,7 @@ const AccountBanner = () => {
     <div
       className="
         relative w-full
-        h-[160px] sm:h-[200px] md:h-[240px] lg:h-[300px] xl:h-[360px] 2xl:h-[420px]
+        h-[160px] sm:h-[200px] md:h-[200px] lg:h-[300px] xl:h-[360px] 2xl:h-[420px]
         overflow-hidden
         mt-[56px] sm:mt-[64px] md:mt-[72px]
         shadow-md

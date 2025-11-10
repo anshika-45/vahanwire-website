@@ -21,8 +21,6 @@ const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
       imgColor: bikeColor,
     },
   ];
-  console.log("kjefgjhbhjbhvhjvhj");
-
   return (
     <div className="flex justify-center gap-2 md:gap-6 mt-4 md:mt-6 flex-wrap">
       {options.map((option) => {

@@ -1,13 +1,28 @@
 // src/pages/MyAccount.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useSearchParams } from "react-router-dom";
+
+// Light components - direct import
 import AccountBanner from "../components/AccountBanner";
 import AccountSidebar from "../components/AccountSidebar";
-import ProfileForm from "../components/ProfileForm";
-import CarCards from "../components/CarCards";
-import MyAMCPage from "../components/MyAMCPage";
-// import AddBanner from "../components/AddBanner";
+
+// Heavy components - lazy load
+const ProfileForm = React.lazy(() => import("../components/ProfileForm"));
+const CarCards = React.lazy(() => import("../components/CarCards"));
+const MyAMCPage = React.lazy(() => import("../components/MyAMCPage"));
+// const AddBanner = React.lazy(() => import("../components/AddBanner"));
+
+// Loading components
+const ContentLoader = () => (
+  <div className="flex items-center justify-center min-h-64">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]"></div>
+  </div>
+);
+
+const CardLoader = () => (
+  <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
+);
 
 function MyAccount() {
   const { setIsLoggedIn } = useAuth();
@@ -23,7 +38,7 @@ function MyAccount() {
     if (viewParam && viewParam !== activeView) {
       setActiveView(viewParam);
     }
-  }, [viewParam]); // eslint-disable-line
+  }, [viewParam]); 
 
   const handleChangeView = (next) => {
     setActiveView(next);
@@ -37,38 +52,50 @@ function MyAccount() {
   const renderContent = () => {
     switch (activeView) {
       case "vehicles":
-        return <CarCards />;
+        return (
+          <Suspense fallback={<CardLoader />}>
+            <CarCards />
+          </Suspense>
+        );
       case "amc":
-        return <MyAMCPage />;
+        return (
+          <Suspense fallback={<ContentLoader />}>
+            <MyAMCPage />
+          </Suspense>
+        );
       case "profile":
       default:
-        return <ProfileForm />;
+        return (
+          <Suspense fallback={<ContentLoader />}>
+            <ProfileForm />
+          </Suspense>
+        );
     }
   };
 
   return (
-    <div className="bg-[#F4F4F4] py-8 sm:py-10 md:py-14">
+    <div className="bg-[#F4F4F4] py-8 sm:py-10 md:py-5">
       <div className="">
-
         <div className="mb-6 sm:mb-8">
+          {/* Light component - direct load */}
           <AccountBanner />
         </div>
+        
         <div className="max-w-[1400px] mx-auto px-4 sm:px-5 md:px-8 lg:px-10">
+          <div className="flex flex-col md:flex-row gap-15">
+            <div className="w-full md:w-72 shrink-0">
+              {/* Light component - direct load */}
+              <AccountSidebar
+                activeView={activeView}
+                setActiveView={handleChangeView}
+              />
+            </div>
 
-        <div className="flex flex-col md:flex-row gap-15">
-          <div className="w-full md:w-72 shrink-0 ">
-            <AccountSidebar
-              activeView={activeView}
-              setActiveView={handleChangeView}
-            />
-          </div>
-
-          <div className="flex-1 w-full">
-            {renderContent()}
+            <div className="flex-1 w-full">
+              {renderContent()}
+            </div>
           </div>
         </div>
-        </div>
-
       </div>
     </div>
   );

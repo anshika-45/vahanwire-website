@@ -97,7 +97,7 @@ const Tile = React.memo(function Tile({
     rgba(248,2,0,0.08) 100%
   );
 
-  background-size: 250% 100%;   /* gives sweep range */
+  background-size: 250% 100%;
   background-position: 0% 50%;
 
   opacity: 0;

@@ -22,7 +22,7 @@ const Header = () => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const dropdownRef = useRef(null);
   const handleProfileClick = () => {
-    setIsProfileModalOpen(true);
+    setIsProfileModalOpen(!isProfileModalOpen);
   };
   const handleSidebarSelect = (view) => {
     setIsProfileModalOpen(false);
@@ -67,6 +67,7 @@ const Header = () => {
                 className="md:hidden block"
               >
                 <img
+                id="searchIcon"
                   className="w-4 h-4 object-contain"
                   src={searchIcon}
                   alt="searchicon"

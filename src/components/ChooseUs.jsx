@@ -6,7 +6,6 @@ import checkIcon from "../assets/check-circle.webp";
 import Choose1 from "../assets/choose1.webp";
 import Choose2 from "../assets/choose2.webp";
 import Choose3 from "../assets/choose3.webp";
-import mobileImage from '../assets/mobile.png'
 const ChooseUs = () => {
   return (
     <section className="bg-[#FAFCFF] overflow-hidden">
@@ -17,10 +16,10 @@ const ChooseUs = () => {
             loading="lazy"
             src={appImage}
             alt="VahanWire App"
-            className=" drop-shadow-2xl md:scale-180 md:absolute  h-full rounded-[2rem]"
+            className=" drop-shadow-2xl md:scale-180  h-full rounded-[2rem]"
           />
         </div>
-        <div className="bg-white rounded-2xl border border-[#BCD2F5] py-2 sm:p-4 space-y-8 h-[590px] md:w-[500px] w-full  text-left order-2 md:order-1 px-5">
+        <div className="bg-white rounded-2xl border border-[#BCD2F5] md:py-2 py-4 sm:p-4 space-y-8 md:h-[610px] h-auto lg:w-[500px] w-full  text-left order-2 md:order-1 px-5">
           <div>
             <h2 className="text-xl md:text-2xl text-skyblue-200 mb-7 py-2 text-center font-semibold">
               Smart & Reliable Vehicle Care
@@ -68,7 +67,7 @@ const ChooseUs = () => {
               />
             </div>
           </div>
-          <div className="flex items-center gap-3 pt-1">
+          <div className="flex md:flex-row flex-col items-center gap-3 pt-1">
             <div className="flex -space-x-2">
               <img
                 loading="lazy"

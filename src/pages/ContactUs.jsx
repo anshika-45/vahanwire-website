@@ -13,6 +13,10 @@ const ComponentFallback = () => (
   </div>
 );
 
+const ImageFallback = () => (
+  <div className="w-[180px] sm:w-[220px] md:w-[280px] h-[200px] bg-gray-200 animate-pulse rounded-lg"></div>
+);
+
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -47,7 +51,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="mt-[60px] sm:mt-[60px] md:mt-[60px]">
+    <div className="mt-[60px] sm:mt-[60px] md:mt-[80px]">
       <Suspense fallback={<ComponentFallback />}>
         <PageBanner title="Contact Us" image={contactBanner} />
       </Suspense>
@@ -97,6 +101,9 @@ const ContactUs = () => {
                 alt="Contact Illustration"
                 className="w-[180px] sm:w-[220px] md:w-[280px] object-contain"
                 loading="lazy"
+                width={280}  // ✅ Add for better performance
+                height={200} // ✅ Add for better performance
+                decoding="async" // ✅ Better image loading
               />
             </div>
           </div>

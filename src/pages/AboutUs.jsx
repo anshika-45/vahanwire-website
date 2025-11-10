@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import aboutBanner from "../assets/about-us-banner.webp";
 import aboutAppImage from "../assets/about-us-side.webp";
+
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 
@@ -10,21 +11,26 @@ const ComponentFallback = () => (
   </div>
 );
 
+const ImageFallback = () => (
+  <div className="w-[260px] md:w-[260px] lg:w-[300px] h-[400px] bg-gray-200 animate-pulse rounded-[2rem]"></div>
+);
+
 const AboutUs = () => {
   return (
     <>
-      <div className="mt-[34px] sm:mt-[30px] md:mt-[60px] ">
+      <div className="mt-[34px] sm:mt-[30px] md:mt-[80px]">
         <Suspense fallback={<ComponentFallback />}>
           <PageBanner title="About Us" image={aboutBanner} />
         </Suspense>
+        
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
           <div>
             <h2 className="text-2xl md:text-5xl font-semibold text-[#242424] mb-6">
               About Us
             </h2>
             <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed mb-4">
-              This website www.vahanwire.com (“Website”) and
-              its mobile application (“Application”) are owned and operated by
+              This website www.vahanwire.com ("Website") and
+              its mobile application ("Application") are owned and operated by
               Vahanwire Technologies Pvt. Ltd., a company
               incorporated under the laws of India, having its corporate office
               at TOWER-B-819 Noida One, Industrial Area, Sector 62, Noida, Uttar
@@ -48,13 +54,17 @@ const AboutUs = () => {
               provided.
             </p>
           </div>
+          
           <div className="flex justify-center md:justify-center">
             <div className="relative">
               <img
                 src={aboutAppImage}
                 alt="VahanWire App Interface"
-                className="w-[260px] md:w-[260px] lg:w-[300px] drop-shadow-2xl h-full rounded-[2rem] scale-200"
+                className="w-[260px] md:w-[260px] lg:w-[300px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200"
                 loading="lazy"
+                width={300}  
+                height={600}
+                decoding="async"
               />
             </div>
           </div>

@@ -1,20 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { verifyPayment } from "../api/paymentApi";
 import BreadcrumbBar from "../components/BreadcrumbBar";
 import AMC from "../components/AMC";
-import AmcTabs from "../components/AmcTabs";
-import AmcCard from "../components/AmcCard";
-import CompareTable from "../components/CompareTable";
-import LatestOffer from "../components/LatestOffer";
-import AmcBanner from "../components/AmcBanner";
-import AddBanner from "../components/AddBanner";
-import PlanSummaryPage from "../popup/PlanSummaryPage";
-import SuccessPurchase from "../popup/SuccessPurchase";
-import FailedPurchase from "../popup/FailedPurchase";
 import useAmcData from "../hooks/useAmcData";
-
+const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
+const AmcCard = React.lazy(() => import("../components/AmcCard"));
+const CompareTable = React.lazy(() => import("../components/CompareTable"));
+const LatestOffer = React.lazy(() => import("../components/LatestOffer"));
+const AmcBanner = React.lazy(() => import("../components/AmcBanner"));
+const AddBanner = React.lazy(() => import("../components/AddBanner"));
+const PlanSummaryPage = React.lazy(() => import("../popup/PlanSummaryPage"));
+const SuccessPurchase = React.lazy(() => import("../popup/SuccessPurchase"));
+const FailedPurchase = React.lazy(() => import("../popup/FailedPurchase"));
+const CardLoader = () => (
+  <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
+);
+const TableLoader = () => (
+  <div className="h-96 bg-gray-200 animate-pulse rounded-lg"></div>
+);
+const BannerLoader = () => (
+  <div className="h-48 bg-gray-200 animate-pulse rounded-lg"></div>
+);
+const ComponentLoader = () => (
+  <div className="flex justify-center items-center py-8">
+    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]"></div>
+  </div>
+);
 const VehicleAmcFilter = () => {
   const { setIsLoggedIn } = useAuth();
   const [searchParams] = useSearchParams();
@@ -24,13 +37,10 @@ const VehicleAmcFilter = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
   const [isVerifying, setIsVerifying] = useState(false);
-
   const status = searchParams.get("status");
   const txnid = searchParams.get("txnid");
-
   useEffect(() => {
     setIsLoggedIn(true);
-
     document.body.style.overflow = "auto";
     document.documentElement.style.overflow = "auto";
     return () => {
@@ -38,7 +48,6 @@ const VehicleAmcFilter = () => {
       document.documentElement.style.overflow = "auto";
     };
   }, [setIsLoggedIn]);
-
   useEffect(() => {
     const handlePaymentStatus = async () => {
       if (status === "success" && txnid) {
@@ -60,45 +69,59 @@ const VehicleAmcFilter = () => {
         setShowPopup("failed");
       }
     };
-
     handlePaymentStatus();
   }, [status, txnid]);
-
   const handleBuyNow = (plan) => {
     setSelectedPlan(plan);
     setIsPopupOpen(true);
   };
-
   const handleClosePopup = () => {
     setSelectedPlan(null);
     setIsPopupOpen(false);
   };
-
   const handleClosePaymentPopup = () => {
     setShowPopup(null);
     navigate("/", { replace: true });
   };
-
   const handleRetry = () => {
     setShowPopup(null);
     navigate("/plans", { replace: true });
   };
-
   return (
     <section className="bg-white w-full min-h-screen">
       <BreadcrumbBar />
       <AMC vehicleType={vehicleType} setVehicleType={setVehicleType} isFilter={true} />
-      <AmcTabs amcType={amcType} setAmcType={setAmcType} showRemoveFilter tabs={getAmcTabs} vehicleType={vehicleType} />
-      <AmcCard vehicleType={vehicleType} onBuy={handleBuyNow} />
-      <CompareTable plans={comparePlans} features={features} onBuyNow={handleBuyNow} />
-      <LatestOffer />
+      <Suspense fallback={<ComponentLoader />}>
+        <AmcTabs 
+          amcType={amcType} 
+          setAmcType={setAmcType} 
+          showRemoveFilter 
+          tabs={getAmcTabs} 
+          vehicleType={vehicleType} 
+        />
+      </Suspense>
+      <Suspense fallback={<CardLoader />}>
+        <AmcCard vehicleType={vehicleType} onBuy={handleBuyNow} />
+      </Suspense>
+      <Suspense fallback={<TableLoader />}>
+        <CompareTable plans={comparePlans} features={features} onBuyNow={handleBuyNow} />
+      </Suspense>
+      <Suspense fallback={<BannerLoader />}>
+        <LatestOffer />
+      </Suspense>
       <div className="flex flex-col space-y-10">
-        <AmcBanner onBuy={handleBuyNow} />
-        <AddBanner />
+        <Suspense fallback={<BannerLoader />}>
+          <AmcBanner onBuy={handleBuyNow} />
+        </Suspense>
+        
+        <Suspense fallback={<BannerLoader />}>
+          <AddBanner />
+        </Suspense>
       </div>
-
       {isPopupOpen && (
-        <PlanSummaryPage isOpen={isPopupOpen} plan={selectedPlan} onClose={handleClosePopup} />
+        <Suspense fallback={null}>
+          <PlanSummaryPage isOpen={isPopupOpen} plan={selectedPlan} onClose={handleClosePopup} />
+        </Suspense>
       )}
 
       {isVerifying && (
@@ -109,17 +132,21 @@ const VehicleAmcFilter = () => {
 
       {showPopup === "success" && (
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
-          <SuccessPurchase onClose={handleClosePaymentPopup} />
+          <Suspense fallback={<div className="text-white">Loading...</div>}>
+            <SuccessPurchase onClose={handleClosePaymentPopup} />
+          </Suspense>
         </div>
       )}
 
       {showPopup === "failed" && (
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
-          <FailedPurchase
-            reason="Your UPI payment was not completed or cancelled."
-            onClose={handleClosePaymentPopup}
-            onRetry={handleRetry}
-          />
+          <Suspense fallback={<div className="text-white">Loading...</div>}>
+            <FailedPurchase
+              reason="Your UPI payment was not completed or cancelled."
+              onClose={handleClosePaymentPopup}
+              onRetry={handleRetry}
+            />
+          </Suspense>
         </div>
       )}
     </section>

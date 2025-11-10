@@ -29,21 +29,21 @@ const HoverCards = () => {
 
       {/* Content */}
       <div className="container relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-4 py-16">
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 -mb-100">
+        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 lg:-mb-100 -mb-10">
           {steps.map((step, index) => (
             <div
               key={index}
-              className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg p-6 text-center transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl overflow-hidden lg:min-h-76 min-h-60"
+              className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-lg md:p-6 p-2 text-center transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl overflow-hidden lg:min-h-76 min-h-40"
             >
               {/* Hover gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#FFBD00] via-[#32AB15] to-[#4184ED] opacity-0 group-hover:opacity-90 transition-opacity duration-500 rounded-3xl"></div>
 
               {/* Card content */}
               <div className="relative z-10">
-                <h2 className="md:text-8xl pt-5 font-extrabold bg-gradient-to-r from-[#FFBD00]/60 to-[#32AB15]/75 bg-clip-text text-transparent mb-4 group-hover:text-white transition-all duration-500">
+                <h2 className="md:text-8xl text-2xl md:pt-5 pt-3 font-extrabold bg-gradient-to-r from-[#FFBD00]/60 to-[#32AB15]/75 bg-clip-text text-transparent md:mb-4 mb-2 group-hover:text-white transition-all duration-500">
                   {step.number}
                 </h2>
-                <h3 className="text-lg md:text-xl font-semibold text-[#242424] mb-3 group-hover:text-white transition-all duration-500">
+                <h3 className="text-lg md:text-xl font-semibold text-[#242424] md:mb-3 mb-1.5 group-hover:text-white transition-all duration-500">
                   {step.title}
                 </h3>
                 <p className="text-sm md:text-base text-[#242424] font-medium group-hover:text-white transition-all duration-500">

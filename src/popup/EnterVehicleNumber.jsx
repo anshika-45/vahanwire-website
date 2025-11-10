@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import Button from "../components/Button";
 import verifyIcon from "../assets/verify.webp";
-import SelectVehicle from "./SelectVehicle";
 import Modal from "../components/Modal";
 import { searchUserVehicle, addUserVehicle } from "../api/vehicleApi";
+
+// Heavy component ko lazy load karein
+const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
 
 const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
   const [vehicleNumber, setVehicleNumber] = useState("");
@@ -18,6 +20,7 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
   const [vehicleData, setVehicleData] = useState(null);
   
   if (!isOpen && !showSelectVehicle) return null;
+  
   const validateVehicleNumber = (number) => {
     const cleanedNumber = number.trim().toUpperCase();
   
@@ -26,10 +29,8 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
     }
 
     const patterns = [
-     
       /^[A-Z]{2}[-\s]?[0-9]{1,2}[-\s]?[A-Z]{1,3}[-\s]?[0-9]{1,4}$/,
       /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/,
-      
       /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}[A-Z]?$/,
     ];
 
@@ -42,13 +43,11 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
       };
     }
 
-   
     const invalidChars = /[^A-Z0-9\s-]/;
     if (invalidChars.test(cleanedNumber)) {
       return { isValid: false, message: "Vehicle number contains invalid characters" };
     }
 
-   
     const stateCode = cleanedNumber.substring(0, 2);
     if (!/^[A-Z]{2}$/.test(stateCode)) {
       return { isValid: false, message: "First two characters should be state code letters" };
@@ -76,7 +75,6 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
   };
 
   const handleSearch = async () => {
-   
     const validation = validateVehicleNumber(vehicleNumber);
     
     if (!validation.isValid) {
@@ -91,7 +89,6 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
 
     setNumberError("");
     
-   
     const formattedNumber = validation.formattedNumber || vehicleNumber.toUpperCase().replace(/[-\s]/g, '');
     const result = await verifyVehicleNumber(formattedNumber);
 
@@ -100,7 +97,6 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
       setShowSelectVehicle(true);
     } else {
       setShowModel(true);
-     
       setVehicleNumber(formattedNumber);
     }
   };
@@ -123,7 +119,6 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
     try {
       setIsLoading(true);
       
-     
       const validation = validateVehicleNumber(vehicleNumber);
       if (!validation.isValid) {
         setNumberError(validation.message);
@@ -163,13 +158,8 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
     const value = e.target.value;
     setVehicleNumber(value);
     
-  
     if (numberError) {
       setNumberError("");
-    }
-    
-    
-    if (value.length > 2) {
     }
   };
 
@@ -178,7 +168,15 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
       <Modal isOpen={isOpen} onClose={onClose} onBack={onBack} className="z-110">
         <div className="w-full max-w-[550px] flex flex-col items-center p-2 sm:p-4">
           <div className="w-full flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 rounded-lg px-3 py-3 sm:py-5 mb-4">
-            <img src={verifyIcon} loading="lazy" alt="verify" className="w-5 h-5" />
+            <img 
+              src={verifyIcon} 
+              loading="lazy" 
+              alt="verify" 
+              className="w-5 h-5"
+              width={20}
+              height={20}
+              decoding="async"
+            />
             <span className="font-medium text-sm text-[#333333]">Account is Verified</span>
           </div>
 
@@ -205,7 +203,7 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
             )}
             {!numberError && vehicleNumber && (
               <div className="text-[#266DDF] text-xs mb-2 w-full text-left">
-               
+                {/* Optional: Add validation success message */}
               </div>
             )}
 
@@ -256,19 +254,25 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack }) => {
       </Modal>
 
       {showSelectVehicle && (
-        <SelectVehicle
-          isOpen={showSelectVehicle}
-          onClose={onClose}
-          onBack={() => {
-            setShowSelectVehicle(false);
-            setShowModel(false);
-            setVehicleModel("");
-            setBrand("");
-            setVehicleNumber("");
-          }}
-          addedVehicleNumber={vehicleData?.number || vehicleNumber}
-          addedVehicleModel={vehicleData?.model || `${brand} ${vehicleModel}`}
-        />
+        <Suspense fallback={
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="text-white">Loading vehicle selection...</div>
+          </div>
+        }>
+          <SelectVehicle
+            isOpen={showSelectVehicle}
+            onClose={onClose}
+            onBack={() => {
+              setShowSelectVehicle(false);
+              setShowModel(false);
+              setVehicleModel("");
+              setBrand("");
+              setVehicleNumber("");
+            }}
+            addedVehicleNumber={vehicleData?.number || vehicleNumber}
+            addedVehicleModel={vehicleData?.model || `${brand} ${vehicleModel}`}
+          />
+        </Suspense>
       )}
     </>
   );

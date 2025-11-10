@@ -14,12 +14,11 @@ const VideoSection = React.memo(() => {
     };
   }, []);
   return (
-    <section>
-      <div className="max-w-full text-center">
+   
+      <div className="max-w-full text-center mt-4 sm:mt-6 md:mt-4">
         <video
           ref={videoRef}
           src={demoVideo}
-          controls
           autoPlay
           loop
           muted
@@ -28,7 +27,7 @@ const VideoSection = React.memo(() => {
           className="shadow-lg w-full mx-auto select-none pointer-events-none"
         />
       </div>
-    </section>
+   
   );
 });
 VideoSection.displayName = "VideoSection";

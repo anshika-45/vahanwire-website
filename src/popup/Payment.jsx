@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -45,7 +44,6 @@ const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
 
     document.body.appendChild(form);
     
-    // Add small delay to ensure form is properly appended
     setTimeout(() => {
       form.submit();
     }, 100);
@@ -79,16 +77,18 @@ const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
             <div className="flex gap-4 justify-center">
               <button
                 onClick={onBack}
-                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 Back
               </button>
               <button
                 onClick={handleManualPayment}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" // 🟢 ADD transition-colors
+                disabled={isSubmitting} // 🟢 ADD disabled attribute
               >
-                Proceed to PayU
+                {isSubmitting ? "Redirecting..." : "Proceed to PayU"} {/* 🟢 CHANGE text based on state */}
               </button>
+
             </div>
           </>
         ) : (

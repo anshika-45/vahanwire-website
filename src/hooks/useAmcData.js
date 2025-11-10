@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { comparePlans, featuresCar, featuresBike, pricingData } from "../constants/amcData";
+import { featuresCar, featuresBike, pricingData } from "../constants/amcData";
 const useAmcData = () => {
   const [vehicleType, setVehicleType] = useState(localStorage.getItem("vehicleType") || "car");
   const [amcType, setAmcType] = useState(localStorage.getItem("amcType") || "luxury");

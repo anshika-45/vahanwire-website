@@ -7,8 +7,9 @@ const SuccessPurchase = ({ onClose }) => {
     <div className="flex flex-col items-center justify-center py-10">
       <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
         <CheckCircle
-          size={70}
-          className="text-white fill-green-500 mb-8 justify-between ml-35 "
+          size={100}
+          className="text-white fill-green-500 mb-8 flex justify-center items-center ml-35 "
+          aria-label="Payment Successful"  
         />
 
         <h2 className="text-3xl font-bold text-gray-800 mb-3">

@@ -13,15 +13,14 @@ const AboutUs = React.lazy(() => import("./pages/AboutUs"));
 const ContactUs = React.lazy(() => import("./pages/ContactUs"));
 const TermsCondition = React.lazy(() => import("./pages/TermsCondition"));
 const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
+
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen">
     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#266DDF]"></div>
   </div>
 );
 function App() {
-  
   return (
-   
     <ErrorBoundary>
       <AuthProvider>
         <BrowserRouter>
@@ -31,13 +30,17 @@ function App() {
               <Route element={<MainLayout />}>
                 <Route path="/" element={<Homepage />} />
                 <Route path="/vehicle-amc" element={<VehicleAmc />} />
-                <Route path="/vehicle-amc-filter" element={<VehicleAmcFilter />} />
+                <Route
+                  path="/vehicle-amc-filter"
+                  element={<VehicleAmcFilter />}
+                />
+                <Route path="/my-account" element={<MyAccount />} />
+
                 <Route path="/about-us" element={<AboutUs />} />
                 <Route path="/contact-us" element={<ContactUs />} />
                 <Route path="/terms-condition" element={<TermsCondition />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               </Route>
-              <Route path="/my-account" element={<MyAccount />} />
               <Route path="/payment-status" element={<PaymentStatus />} />
             </Routes>
           </Suspense>

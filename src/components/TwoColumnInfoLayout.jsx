@@ -1,37 +1,75 @@
-import React, { useRef, useState } from "react";
-import { ChevronRight } from "lucide-react";
+import React, { useRef, useState, useCallback, useMemo } from "react";
+import ChevronRight from "lucide-react/dist/esm/icons/chevron-right"; // ✅ Better import
 
 const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const contentRefs = useRef([]);
   const scrollContainerRef = useRef(null);
 
-  const handleScrollTo = (index) => {
+  const handleScrollTo = useCallback((index) => {
     setActiveIndex(index);
-    const target = contentRefs.current[index];
+    setTimeout(() => {
+      const target = contentRefs.current[index];
+      const container = scrollContainerRef.current;
+
+      if (target && container) {
+ 
+        const targetOffset = target.offsetTop - container.offsetTop - 8;
+        
+        container.scrollTo({
+          top: targetOffset,
+          behavior: "smooth",
+        });
+      }
+    }, 0);
+  }, []);
+
+ 
+  const memoizedSections = useMemo(() => sections, [sections]);
+
+  React.useEffect(() => {
     const container = scrollContainerRef.current;
+    if (!container) return;
 
-    if (target && container) {
-      const containerTop = container.getBoundingClientRect().top;
-      const targetTop = target.getBoundingClientRect().top;
-      const scrollOffset = container.scrollTop + (targetTop - containerTop) - 8;
+    const observers = [];
+    const options = {
+      root: container,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: 0.5
+    };
 
-      container.scrollTo({
-        top: scrollOffset,
-        behavior: "smooth",
+    const handleIntersect = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const index = parseInt(entry.target.dataset.index);
+          setActiveIndex(index);
+        }
       });
-    }
-  };
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, options);
+    
+    contentRefs.current.forEach((ref, index) => {
+      if (ref) {
+        ref.dataset.index = index;
+        observer.observe(ref);
+        observers.push(observer);
+      }
+    });
+
+    return () => {
+      observers.forEach(obs => obs.disconnect());
+    };
+  }, [memoizedSections]);
 
   return (
     <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-[450px_1fr] gap-6 md:gap-10">
-      {/* Sidebar */}
-      <aside className="bg-white rounded-lg h-fit sticky top-[180px] self-start shadow-sm border border-[#E9F0FC] max-h-[600px] overflow-y-auto">
+      <aside className="bg-white rounded-lg md:h-fit h-[400px] md:sticky top-[180px] self-start shadow-sm border border-[#E9F0FC] max-h-[600px] overflow-y-auto">
         <h3 className="text-sm font-semibold text-[#242424] px-4 py-4 border-b border-[#E9F0FC]">
           {title}
         </h3>
         <ul className="flex flex-col">
-          {sections.map((section, index) => {
+          {memoizedSections.map((section, index) => {
             const isActive = activeIndex === index;
             return (
               <li key={index}>
@@ -51,6 +89,7 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
                     className={`transition-transform duration-200 ${
                       isActive ? "rotate-90 text-[#266DDF]" : "text-gray-400"
                     }`}
+                    aria-label={isActive ? "Expanded" : "Collapsed"} 
                   />
                 </button>
               </li>
@@ -63,9 +102,10 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
       <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="max-h-[600px] overflow-y-auto pr-2 md:pr-4 space-y-8 scroll-smooth custom-scrollbar"
+          className="max-h-[600px] md:h-auto h-[300px] overflow-y-auto pr-2 md:pr-4 space-y-8 scroll-smooth custom-scrollbar"
+          onScroll={() => {}} 
         >
-          {sections.map((section, index) => {
+          {memoizedSections.map((section, index) => {
             const isActive = activeIndex === index;
             return (
               <div
@@ -99,4 +139,4 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
   );
 };
 
-export default TwoColumnInfoLayout;
+export default React.memo(TwoColumnInfoLayout);

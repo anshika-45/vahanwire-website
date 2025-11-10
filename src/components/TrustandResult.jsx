@@ -3,7 +3,7 @@ import bgImage from "../assets/result.webp";
 import Card from "./Card";
 const TrustandResult = () => {
   return (
-    <div className="relative w-full h-auto  pt-8 pb-14">
+    <div className="relative w-full h-auto mt-4 sm:mt-6 md:mt-4  pt-8 pb-14">
       <div className="absolute inset-0 bg-[#183f7f]"></div>
       <div
         className="absolute inset-0 bg-cover bg-center opacity-80"

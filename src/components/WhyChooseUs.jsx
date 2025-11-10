@@ -1,8 +1,8 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense} from "react";
 const ChooseUs = React.lazy(() => import("./ChooseUs"));
 const WhyChooseUs = () => {
   return (
-    <div className="bg-[#FAFCFF] py-5 lg:py-[65px] flex items-center justify-center">
+    <div className="bg-[#FAFCFF] py-5 lg:py-[65px] flex items-center justify-center mt-4 sm:mt-6 md:mt-4">
       <div className="container">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-medium text-[#242424]">
           Why Choose Us?

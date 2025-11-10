@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Button from "./Button";
 import { Check, X } from "lucide-react";
 import detailIcon from "../assets/info-circle.webp";
@@ -7,9 +7,43 @@ import "../index.css";
 
 const CompareTable = ({ plans, features, onBuy }) => {
   const [hoveredCol, setHoveredCol] = useState(null);
+  const [hoverStyle, setHoverStyle] = useState({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
+
+  const tableRef = useRef(null);
+
+  const handleMouseEnter = (colIndex) => {
+    setHoveredCol(colIndex);
+
+    if (!tableRef.current) return;
+
+    const thElements = tableRef.current.querySelectorAll("thead th");
+    const targetTh = thElements[colIndex + 1]; // +1 because first column is "Compare plans"
+    if (targetTh) {
+      const rect = targetTh.getBoundingClientRect();
+      const containerRect = tableRef.current.parentElement.getBoundingClientRect();
+
+      setHoverStyle({
+        left: `${rect.left - containerRect.left + tableRef.current.parentElement.scrollLeft}px`,
+        width: `${rect.width}px`,
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    // Only remove hover if mouse leaves the entire table container, not when moving between cells
+    // We'll handle this differently - see the container approach below
+  };
+
+  const handleTableMouseLeave = (e) => {
+    // Check if we're leaving the table container
+    if (!tableRef.current.contains(e.relatedTarget)) {
+      setHoveredCol(null);
+      setHoverStyle({});
+    }
+  };
 
   const handleBuy = (plan) => {
     if (onBuy) {
@@ -32,16 +66,20 @@ const CompareTable = ({ plans, features, onBuy }) => {
   };
 
   return (
-    <div className="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pb-20 mt-10 sm:mt-16 md:mt-20">
-      {/* 👇 Scrollable wrapper */}
+    <div 
+      className="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pb-20 mt-10 sm:mt-16 md:mt-20"
+      onMouseLeave={handleTableMouseLeave}
+    >
       <div className="w-full overflow-x-auto overflow-y-hidden relative scroll-smooth">
-        <div className="min-w-[700px] inline-block align-middle w-full">
+        <div 
+          className="min-w-[700px] inline-block align-middle w-full relative" 
+          ref={tableRef}
+        >
           {hoveredCol !== null && (
             <div
               className="absolute top-0 bottom-0 z-25 pointer-events-none transition-all duration-300 gradient-border-animate"
               style={{
-                left: `calc((100% / ${plans.length + 1}) * (${hoveredCol >= 0 ? hoveredCol + 1 : 0}))`,
-                width: `calc(100% / ${plans.length + 1})`,
+                ...hoverStyle,
                 height: "100%",
                 padding: "2px",
                 background:
@@ -56,15 +94,13 @@ const CompareTable = ({ plans, features, onBuy }) => {
             ></div>
           )}
 
-          {/* 👇 Actual Table */}
           <table className="w-full border-collapse text-center">
             <thead className="bg-[#FFFFFF] border-2 border-[#E9F0FC] sticky top-0 z-20">
               <tr className="h-[120px]">
                 <th
                   className="py-10 px-4 sm:px-6 text-center text-[#242424] font-bold text-2xl sm:text-3xl border-2 border-[#E0EDFF] bg-[#F9FBFF]"
                   style={{ width: "20%" }}
-                  onMouseEnter={() => setHoveredCol(-1)}
-                  onMouseLeave={() => setHoveredCol(null)}
+                  onMouseEnter={() => handleMouseEnter(-1)}
                 >
                   Compare plans
                 </th>
@@ -74,8 +110,7 @@ const CompareTable = ({ plans, features, onBuy }) => {
                     key={plan.key}
                     style={{ width: "20%" }}
                     className="py-4 px-4 sm:px-6 border-2 border-[#E0EDFF] bg-[#F9FBFF] transition-all duration-300"
-                    onMouseEnter={() => setHoveredCol(colIndex)}
-                    onMouseLeave={() => setHoveredCol(null)}
+                    onMouseEnter={() => handleMouseEnter(colIndex)}
                   >
                     <div className="flex flex-col items-center gap-1 min-w-[160px] sm:min-w-[180px]">
                       <p className="font-semibold text-[#242424] text-base sm:text-lg">
@@ -103,13 +138,12 @@ const CompareTable = ({ plans, features, onBuy }) => {
               {features.map((feature, rowIndex) => (
                 <tr
                   key={rowIndex}
-                  className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-[#F7FAFF]"}`}
+                  className={`${rowIndex % 2 === 0 ? "bg-white" : "bg-[#F7FAFF]"}`} 
                 >
                   <td
                     className="py-4 px-4 sm:px-6 text-left font-medium text-[#242424] border-x-2 border-[#E0EDFF] min-w-[200px]"
                     style={{ width: "20%" }}
-                    onMouseEnter={() => setHoveredCol(-1)}
-                    onMouseLeave={() => setHoveredCol(null)}
+                    onMouseEnter={() => handleMouseEnter(-1)}
                   >
                     <div className="flex items-center gap-2 relative">
                       <span>{feature.label}</span>
@@ -148,8 +182,7 @@ const CompareTable = ({ plans, features, onBuy }) => {
                       key={plan.key}
                       className="py-4 px-4 sm:px-6 h-[80px] border-r-2 border-[#E0EDFF] transition-all duration-300 min-w-[150px] sm:min-w-[180px]"
                       style={{ width: "20%" }}
-                      onMouseEnter={() => setHoveredCol(colIndex)}
-                      onMouseLeave={() => setHoveredCol(null)}
+                      onMouseEnter={() => handleMouseEnter(colIndex)}
                     >
                       {feature.values[plan.key] === true ? (
                         <div className="flex items-center justify-center w-6 h-6 rounded-full bg-[#21830F] mx-auto">
@@ -173,7 +206,6 @@ const CompareTable = ({ plans, features, onBuy }) => {
         </div>
       </div>
 
-      {/* Hide scrollbar for cleaner mobile look */}
       <style>
         {`
           .overflow-x-auto::-webkit-scrollbar {
@@ -185,6 +217,7 @@ const CompareTable = ({ plans, features, onBuy }) => {
           }
         `}
       </style>
+
       <PlanSummaryPage
         isOpen={isPopupOpen}
         onClose={handleClosePopup}
@@ -193,4 +226,5 @@ const CompareTable = ({ plans, features, onBuy }) => {
     </div>
   );
 };
+
 export default CompareTable;

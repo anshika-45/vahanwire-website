@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import carIcon from "../assets/car.webp";
 import carIconDark from "../assets/car-1.webp";

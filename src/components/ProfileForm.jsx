@@ -11,7 +11,7 @@ const ProfileForm = () => {
   const [isEditing, setIsEditing] = useState(true);
   const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
   const [previewUrl, setPreviewUrl] = useState("https://i.pravatar.cc/160");
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [ setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -69,14 +69,14 @@ const ProfileForm = () => {
   };
 
   return (
-    <section className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 md:p-8 lg:p-10">
+    <section className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 md:p-2 lg:p-10">
       <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
         <div className="flex flex-col items-center md:w-1/3 gap-4 w-full mt-4 md:mt-6">
           <div className="relative">
             <img
               src={previewUrl}
               alt="Avatar"
-              className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-white shadow"
+              className="w-24 h-24 sm:w-32 sm:h-32 md:w-30 md:h-30 lg:w-36 lg:h-36 rounded-full object-cover border-4 border-white shadow"
             />
 
             <label
