@@ -23,7 +23,7 @@ function SearchBar({ placeholder = "Search" }) {
           value={query}
           onChange={handleChange}
           placeholder={placeholder}
-          className="pl-10 pr-4 py-2 w-full rounded-[6px] border border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
+          className="pl-10 pr-6 py-2 w-full rounded-[6px] border-2 border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
         />
       </div>
     </div>

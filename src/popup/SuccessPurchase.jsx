@@ -1,27 +1,40 @@
 import React from "react";
-import { Check } from "lucide-react";
+import { CheckCircle } from "lucide-react";
+import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
-const SuccessPurchase = ({ onClose }) => {
+const SuccessPurchase = ({ onClose, selectedPlan }) => {
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    // Add to context if purchaseData exists
+    if (onClose) {
+      onClose(selectedPlan);
+    }
+    // Navigate to MyAMCPage
+    navigate("/my-account?view=amc");
+  };
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 text-center max-w-md w-full">
-        <div className="flex justify-center mb-6">
-          <div className="bg-green-500 rounded-full p-4">
-            <Check size={40} className="text-white" strokeWidth={3} />
-          </div>
-        </div>
-        <h4 className="text-xl font-bold text-black-800 mb-4">
+    <div className="flex flex-col items-center justify-center py-10">
+      <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
+        <CheckCircle
+          size={70}
+          className="text-white fill-green-500 mb-8 justify-between ml-35"
+          aria-label="Payment Successful"
+        />
+        <h2 className="text-3xl font-bold text-gray-800 mb-3">
           Thank You for Your Purchase!
-        </h4>
-        <p className="text-gray-600 text-base mb-8 leading-relaxed">
-          Your AMC Plan is active — enjoy a year of worry-free service and priority support.
+        </h2>
+        <p className="text-gray-600 mb-8 text-sm">
+          Your AMC Plan is active — enjoy a year of worry<br></br>-free service
+          and priority support.
         </p>
-        <button
-          onClick={onClose}
-          className="w-full max-w-xs mx-auto px-6 py-3 bg-white border border-gray-400 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
-        >
-          Close
-        </button>
+        <Button
+          text="Close"
+          className="px-15 py-3 bg-white border text-[#266DDF] font-semibold rounded-lg hover:bg-blue-700 hover:text-white transition"
+          onClick={handleClose}
+        />
       </div>
     </div>
   );

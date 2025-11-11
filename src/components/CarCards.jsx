@@ -124,6 +124,8 @@ const CarCards = () => {
     if (window.confirm("Are you sure you want to delete this vehicle?")) {
       await deleteUserVehicle(vehicleId);
       setCars((prev) => prev.filter((car) => car.id !== vehicleId));
+      // Trigger vehicle count update in sidebar
+      window.dispatchEvent(new Event("vehicleCountChanged"));
     }
   };
 
@@ -135,6 +137,8 @@ const CarCards = () => {
   const handleAddSubmit = () => {
     setAddModalOpen(false);
     fetchUserVehicles();
+    // Trigger vehicle count update in sidebar
+    window.dispatchEvent(new Event("vehicleCountChanged"));
   };
 
   return (
@@ -161,7 +165,7 @@ const CarCards = () => {
           No vehicles found.
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6 ">
           {cars.map((car) => (
             <VehicleCard
               key={car.id}
@@ -179,7 +183,7 @@ const CarCards = () => {
         </div>
       )}
 
-      <div className="flex items-center justify-between mt-4 sm:mt-6 md:mt-6 px-3 sm:px-4 md:px-0">
+      <div className="flex items-center justify-between mt-4 sm:mt-6 md:mt-6 px-3 sm:px-4 md:px-0 md:mb-10 mb-5">
         <button
           onClick={() => setAddModalOpen(true)}
           aria-label="Add new vehicle"
@@ -192,4 +196,8 @@ const CarCards = () => {
   );
 };
 
-export default CarCards;
+export { CarCards as default, CarCards };
+export const getVehicleCount = async () => {
+  const vehicles = await getUserVehicles();
+  return vehicles.length;
+};

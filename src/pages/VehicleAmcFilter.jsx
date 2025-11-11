@@ -90,7 +90,7 @@ const VehicleAmcFilter = () => {
       alert(purchaseResponse.message || "Failed to create AMC purchase");
       return;
     }
-
+   console.log("ej2fbhjvhv",purchaseResponse);
     const purchaseData = purchaseResponse.data;
     setSelectedPlanState({
       ...plan,
@@ -118,10 +118,8 @@ const VehicleAmcFilter = () => {
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
   };
-
   return (
     <section className="bg-white w-full min-h-screen">
-      <BreadcrumbBar />
       <AMC
         vehicleType={vehicleType}
         setVehicleType={setVehicleType}
@@ -160,9 +158,9 @@ const VehicleAmcFilter = () => {
         <Suspense fallback={<BannerLoader />}>
           <AmcBanner onBuy={handleBuyNow} />
         </Suspense>
-        <Suspense fallback={<BannerLoader />}>
+        {/* <Suspense fallback={<BannerLoader />}>
           <AddBanner />
-        </Suspense>
+        </Suspense> */}
       </div>
 
       {isPopupOpen && (
@@ -179,7 +177,14 @@ const VehicleAmcFilter = () => {
       {showPopup === "success" && (
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <Suspense fallback={<div className="text-white">Loading...</div>}>
-            <SuccessPurchase onClose={handleClosePaymentPopup} />
+            <SuccessPurchase 
+              onClose={(data) => {
+                if (data) {
+                  addPurchasedCard(data);
+                }
+              }}
+              purchaseData={selectedPlanState}
+            />
           </Suspense>
         </div>
       )}

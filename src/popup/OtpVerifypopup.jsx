@@ -2,10 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import Modal from "../components/Modal";
 import Button from "../components/Button";
 import otpImg from "../assets/AnimationPhone.webp";
-import { LucideEdit } from "lucide-react";
+import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { verifyOtp } from "../api/authApi";
+import { verifyOtp, sendOtp } from "../api/authApi"; // ⬅️ add sendOtp
+import { getUserVehicles } from "../api/vehicleApi";
+
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
+const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
+
+const RESEND_SECONDS = 60; // ⬅️ show 60s timer
+
 const OtpVerifypopup = ({
   isOpen,
   onClose,
@@ -15,39 +21,42 @@ const OtpVerifypopup = ({
 }) => {
   const { setIsLoggedIn } = useAuth();
   const [showVehiclePopup, setShowVehiclePopup] = useState(false);
+  const [userVehicles, setUserVehicles] = useState([]);
+  const [showSelectVehicle, setShowSelectVehicle] = useState(false);
   const [otp, setOtp] = useState(["", "", "", ""]);
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(RESEND_SECONDS);
   const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
   const [error, setError] = useState("");
-  const inputRefs = [useRef(), useRef(), useRef(), useRef()];
+  const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
+  // start/refresh timer whenever popup opens
   useEffect(() => {
     if (!isOpen) return;
-    setTimer(30);
-    const interval = setInterval(
-      () => setTimer((prev) => (prev > 0 ? prev - 1 : 0)),
-      1000
-    );
+    setTimer(RESEND_SECONDS);
+    const interval = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
     return () => clearInterval(interval);
   }, [isOpen]);
 
   const handleChange = (value, idx) => {
     if (/^[0-9]?$/.test(value)) {
-      const newOtp = [...otp];
-      newOtp[idx] = value;
-      setOtp(newOtp);
-      if (value && idx < 3) inputRefs[idx + 1].current.focus();
+      const next = [...otp];
+      next[idx] = value;
+      setOtp(next);
+      if (value && idx < 3) inputRefs[idx + 1].current?.focus();
     }
   };
 
   const handleKeyDown = (e, idx) => {
-    if (e.key === "Backspace" && !otp[idx] && idx > 0)
-      inputRefs[idx - 1].current.focus();
+    if (e.key === "Backspace" && !otp[idx] && idx > 0) {
+      inputRefs[idx - 1].current?.focus();
+    }
   };
 
   const handleOtpSubmit = async () => {
     const fullOtp = otp.join("").trim();
-
     if (fullOtp.length !== 4) {
       setError("Please enter the 4-digit OTP");
       return;
@@ -56,23 +65,30 @@ const OtpVerifypopup = ({
     try {
       setLoading(true);
       setError("");
-
       const response = await verifyOtp(phoneNumber, fullOtp);
 
       if (response?.success && response?.data) {
         const { accessToken, user } = response.data;
-
-        if (accessToken) {
-          localStorage.setItem("token", accessToken);
-        }
-
-        if (user) {
-          localStorage.setItem("user", JSON.stringify(user));
-        }
+        if (accessToken) localStorage.setItem("token", accessToken);
+        if (user) localStorage.setItem("user", JSON.stringify(user));
 
         setIsLoggedIn(true);
-
-        isFromLogin ? onClose() : setShowVehiclePopup(true);
+        
+        if (isFromLogin) {
+          onClose();
+        } else {
+          // Fetch user vehicles to determine which popup to show
+          const vehicles = await getUserVehicles();
+          setUserVehicles(vehicles);
+          
+          if (vehicles && vehicles.length > 0) {
+            // User has existing vehicles - show SelectVehicle
+            setShowSelectVehicle(true);
+          } else {
+            // User has no vehicles - show EnterVehicleNumber
+            setShowVehiclePopup(true);
+          }
+        }
       } else {
         setError(response?.message || "Invalid OTP. Try again.");
       }
@@ -87,13 +103,43 @@ const OtpVerifypopup = ({
     }
   };
 
-  if (!isOpen && !showVehiclePopup) return null;
+  const handleResend = async () => {
+    if (timer > 0 || resendLoading) return; // guard
+    try {
+      setResendLoading(true);
+      setError("");
+
+      // call your backend to resend OTP
+      const resp = await sendOtp(phoneNumber);
+
+      // optional: handle backend messages
+      if (resp?.success === false) {
+        setError(resp?.message || "Could not send OTP. Please try again.");
+        return;
+      }
+
+      // reset input + timer
+      setOtp(["", "", "", ""]);
+      inputRefs[0].current?.focus();
+      setTimer(RESEND_SECONDS);
+    } catch (err) {
+      console.error("Resend OTP failed:", err);
+      setError(
+        err?.response?.data?.message ||
+          "Could not send OTP. Please try again."
+      );
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+  if (!isOpen && !showVehiclePopup && !showSelectVehicle) return null;
 
   return (
     <>
-      {!showVehiclePopup && (
+      {!showVehiclePopup && !showSelectVehicle && (
         <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
-          <div className="bg-white rounded-xl p-5  flex flex-col items-center m-4">
+          <div className="bg-white rounded-xl p-5 flex flex-col items-center m-8">
             <img
               src={otpImg}
               loading="lazy"
@@ -110,40 +156,55 @@ const OtpVerifypopup = ({
               Enter the OTP sent to {phoneNumber}
             </p>
 
+            {/* Change Number with icon BEFORE label */}
             <Button
-              text="Change Number"
               onClick={onBack}
-              className="flex items-center gap-1 px-2 py-0 bg-[#EFEFEF] text-[#333333] text-xs rounded-full border border-gray-200 hover:bg-gray-200 transition-all mb-4"
+              className="flex items-center gap-1 px-1 py-0 bg-[#EFEFEF] text-[#333333] text-xs rounded-full border border-gray-200 hover:bg-gray-200 transition-all mb-4"
             >
-              <span className="p-1 flex items-center justify-center mr-1">
-                <LucideEdit size={14} className="text-[#242424]" />
+              <span className="flex items-center justify-center">
+                <Edit size={12} className="text-[#242424]" />
               </span>
+              <span className="text-xs text-[#333333] ">Change Number</span>
             </Button>
 
+            {/* OTP Inputs */}
             <div id="otp-inputs" className="flex gap-2 mb-3" role="group">
               {otp.map((digit, idx) => (
                 <input
                   key={idx}
                   ref={inputRefs[idx]}
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   maxLength={1}
                   value={digit}
                   placeholder="X"
                   onChange={(e) => handleChange(e.target.value, idx)}
                   onKeyDown={(e) => handleKeyDown(e, idx)}
-                  className="w-10 h-10 text-center text-lg border border-[#BCD2F5] rounded focus:outline-none focus:ring-1 focus:ring-[#BCD2F5]"
+                  className="w-10 h-10 text-center text-sm text-[#5C5C5C] border border-[#BCD2F5] rounded focus:outline-none focus:ring-1 focus:ring-[#BCD2F5]"
                 />
               ))}
             </div>
 
-            {error && (
-              <div className="text-[#CB0200] text-xs mb-2">{error}</div>
+            {/* Error */}
+            {error && <div className="text-[#CB0200] text-xs mb-2">{error}</div>}
+
+            {/* Resend block */}
+            {timer > 0 ? (
+              <div className="text-xs text-[#CB0200] mb-4">
+                Resend OTP in {timer}s
+              </div>
+            ) : (
+              <button
+                onClick={handleResend}
+                disabled={resendLoading}
+                className="text-xs text-[#266DDF] underline mb-4 disabled:opacity-60"
+              >
+                {resendLoading ? "Sending..." : "Resend OTP"}
+              </button>
             )}
 
-            <div className="text-xs text-[#666] mb-4">
-              Resend OTP in {timer}s
-            </div>
-
+            {/* Submit */}
             <Button
               text={loading ? "Verifying..." : "Submit"}
               disabled={loading}
@@ -160,6 +221,22 @@ const OtpVerifypopup = ({
             onClose={onClose}
             onBack={() => setShowVehiclePopup(false)}
           />
+      )}
+
+      {showSelectVehicle && (
+        <React.Suspense
+          fallback={
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="text-white">Loading vehicle selection...</div>
+            </div>
+          }
+        >
+          <SelectVehicle
+            isOpen={showSelectVehicle}
+            onClose={onClose}
+            onBack={() => setShowSelectVehicle(false)}
+          />
+        </React.Suspense>
       )}
     </>
   );

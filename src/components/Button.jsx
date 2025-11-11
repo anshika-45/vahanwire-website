@@ -1,4 +1,6 @@
+// components/Button.jsx
 import React from "react";
+
 const Button = React.memo(
   ({
     text = "Log In",
@@ -16,7 +18,7 @@ const Button = React.memo(
 py-2 md:text-[17px] text-xs sm:text-base lg:text-base transition-all duration-300`}
         {...props}
       >
-        {text || children}
+        {children ?? text}
       </button>
     );
   }

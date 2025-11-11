@@ -12,7 +12,7 @@ import dropdownIcon from "../assets/down-arrow.webp";
 import searchIcon from "../assets/search.webp";
 
 const LazyFallback = () => (
-  <div className="w-4 h-4 bg-gray-200 animate-pulse"></div>
+  <div className="w-4 h-4 bg-[#ffffff] animate-pulse"></div>
 );
 const Header = () => {
   const { isLoggedIn } = useAuth();
@@ -30,7 +30,9 @@ const Header = () => {
   };
   const handleSidebarSelect = (view) => {
     setIsProfileModalOpen(false);
-    navigate(`/my-account?view=${view}`);
+    if (view !== "logout") {
+      navigate(`/my-account?view=${view}`);
+    }
   };
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -50,14 +52,14 @@ const Header = () => {
     setOpen(!open);
   };
   return (
-    <div className={` bg-white mx-auto md:py-4 py-2.5 z-50 gap-2 sm:gap-4`}>
+    <div className={` bg-white mx-auto md:py-8 py-4 z-50 gap-x-4 sm:gap-4`}>
       <div className="container">
         <div className="flex items-center">
-          <div className="flex w-full justify-between">
+          <div className="flex w-full justify-between gap-4 ">
             <Suspense fallback={<LazyFallback />}>
               <Logo />
             </Suspense>
-            <div className="md:flex items-center justify-end">
+            <div className="md:flex items-center justify-end gap-2">
               <Suspense fallback={<LazyFallback />}>
                 <SearchBar />
               </Suspense>

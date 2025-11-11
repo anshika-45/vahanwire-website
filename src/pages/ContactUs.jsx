@@ -46,7 +46,7 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="mt-[60px] sm:mt-[60px] md:mt-[80px]">
+    <div>
       <Suspense fallback={<ComponentFallback />}>
         <PageBanner title="Contact Us" image={contactBanner} />
       </Suspense>
@@ -206,11 +206,11 @@ const ContactUs = () => {
         </div>
       </div>
 
-      <div className="mt-20">
+      {/* <div className="mt-20">
         <Suspense fallback={<ComponentFallback />}>
           <AddBanner />
         </Suspense>
-      </div>
+      </div> */}
     </div>
   );
 };
