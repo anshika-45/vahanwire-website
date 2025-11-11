@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import logoImg from "../assets/logo.webp";
 const Logo = React.memo(() => {
   return (
-    <div className="flex">
+    <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex">
       <img
         src={logoImg}
         loading="eager"
@@ -13,7 +14,7 @@ const Logo = React.memo(() => {
         decoding="async"
         fetchPriority="high"
       />
-    </div>
+    </Link>
   );
 });
 Logo.displayName = "Logo";

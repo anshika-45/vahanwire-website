@@ -39,7 +39,7 @@
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 //     if (!validate()) return;
-  
+
 //     try {
 //       const selectedReason = selected != null ? choices[selected] : null;
 //       const description = reason.trim() || null;
@@ -52,10 +52,10 @@
 //       }
 //       const result = await createRefundRequest(resData);
 //       console.log("Refund request created:", result);
-  
+
 //       // Notify parent
 //       onSubmit?.(result);
-  
+
 //       // Close modal
 //       onClose?.();
 //     } catch (err) {
@@ -197,21 +197,25 @@
 //       </form>
 
 //       <style>{`
-//         @keyframes fadeIn { 
-//           from { opacity: 0; transform: translateY(6px) } 
-//           to { opacity: 1; transform: translateY(0) } 
+//         @keyframes fadeIn {
+//           from { opacity: 0; transform: translateY(6px) }
+//           to { opacity: 1; transform: translateY(0) }
 //         }
 //       `}</style>
 //     </div>
 //   );
 // }
 
-
 import React, { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-import {createRefundRequest} from "../api/amcApi";
+import { createRefundRequest } from "../api/amcApi";
 
-export default function RefundRequestModal({ open, onClose, onSubmit, amcData }) {
+export default function RefundRequestModal({
+  open,
+  onClose,
+  onSubmit,
+  amcData,
+}) {
   const [reason, setReason] = useState("");
   const [selected, setSelected] = useState(null);
   const [error, setError] = useState("");
@@ -248,28 +252,30 @@ export default function RefundRequestModal({ open, onClose, onSubmit, amcData })
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-  
+
     try {
       const description = reason.trim() || null;
-      
+
       const resData = {
         amcPurchaseId: amcData.id,
-        reason: description
+        reason: description,
       };
-      
+
       const result = await createRefundRequest(resData);
-      
+
       if (result.success) {
         onSubmit?.({
           amcPurchaseId: amcData.id,
           refundRequestId: result.data._id || result.data.refundRequestId,
         });
       }
-      
+
       onClose?.();
     } catch (err) {
       setError(
-        err.response?.data?.message || err.message || "Failed to submit refund request"
+        err.response?.data?.message ||
+          err.message ||
+          "Failed to submit refund request"
       );
     }
   };

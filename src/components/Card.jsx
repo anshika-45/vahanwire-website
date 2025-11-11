@@ -36,7 +36,7 @@ const YellowCards = () => {
             <img
               loading="lazy"
               src={card.image}
-              alt={card.title}
+              alt=""
               className="w-12 sm:w-14 md:w-16 lg:w-18 h-12 sm:h-14 md:h-16 lg:h-18 object-contain 
                          max-sm:w-9 max-sm:h-9"
             />

@@ -22,14 +22,14 @@ const steps = [
 const HoverCards = () => {
   return (
     <section
-      className="relative w-full bg-cover bg-center bg-no-repeat py-15"
+      className="relative w-full bg-cover bg-center bg-no-repeat py-4 lg:mb-32"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Overlay for better text visibility */}
 
       {/* Content */}
-      <div className="container relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-4 py-16">
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 lg:-mb-150 -mb-10">
+      <div className="container relative z-10 flex flex-col items-center justify-center md:min-h-[80vh] px-4 py-16">
+        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 lg:-mb-120">
           {steps.map((step, index) => (
             <div
               key={index}
@@ -40,7 +40,7 @@ const HoverCards = () => {
 
               {/* Card content */}
               <div className="relative z-10">
-                <h2 className="md:text-8xl text-2xl md:pt-5 pt-3 font-extrabold bg-gradient-to-r from-[#FFBD00]/60 to-[#32AB15]/75 bg-clip-text text-transparent md:mb-4 mb-2 group-hover:text-white transition-all duration-500">
+                <h2 className="lg:text-8xl md:text-7xl text-2xl lg:pt-5 pt-3 font-extrabold bg-gradient-to-r from-[#FFBD00]/60 to-[#32AB15]/75 bg-clip-text text-transparent md:mb-4 mb-2 group-hover:text-white transition-all duration-500">
                   {step.number}
                 </h2>
                 <h3 className="text-lg md:text-xl font-semibold text-[#242424] md:mb-3 mb-1.5 group-hover:text-white transition-all duration-500">

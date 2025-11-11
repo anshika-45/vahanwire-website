@@ -11,7 +11,6 @@ const FailedPurchase = React.lazy(() => import("../popup/FailedPurchase"));
 import { useAuth } from "../context/AuthContext";
 import { createAMCPurchase } from "../api/amcApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
-import BreadcrumbBar from "../components/BreadcrumbBar";
 import AMC from "../components/AMC";
 import useAmcData from "../hooks/useAmcData";
 

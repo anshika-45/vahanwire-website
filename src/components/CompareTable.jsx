@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Button from "./Button";
 import { Check, X } from "lucide-react";
-import detailIcon from "../assets/info-circle.webp";
+import detailIcon from "../assets/info.png";
 import PlanSummaryPage from "../popup/PlanSummaryPage";
 import { useAmcData } from "../context/AmcDataContext";
 import { getAMCPlansByCategory } from "../api/amcApi";
@@ -27,7 +27,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
     if (!tableRef.current) return;
 
     const thElements = tableRef.current.querySelectorAll("thead th");
-    const targetTh = thElements[colIndex + 1]; // +1 because first column is "Compare plans"
+    const targetTh = thElements[colIndex + 1]; 
     if (targetTh) {
       const rect = targetTh.getBoundingClientRect();
       const containerRect =
@@ -243,7 +243,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
                   >
                     <td
                       ref={rowIndex === 0 ? firstColumnRef : null}
-                      className="py-4 px-4 sm:px-6 text-left font-medium text-[#242424] border-x-2 border-[#E0EDFF] min-w-[200px] relative"
+                      className="py-4 px-4 sm:px-6 text-left font-bold text-[#242424] border-x-2 border-[#E0EDFF] min-w-[200px] relative"
                       style={{ width: "20%" }}
                       onMouseEnter={handleFirstColumnMouseEnter}
                       onMouseLeave={handleMouseLeave}
@@ -259,22 +259,29 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
                               onMouseEnter={() => setHoveredIcon(rowIndex)}
                               onMouseLeave={() => setHoveredIcon(null)}
                             >
-                              <img
-                                loading="lazy"
-                                src={detailIcon}
-                                alt="Details"
-                                className="w-5 h-5 cursor-pointer"
-                              />
+                              <button
+                                type="button"
+                                className="w-5 h-5 p-0 bg-none border-none cursor-pointer"
+                                aria-label={`Details for ${feature.label}`}
+                                onClick={() => setHoveredIcon(hoveredIcon === rowIndex ? null : rowIndex)}
+                              >
+                                <img
+                                  loading="lazy"
+                                  src={detailIcon}
+                                  alt="info"
+                                  className="w-4 h-4"
+                                />
+                              </button>
                               {hoveredIcon === rowIndex && (
                                 <div
-                                  className={`absolute left-8 bg-[#F7FAFF] border border-[#c9dcfd] text-black text-xs px-4 py-3 rounded-lg z-50 w-64 sm:w-72 shadow-md ${
-                                    rowIndex > 7 ? "top-[-6rem]" : "top-0"
+                                  className={`absolute left-8 bg-[#F7FAFF] border border-[#c9dcfd] text-black text-xs px-3 py-3 rounded-lg z-50 w-70 sm:w-72 shadow-md ${
+                                    rowIndex > 7 ? "top-[-10rem]" : "top-0"
                                   }`}
                                 >
-                                  <h5 className="text-center font-bold text-base mb-2">
+                                  <h5 className="text-center font-bold text-xl mb-3">
                                     {feature.label}
                                   </h5>
-                                  <p className="text-center">
+                                  <p className="text-center text-base">
                                     {feature.details}
                                   </p>
                                 </div>

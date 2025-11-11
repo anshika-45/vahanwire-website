@@ -5,8 +5,9 @@ import verifyIcon from "../assets/verify.webp";
 import Modal from "../components/Modal";
 import { searchUserVehicle, addUserVehicle } from "../api/vehicleApi";
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
+
 const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
-  const { vehicleType, amcType } = useAmcData();
+  const { vehicleType } = useAmcData();
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [vehicleModel, setVehicleModel] = useState("");
   const [brand, setBrand] = useState("");
@@ -20,32 +21,28 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
 
   if (!isOpen && !showSelectVehicle) return null;
 
+  // ✅ Updated: Realistic Indian Vehicle Number Validation
   const validateVehicleNumber = (number) => {
     const cleanedNumber = number.trim().toUpperCase().replace(/[-\s]/g, "");
+
+    // Common India vehicle number format: MH12AB1234
+    // State Code (2 letters) + RTO (1–2 digits) + Series (1–3 letters) + Number (1–4 digits)
+    const indianVehicleRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
+
+    // Some older vehicles or temporary numbers have different pattern (like DL3S1234, BR01T999)
+    const alternateRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1}[0-9]{3,4}$/;
 
     if (cleanedNumber.length < 8 || cleanedNumber.length > 15) {
       return {
         isValid: false,
-        message: "Vehicle number should be between 8-15 characters",
+        message: "Vehicle number should be between 8–15 characters",
       };
     }
 
-    const patterns = [
-      /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/,
-      /^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$/,
-      /^[A-Z]{2}[0-9]{1,2}[A-Z]{2}[0-9]{4}$/,
-      /^[A-Z]{2}[0-9]{2}[A-Z]{1,3}[0-9]{3,4}$/,
-    ];
-
-    const isValidFormat = patterns.some((pattern) =>
-      pattern.test(cleanedNumber)
-    );
-
-    if (!isValidFormat) {
+    if (!indianVehicleRegex.test(cleanedNumber) && !alternateRegex.test(cleanedNumber)) {
       return {
         isValid: false,
-        message:
-          "Please enter a valid vehicle number format (e.g., DL01AB1234)",
+        message: "Please enter a valid vehicle number (e.g., MH12AB1234 or DL3S9999)",
       };
     }
 
@@ -58,15 +55,18 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
 
   const verifyVehicleNumber = async (regNumber) => {
     setIsLoading(true);
-    const data = await searchUserVehicle(regNumber);
-    setIsLoading(false);
-    if (
-      (data.found && data.vehicle) ||
-      (data.data?.found && data.data?.vehicle)
-    ) {
-      const vehicle = data.vehicle || data.data.vehicle;
-      return { found: true, vehicle: vehicle };
-    } else {
+    try {
+      const data = await searchUserVehicle(regNumber);
+      setIsLoading(false);
+      if ((data.found && data.vehicle) || (data.data?.found && data.data?.vehicle)) {
+        const vehicle = data.vehicle || data.data.vehicle;
+        return { found: true, vehicle };
+      } else {
+        return { found: false };
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error verifying vehicle:", error);
       return { found: false };
     }
   };
@@ -104,23 +104,30 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
       hasError = true;
     }
     if (hasError) return;
-    setIsLoading(true);
+
     const validation = validateVehicleNumber(vehicleNumber);
     if (!validation.isValid) {
       setNumberError(validation.message);
-      setIsLoading(false);
       return;
     }
+
+    setIsLoading(true);
     const newVehicle = {
       vehicleNumber: validation.formattedNumber,
       brand: brand.trim(),
       model: vehicleModel.trim(),
     };
-    const response = await addUserVehicle(newVehicle);
-    setIsLoading(false);
-    if (response.status === 201) {
-      setVehicleData(newVehicle);
-      setShowSelectVehicle(true);
+
+    try {
+      const response = await addUserVehicle(newVehicle);
+      setIsLoading(false);
+      if (response.status === 201) {
+        setVehicleData(newVehicle);
+        setShowSelectVehicle(true);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error adding vehicle:", error);
     }
   };
 
@@ -159,14 +166,7 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
       >
         <div className="w-full max-w-[550px] flex flex-col items-center p-5">
           <div className="w-full flex items-center gap-3 bg-green-50 border border-green-200 text-[#6AAC5E] rounded-lg px-3 py-4 mb-4">
-            <img
-              src={verifyIcon}
-              alt="verify"
-              className="w-5 h-5"
-              width={20}
-              height={20}
-              decoding="async"
-            />
+            <img src={verifyIcon} alt="verify" className="w-5 h-5" />
             <span className="font-medium text-sm text-[#333333]">
               Account is Verified
             </span>
@@ -182,30 +182,23 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
             </label>
             <input
               type="text"
-              placeholder="Enter Registration Number"
+              placeholder="Enter Registration Number (e.g. MH12AB1234)"
               value={vehicleNumber}
-              onChange={(e) => setVehicleNumber(e.target.value.toUpperCase())}
-              className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3
-text-xs bg-[#F8F8F8]
-hover:border-[#BCD2F5]
-focus:outline-none focus-visible:outline-none
-focus:border-[#BCD2F5]
-focus:ring-2 focus:ring-[#BCD2F5]"
-
+              onChange={(e) =>
+                setVehicleNumber(e.target.value.toUpperCase().replace(/\s/g, ""))
+              }
+              className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
+              hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
               maxLength={15}
               disabled={isLoading}
             />
             {numberError && (
-              <div className="text-[#CB0200] text-xs mb-3 w-full">
-                {numberError}
-              </div>
+              <div className="text-[#CB0200] text-xs mb-3 w-full">{numberError}</div>
             )}
 
             {showModel && (
               <>
-                <label className="w-full text-xs text-[#333333] mb-1">
-                  Brand
-                </label>
+                <label className="w-full text-xs text-[#333333] mb-1">Brand</label>
                 <input
                   type="text"
                   placeholder="Enter Brand"
@@ -214,22 +207,14 @@ focus:ring-2 focus:ring-[#BCD2F5]"
                     setBrand(e.target.value);
                     setBrandError("");
                   }}
-className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3
-text-xs bg-[#F8F8F8]
-hover:border-[#BCD2F5]
-focus:outline-none focus-visible:outline-none
-focus:border-[#BCD2F5]
-focus:ring-2 focus:ring-[#BCD2F5]"
+                  className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
+                  hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
                 />
                 {brandError && (
-                  <div className="text-[#CB0200] text-xs mb-2 w-full">
-                    {brandError}
-                  </div>
+                  <div className="text-[#CB0200] text-xs mb-2 w-full">{brandError}</div>
                 )}
 
-                <label className="w-full text-xs text-[#333333] mb-1">
-                  Model
-                </label>
+                <label className="w-full text-xs text-[#333333] mb-1">Model</label>
                 <input
                   type="text"
                   placeholder="Enter Model"
@@ -238,28 +223,18 @@ focus:ring-2 focus:ring-[#BCD2F5]"
                     setVehicleModel(e.target.value);
                     setModelError("");
                   }}
-className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3
-text-xs bg-[#F8F8F8]
-hover:border-[#BCD2F5]
-focus:outline-none focus-visible:outline-none
-focus:border-[#BCD2F5]
-focus:ring-2 focus:ring-[#BCD2F5]"
+                  className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
+                  hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
                 />
                 {modelError && (
-                  <div className="text-[#CB0200] text-xs mb-3 w-full">
-                    {modelError}
-                  </div>
+                  <div className="text-[#CB0200] text-xs mb-3 w-full">{modelError}</div>
                 )}
               </>
             )}
 
             <Button
               text={
-                isLoading
-                  ? "Searching..."
-                  : showModel
-                  ? "Add Vehicle"
-                  : "Search"
+                isLoading ? "Searching..." : showModel ? "Add Vehicle" : "Search"
               }
               onClick={showModel ? handleAddVehicle : handleSearch}
               disabled={isLoading}
@@ -283,7 +258,7 @@ focus:ring-2 focus:ring-[#BCD2F5]"
             onBack={() => setShowSelectVehicle(false)}
             addedVehicleNumber={vehicleData.vehicleNumber}
             addedVehicleBrand={vehicleData.brand}
-            addedVehicleModel={`${vehicleData.model}`}
+            addedVehicleModel={vehicleData.model}
             plan={plan}
           />
         </Suspense>

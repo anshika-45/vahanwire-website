@@ -11,7 +11,7 @@ const SuccessPurchase = ({ onClose, selectedPlan }) => {
     if (onClose) {
       onClose(selectedPlan);
     }
-    // Navigate to MyAMCPage
+
     navigate("/my-account?view=amc");
   };
 
