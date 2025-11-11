@@ -66,7 +66,7 @@ const mapApiDataToAMC = (apiData) => {
       refundTimeline: item.refundTimeline || [],
       planStatus: item.planStatus,
       logoSrc: "/src/assets/Logo1.webp",
-      carImageSrc: "/src/assets/carAMC.webp",
+      carImageSrc: "/src/assets/CarAMC.webp",
       planPrice: item.planPrice,
       planStartDate: item.planStartDate,
       planEndDate: item.planEndDate,
