@@ -1,8 +1,20 @@
 import React from "react";
 import { CheckCircle } from "lucide-react";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
-const SuccessPurchase = ({ onClose }) => {
+const SuccessPurchase = ({ onClose, selectedPlan }) => {
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    // Add to context if purchaseData exists
+    if (onClose) {
+      onClose(selectedPlan);
+    }
+    // Navigate to MyAMCPage
+    navigate("/my-account?view=amc");
+  };
+
   return (
     <div className="flex flex-col items-center justify-center py-10">
       <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
@@ -21,7 +33,7 @@ const SuccessPurchase = ({ onClose }) => {
         <Button
           text="Close"
           className="px-15 py-3 bg-white border text-[#266DDF] font-semibold rounded-lg hover:bg-blue-700 hover:text-white transition"
-          onClick={onClose}
+          onClick={handleClose}
         />
       </div>
     </div>

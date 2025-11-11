@@ -39,3 +39,10 @@ export const createContact = async (contactData) => {
     const response = await axiosInstance.post("/users/contact", contactData);
     return response.data;
 };
+
+export const getCityFromCoords = async (lat, lon) => {
+  const response = await axiosInstance.get("/users/get-city", {
+    params: { lat, lon },
+  });
+  return response.data;
+};

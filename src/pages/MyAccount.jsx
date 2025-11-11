@@ -66,9 +66,9 @@ function MyAccount() {
   };
 
   return (
-    <div className="bg-[#F4F4F4] py-8 sm:py-10 md:py-5">
+    <div className="bg-[#F4F4F4]">
       <div className="">
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-10 sm:mb-8 md:mb-8">
           <AccountBanner />
         </div>
         

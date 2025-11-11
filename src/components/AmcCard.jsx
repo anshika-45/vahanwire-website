@@ -21,12 +21,12 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
         }}
       >
         <div className="absolute left-0 top-4 bg-white rounded-r-full w-20 h-13 flex items-center justify-end pr-5 shadow-md z-10">
-          <img loading="lazy" src="/src/assets/Logo1.webp" alt="Logo" className="w-9 h-9 object-contain" />
+          <img loading="lazy" src="/src/assets/Logo1.webp" alt="VahanWire Logo" className="w-9 h-9 object-contain" />
         </div>
         <div className="flex justify-end items-start mb-4 relative">
-          <img loading="lazy" src="/src/assets/back-logo.webp" alt="" className="absolute right-8 -top-10 w-34 h-32 object-contain opacity-60" />
+          <img loading="lazy" src="/src/assets/back-logo.webp" alt="Background decorative logo" className="absolute right-8 -top-10 w-34 h-32 object-contain opacity-60" />
           <div>
-            <img loading="lazy" src={vehicleType === "bike" ? "/src/assets/BikeAMC.webp" : "/src/assets/CarAMC.webp"} alt={vehicleType === "bike" ? "Bike" : "Car"} className="w-20 h-16 object-contain relative z-10" />
+            <img loading="lazy" src={vehicleType === "bike" ? "/src/assets/BikeAMC.webp" : "/src/assets/CarAMC.webp"} alt={vehicleType === "bike" ? "Motorcycle AMC plan" : "Car AMC plan"} className="w-20 h-16 object-contain relative z-10" />
           </div>
         </div>
         <h3 className="text-2xl font-semibold mb-3">{title}</h3>

@@ -13,8 +13,8 @@ export default function AnimatedTextTicker({
   if (!texts || texts.length === 0) return null;
   if (texts.length === 1) {
     return (
-      <div className={`relative overflow-visible h-20 sm:h-24 md:h-26 pl-4 ${className}`} style={{ lineHeight: 1 }}>
-        <span className="absolute inset-0 flex items-center
+      <div className={`relative overflow-visible h-20 sm:h-24 md:h-26 ${className}`} style={{ lineHeight: 1 }}>
+        <span className="absolute inset-0 flex items-start
                          text-5xl sm:text-7xl md:text-8xl font-md tracking-tight
                          bg-gradient-to-r from-[#1E9600] via-[#FFF200] to-[#FF0000]
                          bg-clip-text text-transparent whitespace-nowrap">
@@ -56,7 +56,7 @@ export default function AnimatedTextTicker({
       aria-live="polite"
     >
       {phase === "idle" && (
-        <div className="absolute inset-0 flex items-center pl-5">
+        <div className="absolute inset-0 flex items-center">
           <span className="text-5xl sm:text-7xl md:text-8xl font-md tracking-tight
                            bg-gradient-to-r from-[#1E9600] via-[#FFF200] to-[#FF0000]
                            bg-clip-text text-transparent whitespace-nowrap">
@@ -67,7 +67,7 @@ export default function AnimatedTextTicker({
 
       {phase === "out" && (
         <div
-          className="absolute inset-0 flex items-center will-change-transform pl-5"
+          className="absolute inset-0 flex items-center will-change-transform"
           style={{ animation: `fadeUpOut ${outMs}ms ease-in forwards` }}
           onAnimationEnd={handleOutEnd}
         >
@@ -80,7 +80,7 @@ export default function AnimatedTextTicker({
       )}
       {phase === "in" && (
         <div
-          className="absolute inset-0 flex items-center will-change-transform pl-5"
+          className="absolute inset-0 flex items-center will-change-transform"
           style={{ animation: `slideUpInBounce ${inMs}ms cubic-bezier(0.22,1,0.36,1) forwards` }}
           onAnimationEnd={handleInEnd}
         >

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const Tile = React.memo(function Tile({
   icon,
   title,
@@ -6,19 +8,28 @@ const Tile = React.memo(function Tile({
   linkText,
   linkHref = "/",
 }) {
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
+
+  const handleTileClick = () => {
+    navigate(linkHref);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+  };
+
   return (
     <div
-      id="tile"
-      className={`tile ${isHovered ? "hovered" : ""}
+      className={`tile ${isHovered ? "hovered" : ""} 
         flex flex-col justify-between w-full
         max-w-[300px] sm:max-w-[350px] md:max-w-[400px]
-         h-auto
-        rounded-[12px] p-4 xl:p-[30px]
+        h-45 sm:h-50 md:h-50 lg:h-50
+        rounded-[12px] p-4 sm:p-5 md:p-6 lg:p-7 xl:p-[30px]
         bg-white cursor-pointer
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleTileClick}  
+      role="button"
     >
       <div className="flex items-start gap-2 sm:gap-3">
         {icon && (
@@ -37,9 +48,9 @@ const Tile = React.memo(function Tile({
             {title}
           </h3>
           <p className="text-xs mt-1 text-[#5C5C5C]">{desc}</p>
+
           {linkText && (
-            <a
-              href={linkHref}
+            <span
               className="text-sm mt-2 sm:mt-3 font-semibold flex items-end gap-1 text-[#266DDF] hover:text-blue-700"
             >
               {linkText}
@@ -57,12 +68,11 @@ const Tile = React.memo(function Tile({
                   d="M13 7l5 5m0 0l-5 5m5-5H6"
                 />
               </svg>
-            </a>
+            </span>
           )}
         </div>
       </div>
 
-      {/* Styles */}
       <style>{`
         .tile {
           position: relative;
@@ -82,48 +92,37 @@ const Tile = React.memo(function Tile({
           background-origin: border-box;
           background-clip: padding-box, border-box;
         }
-.tile::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 12px;
-  pointer-events: none;
-
-  background: linear-gradient(90deg,
-    rgba(248,2,0,0.08) 0%,
-    rgba(248,186,1,0.10) 25%,
-    rgba(50,171,21,0.10) 50%,
-    rgba(65,132,237,0.10) 75%,
-    rgba(248,2,0,0.08) 100%
-  );
-
-  background-size: 250% 100%;   /* gives sweep range */
-  background-position: 0% 50%;
-
-  opacity: 0;
-  transform: scale(0.98);
-  transition: opacity 250ms ease, transform 260ms ease;
-}
-
-.tile.hovered::before {
-  opacity: 1;
-  transform: scale(1.0);
-  animation: sweepLeftRight 1.25s ease-out forwards;
-}
-
-@keyframes sweepLeftRight {
-  0%   { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
-}
+        .tile::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: 12px;
+          pointer-events: none;
+          background: linear-gradient(90deg,
+            rgba(248,2,0,0.08) 0%,
+            rgba(248,186,1,0.10) 25%,
+            rgba(50,171,21,0.10) 50%,
+            rgba(65,132,237,0.10) 75%,
+            rgba(248,2,0,0.08) 100%
+          );
+          background-size: 250% 100%;
+          background-position: 0% 50%;
+          opacity: 0;
+          transform: scale(0.98);
+          transition: opacity 250ms ease, transform 260ms ease;
+        }
         .tile.hovered::before {
           opacity: 1;
           transform: scale(1.0);
+          animation: sweepLeftRight 1.25s ease-out forwards;
         }
-
+        @keyframes sweepLeftRight {
+          0%   { background-position: 0% 50%; }
+          100% { background-position: 100% 50%; }
+        }
         .tile.hovered {
           box-shadow: 0 8px 20px rgba(0,0,0,0.10);
         }
-
         @media (prefers-reduced-motion: reduce) {
           .tile, .tile::before { transition: none !important; }
         }

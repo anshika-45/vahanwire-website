@@ -53,11 +53,10 @@ const VehicleAmc = () => {
   };
 
   return (
-    <section className="w-full pt-15  bg-gray-50">
-      <BreadcrumbBar />
-      <AMC vehicleType={vehicleType} setVehicleType={setVehicleType} />
+    <section className="w-full">
 
-      <div className="container space-y-8 sm:space-y-10 mb-12">
+      <AMC vehicleType={vehicleType} setVehicleType={setVehicleType} />
+      <div classame="container space-y-8 sm:space-y-10 mb-12">
       <Suspense fallback={<ComponentLoader/>}>
       <AmcTabs />
       </Suspense>
@@ -78,11 +77,11 @@ const VehicleAmc = () => {
         <AmcBanner onBuy={handleGenericBuy} />
         </Suspense>
       </div>
-      <div className="w-full">
+      {/* <div className="w-full">
       <Suspense fallback={<BannerLoader/>}>
         <AddBanner />
       </Suspense>
-      </div>
+      </div> */}
       <Suspense fallback={null}>
       <VerifyNumberPopup
         isOpen={isVerifyOpen}

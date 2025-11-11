@@ -8,12 +8,13 @@ import { initiatePayment } from "../api/paymentApi";
 import { toast } from "react-toastify";
 const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
-const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
+const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
   const [currentView, setCurrentView] = useState("summary");
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
-  
+
+
   useEffect(() => {
     if (isOpen) {
       setCurrentView("summary");
@@ -44,19 +45,50 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
   ];
 
   const features = [
-    { label: "Flat Tyre (Tube)", details: "Emergency roadside assistance for flat tyre replacement with tube-type tyres. Includes tyre changing and basic repairs." },
-    { label: "Flat Tyre (Tubeless)", details: "Emergency roadside assistance for flat tyre replacement with tubeless tyres. Includes tyre changing and basic repairs." },
-    { label: "Battery Jumpstart", details: "On-site battery jumpstart service when your vehicle battery is dead. Includes battery testing and jumpstart assistance." },
-    { label: "Custody Service", details: "Vehicle custody and secure parking services when you need to leave your vehicle temporarily for repairs or other reasons." },
-    { label: "Key Unlock Assistance", details: "Emergency key unlock service if you lock your keys inside the vehicle. Professional locksmith assistance." },
-    { label: "Fuel Delivery", details: "Emergency fuel delivery service when you run out of fuel. Up to 5 liters of fuel delivered to your location." },
-    { label: "Starting Problem", details: "Assistance for vehicle starting issues including battery problems, starter motor issues, and basic electrical diagnostics." },
+    {
+      label: "Flat Tyre (Tube)",
+      details:
+        "Emergency roadside assistance for flat tyre replacement with tube-type tyres. Includes tyre changing and basic repairs.",
+    },
+    {
+      label: "Flat Tyre (Tubeless)",
+      details:
+        "Emergency roadside assistance for flat tyre replacement with tubeless tyres. Includes tyre changing and basic repairs.",
+    },
+    {
+      label: "Battery Jumpstart",
+      details:
+        "On-site battery jumpstart service when your vehicle battery is dead. Includes battery testing and jumpstart assistance.",
+    },
+    {
+      label: "Custody Service",
+      details:
+        "Vehicle custody and secure parking services when you need to leave your vehicle temporarily for repairs or other reasons.",
+    },
+    {
+      label: "Key Unlock Assistance",
+      details:
+        "Emergency key unlock service if you lock your keys inside the vehicle. Professional locksmith assistance.",
+    },
+    {
+      label: "Fuel Delivery",
+      details:
+        "Emergency fuel delivery service when you run out of fuel. Up to 5 liters of fuel delivered to your location.",
+    },
+    {
+      label: "Starting Problem",
+      details:
+        "Assistance for vehicle starting issues including battery problems, starter motor issues, and basic electrical diagnostics.",
+    },
   ];
 
   const billing = [
     { label: "Amount", value: `₹${plan?.price || "0"}` },
-    // { label: "Discount", value: plan?.discount ? plan.discount : "—" },
-    // { label: "Subtotal", value: `₹${plan?.originalPrice || plan?.price || "0"}` },
+    { label: "Items", value: "1" },
+    { label: "Amount", value: "₹100" },
+    { label: "Discount", value: "-₹100" },
+    { label: "Subtotal", value: "₹899" },
+    { label: "GST (18%)", value: "₹161.82" },
   ];
 
   const total = plan?.price;
@@ -76,7 +108,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
     try {
       const paymentResponse = await initiatePayment({
         planId: plan._id,
-        vehicleNumber: vehicle.vehicleNumber 
+        vehicleNumber: vehicle.vehicleNumber,
       });
 
       if (paymentResponse.success) {
@@ -177,8 +209,14 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
                     decoding="async"
                   />
                   {hoveredIcon === i && (
-                    <div className={`absolute left-8 bg-[#F7FAFF] border-1 border-[#c9dcfd] text-black text-xs px-4 py-4 rounded-lg z-50 w-64 ${i > 3 ? 'top-[-6rem]' : 'top-0'}`}>
-                      <h5 className="text-center font-bold text-sm mb-2">{feature.label}</h5>
+                    <div
+                      className={`absolute left-8 bg-[#F7FAFF] border-1 border-[#c9dcfd] text-black text-xs px-4 py-4 rounded-lg z-50 w-64 ${
+                        i > 3 ? "top-[-6rem]" : "top-0"
+                      }`}
+                    >
+                      <h5 className="text-center font-bold text-sm mb-2">
+                        {feature.label}
+                      </h5>
                       <p className="text-center">{feature.details}</p>
                     </div>
                   )}
@@ -191,6 +229,38 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
           ))}
         </div>
 
+        {/* ===== Coupon Section ===== */}
+        <div className="bg-white rounded-xl px-6 py-5 border border-gray-200">
+          <h3 className="font-semibold text-gray-800 mb-3 text-2xl">
+            Have a Discount Coupon?
+          </h3>
+          <div className="flex justify-between items-center mb-4">
+            <div>
+              <p className="text-gray-700">Get a CashBack with...</p>
+              <p className="text-[#266DDF] cursor-pointer">
+                view all coupons &gt;
+              </p>
+              <div className="border-t border-dashed border-gray-300 mt-2"></div>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <label htmlFor="coupon-code" className="sr-only">
+              Coupon Code
+            </label>
+            <input
+              id="coupon-code"
+              type="text"
+              placeholder="Enter coupon code"
+              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-gray-700"
+            />
+            <Button
+              text="Apply"
+              className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700"
+            />
+          </div>
+        </div>
+
+        {/* ===== Billing Section ===== */}
         <div className="bg-white rounded-xl px-6 py-5 mb-20">
           <h3 className="font-semibold text-[#333333] mb-2 text-2xl">
             Billing Details
@@ -215,9 +285,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
 
   if (currentView === "success") {
     return (
-    <React.Suspense fallback={<div>Loading...</div>}>
       <SuccessPurchase onClose={onClose} plan={plan} />
-    </React.Suspense>
     );
   }
 
@@ -225,9 +293,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user,vehicle }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      onBack={
-        currentView === "payment" ? handlePaymentBack : onBack
-      }
+      onBack={currentView === "payment" ? handlePaymentBack : onBack}
       proceedButton={
         currentView === "summary" ? (
           <Button

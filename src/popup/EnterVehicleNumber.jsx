@@ -157,8 +157,8 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
         onClose={handleClose}
         onBack={handleBack}
       >
-        <div className="w-full max-w-[550px] flex flex-col items-center p-4">
-          <div className="w-full flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 rounded-lg px-3 py-3 mb-4">
+        <div className="w-full max-w-[550px] flex flex-col items-center p-5">
+          <div className="w-full flex items-center gap-3 bg-green-50 border border-green-200 text-[#6AAC5E] rounded-lg px-3 py-4 mb-4">
             <img
               src={verifyIcon}
               alt="verify"
@@ -173,7 +173,7 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
           </div>
 
           <div className="bg-white rounded-xl p-6 w-full flex flex-col items-center mb-10">
-            <h2 className="text-xl font-semibold text-[#242424] mb-4 w-full text-left">
+            <h2 className="text-2xl font-semibold text-[#242424] mb-4 w-full text-left">
               Vehicle not listed?
             </h2>
 
@@ -182,15 +182,21 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
             </label>
             <input
               type="text"
-              placeholder="Enter Registration Number (e.g., DL01AB1234)"
+              placeholder="Enter Registration Number"
               value={vehicleNumber}
               onChange={(e) => setVehicleNumber(e.target.value.toUpperCase())}
-              className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 focus:ring-1 focus:ring-[#BCD2F5] text-xs bg-[#F8F8F8]"
+              className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3
+text-xs bg-[#F8F8F8]
+hover:border-[#BCD2F5]
+focus:outline-none focus-visible:outline-none
+focus:border-[#BCD2F5]
+focus:ring-2 focus:ring-[#BCD2F5]"
+
               maxLength={15}
               disabled={isLoading}
             />
             {numberError && (
-              <div className="text-red-600 text-xs mb-3 w-full">
+              <div className="text-[#CB0200] text-xs mb-3 w-full">
                 {numberError}
               </div>
             )}
@@ -202,16 +208,21 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter Brand (e.g., Hero)"
+                  placeholder="Enter Brand"
                   value={brand}
                   onChange={(e) => {
                     setBrand(e.target.value);
                     setBrandError("");
                   }}
-                  className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-2 text-xs bg-[#F8F8F8]"
+className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3
+text-xs bg-[#F8F8F8]
+hover:border-[#BCD2F5]
+focus:outline-none focus-visible:outline-none
+focus:border-[#BCD2F5]
+focus:ring-2 focus:ring-[#BCD2F5]"
                 />
                 {brandError && (
-                  <div className="text-red-600 text-xs mb-2 w-full">
+                  <div className="text-[#CB0200] text-xs mb-2 w-full">
                     {brandError}
                   </div>
                 )}
@@ -221,16 +232,21 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
                 </label>
                 <input
                   type="text"
-                  placeholder="Enter Model (e.g., Hero Zone)"
+                  placeholder="Enter Model"
                   value={vehicleModel}
                   onChange={(e) => {
                     setVehicleModel(e.target.value);
                     setModelError("");
                   }}
-                  className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-2 text-xs bg-[#F8F8F8]"
+className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3
+text-xs bg-[#F8F8F8]
+hover:border-[#BCD2F5]
+focus:outline-none focus-visible:outline-none
+focus:border-[#BCD2F5]
+focus:ring-2 focus:ring-[#BCD2F5]"
                 />
                 {modelError && (
-                  <div className="text-red-600 text-xs mb-3 w-full">
+                  <div className="text-[#CB0200] text-xs mb-3 w-full">
                     {modelError}
                   </div>
                 )}
@@ -257,7 +273,7 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
         <Suspense
           fallback={
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="text-white">Loading vehicle selection...</div>
+              <div className="text-white"></div>
             </div>
           }
         >

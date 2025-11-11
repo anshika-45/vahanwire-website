@@ -14,6 +14,7 @@ export const useAmcData = () => {
 export const AmcDataProvider = ({ children }) => {
   const [vehicleType, setVehicleType] = useState("car");
   const [amcType, setAmcType] = useState("luxury");
+  const [purchasedCards, setPurchasedCards] = useState([]);
 
   const getAmcTabs = useMemo(() => {
     if (vehicleType === "bike") {
@@ -32,6 +33,10 @@ export const AmcDataProvider = ({ children }) => {
     return vehicleType === "bike" ? featuresBike : featuresCar;
   }, [vehicleType]);
 
+  const addPurchasedCard = (card) => {
+    setPurchasedCards((prev) => [...prev, card]);
+  };
+
   return (
     <AmcDataContext.Provider
       value={{
@@ -41,6 +46,8 @@ export const AmcDataProvider = ({ children }) => {
         setAmcType,
         getAmcTabs,
         features: getFeatures,
+        purchasedCards,
+        addPurchasedCard,
       }}
     >
       {children}
