@@ -29,7 +29,7 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
           />
           <img
             src={carImageSrc || "/src/assets/CarAMC.webp"}
-            alt="Vehicle"
+            alt="Vehicle image"
             loading="lazy"
             className="relative z-10 w-14 sm:w-18 md:w-22 object-contain"
           />
