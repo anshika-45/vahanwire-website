@@ -86,6 +86,8 @@ const VehicleAmcFilter = () => {
       vehicleNumber: vehicle.vehicleNumber,
     });
 
+    console.log("kjejkckhuhgi",purchaseResponse);
+
     if (!purchaseResponse.success) {
       alert(purchaseResponse.message || "Failed to create AMC purchase");
       return;

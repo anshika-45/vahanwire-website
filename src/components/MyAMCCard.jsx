@@ -58,7 +58,7 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
           onClick={onDownloadInvoice}
           className="w-full flex items-center justify-center gap-2 text-[#266DDF] font-semibold transition text-xs sm:text-sm md:text-base hover:opacity-80"
         >
-          <Download size={16} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]" />
+          <Download size={16} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]"/>
           Download Invoice
         </button>
       </div>
