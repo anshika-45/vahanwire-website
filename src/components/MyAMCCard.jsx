@@ -1,6 +1,5 @@
 import React from "react";
 import { Download } from "lucide-react";
-
 const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onDownloadInvoice }) => {
   // carImageSrc can be either car or bike image based on purchase
   return (
