@@ -1,17 +1,24 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import AMC from "../components/AMC";
 import { useAmcData } from "../context/AmcDataContext";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import AMCCards from "../components/AmcCard";
 import BreadcrumbBar from "../components/BreadcrumbBar";
+import { getUserVehicles } from "../api/vehicleApi";
 const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
 const AmcCard = React.lazy(() => import("../components/AmcCard"));
 const CompareTable = React.lazy(() => import("../components/CompareTable"));
 const LatestOffer = React.lazy(() => import("../components/LatestOffer"));
 const AmcBanner = React.lazy(() => import("../components/AmcBanner"));
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
-const VerifyNumberPopup = React.lazy(() => import("../popup/VerifyNumberPopup"));
-const EnterVehicleNumber = React.lazy(() => import("../popup/EnterVehicleNumber"));
+const VerifyNumberPopup = React.lazy(() =>
+  import("../popup/VerifyNumberPopup")
+);
+const EnterVehicleNumber = React.lazy(() =>
+  import("../popup/EnterVehicleNumber")
+);
+const SelectVehicle = React.lazy(() => import("../popup/SelectVehicle"));
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
 );
@@ -28,25 +35,83 @@ const ComponentLoader = () => (
 );
 
 const VehicleAmc = () => {
-  const { features, vehicleType, setVehicleType } = useAmcData();
+  const { features, vehicleType, setVehicleType, filterActive, filterData, clearFilter } =
+    useAmcData();
   const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isVehicleOpen, setIsVehicleOpen] = useState(false);
+  const [isSelectVehicleOpen, setIsSelectVehicleOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
 
-  const handleGenericBuy = () => {
+  useEffect(() => {
+    const checkFilterValidity = async () => {
+      if (filterActive && filterData) {
+        // Check if the selected vehicle still exists
+        const vehicles = await getUserVehicles();
+        const vehicleExists = vehicles.some(
+          v => v.vehicleNumber === filterData.vehicle?.vehicleNumber
+        );
+        
+        if (vehicleExists) {
+          // Vehicle exists, navigate to filter page
+          navigate("/vehicle-amc-filter", {
+            state: filterData,
+            replace: true,
+          });
+        } else {
+          // Vehicle was deleted, clear the filter
+          clearFilter();
+        }
+      }
+    };
+    
+    checkFilterValidity();
+  }, [filterActive, filterData, navigate]);
+
+  const checkUserVehicles = async () => {
+    try {
+      const vehicles = await getUserVehicles();
+      return vehicles && vehicles.length > 0;
+    } catch (error) {
+      console.error("Error checking vehicles:", error);
+      return false;
+    }
+  };
+
+  const handleGenericBuy = async () => {
     setSelectedPlan(null);
+    setIsVehicleOpen(false);
+    setIsSelectVehicleOpen(false);
+    
     if (isLoggedIn) {
-      setIsVehicleOpen(true);
+      const hasVehicles = await checkUserVehicles();
+      if (hasVehicles) {
+        setIsVehicleOpen(false);
+        setIsSelectVehicleOpen(true);
+      } else {
+        setIsSelectVehicleOpen(false);
+        setIsVehicleOpen(true);
+      }
     } else {
       setIsVerifyOpen(true);
     }
   };
 
-  const handlePlanBuy = (plan) => {
+  const handlePlanBuy = async (plan) => {
     setSelectedPlan(plan);
+    setIsVehicleOpen(false);
+    setIsSelectVehicleOpen(false);
+    
     if (isLoggedIn) {
-      setTimeout(() => setIsVehicleOpen(true), 0);
+      const hasVehicles = await checkUserVehicles();
+      if (hasVehicles) {
+        setIsVehicleOpen(false);
+        setIsSelectVehicleOpen(true);
+      } else {
+        setIsSelectVehicleOpen(false);
+        setIsVehicleOpen(true);
+      }
     } else {
       setIsVerifyOpen(true);
     }
@@ -54,47 +119,48 @@ const VehicleAmc = () => {
 
   return (
     <section className="w-full">
-
       <AMC vehicleType={vehicleType} setVehicleType={setVehicleType} />
 
       <div className="container space-y-8 sm:space-y-10 mb-12">
-      <Suspense fallback={<ComponentLoader/>}>
-      <AmcTabs />
-      </Suspense>
+        <Suspense fallback={<ComponentLoader />}>
+          <AmcTabs />
+        </Suspense>
       </div>
 
-      <Suspense fallback={<CardLoader/>}>
-      <AMCCards onBuy={handlePlanBuy} />
+      <Suspense fallback={<CardLoader />}>
+        <AMCCards onBuy={handlePlanBuy} />
       </Suspense>
-      <Suspense fallback={<TableLoader/>}>
-      <CompareTable features={features} onBuy={handlePlanBuy} />
+      <Suspense fallback={<TableLoader />}>
+        <CompareTable features={features} onBuy={handlePlanBuy} />
       </Suspense>
-      <Suspense fallback={<BannerLoader/>}>
-      <LatestOffer />
+      <Suspense fallback={<BannerLoader />}>
+        <LatestOffer />
       </Suspense>
 
       <div className="flex flex-col lg:flex-col gap-6">
-        <Suspense fallback={<BannerLoader/>}>
-        <AmcBanner onBuy={handleGenericBuy} />
+        <Suspense fallback={<BannerLoader />}>
+          <AmcBanner onBuy={handleGenericBuy} />
         </Suspense>
       </div>
-      {/* <div className="w-full">
-      <Suspense fallback={<BannerLoader/>}>
-        <AddBanner />
-      </Suspense>
-      </div> */}
       <Suspense fallback={null}>
-      <VerifyNumberPopup
-        isOpen={isVerifyOpen}
-        onClose={() => setIsVerifyOpen(false)}
-      />
+        <VerifyNumberPopup
+          isOpen={isVerifyOpen}
+          onClose={() => setIsVerifyOpen(false)}
+        />
       </Suspense>
       <Suspense fallback={null}>
-      <EnterVehicleNumber
-        isOpen={isVehicleOpen}
-        onClose={() => setIsVehicleOpen(false)}
-        plan={selectedPlan}
-      />
+        <EnterVehicleNumber
+          isOpen={isVehicleOpen}
+          onClose={() => setIsVehicleOpen(false)}
+          plan={selectedPlan}
+        />
+      </Suspense>
+      <Suspense fallback={null}>
+        <SelectVehicle
+          isOpen={isSelectVehicleOpen}
+          onClose={() => setIsSelectVehicleOpen(false)}
+          plan={selectedPlan}
+        />
       </Suspense>
     </section>
   );

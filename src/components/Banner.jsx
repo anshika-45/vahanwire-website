@@ -21,7 +21,7 @@ const Banner = React.memo(() => {
         >
           <div className="container">
             {" "}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2  text-white  w-full">
+            <div className="absolute left-0 top-[40%] -translate-y-1/2  text-white  w-full">
               <div className="container">
                 <h1 className="text-2xl md:text-5xl  leading-tight drop-shadow-lg py-1 md:my-5">
                   Your One-Stop <br /> Solution for

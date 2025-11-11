@@ -63,11 +63,6 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-      {/* <div className="mt-20">
-        <Suspense fallback={<ComponentFallback />}>
-          <AddBanner />
-        </Suspense>
-      </div> */}
     </>
   );
 };

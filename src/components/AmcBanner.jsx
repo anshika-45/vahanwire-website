@@ -4,11 +4,11 @@ import logo from "../assets/blurlogo.webp";
 import Button from "./Button";
 const AmcBanner = ({ onBuy }) => {
     return (
-        <section className="w-full py-6 mt-25 sm:py-8 md:py-10 bg-white flex justify-center mb-6 sm:mb-8">
+        <section className="w-full py-6 sm:py-8 md:py-10 bg-white flex justify-center  sm:mb-8">
             <div className="relative w-[95%] sm:w-[90%] md:w-[85%] max-w-7xl rounded-3xl overflow-hidden shadow-lg">
                 <img
                     src={amcImage}
-                    alt="Vahanwire AMC"
+                    alt="Drive worry-free with Vahanwire AMC. Get annual maintenance, priority support, and on-road assistance. Buy Now."
                     loading="eager"
                     className="w-full h-[200px] sm:h-[280px] md:h-[380px] object-cover"
                 />
@@ -27,7 +27,7 @@ const AmcBanner = ({ onBuy }) => {
                 </div>
                 <img loading="lazy"
                     src={logo}
-                    alt="Vahanwire Logo"
+                    alt=""
                     className="absolute right-0 transform top-1/2 translate-y-15 w-20 sm:w-28 md:w-36 h-auto opacity-90 flex-shrink-0"
                 />
             </div>

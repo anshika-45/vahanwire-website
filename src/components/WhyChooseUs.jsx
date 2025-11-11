@@ -12,7 +12,7 @@ const WhyChooseUs = () => {
           vehicle services. Today, we lead India's app-based automotive service
           market with a 70% share, helping the nation move smarter.
         </p>
-        <div className="mt-8 md:mt-10 lg:mt-4">
+        <div className="mt-8 md:mt-10 lg:mt-6">
           <Suspense
             fallback={
               <div className="flex items-center justify-center py-4">

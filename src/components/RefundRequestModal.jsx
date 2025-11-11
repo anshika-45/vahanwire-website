@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 export default function RefundRequestModal({
   open,
   onClose,
-  onSubmit, // (payload) => void
+  onSubmit, 
 }) {
   const [reason, setReason] = useState("");
   const [selected, setSelected] = useState(null);
@@ -31,12 +31,12 @@ export default function RefundRequestModal({
   ];
 
   const validate = () => {
-    // If no reason selected, description is mandatory
+   
     if (selected === null && !reason.trim()) {
       setError("Please select a reason or provide a description");
       return false;
     }
-    // If reason is selected, description is optional
+  
     setError("");
     return true;
   };
@@ -77,13 +77,12 @@ export default function RefundRequestModal({
       role="dialog"
       aria-labelledby="refund-title"
     >
-      {/* Backdrop */}
+ 
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-[1px]"
         onClick={onClose}
       />
 
-      {/* Dialog */}
       <form
         ref={dialogRef}
         onSubmit={handleSubmit}
@@ -95,7 +94,7 @@ export default function RefundRequestModal({
         "
         style={{ borderRadius: 18 }}
       >
-        {/* Close */}
+
         <button
           type="button"
           onClick={onClose}
@@ -105,7 +104,6 @@ export default function RefundRequestModal({
           <X size={18} />
         </button>
 
-        {/* Title */}
         <h2
           id="refund-title"
           className="mb-4 mt-1 w-full text-center text-[18px] font-semibold text-gray-900"
@@ -113,14 +111,12 @@ export default function RefundRequestModal({
           Request Refund for Your AMC Plan
         </h2>
 
-        {/* Reason pills */}
         <div className="space-y-3">
           {choices.map((c, i) => (
             <Pill key={c} idx={i} label={c} />
           ))}
         </div>
 
-        {/* Divider with OR */}
         <div className="my-5 flex items-center">
           <div className="h-px w-full bg-gray-200" />
           <span className="px-3 text-[14px] font-semibold text-gray-500">
@@ -129,7 +125,7 @@ export default function RefundRequestModal({
           <div className="h-px w-full bg-gray-200" />
         </div>
 
-        {/* Textarea */}
+      
         <label
           htmlFor="reason"
           className="mb-2 block text-[12px] font-medium text-gray-600"
@@ -160,7 +156,7 @@ export default function RefundRequestModal({
         />
         {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
 
-        {/* Actions */}
+       
         <div className="mt-5 space-y-3">
           <button
             type="submit"

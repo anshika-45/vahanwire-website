@@ -2,6 +2,7 @@ import React from "react";
 import { Download } from "lucide-react";
 
 const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onDownloadInvoice }) => {
+  // carImageSrc can be either car or bike image based on purchase
   return (
     <div className="flex flex-col items-center w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px] mx-auto">
       {/* Top Section */}
@@ -24,11 +25,11 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
             src="/src/assets/back-logo.webp"
             alt="Background decorative logo"
             loading="lazy"
-            className="absolute right-4 sm:right-6 -top-10 sm:-top-12 md:-top-14 w-24 sm:w-28 md:w-32 opacity-60 pointer-events-none"
+            className="absolute right-4 sm:right-6 -top-16 sm:-top-12 md:-top-8 w-24 sm:w-28 md:w-32 opacity-60 pointer-events-none"
           />
           <img
             src={carImageSrc || "/src/assets/carAMC.webp"}
-            alt="Vehicle illustration"
+            alt="Vehicle"
             loading="lazy"
             className="relative z-10 w-14 sm:w-18 md:w-22 object-contain"
           />

@@ -7,11 +7,10 @@ const SuccessPurchase = ({ onClose, purchaseData }) => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    // Add to context if purchaseData exists
     if (purchaseData && onClose) {
       onClose(purchaseData);
     }
-    // Navigate to MyAMCPage
+  
     navigate("/my-account?view=amc");
   };
 

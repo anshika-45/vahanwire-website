@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Check } from "lucide-react";
-import detailIcon from "../assets/info-circle.webp";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import Payment from "./Payment";
 import { initiatePayment } from "../api/paymentApi";
-import { toast } from "react-toastify";
+import coupon from "../assets/coupon.png"; 
 const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
 const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
   const [currentView, setCurrentView] = useState("summary");
-  const [hoveredIcon, setHoveredIcon] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
 
@@ -44,41 +42,13 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
   ];
 
   const features = [
-    {
-      label: "Flat Tyre (Tube)",
-      details:
-        "Emergency roadside assistance for flat tyre replacement with tube-type tyres. Includes tyre changing and basic repairs.",
-    },
-    {
-      label: "Flat Tyre (Tubeless)",
-      details:
-        "Emergency roadside assistance for flat tyre replacement with tubeless tyres. Includes tyre changing and basic repairs.",
-    },
-    {
-      label: "Battery Jumpstart",
-      details:
-        "On-site battery jumpstart service when your vehicle battery is dead. Includes battery testing and jumpstart assistance.",
-    },
-    {
-      label: "Custody Service",
-      details:
-        "Vehicle custody and secure parking services when you need to leave your vehicle temporarily for repairs or other reasons.",
-    },
-    {
-      label: "Key Unlock Assistance",
-      details:
-        "Emergency key unlock service if you lock your keys inside the vehicle. Professional locksmith assistance.",
-    },
-    {
-      label: "Fuel Delivery",
-      details:
-        "Emergency fuel delivery service when you run out of fuel. Up to 5 liters of fuel delivered to your location.",
-    },
-    {
-      label: "Starting Problem",
-      details:
-        "Assistance for vehicle starting issues including battery problems, starter motor issues, and basic electrical diagnostics.",
-    },
+    { label: "Flat Tyre (Tube)" },
+    { label: "Flat Tyre (Tubeless)" },
+    { label: "Battery Jumpstart" },
+    { label: "Custody Service" },
+    { label: "Key Unlock Assistance" },
+    { label: "Fuel Delivery" },
+    { label: "Starting Problem" },
   ];
 
   const billing = [
@@ -179,9 +149,9 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
         </div>
 
         <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
-          <div className="flex justify-between px-8 py-3 border-[#BCD2F5] border-0.5 text-[#242424] font-semibold text-md mr-15">
+          <div className="flex justify-between items-center px-8 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
             <span>Number of Service Per Year</span>
-            <span>Unlimited</span>
+            <span className="mr-12">Unlimited</span>
           </div>
 
           {features.map((feature, i) => (
@@ -191,73 +161,57 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
                 i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"
               }`}
             >
-              <div className="flex items-center gap-2 text-[#242424] text-sm font-medium">
+              <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
                 <span>{feature.label}</span>
-                <div
-                  className="relative inline-block"
-                  onMouseEnter={() => setHoveredIcon(i)}
-                  onMouseLeave={() => setHoveredIcon(null)}
-                >
-                  <img
-                    src={detailIcon}
-                    alt="Details"
-                    loading="lazy"
-                    className="w-5 h-5 cursor-pointer"
-                    width={20}
-                    height={20}
-                    decoding="async"
-                  />
-                  {hoveredIcon === i && (
-                    <div
-                      className={`absolute left-8 bg-[#F7FAFF] border-1 border-[#c9dcfd] text-black text-xs px-4 py-4 rounded-lg z-50 w-64 ${
-                        i > 3 ? "top-[-6rem]" : "top-0"
-                      }`}
-                    >
-                      <h5 className="text-center font-bold text-sm mb-2">
-                        {feature.label}
-                      </h5>
-                      <p className="text-center">{feature.details}</p>
-                    </div>
-                  )}
-                </div>
               </div>
-              <div className="w-4 h-4 rounded-full bg-[#21830F] flex items-center justify-center mr-20">
-                <Check size={12} className="text-white" />
+              <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center mr-20">
+                <Check size={13} className="text-white" />
               </div>
             </div>
           ))}
         </div>
 
         {/* ===== Coupon Section ===== */}
-        <div className="bg-white rounded-xl px-6 py-5 border border-gray-200">
-          <h3 className="font-semibold text-gray-800 mb-3 text-2xl">
-            Have a Discount Coupon?
-          </h3>
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <p className="text-gray-700">Get a CashBack with...</p>
-              <p className="text-[#266DDF] cursor-pointer">
-                view all coupons &gt;
-              </p>
-              <div className="border-t border-dashed border-gray-300 mt-2"></div>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <label htmlFor="coupon-code" className="sr-only">
-              Coupon Code
-            </label>
-            <input
-              id="coupon-code"
-              type="text"
-              placeholder="Enter coupon code"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-gray-700"
-            />
-            <Button
-              text="Apply"
-              className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700"
-            />
-          </div>
-        </div>
+<div className="bg-white rounded-xl px-6 py-5 border border-gray-200">
+  <h3 className="font-semibold text-gray-800 mb-3 text-2xl">
+    Have a Discount Coupon?
+  </h3>
+
+  <p className="text-sm text-[#242424]">Enter Code</p>
+
+  <div className="bg-[#F8F8F8] rounded-lg px-4 py-3 flex justify-between items-center border border-[#94b6ed]">
+    <div className="flex flex-col gap-[2px]">
+      <p className="flex items-center gap-2 text-[#242424] text-md font-bold">
+<img src={coupon} alt="coupon icon" className="w-5 h-5 object-contain" />
+
+        Get a CashBack with...
+      </p>
+
+      <p className="text-[#242424] text-md pb-[1px] border-b border-dashed border-[#242424] w-fit hover:text-[#242424] cursor-pointer">
+        view all coupons &gt;
+      </p>
+    </div>
+
+    <button
+      className="
+        text-[#266DDF]
+        border border-[#266DDF]
+        px-6 py-2
+        rounded-lg
+        font-medium
+        text-sm
+        bg-transparent
+        hover:bg-[#266DDF]
+        hover:text-white
+        transition
+      "
+    >
+      Apply
+    </button>
+  </div>
+</div>
+
+
 
         {/* ===== Billing Section ===== */}
         <div className="bg-white rounded-xl px-6 py-5 mb-20">

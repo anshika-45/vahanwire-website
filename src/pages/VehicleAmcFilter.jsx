@@ -13,7 +13,6 @@ import { useAmcData } from "../context/AmcDataContext";
 import { verifyPayment } from "../api/paymentApi";
 import { createAMCPurchase } from "../api/amcApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
-import BreadcrumbBar from "../components/BreadcrumbBar";
 import AMC from "../components/AMC";
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -79,6 +78,11 @@ const VehicleAmcFilter = () => {
       if (res?.success && res?.data?.transaction?.status === "success") {
         // Prepare purchase data for context
         if (selectedPlanState) {
+          // Determine vehicle image based on vehicleType
+          const vehicleImage = vehicleType === "bike" 
+            ? "/src/assets/BikeAMC.webp" 
+            : "/src/assets/CarAMC.webp";
+          
           const cardData = {
             id: Date.now(),
             plan: selectedPlanState.name,
@@ -90,9 +94,12 @@ const VehicleAmcFilter = () => {
             statusBadge: "Active AMC",
             bgColor: selectedPlanState.bgColor,
             vehicleInfo: vehicle?.vehicleNumber,
-            logoSrc: selectedPlanState.logoSrc,
-            carImageSrc: selectedPlanState.carImageSrc,
+            logoSrc: "/src/assets/Logo1.webp",
+            carImageSrc: vehicleImage,
           };
+          console.log("Creating purchase card data:", cardData);
+          console.log("Vehicle object:", vehicle);
+          console.log("Vehicle Type:", vehicleType);
           setPurchaseData(cardData);
         }
         setShowPopup("success");

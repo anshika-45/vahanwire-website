@@ -125,14 +125,14 @@ const ProfileForm = () => {
           </div>
         </div>
 
-        {/* ---------- Profile Form ---------- */}
+       
         <div className="md:w-2/3 w-full">
           {isEditing ? (
             <form
               onSubmit={handleUpdate}
               className="flex flex-col gap-4 sm:gap-5"
             >
-              {/* Name */}
+            
               <div>
                 <label className="block text-sm md:text-base text-[#333] mb-1">
                   Name*
@@ -151,7 +151,7 @@ const ProfileForm = () => {
                 )}
               </div>
 
-              {/* Phone */}
+           
               <div>
                 <label className="block text-sm md:text-base text-[#333] mb-1">
                   Phone*
@@ -164,7 +164,7 @@ const ProfileForm = () => {
                 />
               </div>
 
-              {/* Email */}
+          
               <div>
                 <label className="block text-sm md:text-base text-[#333] mb-1">
                   Email*

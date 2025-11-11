@@ -5,7 +5,7 @@ import GooglePlay from "../assets/playstore.webp";
 const AddBanner = () => {
   return (
     <>
-      <section className="w-full pt-40 mt-50 flex justify-center relative max-md:pt-60 max-md:mt-80 max-sm:pt-0 max-sm:mt-0 max-sm:pb-8">
+      <section className="w-full pt-40 mt-50 flex justify-center relative max-md:pt-50 max-md:mt-60 max-sm:pt-0 max-sm:mt-0 max-sm:pb-8">
         <div className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-b from-white to-[#00AB11] opacity-50 hidden sm:block"></div>
         <div className="absolute top-0 bottom-0 right-0 w-1/2 bg-gradient-to-b from-white to-[#157EFD] opacity-50 hidden sm:block"></div>
         <div
@@ -38,20 +38,38 @@ const AddBanner = () => {
                 <p className="font-bold text-[#242424] mb-3 text-xs md:text-base">
                   Download User App
                 </p>
-                <div className="flex gap-3 flex-wrap">
-                  <img
-                    loading="lazy"
-                    src={AppStore}
-                    alt="App Store"
+                <div className="flex gap-2 flex-wrap">
+                <a
+                href="https://apps.apple.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download on App Store"
+                  className="inline-block hover:opacity-80 transition"
+                >
+                <img
+                  loading="lazy"
+                  src={AppStore}
+                  alt="App Store"
+                  role="img"
                     className="h-10 sm:h-12 lg:h-16 shrink-0"
-                  />
-                  <img
-                    loading="lazy"
-                    src={GooglePlay}
-                    alt="Google Play"
-                    className="h-10 sm:h-12 lg:h-16 shrink-0"
-                  />
-                </div>
+                    />
+                   </a>
+                   <a
+                   href="https://play.google.com"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Get it on Google Play"
+                   className="inline-block hover:opacity-80 transition"
+                   >
+                   <img
+                   loading="lazy"
+                   src={GooglePlay}
+                   alt="Google Play"
+                   role="img"
+                     className="h-10 sm:h-12 lg:h-16 shrink-0"
+                     />
+                    </a>
+                 </div>
               </div>
             </div>
             <div className="bg-white rounded-3xl shadow-xl p-5 sm:p-8 flex flex-col justify-between ">
@@ -68,20 +86,38 @@ const AddBanner = () => {
                 <p className="font-bold text-[#242424] mb-3 text-xs sm:text-sm md:text-base">
                   Download Provider App
                 </p>
-                <div className="flex gap-3 flex-wrap">
-                  <img
-                    src={AppStore}
-                    alt="App Store"
-                    loading="lazy"
+                <div className="flex gap-2 flex-wrap">
+                <a
+                href="https://apps.apple.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download on App Store"
+                  className="inline-block hover:opacity-80 transition"
+                >
+                <img
+                  src={AppStore}
+                  alt="App Store"
+                  role="img"
+                  loading="lazy"
                     className="h-10 sm:h-12 lg:h-16 shrink-0"
-                  />
-                  <img
-                    src={GooglePlay}
-                    alt="Google Play"
-                    loading="lazy"
-                    className="h-10 sm:h-12 lg:h-16 shrink-0"
-                  />
-                </div>
+                    />
+                   </a>
+                   <a
+                   href="https://play.google.com"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Get it on Google Play"
+                   className="inline-block hover:opacity-80 transition"
+                   >
+                   <img
+                   src={GooglePlay}
+                   alt="Google Play"
+                   role="img"
+                   loading="lazy"
+                     className="h-10 sm:h-12 lg:h-16 shrink-0"
+                     />
+                    </a>
+                 </div>
               </div>
             </div>
           </div>
