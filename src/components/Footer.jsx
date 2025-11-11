@@ -28,7 +28,9 @@ const Footer = () => {
       <div className="relative container flex flex-col justify-between">
         <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-12 md:pt-40 md:mt-30 pt-10">
           <div className="h-auto mb-8 sm:mb-6 md:mb-0">
-            <img loading="lazy" src={logo} alt="Logo" className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6" />{" "}
+            <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <img loading="lazy" src={logo} alt="Logo" className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6 cursor-pointer" />
+            </Link>{" "}
             <p className="text-gray-300 text-xs sm:text-sm leading-tight mb-4 sm:mb-6 space-y-0.5">
               VahanWire connects you to nearby
               <br />
@@ -60,7 +62,7 @@ const Footer = () => {
               }`}
             >
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/" className="hover:text-white transition" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                   Home
                 </Link>
               </li>

@@ -18,30 +18,29 @@ const Tile = React.memo(function Tile({
   };
 
   return (
-    <div
+    <button
       className={`tile ${isHovered ? "hovered" : ""} 
         flex flex-col justify-between w-full
         max-w-[300px] sm:max-w-[350px] md:max-w-[400px]
         h-45 sm:h-50 md:h-50 lg:h-50
         rounded-[12px] p-4 sm:p-5 md:p-6 lg:p-7 xl:p-[30px]
-        bg-white cursor-pointer
+        bg-white cursor-pointer border-none
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={handleTileClick}  
-      role="button"
+      onClick={handleTileClick}
     >
       <div className="flex items-start gap-2 sm:gap-3">
         {icon && (
-          <img
-            loading="lazy"
-            src={icon}
-            alt={`${title} service icon`}
-            className="w-20 sm:w-24 md:w-28 lg:w-36 h-20 sm:h-24 md:h-28 lg:h-36 object-contain flex-shrink-0"
-            width="144"
-            height="144"
-            decoding="async"
-          />
+        <img
+        loading="lazy"
+        src={icon}
+        alt=""
+        className="w-20 sm:w-24 md:w-28 lg:w-36 h-20 sm:h-24 md:h-28 lg:h-36 object-contain flex-shrink-0"
+        width="144"
+        height="144"
+        decoding="async"
+        />
         )}
         <div>
           <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold mt-1 sm:mt-2 md:mt-3 text-[#242424]">
@@ -127,8 +126,8 @@ const Tile = React.memo(function Tile({
           .tile, .tile::before { transition: none !important; }
         }
       `}</style>
-    </div>
-  );
+      </button>
+      );
 });
 
 Tile.displayName = "Tile";

@@ -21,8 +21,29 @@ const Header = () => {
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [query, setQuery] = useState("");
+
   const handleChange = (e) => {
     setQuery(e.target.value);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && query.trim() !== "") {
+      e.preventDefault();
+
+      const pages = {
+        home: "/",
+        about: "/about",
+        amc: "/my-account?view=amc",
+        profile: "/my-account?view=profile",
+        vehicle: "my-account?view=vehicles",
+      };
+
+      const lowerQuery = query.toLowerCase();
+      if (Object.prototype.hasOwnProperty.call(pages, lowerQuery)) {
+        navigate(pages[lowerQuery]);
+      }
+      return;
+    }
   };
   const dropdownRef = useRef(null);
   const handleProfileClick = () => {
@@ -52,48 +73,54 @@ const Header = () => {
     setOpen(!open);
   };
   return (
-    <div className={` bg-white mx-auto md:py-8 py-4 z-50 gap-x-4 sm:gap-4`}>
+    <div className="bg-white md:py-6 py-3.5 z-50">
       <div className="container">
-        <div className="flex items-center">
-          <div className="flex w-full justify-between gap-4 ">
+        <div className="flex items-center justify-between gap-1">
+          <Suspense fallback={<LazyFallback />}>
+            <Logo />
+          </Suspense>
+
+          <div className="basis-1/3 md:block hidden justify-self-center">
             <Suspense fallback={<LazyFallback />}>
-              <Logo />
+              <SearchBar />
             </Suspense>
-            <div className="md:flex items-center justify-end gap-2">
-              <Suspense fallback={<LazyFallback />}>
-                <SearchBar />
-              </Suspense>
-            </div>
           </div>
-          <div className="flex items-center justify-end gap-2 w-full">
+          <div className="flex items-center justify-end gap-3 basis-auto">
             <div className="flex items-center gap-1">
-              <div
-                role="button"
+              <button
                 onClick={handleClick}
-                className="md:hidden block mr-2 border-r border-gray-400 pr-2"
+                aria-label="Toggle search"
+                className="md:hidden block mr-1 border-r border-gray-300 pr-2 bg-transparent cursor-pointer min-w-[25px]"
               >
                 <img
                   className="w-4 h-4 object-contain"
                   src={searchIcon}
-                  alt="searchicon"
+                  alt="search icon"
                 />
-              </div>
+              </button>
               <Suspense fallback={<LazyFallback />}>
                 <LocationDropdown />
               </Suspense>
             </div>
-            <div>
-              {!isLoggedIn && (
+            {!isLoggedIn && (
+              <div className="md:w-auto w-[80px]">
                 <Suspense fallback={<LazyFallback />}>
-                  <Button className=" text-white" onClick={handleLogin} />
+                  <Button
+                    className="w-full text-white py-1 text-sm sm:text-base"
+                    onClick={handleLogin}
+                  />
                 </Suspense>
-              )}
-            </div>
+              </div>
+            )}
             {isLoggedIn && (
               <div className="relative" ref={dropdownRef}>
                 <div
                   className="flex items-center gap-1 cursor-pointer hover:opacity-80"
                   onClick={handleProfileClick}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Open profile menu"
+                  onKeyDown={(e) => e.key === "Enter" && handleProfileClick()}
                 >
                   <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full flex items-center justify-center">
                     <User size={16} className="sm:w-5 sm:h-5 text-gray-800" />
@@ -104,10 +131,11 @@ const Header = () => {
                   <img
                     src={dropdownIcon}
                     loading="lazy"
-                    alt="location"
+                    alt="dropdown"
                     className="w-4 sm:w-5 h-4 sm:h-5"
                   />
                 </div>
+
                 {isProfileModalOpen && (
                   <div className="absolute top-full right-0 mt-2 z-50">
                     <Suspense fallback={<LazyFallback />}>
@@ -122,40 +150,45 @@ const Header = () => {
             )}
           </div>
         </div>
-        <Suspense fallback={<LazyFallback />}>
-          <VerifyNumberPopup
-            isOpen={isVerifyOpen}
-            onClose={() => setIsVerifyOpen(false)}
-            isFromLogin={true}
-          />
-        </Suspense>
-      </div>
-      <div
-        id="headerSearchbar"
-        className={`${
-          open ? "max-h-7 py-1 my-2 opacity-100" : "max-h-0 opacity-0 "
-        } duration-300 ease-in transition-all `}
-      >
-        <div className="relative">
-          <img
-            src={searchIcon}
-            loading="lazy"
-            alt="Search"
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
-          />
-          <input
-            className={`py-2 pl-10 pr-4 ${
-              open
-                ? "w-full rounded-[6px] border-2 border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
-                : ""
-            }`}
-            value={query}
-            onChange={handleChange}
-            type="text"
-            placeholder="Search..."
-          />
+        <div
+          id="headerSearchbarForMobile"
+          className={`${
+            open ? "max-h-7 py-1 my-2 opacity-100" : "max-h-0 opacity-0"
+          } duration-200 ease-in-out transition-all`}
+        >
+          <div className="relative md:hidden block">
+            <label htmlFor="mobile-search-input" className="sr-only">
+              Search
+            </label>
+            <img
+              src={searchIcon}
+              loading="lazy"
+              alt="Search"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
+            />
+            <input
+              id="search-input"
+              className={`py-2 pl-10 pr-4 text-sm ${
+                open
+                  ? "w-full rounded-[6px] border-2 border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
+                  : ""
+              }`}
+              value={query}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              type="text"
+              placeholder="Search..."
+            />
+          </div>
         </div>
       </div>
+      <Suspense fallback={<LazyFallback />}>
+        <VerifyNumberPopup
+          isOpen={isVerifyOpen}
+          onClose={() => setIsVerifyOpen(false)}
+          isFromLogin={true}
+        />
+      </Suspense>
     </div>
   );
 };

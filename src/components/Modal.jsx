@@ -14,7 +14,7 @@ const Modal = ({ isOpen, onClose, onBack, children, proceedButton }) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 flex w-full h-full bg-black/50 z-50">
-      <div className="ml-auto w-full sm:w-[90%] md:w-[60%] lg:w-[40%] h-full bg-[#EFEFEF] flex flex-col relative">
+      <div className="ml-auto lg:w-[45vw] md:w-[60vw] max-w-[700px] sm:w-[50vw] w-[100vw] h-full bg-[#EFEFEF] flex flex-col relative">
         <div className="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-1">
           <button
             onClick={onBack || onClose}

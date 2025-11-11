@@ -10,6 +10,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
+  const [autoDetectAttempted, setAutoDetectAttempted] = useState(false);
 
   const locations = [
     "Noida Sec 15",
@@ -26,14 +27,24 @@ const LocationDropdown = ({ onLocationSelect }) => {
     return address.length > 30 ? address.substring(0, 30) + "..." : address;
   };
 
-  const getCurrentLocation = useCallback(() => {
+  const getCurrentLocation = useCallback(async (isAutoDetect = false) => {
+    if (isAutoDetect && autoDetectAttempted) {
+      return;
+    }
+
     setLoading(true);
     setError(null);
-    setOpen(false);
+    
+    if (!isAutoDetect) {
+      setOpen(false);
+    }
 
     if (!navigator.geolocation) {
       setError("Geolocation is not supported");
       setLoading(false);
+      if (isAutoDetect) {
+        setAutoDetectAttempted(true);
+      }
       return;
     }
 
@@ -66,15 +77,41 @@ const LocationDropdown = ({ onLocationSelect }) => {
           setError("Failed to fetch location");
         } finally {
           setLoading(false);
+          if (isAutoDetect) {
+            setAutoDetectAttempted(true);
+          }
         }
       },
       (error) => {
         console.error("Geolocation error:", error);
-        setError("Failed to get current location");
+        
+        // Handle different geolocation errors
+        let errorMessage = "Failed to get current location";
+        if (error.code === error.PERMISSION_DENIED) {
+          errorMessage = "Location access denied";
+        } else if (error.code === error.TIMEOUT) {
+          errorMessage = "Location request timeout";
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          errorMessage = "Location unavailable";
+        }
+        
+        setError(errorMessage);
         setLoading(false);
+        if (isAutoDetect) {
+          setAutoDetectAttempted(true);
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000,
       }
     );
-  }, [onLocationSelect]);
+  }, [onLocationSelect, autoDetectAttempted]);
+
+  useEffect(() => {
+    getCurrentLocation(true);
+  }, []);
 
   const handleClick = useCallback(() => {
     setOpen((prev) => !prev);
@@ -95,6 +132,12 @@ const LocationDropdown = ({ onLocationSelect }) => {
     },
     [onLocationSelect]
   );
+
+  // Retry auto-detection if user grants permission after initial denial
+  const handleRetryLocation = useCallback(() => {
+    setError(null);
+    getCurrentLocation(false);
+  }, [getCurrentLocation]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -153,7 +196,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
           <div className="absolute top-[calc(100%+4px)] left-0 min-w-[250px] z-50 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-fadeIn">
             <div className="p-2 border-b border-gray-200 bg-gray-50">
               <button
-                onClick={getCurrentLocation}
+                onClick={handleRetryLocation}
                 disabled={loading}
                 className="w-full px-3 py-2 text-sm font-medium text-left hover:bg-white rounded-md flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -165,8 +208,14 @@ const LocationDropdown = ({ onLocationSelect }) => {
             </div>
 
             {error && (
-              <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border-b border-red-100">
-                {error}
+              <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border-b border-red-100 flex justify-between items-center">
+                <span>{error}</span>
+                <button
+                  onClick={handleRetryLocation}
+                  className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                >
+                  Retry
+                </button>
               </div>
             )}
 

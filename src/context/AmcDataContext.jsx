@@ -15,6 +15,8 @@ export const AmcDataProvider = ({ children }) => {
   const [vehicleType, setVehicleType] = useState("car");
   const [amcType, setAmcType] = useState("luxury");
   const [purchasedCards, setPurchasedCards] = useState([]);
+  const [filterActive, setFilterActive] = useState(false);
+  const [filterData, setFilterData] = useState(null);
 
   const getAmcTabs = useMemo(() => {
     if (vehicleType === "bike") {
@@ -37,6 +39,16 @@ export const AmcDataProvider = ({ children }) => {
     setPurchasedCards((prev) => [...prev, card]);
   };
 
+  const activateFilter = (data) => {
+    setFilterActive(true);
+    setFilterData(data);
+  };
+
+  const clearFilter = () => {
+    setFilterActive(false);
+    setFilterData(null);
+  };
+
   return (
     <AmcDataContext.Provider
       value={{
@@ -48,6 +60,10 @@ export const AmcDataProvider = ({ children }) => {
         features: getFeatures,
         purchasedCards,
         addPurchasedCard,
+        filterActive,
+        filterData,
+        activateFilter,
+        clearFilter,
       }}
     >
       {children}

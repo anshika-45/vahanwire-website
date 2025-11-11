@@ -1,5 +1,4 @@
 import React, { Suspense, lazy } from 'react';
-import Img from "../assets/GetHelp.webp";
 const HoverCards = lazy(() => import('./HoverCards'));
 const GetHelp = () => {
     return (

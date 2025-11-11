@@ -48,7 +48,7 @@ const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false }) => {
     <>
       {!showOtp && (
         <Modal isOpen={isOpen} onClose={onClose}>
-          <div className="bg-white rounded-xl p-8 sm:p-8 md:p-14 flex flex-col items-center m-6 my-10">
+          <div className="bg-white rounded-xl p-8 sm:p-8 md:p-10 flex flex-col items-center m-4 my-10">
             <div className="flex justify-center mb-5 sm:mb-7">
               <img
                 src={phoneGif}
