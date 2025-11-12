@@ -17,23 +17,12 @@ const slides = [
     img: mechanic,
   },
   { id: 2, title: "AMC Plan", desc: "Annual Maintenance Contract.", img: amc },
-  {
-    id: 3,
-    title: "Tow Truck Service",
-    desc: "Fast, Reliable Towing.",
-    img: towtruck,
-  },
+
   {
     id: 4,
     title: "Battery Jumpstart",
     desc: "Quick and safe power boost.",
     img: mechanic,
-  },
-  {
-    id: 5,
-    title: "Flat Tyre Fix",
-    desc: "On-the-spot repair and inflation.",
-    img: towtruck,
   },
   {
     id: 6,
@@ -42,12 +31,7 @@ const slides = [
     img: mechanic,
   },
   { id: 7, title: "AMC Plan", desc: "Annual Maintenance Contract.", img: amc },
-  {
-    id: 8,
-    title: "Tow Truck Service",
-    desc: "Fast, Reliable Towing.",
-    img: towtruck,
-  },
+
   {
     id: 9,
     title: "Battery Jumpstart",
@@ -63,7 +47,7 @@ const slides = [
 ];
 export default function Slider() {
   return (
-    <div className="homeSlider max-w-screen relative pt-5 mt-3">
+    <div className="homeSlider max-w-screen relative pt-5 mt-3 lg:mb-6">
       <div className="md:block hidden absolute w-[10vw] bg-white left-0 top-0 bottom-0 z-30"></div>
       <div className="md:max-w-screen max-w-[1300px] px-3 md:px-0">
         <Swiper
@@ -76,27 +60,22 @@ export default function Slider() {
           loop={true}
           breakpoints={{
             480: {
-            
               slidesPerView: 1,
               spaceBetween: 10,
             },
             640: {
-             
               slidesPerView: 2,
               spaceBetween: 15,
             },
             768: {
-            
               slidesPerView: 2,
               spaceBetween: 20,
             },
             1024: {
-            
               slidesPerView: 3,
               spaceBetween: 25,
             },
             1280: {
-             
               slidesPerView: 4,
               spaceBetween: 20,
             },
@@ -114,9 +93,9 @@ export default function Slider() {
           {slides.map((s, index) => {
             return (
               <SwiperSlide key={s.id}>
-                <div className=" w-full h-[230px]">
+                <div className=" w-full h-[250px]">
                   <img
-                    className="object-contain rounded-2xl"
+                    className="object-center h-full rounded-2xl"
                     src={s.img}
                     alt=""
                   />

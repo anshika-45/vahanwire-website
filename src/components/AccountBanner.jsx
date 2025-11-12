@@ -1,5 +1,5 @@
 import React from "react";
-import accountBannerImg from "../assets/account-banner.webp";
+import accountBannerImg from "../assets/AccountBanner.svg";
 
 const AccountBanner = () => {
   return (

@@ -1,8 +1,8 @@
 import React from "react";
-import FacebookIcon from "../assets/FacebookIcon.webp";
-import InstaIcon from "../assets/InstaIcon.webp";
-import XIcon from "../assets/XIcon.webp";
-import LinkedInIcon from "../assets/LinkedInIcon.webp"
+import FacebookIcon from "../assets/FacebookIcon.svg";
+import InstaIcon from "../assets/InstagramIcon.svg";
+import XIcon from "../assets/XIcon.svg";
+import LinkedInIcon from "../assets/LinkedInIcon.svg"
 const IconCircle = ({ src, alt, link }) => {
     return (
         <a href={link}>

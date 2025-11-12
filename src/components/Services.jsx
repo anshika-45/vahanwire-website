@@ -1,11 +1,11 @@
 import React from "react";
 import Tile from "./Tile";
-import amcIcon from "../assets/service-amc.webp";
-import mechanicIcon from "../assets/service-mechanic.webp";
-import towtruckIcon from "../assets/service-truck.webp";
-import patrolIcon from "../assets/service-pump.webp";
-import serviceIcon from "../assets/service-center.webp";
-import ecommerceIcon from "../assets/service-cart.webp";
+import amcIcon from "../assets/Tile1.svg";
+import mechanicIcon from "../assets/Tile2.svg";
+import towtruckIcon from "../assets/Tile3.svg";
+import patrolIcon from "../assets/Tile4.svg";
+import serviceIcon from "../assets/Tile5.svg";
+import ecommerceIcon from "../assets/Tile6.svg";
 const servicesData = [
   {
     icon: amcIcon,
@@ -52,7 +52,7 @@ const Services = React.memo(() => {
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]">
           Our Main Services
         </h1>
-        <p className="text-xs sm:text-sm text-[#5C5C5C] text-center pt-2 md:pt-4">
+        <p className="text-xs sm:text-lg text-[#5C5C5C] text-center pt-2 md:pt-4">
           Explore a full range of essential vehicle and home services —<br />
           from mechanic support to doorstep repairs, towing, payments, and more.
         </p>

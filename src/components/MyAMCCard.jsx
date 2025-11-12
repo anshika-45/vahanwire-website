@@ -8,7 +8,7 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
       >
         <div className="absolute left-0 top-3 sm:top-4 bg-white rounded-r-full w-12 sm:w-14 md:w-16 h-10 sm:h-12 md:h-14 flex items-center justify-end pr-2 sm:pr-3 shadow-md z-10">
           <img
-            src={logoSrc || "/src/assets/Logo1.webp"}
+            src={logoSrc || "/src/assets/Logo-AMC.svg"}
             alt="VahanWire Logo"
             loading="lazy"
             className="w-6 sm:w-7 md:w-8 h-6 sm:h-7 md:h-8 object-contain"
@@ -23,7 +23,7 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
             className="absolute right-4 sm:right-6 -top-16 sm:-top-12 md:-top-8 w-24 sm:w-28 md:w-32 opacity-60 pointer-events-none"
           />
           <img
-            src={carImageSrc || "/src/assets/CarAMC.webp"}
+            src={carImageSrc || "/src/assets/Car-AMC.svg"}
             alt="Vehicle image"
             loading="lazy"
             className="relative z-10 w-14 sm:w-18 md:w-22 object-contain"

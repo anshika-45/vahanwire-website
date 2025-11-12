@@ -1,10 +1,10 @@
 import React from "react";
-import carGrey from "../assets/CarFade.webp";
-import carColor from "../assets/CarFill.webp";
-import bikeGrey from "../assets/BikeFade.webp";
-import bikeColor from "../assets/BikeFill.webp";
-import vector from "../assets/radio-button-unchecked.webp";
-import image from "../assets/radio-button-checked.webp";
+import carGrey from "../assets/CarFade.svg";
+import carColor from "../assets/CarFill.svg";
+import bikeGrey from "../assets/BikeFade.svg";
+import bikeColor from "../assets/BikeFill.svg";
+import vector from "../assets/radio-unchecked.svg";
+import image from "../assets/radio-checked.svg";
 
 const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
   const options = [

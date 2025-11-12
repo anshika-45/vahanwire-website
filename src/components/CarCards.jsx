@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import EditVehicleModal from "./EditVehicleModal";
 import AddVehicleModal from "./AddVehicleModal";
 import EditVehicle from "../popup/EditVehicle";
-import vehicleImage1 from "../assets/acar-2.webp";
-import vehicleImage2 from "../assets/acar-1.webp";
-import deleteIcon from "../assets/adelete.webp";
-import editIcon from "../assets/aedit.webp";
-import checkIcon from "../assets/circle-check-filled.webp";
+import vehicleImage1 from "../assets/acar-2.svg";
+import vehicleImage2 from "../assets/acar-1.svg";
+import deleteIcon from "../assets/DeleteIcon.svg";
+import editIcon from "../assets/EditIcon.svg";
+import checkIcon from "../assets/check2.svg";
 import { getUserVehicles, deleteUserVehicle } from "../api/vehicleApi";
 
 const VehicleCard = ({

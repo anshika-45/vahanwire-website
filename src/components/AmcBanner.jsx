@@ -1,5 +1,5 @@
 import React from "react";
-import amcImage from "../assets/Drive.webp";
+import amcImage from "../assets/Drive.svg";
 import logo from "../assets/blurlogo.webp";
 import Button from "./Button";
 const AmcBanner = ({ onBuy }) => {

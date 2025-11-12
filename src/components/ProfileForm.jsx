@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import uploadIcon from "../assets/upload.webp";
+import uploadIcon from "../assets/upload.svg";
 import Button from "./Button";
 import {
   getMyProfile,

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import carColor from "../assets/CarRed.png";
-import carOutline from "../assets/CarGrey.png";
-import bikeColor from "../assets/BikeRed.png";
-import bikeOutline from "../assets/BikeGrey.png";
+import carColor from "../assets/CarFill.svg";
+import carOutline from "../assets/CarFade.svg";
+import bikeColor from "../assets/BikeFill.svg";
+import bikeOutline from "../assets/BikeFade.svg";
 import { addUserVehicle } from "../api/vehicleApi";
 
 const Backdrop = ({ onClose }) => (

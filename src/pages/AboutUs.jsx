@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import aboutBanner from "../assets/about-us-banner.webp";
+import aboutBanner from "../assets/AboutUs.svg";
 import aboutAppImage from "../assets/about-us-side.webp";
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));

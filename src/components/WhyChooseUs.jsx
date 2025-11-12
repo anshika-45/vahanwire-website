@@ -7,7 +7,7 @@ const WhyChooseUs = () => {
         <h1 className="text-2xl sm:text-3xl lg:text-4xl text-center font-medium text-[#242424]">
           Why Choose Us?
         </h1>
-        <p className="text-xs sm:text-sm text-[#5C5C5C] pt-4 max-w-3xl mx-auto">
+        <p className="text-xs sm:text-lg text-[#5C5C5C] pt-4 max-w-3xl mx-auto">
           VahanWire began in 2019 to simplify access to mechanics, fuel, and
           vehicle services. Today, we lead India's app-based automotive service
           market with a 70% share, helping the nation move smarter.

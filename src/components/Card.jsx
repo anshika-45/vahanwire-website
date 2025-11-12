@@ -1,8 +1,8 @@
 import React from "react";
-import Card1Img from "../assets/Card1.webp";
-import Card2Img from "../assets/Card2.webp";
-import Card3Img from "../assets/Card3.webp";
-import Card4Img from "../assets/Card4.webp";
+import Card1Img from "../assets/Card1.svg";
+import Card2Img from "../assets/Card2.svg";
+import Card3Img from "../assets/Card3.svg";
+import Card4Img from "../assets/Card4.svg";
 const YellowCards = () => {
   const cardData = [
     { image: Card1Img, title: "98%", description: "Customer Satisfaction" },

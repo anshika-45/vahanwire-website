@@ -1,7 +1,7 @@
 import React from "react";
 import AddImage from "../assets/addbanner.webp";
-import AppStore from "../assets/AppleStoreImage.png";
-import GooglePlay from "../assets/GooglePlayStore.png";
+import AppStore from "../assets/Apple.svg";
+import GooglePlay from "../assets/Playstore.svg";
 const AddBanner = () => {
   return (
     <>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/Footerlogo.webp";
+import logo from "../assets/LogoFooter.svg";
 import bgImg from "../assets/Footerbg.webp";
 import { Link } from "react-router-dom";
 import FooterIcons from "./FooterIcons";

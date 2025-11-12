@@ -1,7 +1,7 @@
 import React, { useState, Suspense } from "react";
 import { createContact } from "../api/authApi";
 import { MailOpen, Phone, MapPin } from "lucide-react";
-import contactBanner from "../assets/contact-us-banner.webp";
+import contactBanner from "../assets/ContactUs.svg";
 import contactImage from "../assets/contact-us-card.webp";
 
 const AddBanner = React.lazy(() => import("../components/AddBanner"));

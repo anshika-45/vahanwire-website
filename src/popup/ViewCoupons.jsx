@@ -1,5 +1,5 @@
 import React from "react";
-import couponLogo from "../assets/Logo1.webp";
+import couponLogo from "../assets/Logo-AMC.svg";
 export default function ViewCoupons({ handleClick }) {
   const handleRemoveCoupon = () => {
     handleClick();

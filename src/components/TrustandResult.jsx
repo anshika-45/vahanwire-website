@@ -14,7 +14,7 @@ const TrustandResult = () => {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium text-white text-center">
             Powered by Trust & Results
           </h1>
-          <p className="text-xs sm:text-xs md:text-sm text-white text-center pt-2 md:pt-4 leading-relaxed">
+          <p className="text-xs sm:text-lg text-white text-center pt-2 md:pt-4 leading-relaxed">
           See why customers across India rely on VahanWire for fast, reliable,
           and <br className="hidden md:block" />
           transparent vehicle services — anytime, anywhere.

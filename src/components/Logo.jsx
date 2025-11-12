@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logoImg from "../assets/logo.webp";
+import logoImg from "../assets/Logo.svg";
 const Logo = React.memo(() => {
   return (
     <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex">

@@ -3,7 +3,7 @@ import { useAmcData } from "../context/AmcDataContext";
 import { getAMCPlansByCategory } from "../api/amcApi";
 import { Check } from "lucide-react";
 import VerifyNumberPopup from "../popup/VerifyNumberPopup";
-import essentialPlanImg from "../assets/Essentialplan.webp";
+import essentialPlanImg from "../assets/Essentialplan.svg";
 
 const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discount, periodLabel, features, bgColor, hoverBgColor, isEssential = false, onBuy, vehicleType = "car" }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -21,12 +21,12 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
         }}
       >
         <div className="absolute left-0 top-4 bg-white rounded-r-full w-20 h-13 flex items-center justify-end pr-5 shadow-md z-10">
-          <img loading="lazy" src="/src/assets/Logo1.webp" alt="VahanWire Logo" className="w-9 h-9 object-contain" />
+          <img loading="lazy" src="/src/assets/Logo-AMC.svg" alt="VahanWire Logo" className="w-9 h-9 object-contain" />
         </div>
         <div className="flex justify-end items-start mb-4 relative">
           <img loading="lazy" src="/src/assets/back-logo.webp" alt="Background decorative logo" className="absolute right-8 -top-10 w-34 h-32 object-contain opacity-60" />
           <div>
-            <img loading="lazy" src={vehicleType === "bike" ? "/src/assets/BikeAMC.webp" : "/src/assets/CarAMC.webp"} alt={vehicleType === "bike" ? "Motorcycle AMC plan" : "Car AMC plan"} className="w-20 h-16 object-contain relative z-10" />
+            <img loading="lazy" src={vehicleType === "bike" ? "/src/assets/Bike-AMC.svg" : "/src/assets/Car-AMC.svg"} alt={vehicleType === "bike" ? "Motorcycle AMC plan" : "Car AMC plan"} className="w-20 h-16 object-contain relative z-10" />
           </div>
         </div>
         <h3 className="text-2xl font-semibold mb-3">{title}</h3>
@@ -67,7 +67,7 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
           Buy Now
         </button>
       </div>
-      {/* {isEssential && <img loading="lazy" src={essentialPlanImg} alt="Essential Plan" className="absolute top-52 -right-2 h-7 w-auto z-20" />} */}
+      {isEssential && <img loading="lazy" src={essentialPlanImg} alt="Essential Plan" className="absolute top-52 -right-2 h-7 w-auto z-20" />}
     </div>
   );
 };

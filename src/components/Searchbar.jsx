@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import searchIcon from "../assets/search.webp";
+import searchIcon from "../assets/SearchIcon.svg";
 
 function SearchBar({ placeholder = "Search..." }) {
   const [query, setQuery] = useState("");
