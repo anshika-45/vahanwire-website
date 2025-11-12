@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import plusIcon from "../assets/PlusIcon.svg";
-import minusIcon from "../assets/minusIcon.svg";
+import minusIcon from "../assets/MinusIcon.svg";
 import AddBanner from "./AddBanner";
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
