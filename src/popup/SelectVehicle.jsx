@@ -36,17 +36,32 @@ const SelectVehicle = ({
   const [isProceeding, setIsProceeding] = useState(false);
   const initialized = useRef(false);
 
-  // ✅ Validate Indian vehicle number format
-  const validateVehicleNumber = (number) => {
-    const cleaned = number.trim().toUpperCase().replace(/[-\s]/g, "");
-    const pattern = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
-    if (!cleaned) return "Please enter the vehicle number";
-    if (cleaned.length < 8 || cleaned.length > 10)
-      return "Vehicle number should be 8–10 characters long";
-    if (!pattern.test(cleaned))
-      return "Invalid format. Example: DL01AB1234 or MH12DE1433";
-    return "";
-  };
+   // ✅ Strong Indian Vehicle Number Validation
+const validateVehicleNumber = (number) => {
+  const cleaned = number.trim().toUpperCase().replace(/[-\s]/g, "");
+
+  if (!cleaned) return "Please enter the vehicle number";
+
+  // ✅ Indian standard: e.g. DL01AB1234, HR26DA2330, MH12DE1433
+  const indianPattern = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
+
+  // ✅ Some states issue temporary registrations: e.g. TEMP123456
+  const tempPattern = /^TEMP[0-9]{4,6}$/;
+
+  // ✅ Length validation
+  if (cleaned.length < 8 || cleaned.length > 10)
+    return "Vehicle number should be 8–10 characters long";
+
+  // ✅ Check if matches valid patterns
+  if (!indianPattern.test(cleaned) && !tempPattern.test(cleaned))
+    return "Invalid vehicle number format. Example: DL01AB1234 or TEMP1234";
+
+  // ✅ Avoid obvious invalid patterns
+  if (/^[A-Z]{2}0{1,2}[A-Z]{1,3}0+$/.test(cleaned))
+    return "Vehicle number cannot contain all zeros";
+
+  return ""; // ✅ Valid number
+};
 
   useEffect(() => {
     if (!initialized.current) {

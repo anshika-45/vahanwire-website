@@ -58,7 +58,7 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
                 <div className="bg-[#32AB15] rounded-full p-0.5 mt-0.5 flex-shrink-0">
                   <Check size={10} strokeWidth={3} />
                 </div>
-                <span className="text-xs leading-tight">{feature}</span>
+               <span className="text-[13px] md:text-[15px] leading-tight">{feature}</span>
               </div>
             ))}
           </div>
