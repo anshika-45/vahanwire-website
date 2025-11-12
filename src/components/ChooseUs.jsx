@@ -5,7 +5,7 @@ import checkIcon from "../assets/CheckIcon.svg";
 import Choose1 from "../assets/Choose1.svg";
 import Choose2 from "../assets/Choose2.svg";
 import Choose3 from "../assets/Choose3.svg";
-import mobile from "../assets/Phone.svg"; // ✅ Keep only this
+import mobile from "../assets/Mobile.svg"; // ✅ Keep only this
 
 const ChooseUs = () => {
   return (
@@ -124,7 +124,7 @@ const ChooseUs = () => {
               alt="VahanWire mobile app preview"
               loading="lazy"
               decoding="async"
-              className="w-[60%] sm:w-[40%] md:w-[40%] lg:w-[50%] h-auto drop-shadow-xl"
+              className="w-[60%] sm:w-[50%] md:w-[50%] lg:w-[65%] h-auto drop-shadow-xl"
             />
           </div>
         </div>

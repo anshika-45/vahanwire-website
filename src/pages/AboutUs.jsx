@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import aboutBanner from "../assets/AboutUs.svg";
-import aboutAppImage from "../assets/about-us-side.webp";
+import aboutAppImage from "../assets/Mobile.svg";
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 
@@ -22,7 +22,7 @@ const AboutUs = () => {
             <h2 className="text-2xl md:text-5xl font-semibold text-[#242424] mb-6">
               About Us
             </h2>
-            <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed mb-4">
+            <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed mb-4 text-justify">
               This website www.vahanwire.com (“Website”) and
               its mobile application (“Application”) are owned and operated by
               Vahanwire Technologies Pvt. Ltd., a company
@@ -31,7 +31,7 @@ const AboutUs = () => {
               Pradesh 201309, India.
             </p>
 
-            <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed mb-4">
+            <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed mb-4 text-justify">
               VahanWire enables users to connect with mechanics, multi-branded
               service centers, tow providers, and petrol pump establishments
               offering varied automotive services. Through our platform, users
@@ -39,7 +39,7 @@ const AboutUs = () => {
               providers.
             </p>
 
-            <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed">
+            <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed text-jusify">
               These terms and conditions govern your access to and use of the
               Website and Application. By using the Website/Application, you
               acknowledge that VahanWire acts as a digital platform facilitating
