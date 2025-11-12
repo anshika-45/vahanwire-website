@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import userIcon from "../assets/user.svg";
-import vehicleIcon from "../assets/carr.svg";
+import vehicleIcon from "../assets/Carr.svg";
 import moneyIcon from "../assets/Money.svg";
 import { LogOut } from "lucide-react";
 import { getUserVehicles } from "../api/vehicleApi";
