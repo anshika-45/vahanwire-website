@@ -25,9 +25,9 @@ const mapApiDataToAMC = (apiData) => {
     let status = "Active";
     let statusBadge = "Active AMC";
 
-    if (isPlanPending) {
+    if (isPlanPending && !isRefundPending && !isRefundApproved && !isRefundRejected) {
       status = "Pending";
-      statusBadge = "Pending";
+      statusBadge = "AMC Activation Pending";
     } else if (isRefundPending) {
       status = "Pending";
       statusBadge = `Refund Request Status : Pending`;
@@ -158,6 +158,7 @@ export default function MyAMCPage() {
       try {
         setLoading(true);
         const response = await getMyAMCPlans();
+        console.log("jcebwdjkbkjb",response);
         if (response.success && response.data) {
           const mappedData = mapApiDataToAMC(response.data);
           setAmcData([...mappedData, ...purchasedCards]);
@@ -367,16 +368,16 @@ export default function MyAMCPage() {
     return (
       item.refundStatus === "submitted" &&
       !item.refundFinalStatus &&
-      item.planStatus === "active"
+      (item.planStatus === "active" || item.planStatus === "pending")
     );
   };
 
   const shouldShowTimeline = (item) => {
-    return (item.refundApplied || item.refundFinalStatus) && item.planStatus !== "pending";
+    return item.refundApplied || item.refundFinalStatus;
   };
 
-  const isActivePlan = (item) => {
-    return item.planStatus === "active" && item.refundStatus === "none";
+  const shouldShowActionButtons = (item) => {
+    return (item.planStatus === "active" || item.planStatus === "pending") && item.refundStatus === "none";
   };
 
   if (loading) {
@@ -438,6 +439,7 @@ export default function MyAMCPage() {
                       logoSrc={item.logoSrc}
                       carImageSrc={item.carImageSrc}
                       vehicle={item.vehicle}
+                      planDescription={item.planDescription}
                       onDownloadInvoice={() => handleDownloadInvoice(item)}
                     />
 
@@ -463,7 +465,7 @@ export default function MyAMCPage() {
                         </div>
 
                         <p className="text-[#1C1C28] text-xs mb-2">
-                          {item.planStatus === "pending"
+                          {item.planStatus === "pending" && item.refundStatus === "none"
                             ? "Your AMC payment is successful. Waiting for admin approval to activate."
                             : item.status === "Active"
                             ? "Your AMC is active. You can raise service requests."
@@ -477,7 +479,7 @@ export default function MyAMCPage() {
                         </p>
 
                         <p className="text-[#1C1C28] text-xs mb-2 leading-normal line-clamp-3">
-                          {item.description}
+                          {item.planDescription}
                         </p>
 
                         <div className="mb-2">
@@ -508,7 +510,7 @@ export default function MyAMCPage() {
                           View Coverage
                         </button>
 
-                        {isActivePlan(item) && (
+                        {shouldShowActionButtons(item) && (
                           <>
                             <button
                               onClick={() => handleEditVehicle(item)}

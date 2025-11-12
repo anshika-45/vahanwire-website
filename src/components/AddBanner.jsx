@@ -1,7 +1,7 @@
 import React from "react";
 import AddImage from "../assets/addbanner.webp";
-import AppStore from "../assets/Apple.webp";
-import GooglePlay from "../assets/playstore.webp";
+import AppStore from "../assets/AppleStoreImage.png";
+import GooglePlay from "../assets/GooglePlayStore.png";
 const AddBanner = () => {
   return (
     <>
@@ -9,7 +9,7 @@ const AddBanner = () => {
         <div className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-b from-white to-[#00AB11] opacity-50 hidden sm:block"></div>
         <div className="absolute top-0 bottom-0 right-0 w-1/2 bg-gradient-to-b from-white to-[#157EFD] opacity-50 hidden sm:block"></div>
         <div
-          className="w-[95%] sm:w-[90%] lg:w-[85%] max-w-7xl rounded-3xl overflow-hidden shadow-lg absolute lg:-bottom-50 sm:-bottom-60 -bottom-100 z-10 bg-cover bg-center mt-20 sm:mt-28 md:mt-40
+          className="w-[95%] sm:w-[90%] md:w-full max-w-screen-xl rounded-3xl overflow-hidden shadow-lg absolute lg:-bottom-52 sm:-bottom-61 -bottom-100 z-10 bg-center mt-20 sm:mt-28 md:mt-40
           max-sm:static max-sm:mt-10  max-sm:p-4"
           style={{
             backgroundImage: `url(${AddImage})`,
@@ -39,37 +39,37 @@ const AddBanner = () => {
                   Download User App
                 </p>
                 <div className="flex gap-2 flex-wrap">
-                <a
-                href="https://apps.apple.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Download on App Store"
-                  className="inline-block hover:opacity-80 transition"
-                >
-                <img
-                  loading="lazy"
-                  src={AppStore}
-                  alt="App Store"
-                  role="img"
-                    className="h-10 sm:h-12 lg:h-16 shrink-0"
+                  <a
+                    href="https://apps.apple.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Download on App Store"
+                    className="inline-block hover:opacity-80 transition"
+                  >
+                    <img
+                      loading="lazy"
+                      src={AppStore}
+                      alt="App Store"
+                      role="img"
+                      className="h-10 sm:h-12 lg:h-16 shrink-0"
                     />
-                   </a>
-                   <a
-                   href="https://play.google.com/store/apps/details?id=com.vahanwireprovider"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   aria-label="Get it on Google Play"
-                   className="inline-block hover:opacity-80 transition"
-                   >
-                   <img
-                   loading="lazy"
-                   src={GooglePlay}
-                   alt="Google Play"
-                   role="img"
-                     className="h-10 sm:h-12 lg:h-16 shrink-0"
-                     />
-                    </a>
-                 </div>
+                  </a>
+                  <a
+                    href="https://play.google.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Get it on Google Play"
+                    className="inline-block hover:opacity-80 transition"
+                  >
+                    <img
+                      loading="lazy"
+                      src={GooglePlay}
+                      alt="Google Play"
+                      role="img"
+                      className="h-10 sm:h-12 lg:h-16 shrink-0"
+                    />
+                  </a>
+                </div>
               </div>
             </div>
             <div className="bg-white rounded-3xl shadow-xl p-5 sm:p-8 flex flex-col justify-between ">
@@ -87,37 +87,37 @@ const AddBanner = () => {
                   Download Provider App
                 </p>
                 <div className="flex gap-2 flex-wrap">
-                <a
-                href="https://apps.apple.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Download on App Store"
-                  className="inline-block hover:opacity-80 transition"
-                >
-                <img
-                  src={AppStore}
-                  alt="App Store"
-                  role="img"
-                  loading="lazy"
-                    className="h-10 sm:h-12 lg:h-16 shrink-0"
+                  <a
+                    href="https://apps.apple.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Download on App Store"
+                    className="inline-block hover:opacity-80 transition"
+                  >
+                    <img
+                      src={AppStore}
+                      alt="App Store"
+                      role="img"
+                      loading="lazy"
+                      className="h-10 sm:h-12 lg:h-16 shrink-0"
                     />
-                   </a>
-                   <a
-                   href="https://play.google.com/store/apps/details?id=com.vahanwireprovider"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   aria-label="Get it on Google Play"
-                   className="inline-block hover:opacity-80 transition"
-                   >
-                   <img
-                   src={GooglePlay}
-                   alt="Google Play"
-                   role="img"
-                   loading="lazy"
-                     className="h-10 sm:h-12 lg:h-16 shrink-0"
-                     />
-                    </a>
-                 </div>
+                  </a>
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.vahanwireprovider"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Get it on Google Play"
+                    className="inline-block hover:opacity-80 transition"
+                  >
+                    <img
+                      src={GooglePlay}
+                      alt="Google Play"
+                      role="img"
+                      loading="lazy"
+                      className="h-10 sm:h-12 lg:h-16 shrink-0"
+                    />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -126,4 +126,5 @@ const AddBanner = () => {
     </>
   );
 };
+
 export default AddBanner;

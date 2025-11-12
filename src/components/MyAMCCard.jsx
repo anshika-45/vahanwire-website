@@ -1,14 +1,11 @@
 import React from "react";
 import { Download } from "lucide-react";
 const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onDownloadInvoice }) => {
-  // carImageSrc can be either car or bike image based on purchase
   return (
     <div className="flex flex-col items-center w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px] mx-auto">
-      {/* Top Section */}
       <div
         className={`${bgColor} rounded-t-xl p-3 sm:p-4 md:p-6 w-full relative overflow-visible min-h-[170px] sm:min-h-[200px] md:min-h-[230px]`}
       >
-        {/* Logo Bubble */}
         <div className="absolute left-0 top-3 sm:top-4 bg-white rounded-r-full w-12 sm:w-14 md:w-16 h-10 sm:h-12 md:h-14 flex items-center justify-end pr-2 sm:pr-3 shadow-md z-10">
           <img
             src={logoSrc || "/src/assets/Logo1.webp"}
@@ -18,7 +15,6 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
           />
         </div>
 
-        {/* Car + Background Logo */}
         <div className="relative flex justify-end items-start pr-2 mt-1 sm:mt-2">
           <img
             src="/src/assets/back-logo.webp"
@@ -33,13 +29,9 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
             className="relative z-10 w-14 sm:w-18 md:w-22 object-contain"
           />
         </div>
-
-        {/* Plan Title */}
         <h3 className="text-white text-sm sm:text-base md:text-xl font-bold mt-4 sm:mt-5 line-clamp-1">
           {plan}
         </h3>
-
-        {/* Vehicle & Validity Info */}
         <div className="flex justify-between text-white mt-3 sm:mt-4">
           <div>
             {vehicle && <div className="text-xs opacity-80">Vehicle Number</div>}
@@ -51,8 +43,6 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
           </div>
         </div>
       </div>
-
-      {/* Bottom Section */}
       <div className="w-full bg-gray-100 rounded-b-xl py-2 sm:py-3 md:py-3 px-3 sm:px-4 border-t border-gray-200">
         <button
           onClick={onDownloadInvoice}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import AccountBanner from "../components/AccountBanner";
 import AccountSidebar from "../components/AccountSidebar";
+
 const ProfileForm = React.lazy(() => import("../components/ProfileForm"));
 const CarCards = React.lazy(() => import("../components/CarCards"));
 const MyAMCPage = React.lazy(() => import("../components/MyAMCPage"));
+
 const ContentLoader = () => (
   <div className="flex items-center justify-center min-h-64">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]"></div>
@@ -17,20 +19,23 @@ const CardLoader = () => (
 );
 
 function MyAccount() {
-  const { setIsLoggedIn } = useAuth();
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewParam = searchParams.get("view");
   const [activeView, setActiveView] = useState(viewParam || "profile");
 
   useEffect(() => {
-    setIsLoggedIn(true);
-  }, [setIsLoggedIn]);
+    if (!isLoggedIn) {
+      navigate("/", { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
 
   useEffect(() => {
     if (viewParam && viewParam !== activeView) {
       setActiveView(viewParam);
     }
-  }, [viewParam]); 
+  }, [viewParam, activeView]);
 
   const handleChangeView = (next) => {
     setActiveView(next);
@@ -64,6 +69,10 @@ function MyAccount() {
         );
     }
   };
+
+  if (!isLoggedIn) {
+    return null;
+  }
 
   return (
     <div className="bg-[#F4F4F4]">

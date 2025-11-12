@@ -75,6 +75,7 @@ export const downloadAmcInvoice = async (amcId) => {
 export const getAmcInvoice = async (amcPurchaseId) => {
   try {
     const response = await axiosInstance.get(`/amc-invoice/${amcPurchaseId}/invoice`);
+    console.log("kjebckjbke",response);
     return response.data;
   } catch (error) {
     console.error("Error fetching AMC invoice:", error);

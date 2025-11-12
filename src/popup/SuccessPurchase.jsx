@@ -1,40 +1,41 @@
 import React from "react";
-import { CheckCircle } from "lucide-react";
-import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
-
+import { Check } from "lucide-react";
 const SuccessPurchase = ({ onClose, selectedPlan }) => {
   const navigate = useNavigate();
 
   const handleClose = () => {
-    // Add to context if purchaseData exists
     if (onClose) {
       onClose(selectedPlan);
     }
-
     navigate("/my-account?view=amc");
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-10">
-      <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
-        <CheckCircle
-          size={70}
-          className="text-white fill-green-500 mb-8 justify-between ml-35"
-          aria-label="Payment Successful"
-        />
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 text-center max-w-lg w-full mx-auto">
+        <div className="flex justify-center mb-6">
+          <div className="bg-green-500 rounded-full w-16 h-16 flex items-center justify-center">
+            <Check className="text-white w-8 h-8" strokeWidth={3} />
+          </div>
+        </div>
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">
           Thank You for Your Purchase!
         </h2>
-        <p className="text-gray-600 mb-8 text-sm">
-          Your AMC Plan is active — enjoy a year of worry<br></br>-free service
-          and priority support.
+
+        <p className="text-gray-600 text-base leading-relaxed mb-8 p-2">
+          Your AMC Plan has been purchased — it will be activated within 24
+          hours. You can start enjoying worry-free service and priority support
+          soon.
         </p>
-        <Button
-          text="Close"
-          className="px-15 py-3 bg-white border text-[#266DDF] font-semibold rounded-lg hover:bg-blue-700 hover:text-white transition"
+
+       
+        <button
           onClick={handleClose}
-        />
+          className="px-20 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg active:scale-95 transition-transform"
+        >
+          Close
+        </button>
       </div>
     </div>
   );

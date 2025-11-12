@@ -6,11 +6,13 @@ import vehicleIcon from "../assets/avehicle.webp";
 import moneyIcon from "../assets/money.webp";
 import { LogOut } from "lucide-react";
 import { getUserVehicles } from "../api/vehicleApi";
+import { logoutUser } from "../api/authApi";
 
 const AccountSidebar = ({ activeView, setActiveView }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [vehicleCount, setVehicleCount] = useState(0);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const fetchVehicleCount = async () => {
@@ -18,12 +20,12 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
         const vehicles = await getUserVehicles();
         setVehicleCount(vehicles.length);
       } catch (error) {
+        setVehicleCount(0);
         console.error("Error fetching vehicle count:", error);
       }
     };
     fetchVehicleCount();
 
-    // Listen for vehicle count changes
     const handleVehicleCountChange = () => {
       fetchVehicleCount();
     };
@@ -35,9 +37,18 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
     };
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    
+    setIsLoggingOut(true);
+    try {
+      await logoutUser();
+    } catch (error) {
+      console.error("Logout API failed:", error);
+    } finally {
+      logout();
+      navigate("/", { replace: true });
+    }
   };
 
   const sidebarItems = [
@@ -53,12 +64,7 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
   ];
 
   return (
-    <aside
-      className="
-        w-full md:w-72 lg:w-80
-        bg-white rounded-[20px] overflow-hidden shadow-sm
-      "
-    >
+    <aside className="w-full md:w-72 lg:w-80 bg-white rounded-[20px] overflow-hidden shadow-sm">
       <div className="px-4 py-3">
         <h2 className="text-base sm:text-[17px] md:text-[18px] font-medium text-[#2F3A41]">
           My Account
@@ -72,17 +78,11 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
               key={item.id}
               onClick={() => setActiveView(item.id)}
               aria-current={isActive ? "page" : undefined}
-              className={`
-                flex items-center w-full gap-3
-                px-3 sm:px-4 py-3 sm:py-3.5
-                text-left transition-all duration-100
-                
-                ${
-                  isActive
-                    ? "bg-[#F0F7FF] border-l-4 border-[#266DDF] font-medium"
-                    : "bg-transparent hover:bg-gray-50"
-                }
-              `}
+              className={`flex items-center w-full gap-3 px-3 sm:px-4 py-3 sm:py-3.5 text-left transition-all duration-100 ${
+                isActive
+                  ? "bg-[#F0F7FF] border-l-4 border-[#266DDF] font-medium"
+                  : "bg-transparent hover:bg-gray-50"
+              }`}
             >
               <img
                 src={item.img}
@@ -106,11 +106,12 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
         <div className="border-t border-gray-200 mt-1 sm:mt-2"></div>
         <button
           onClick={handleLogout}
-          className="flex items-center w-full gap-3 px-3 sm:px-4 py-3 sm:py-3.5 text-left transition-all duration-100 bg-transparent hover:bg-red-50"
+          disabled={isLoggingOut}
+          className="flex items-center w-full gap-3 px-3 sm:px-4 py-3 sm:py-3.5 text-left transition-all duration-100 bg-transparent hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <LogOut size={20} className="text-red-500 shrink-0" />
           <span className="flex-1 text-sm sm:text-[15px] md:text-base text-red-500 font-medium">
-            Logout
+            {isLoggingOut ? "Logging out..." : "Logout"}
           </span>
         </button>
       </nav>

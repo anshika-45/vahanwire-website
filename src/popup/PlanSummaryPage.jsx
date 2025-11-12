@@ -14,9 +14,10 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
   const [paymentData, setPaymentData] = useState(null);
   const [viewCouponOpen, setViewCouponOpen] = useState(false);
 
-const handleViewCoupon = () => {
+  const handleViewCoupon = () => {
     setViewCouponOpen(!viewCouponOpen);
   };
+
   useEffect(() => {
     if (isOpen) {
       setCurrentView("summary");
@@ -56,15 +57,19 @@ const handleViewCoupon = () => {
     { label: "Starting Problem" },
   ];
 
-  const billing = [
-    { label: "Amount", value: `₹${plan?.price || "0"}` },
-    { label: "Items", value: "1" },
-    { label: "Discount", value: "-₹100" },
-    { label: "Subtotal", value: "₹899" },
-    { label: "GST (18%)", value: "₹161.82" },
-  ];
+  const amount = plan?.price || 0;
+  const discount = 100;
+  const subtotal = amount - discount;
+  const gstRate = 0.18;
+  const gstAmount = subtotal * gstRate;
+  const total = Math.round(subtotal + gstAmount);
 
-  const total = plan?.price;
+  const billing = [
+    { label: "Items", value: "1" },
+    { label: "Amount", value: `₹${amount.toLocaleString()}` },
+    { label: "Discount", value: `-₹${discount}` },
+    { label: "GST (18%)", value: `₹${Math.round(gstAmount).toLocaleString()}` },
+  ];
 
   const handleProceedToPayment = async () => {
     if (!plan?._id) {
@@ -175,23 +180,21 @@ const handleViewCoupon = () => {
           ))}
         </div>
 
-        {/* ===== Coupon Section ===== */}
-<div className="bg-white rounded-xl px-6 py-5 border border-gray-200">
-  <h3 className="font-semibold text-gray-800 mb-3 text-2xl">
-    Have a Discount Coupon?
-  </h3>
+        <div className="bg-white rounded-xl px-6 py-5 border border-gray-200">
+          <h3 className="font-semibold text-gray-800 mb-3 text-2xl">
+            Have a Discount Coupon?
+          </h3>
 
-  <p className="text-sm text-[#242424]">Enter Code</p>
+          <p className="text-sm text-[#242424] mb-2">Enter Code</p>
 
-  <div className="bg-[#F8F8F8] rounded-lg px-4 py-3 flex justify-between items-center border border-[#94b6ed]">
-    <div className="flex flex-col gap-[2px]">
-      <p className="flex items-center gap-2 text-[#242424] text-md font-bold">
-<img src={coupon} alt="coupon icon" className="w-5 h-5 object-contain" />
+          <div className="bg-[#F8F8F8] rounded-lg px-4 py-3 flex justify-between items-center border border-[#94b6ed]">
+            <div className="flex flex-col gap-[2px]">
+              <p className="flex items-center gap-2 text-[#242424] text-md font-bold">
+                <img src={coupon} alt="coupon icon" className="w-5 h-5 object-contain" />
+                Get a CashBack with...
+              </p>
 
-        Get a CashBack with...
-      </p>
-
-      <button
+              <button
                 onClick={handleViewCoupon}
                 className="text-[#266DDF] cursor-pointer"
               >
@@ -202,46 +205,45 @@ const handleViewCoupon = () => {
                   <ViewCoupons handleClick={handleViewCoupon} />
                 </div>
               )}
-    </div>
-
-    <button
-      className="
-        text-[#266DDF]
-        border border-[#266DDF]
-        px-6 py-2
-        rounded-lg
-        font-medium
-        text-sm
-        bg-transparent
-        hover:bg-[#266DDF]
-        hover:text-white
-        transition
-      "
-    >
-      Apply
-    </button>
-  </div>
-</div>
-
-
-
-        {/* ===== Billing Section ===== */}
-        <div className="bg-white rounded-xl px-6 py-5 mb-20">
-          <h3 className="font-semibold text-[#333333] mb-2 text-2xl">
-            Billing Details
-          </h3>
-          {billing.map((item, i) => (
-            <div
-              key={i}
-              className="flex justify-between py-1 text-[#333333] text-md"
-            >
-              <span>{item.label}</span>
-              <span>{item.value}</span>
             </div>
-          ))}
-          <div className="flex justify-between py-3 mt-3 text-xl font-bold text-[#333333] px-2 rounded">
-            <span>Total Payable</span>
-            <span>₹{total}</span>
+
+            <button
+              className="
+                text-[#266DDF]
+                border border-[#266DDF]
+                px-6 py-2
+                rounded-lg
+                font-medium
+                text-sm
+                bg-transparent
+                hover:bg-[#266DDF]
+                hover:text-white
+                transition
+              "
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-xl overflow-hidden mb-20">
+          <div className="px-6 py-5">
+            <h3 className="font-semibold text-[#333333] mb-4 text-2xl">
+              Billing Details
+            </h3>
+            {billing.map((item, i) => (
+              <div
+                key={i}
+                className="flex justify-between py-2 text-[#555555] text-base"
+              >
+                <span>{item.label}</span>
+                <span className="font-medium">{item.value}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between items-center py-4 px-6 bg-[#E9F0FC] text-black">
+            <span className="text-xl">Total Payable</span>
+            <span className="text-xl">₹{total.toLocaleString()}</span>
           </div>
         </div>
       </div>

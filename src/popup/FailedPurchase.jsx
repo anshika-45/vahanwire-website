@@ -3,6 +3,7 @@ import Button from "../components/Button";
 import failureIcon from "../assets/failedpurchase.png";
 
 const FailedPurchase = ({ onClose, reason }) => {
+  
   return (
     <div className="flex flex-col items-center justify-center py-10">
       <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
@@ -21,7 +22,7 @@ const FailedPurchase = ({ onClose, reason }) => {
         </h2>
 
         <p className="text-gray-600 mb-8 text-sm leading-relaxed">
-          We couldn’t complete your payment.{" "}
+          We couldn't complete your payment.{" "}
           {reason ? (
             <>
               <br />

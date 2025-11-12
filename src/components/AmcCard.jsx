@@ -67,7 +67,7 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
           Buy Now
         </button>
       </div>
-      {isEssential && <img loading="lazy" src={essentialPlanImg} alt="Essential Plan" className="absolute top-52 -right-2 h-7 w-auto z-20" />}
+      {/* {isEssential && <img loading="lazy" src={essentialPlanImg} alt="Essential Plan" className="absolute top-52 -right-2 h-7 w-auto z-20" />} */}
     </div>
   );
 };

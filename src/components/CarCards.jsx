@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import EditVehicleModal from "./EditVehicleModal";
 import AddVehicleModal from "./AddVehicleModal";
+import EditVehicle from "../popup/EditVehicle";
 import vehicleImage1 from "../assets/acar-2.webp";
 import vehicleImage2 from "../assets/acar-1.webp";
 import deleteIcon from "../assets/adelete.webp";
 import editIcon from "../assets/aedit.webp";
 import checkIcon from "../assets/circle-check-filled.webp";
 import { getUserVehicles, deleteUserVehicle } from "../api/vehicleApi";
+
 const VehicleCard = ({
   title,
   vehicleNumber,
@@ -95,37 +97,60 @@ const CarCards = () => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [amcPopupOpen, setAmcPopupOpen] = useState(false);
  
   const fetchUserVehicles = async () => {
     setLoading(true);
-    const vehicles = await getUserVehicles();
-    const formatted = vehicles.map((v, index) => ({
-      _id: v._id,
-      id: v._id,
-      title: `${v.brand} ${v.model}`,
-      vehicleNumber: v.vehicleNumber,
-      vehicleType: v.vehicleType,
-      brand: v.brand,
-      model: v.model,
-      fuelType: v.fuelType,
-      amcLabel: "",
-      image: index % 2 === 0 ? vehicleImage1 : vehicleImage2,
-      tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
-    }));
-    setCars(formatted);
-    setLoading(false);
+    try {
+      const vehicles = await getUserVehicles();
+      console.log("jecbjhbjhbjhb",vehicles);
+      const formatted = vehicles.map((v, index) => ({
+        _id: v._id,
+        id: v._id,
+        title: `${v.brand} ${v.model}`,
+        vehicleNumber: v.vehicleNumber,
+        vehicleType: v.vehicleType,
+        brand: v.brand,
+        model: v.model,
+        fuelType: v.fuelType,
+        year: v.year,
+        amcLabel: "",
+        image: index % 2 === 0 ? vehicleImage1 : vehicleImage2,
+        tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
+      }));
+      console.log("keqbkjbckj",formatted);
+      setCars(formatted);
+    } catch (error) {
+      console.error("Error fetching vehicles:", error);
+    } finally {
+      setLoading(false);
+    }
   };
-  
+  console.log("kejj2bkjcbjh",cars);
   useEffect(() => {
     fetchUserVehicles();
   }, []);
 
   const handleDelete = async (vehicleId) => {
-    if (window.confirm("Are you sure you want to delete this vehicle?")) {
-      await deleteUserVehicle(vehicleId);
-      setCars((prev) => prev.filter((car) => car.id !== vehicleId));
-      // Trigger vehicle count update in sidebar
-      window.dispatchEvent(new Event("vehicleCountChanged"));
+    if (!window.confirm("Are you sure you want to delete this vehicle?")) {
+      return;
+    }
+  
+    try {
+      const response = await deleteUserVehicle(vehicleId);
+      if (response.success) {
+        setCars((prev) => prev.filter((car) => car.id !== vehicleId));
+        window.dispatchEvent(new Event("vehicleCountChanged"));
+      }
+    } catch (error) {
+      if (
+        error.response?.status === 400 && 
+        error.response?.data?.message === "Cannot delete vehicle with active AMC purchase"
+      ) {
+        setAmcPopupOpen(true);
+      } else {
+        console.error("Error deleting vehicle:", error);
+      }
     }
   };
 
@@ -137,7 +162,6 @@ const CarCards = () => {
   const handleAddSubmit = () => {
     setAddModalOpen(false);
     fetchUserVehicles();
-    // Trigger vehicle count update in sidebar
     window.dispatchEvent(new Event("vehicleCountChanged"));
   };
 
@@ -156,6 +180,12 @@ const CarCards = () => {
         onSubmit={handleAddSubmit}
       />
 
+      <EditVehicle
+        isOpen={amcPopupOpen}
+        onClose={() => setAmcPopupOpen(false)}
+        type="delete"
+      />
+
       {loading ? (
         <p className="text-center text-sm text-gray-500 py-6">
           Loading vehicles...
@@ -165,12 +195,14 @@ const CarCards = () => {
           No vehicles found.
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6 ">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
           {cars.map((car) => (
             <VehicleCard
               key={car.id}
               title={car.title}
               vehicleNumber={car.vehicleNumber}
+              fuelType={car.fuelType}
+              year={car.year}
               image={car.image}
               tone={car.tone}
               onEdit={() => {

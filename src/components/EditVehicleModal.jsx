@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import carColor from "../assets/CarFill.webp";
-import carOutline from "../assets/CarFade.webp";
+import carColor from "../assets/CarRed.png";
+import carOutline from "../assets/CarGrey.png";
 import bikeColor from "../assets/BikeFill.webp";
 import bikeOutline from "../assets/BikeFade.webp";
 import { updateUserVehicle } from "../api/vehicleApi";
@@ -14,6 +14,7 @@ const Backdrop = ({ onClose }) => (
 );
 
 const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
+  console.log("ewkbckjbkj", initial);
   const [vehicleType, setVehicleType] = useState("car");
   const [form, setForm] = useState({
     vehicleNumber: "",
@@ -22,8 +23,22 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
     year: "",
     fuelType: "",
   });
+  const [errors, setErrors] = useState({
+    vehicleNumber: "",
+    brand: "",
+    model: "",
+    year: "",
+    fuelType: "",
+  });
+  const [touched, setTouched] = useState({
+    vehicleNumber: false,
+    brand: false,
+    model: false,
+    year: false,
+    fuelType: false,
+  });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
     if (!open) return;
@@ -46,61 +61,168 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
         year: initial.year || "",
         fuelType: initial.fuelType || "",
       });
+      setErrors({
+        vehicleNumber: "",
+        brand: "",
+        model: "",
+        year: "",
+        fuelType: "",
+      });
+      setTouched({
+        vehicleNumber: false,
+        brand: false,
+        model: false,
+        year: false,
+        fuelType: false,
+      });
     }
   }, [initial]);
 
-  if (!open) return null;
+  const validateField = (name, value) => {
+    switch (name) {
+      case "vehicleNumber":
+        if (!value.trim()) return "Vehicle number is required";
+        const cleanValue = value.replace(/\s/g, '').toUpperCase();
+        const vehicleNumberRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{0,4}[0-9]{3,4}$/;
+        
+        if (!vehicleNumberRegex.test(cleanValue)) {
+          return "Please enter a valid vehicle number (e.g., AB12CD1234, KA01AB1234)";
+        }
+        
+        if (cleanValue.length < 8 || cleanValue.length > 12) {
+          return "Vehicle number should be between 8-12 characters";
+        }
+        return "";
+      
+      case "brand":
+        if (!value.trim()) return "Brand is required";
+        if (!/^[A-Za-z0-9\s&.-]+$/.test(value)) return "Please enter a valid brand name";
+        if (value.trim().length < 2) return "Brand name should be at least 2 characters";
+        return "";
+      
+      case "model":
+        if (!value.trim()) return "Model is required";
+        if (!/^[A-Za-z0-9\s&.-]+$/.test(value)) return "Please enter a valid model name";
+        if (value.trim().length < 1) return "Model name is required";
+        return "";
+      
+      case "year":
+        if (!value.trim()) return "Manufacture year is required";
+        if (!/^\d{4}$/.test(value)) return "Please enter a valid year (YYYY)";
+        const yearNum = parseInt(value);
+        const currentYear = new Date().getFullYear();
+        if (yearNum < 1900 || yearNum > currentYear + 1) {
+          return `Year must be between 1900 and ${currentYear + 1}`;
+        }
+        return "";
+      
+      case "fuelType":
+        if (!value.trim()) return "Fuel type is required";
+        // Common fuel type validation
+        const validFuelTypes = ['petrol', 'diesel', 'electric', 'cng', 'hybrid', 'lpg', 'ev'];
+        if (!validFuelTypes.includes(value.toLowerCase())) {
+          return "Please enter a valid fuel type (Petrol, Diesel, Electric, CNG, Hybrid, LPG, EV)";
+        }
+        return "";
+      
+      default:
+        return "";
+    }
+  };
+
+  const formatVehicleNumber = (value) => {
+    return value.replace(/\s/g, "").toUpperCase();
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(form).forEach(key => {
+      newErrors[key] = validateField(key, form[key]);
+    });
+    setErrors(newErrors);
+    return !Object.values(newErrors).some(error => error !== "");
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    let processedValue = value;
+
+    if (name === "vehicleNumber") {
+      processedValue = formatVehicleNumber(value);
+    }
+
+    setForm((prev) => ({ ...prev, [name]: processedValue }));
+    
+    if (touched[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: validateField(name, processedValue)
+      }));
+    }
   };
 
-  const cleanReg = (v) => (v || "").toUpperCase().replace(/[\s-]/g, "");
-  const isValidReg = (v) => /^[A-Z]{2}\d{2}[A-Z]{1,2}\d{4}$/.test(cleanReg(v));
-  const allowedFuel = ["PETROL", "DIESEL", "CNG", "EV", "ELECTRIC", "HYBRID", "LPG"];
-  const isValidFuel = (v) => allowedFuel.includes((v || "").trim().toUpperCase());
-  const isNonEmpty2 = (v) => (v || "").trim().length >= 2;
-
-  const validate = () => {
-    if (!form.vehicleNumber || !isValidReg(form.vehicleNumber)) {
-      setError("Enter a valid vehicle number (e.g., DL01AB1234).");
-      return false;
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched(prev => ({ ...prev, [name]: true }));
+    
+    let processedValue = value;
+    if (name === "vehicleNumber") {
+      processedValue = formatVehicleNumber(value);
+      setForm(prev => ({ ...prev, [name]: processedValue }));
     }
-    if (!isNonEmpty2(form.brand)) {
-      setError("Brand is required (min 2 characters).");
-      return false;
-    }
-    if (!isNonEmpty2(form.model)) {
-      setError("Model is required (min 2 characters).");
-      return false;
-    }
-    if (!form.fuelType) {
-      setError("Fuel type is required.");
-      return false;
-    } else if (!isValidFuel(form.fuelType)) {
-      setError("Allowed: Petrol, Diesel, CNG, EV, Electric, Hybrid, LPG.");
-      return false;
-    }
-    setError("");
-    return true;
+    
+    setErrors(prev => ({
+      ...prev,
+      [name]: validateField(name, processedValue)
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
+    setSubmitError("");
+
+    const allTouched = Object.keys(touched).reduce((acc, key) => {
+      acc[key] = true;
+      return acc;
+    }, {});
+    setTouched(allTouched);
+    
+    if (!validateForm()) {
+      setSubmitError("Please fix all validation errors before submitting");
+      return;
+    }
+    
     setLoading(true);
-    const updateData = {
-      vehicleNumber: cleanReg(form.vehicleNumber),
-      vehicleType,
-      brandName: form.brand.trim(),
-      modelName: form.model.trim(),
-      fuelType: form.fuelType.trim().toUpperCase()
-    };
-    await updateUserVehicle(initial._id, updateData);
-    onSubmit?.();
-    setLoading(false);
+    
+    try {
+      const updateData = {
+        vehicleNumber: form.vehicleNumber.replace(/\s/g, ''),
+        vehicleType,
+        brandName: form.brand.trim(),
+        modelName: form.model.trim(),
+        fuelType: form.fuelType.trim().toUpperCase(),
+        year: form.year
+      };
+      console.log("ekj2bjbkj");
+      console.log("kjejkc",updateData);
+      const res = await updateUserVehicle(initial._id, updateData);
+      console.log("kjebcjbj")
+      console.log("llllllllllll",res);
+      if (res?.data?.success || res?.success) {
+        alert("Vehicle updated successfully!");
+        onSubmit?.();
+        onClose();
+      } else {
+        setSubmitError(res?.data?.message || "Failed to update vehicle");
+      }
+    } catch (error) {
+      setSubmitError("An error occurred while updating the vehicle");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  if (!open) return null;
 
   return (
     <>
@@ -121,54 +243,59 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
           </div>
 
           <div className="p-4 sm:p-6">
-            <div className="flex items-center justify-center gap-3 sm:gap-6 md:gap-10 mb-4 pb-4 border-b border-slate-200">
+            <div className="flex items-center justify-center gap-3 sm:gap-6 mb-3">
               <button
                 type="button"
                 onClick={() => setVehicleType("car")}
-                className={`flex flex-col items-center justify-center w-20 sm:w-24 h-20 sm:h-24 rounded-xl border-2 transition-all duration-200 ${
+                className={`relative flex flex-col items-center justify-start w-24 h-14 sm:w-26 sm:h-16 rounded-xl border-1 transition-all duration-150 ${
                   vehicleType === "car"
-                    ? "border-blue-600 bg-[#D9E7FE]"
-                    : "border-slate-200 bg-white hover:bg-slate-50"
+                    ? "border-[#266DDF] bg-[#ECF3FD] shadow-sm"
+                    : "border-[#ffffff]  hover:border-[#266DDF] hover:bg-[#ECF3FD]"
                 }`}
-                aria-pressed={vehicleType === "car"}
               >
                 <span
-                  className={`font-medium text-xs mb-1 ${
-                    vehicleType === "car" ? "text-blue-700" : "text-slate-600"
+                  className={`absolute top-0 px-3 py-0.5 rounded-b-[8px] text-[11px] font-semibold ${
+                    vehicleType === "car"
+                      ? "bg-[#E2A701] text-[#FFFFFF]"
+                      : "bg-[#FFF8E6] text-[#000000]"
                   }`}
                 >
                   Car
                 </span>
+
                 <img
                   src={vehicleType === "car" ? carColor : carOutline}
-                  alt={vehicleType === "car" ? "Car selected" : "Car"}
+                  alt="Car"
                   loading="lazy"
-                  className="h-6 sm:h-7 w-auto"
+                  className="h-7 sm:h-8 w-auto mt-8 sm:mt-7"
                 />
               </button>
 
+              {/* Bike */}
               <button
                 type="button"
                 onClick={() => setVehicleType("bike")}
-                className={`flex flex-col items-center justify-center w-20 sm:w-24 h-20 sm:h-24 rounded-xl border-2 transition-all duration-200 ${
+                className={`relative flex flex-col items-center justify-start w-24 h-14 sm:w-26 sm:h-16 rounded-xl border-1 transition-all duration-150 ${
                   vehicleType === "bike"
-                    ? "border-blue-600 bg-[#D9E7FE]"
-                    : "border-slate-200 bg-white hover:bg-slate-50"
+                    ? "border-[#266DDF] bg-[#ECF3FD] shadow-sm"
+                    : "border-[#ffffff]  hover:border-[#266DDF] hover:bg-[#ECF3FD]"
                 }`}
-                aria-pressed={vehicleType === "bike"}
               >
                 <span
-                  className={`font-medium text-xs mb-1 ${
-                    vehicleType === "bike" ? "text-blue-700" : "text-slate-600"
+                  className={`absolute top-0 px-3 py-0.5 rounded-b-[8px] text-[11px] font-semibold ${
+                    vehicleType === "bike"
+                      ? "bg-[#E2A701] text-[#FFFFFF]"
+                      : "bg-[#FFF8E6] text-[#000000]"
                   }`}
                 >
                   Bike
                 </span>
+
                 <img
                   src={vehicleType === "bike" ? bikeColor : bikeOutline}
-                  alt={vehicleType === "bike" ? "Bike selected" : "Bike"}
+                  alt="Bike"
                   loading="lazy"
-                  className="h-6 sm:h-7 w-auto"
+                  className="h-7 sm:h-8 w-auto mt-8 sm:mt-7"
                 />
               </button>
             </div>
@@ -177,18 +304,28 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
               onSubmit={handleSubmit}
               className="space-y-3 text-xs sm:text-sm"
             >
+              {/* Vehicle Number */}
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Vehicle Number
+                  Enter Vehicle Number
                 </label>
                 <input
                   name="vehicleNumber"
                   value={form.vehicleNumber}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   required
-                  className="w-full h-8 sm:h-9 border border-slate-300 rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none"
+                  className={`w-full h-8 sm:h-9 border rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
+                    errors.vehicleNumber && touched.vehicleNumber
+                      ? "border-red-500 bg-red-50"
+                      : "border-slate-300"
+                  }`}
                   placeholder="Enter Vehicle Number"
+                  maxLength={15}
                 />
+                {errors.vehicleNumber && touched.vehicleNumber && (
+                  <p className="text-red-600 text-xs mt-1">{errors.vehicleNumber}</p>
+                )}
               </div>
 
               <div className="flex items-center gap-4 py-1">
@@ -199,62 +336,97 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
 
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Manufacture Year
+                  Manufacture Year 
                 </label>
                 <input
                   name="year"
                   value={form.year}
                   onChange={handleChange}
-                  className="w-full h-8 sm:h-9 border border-slate-300 rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none"
+                  onBlur={handleBlur}
+                  className={`w-full h-8 sm:h-9 border rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
+                    errors.year && touched.year
+                      ? "border-red-500 bg-red-50"
+                      : "border-slate-300"
+                  }`}
                   placeholder="Enter Manufacture Year"
+                  maxLength={4}
                 />
+                {errors.year && touched.year && (
+                  <p className="text-red-600 text-xs mt-1">{errors.year}</p>
+                )}
               </div>
+
 
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Fuel Type
+                  Select Fuel Type 
                 </label>
                 <input
                   name="fuelType"
                   value={form.fuelType}
                   onChange={handleChange}
-                  className="w-full h-8 sm:h-9 border border-slate-300 rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none"
-                  placeholder="Enter Fuel Type"
-                  list="fuel-options"
+                  onBlur={handleBlur}
+                  required
+                  className={`w-full h-8 sm:h-9 border rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
+                    errors.fuelType && touched.fuelType
+                      ? "border-red-500 bg-red-50"
+                      : "border-slate-300"
+                  }`}
+                  placeholder="Enter Fuel Type (Petrol, Diesel, Electric, etc.)"
                 />
+                {errors.fuelType && touched.fuelType && (
+                  <p className="text-red-600 text-xs mt-1">{errors.fuelType}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Brand
+                  Select Brand 
                 </label>
                 <input
                   name="brand"
                   value={form.brand}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   required
-                  className="w-full h-8 sm:h-9 border border-slate-300 rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none"
+                  className={`w-full h-8 sm:h-9 border rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
+                    errors.brand && touched.brand
+                      ? "border-red-500 bg-red-50"
+                      : "border-slate-300"
+                  }`}
                   placeholder="Enter Brand"
                 />
+                {errors.brand && touched.brand && (
+                  <p className="text-red-600 text-xs mt-1">{errors.brand}</p>
+                )}
               </div>
 
+              {/* Model */}
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Model
+                  Select Model 
                 </label>
                 <input
                   name="model"
                   value={form.model}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   required
-                  className="w-full h-8 sm:h-9 border border-slate-300 rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none"
+                  className={`w-full h-8 sm:h-9 border rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
+                    errors.model && touched.model
+                      ? "border-red-500 bg-red-50"
+                      : "border-slate-300"
+                  }`}
                   placeholder="Enter Model"
                 />
+                {errors.model && touched.model && (
+                  <p className="text-red-600 text-xs mt-1">{errors.model}</p>
+                )}
               </div>
 
-              {error && (
-                <p className="text-red-600 text-xs sm:text-sm mt-1 text-center">
-                  {error}
+              {submitError && (
+                <p className="text-red-600 text-xs sm:text-sm mt-1 text-center bg-red-50 py-2 rounded-lg">
+                  {submitError}
                 </p>
               )}
 
@@ -279,16 +451,6 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
           </div>
         </div>
       </div>
-
-      <datalist id="fuel-options">
-        <option>Petrol</option>
-        <option>Diesel</option>
-        <option>CNG</option>
-        <option>EV</option>
-        <option>Electric</option>
-        <option>Hybrid</option>
-        <option>LPG</option>
-      </datalist>
     </>
   );
 };

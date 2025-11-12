@@ -64,7 +64,7 @@ function Navbar() {
           <button
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "Close menu" : "Open menu"}
-            className="flex items-center justify-center w-10 h-10 self-start"
+            className="flex items-center justify-center p-4 self-start"
           >
             {isOpen ? (
               <X size={24} className="text-[#242424]" />
