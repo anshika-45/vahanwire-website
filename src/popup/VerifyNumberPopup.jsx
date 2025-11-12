@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../components/Button";
-import phoneGif from "../assets/AnimationPhone.webp";
+import phoneGif from "../assets/Animation.svg";
 import OtpVerifypopup from "./OtpVerifypopup";
 import Modal from "../components/Modal";
 import { sendOtp } from "../api/authApi";

@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import privacyPolicyBanner from "../assets/privacy-policy-banner.webp";
+import privacyPolicyBanner from "../assets/PrivacyPolicy.svg";
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 const TwoColumnInfoLayout = React.lazy(() => import("../components/TwoColumnInfoLayout"));

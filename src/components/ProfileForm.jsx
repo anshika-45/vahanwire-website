@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import uploadIcon from "../assets/upload.webp";
+import uploadIcon from "../assets/upload.svg";
 import Button from "./Button";
 import {
   getMyProfile,
@@ -36,29 +36,40 @@ const ProfileForm = () => {
     fetchUserProfile();
   }, []);
 
+  const validateField = (name, value) => {
+    let error = "";
+
+    if (name === "name") {
+      if (!value.trim()) error = "Name is required";
+      else if (value.length < 3)
+        error = "Name must be at least 3 characters long";
+    }
+
+    if (name === "email") {
+      if (!value.trim()) error = "Email is required";
+      else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value))
+        error = "Invalid email format";
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: error }));
+    return error === "";
+  };
+
+  const validateForm = () => {
+    const validName = validateField("name", formData.name);
+    const validEmail = validateField("email", formData.email);
+    return validName && validEmail;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) validateField(name, value);
   };
 
-  
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    } else if (formData.name.length < 3) {
-      newErrors.name = "Name must be at least 3 characters";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    validateField(name, value);
   };
 
   const handleImageChange = async (e) => {
@@ -125,14 +136,12 @@ const ProfileForm = () => {
           </div>
         </div>
 
-       
         <div className="md:w-2/3 w-full">
           {isEditing ? (
             <form
               onSubmit={handleUpdate}
               className="flex flex-col gap-4 sm:gap-5"
             >
-            
               <div>
                 <label className="block text-sm md:text-base text-[#333] mb-1">
                   Name*
@@ -142,6 +151,7 @@ const ProfileForm = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   className={`w-full h-11 md:h-12 rounded-lg border ${
                     errors.name ? "border-red-400" : "border-[#D9E7FE]"
                   } px-3 sm:px-4 text-sm md:text-base focus:ring-2 focus:ring-[#D9E7FE] outline-none`}
@@ -151,7 +161,6 @@ const ProfileForm = () => {
                 )}
               </div>
 
-           
               <div>
                 <label className="block text-sm md:text-base text-[#333] mb-1">
                   Phone*
@@ -164,7 +173,6 @@ const ProfileForm = () => {
                 />
               </div>
 
-          
               <div>
                 <label className="block text-sm md:text-base text-[#333] mb-1">
                   Email*
@@ -174,6 +182,7 @@ const ProfileForm = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   className={`w-full h-11 md:h-12 rounded-lg border ${
                     errors.email ? "border-red-400" : "border-[#D9E7FE]"
                   } px-3 sm:px-4 text-sm md:text-base focus:ring-2 focus:ring-[#D9E7FE] outline-none`}

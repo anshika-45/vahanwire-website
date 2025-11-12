@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Button from "./Button";
 import { Check, X } from "lucide-react";
-import detailIcon from "../assets/info.png";
+import detailIcon from "../assets/Vector.png";
 import PlanSummaryPage from "../popup/PlanSummaryPage";
 import { useAmcData } from "../context/AmcDataContext";
 import { getAMCPlansByCategory } from "../api/amcApi";

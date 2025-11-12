@@ -11,7 +11,7 @@ export const updateUserVehicle = async (vehicleId, updateData) => {
 };
 
 export const deleteUserVehicle = async (vehicleId) => {
-  const res = await axiosInstance.delete(`/vehicle/user-vehicles/${vehicleId}`);
+  const res = await axiosInstance.delete(`/vehicle/delete-without-amc/${vehicleId}`);
   return res.data;
 };
 
@@ -30,3 +30,7 @@ export const searchUserVehicle = async (vehicleNumber) => {
     return res.data;
 };
 
+export const getUserVehicleWithoutAMC = async () => {
+  const res = await axiosInstance.get("/vehicle/without-amc");
+  return res.data?.data?.vehicles || [];
+};

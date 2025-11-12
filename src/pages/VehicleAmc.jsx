@@ -153,6 +153,7 @@ const VehicleAmc = () => {
           isOpen={isVehicleOpen}
           onClose={() => setIsVehicleOpen(false)}
           plan={selectedPlan}
+          onBack={()=>setIsVehicleOpen(false)}
         />
       </Suspense>
       <Suspense fallback={null}>

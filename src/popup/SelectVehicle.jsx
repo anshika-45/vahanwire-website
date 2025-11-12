@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
-import brezzaImg from "../assets/vehicle.webp";
+import carImg from "../assets/vehicle.webp"; 
+import bikeImg from "../assets/bike2.png";
 import verifyIcon from "../assets/verify.webp";
 import {
   searchUserVehicle,
   addUserVehicle,
-  getUserVehicles,
+  getUserVehicleWithoutAMC,
 } from "../api/vehicleApi";
 import { selectAMCVehicle } from "../api/amcApi";
 
@@ -36,16 +37,22 @@ const SelectVehicle = ({
   const [isProceeding, setIsProceeding] = useState(false);
   const initialized = useRef(false);
 
-  // ✅ Validate Indian vehicle number format
+  const getVehicleImage = (vehicleType) => {
+    return vehicleType?.toLowerCase() === "bike" ? bikeImg : carImg;
+  };
   const validateVehicleNumber = (number) => {
     const cleaned = number.trim().toUpperCase().replace(/[-\s]/g, "");
-    const pattern = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
+
     if (!cleaned) return "Please enter the vehicle number";
+    const indianPattern = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
+    const tempPattern = /^TEMP[0-9]{4,6}$/;
     if (cleaned.length < 8 || cleaned.length > 10)
       return "Vehicle number should be 8–10 characters long";
-    if (!pattern.test(cleaned))
-      return "Invalid format. Example: DL01AB1234 or MH12DE1433";
-    return "";
+    if (!indianPattern.test(cleaned) && !tempPattern.test(cleaned))
+      return "Invalid vehicle number format. Example: DL01AB1234 or TEMP1234";
+    if (/^[A-Z]{2}0{1,2}[A-Z]{1,3}0+$/.test(cleaned))
+      return "Vehicle number cannot contain all zeros";
+    return ""; 
   };
 
   useEffect(() => {
@@ -63,7 +70,8 @@ const SelectVehicle = ({
       } else {
         const loadExistingVehicles = async () => {
           try {
-            const vehicles = await getUserVehicles();
+            const vehicles = await getUserVehicleWithoutAMC();
+            console.log("feb2ciubhbch", vehicles);
             if (vehicles?.length > 0) {
               const formatted = vehicles.map((v) => ({
                 number: v.vehicleNumber.toUpperCase(),
@@ -98,10 +106,18 @@ const SelectVehicle = ({
     const data = await searchUserVehicle(normalizedNumber);
     setIsLoading(false);
 
-    const foundVehicle =
-      data?.data?.vehicle || data?.vehicle || data?.data?.data?.vehicle;
+    if (data?.data?.hasAMC) {
+      setErrors({
+        number: `This vehicle already has an active AMC plan (${
+          data.data.amcDetails?.planName || "Active"
+        }). Please select another vehicle.`,
+      });
+      return;
+    }
 
-    if (data?.data?.found || data?.found) {
+    const foundVehicle = data?.data?.vehicle;
+
+    if (data?.data?.found && !data?.data?.hasAMC) {
       const newVehicle = {
         number: foundVehicle.vehicleNumber.toUpperCase(),
         model: foundVehicle.model,
@@ -166,9 +182,7 @@ const SelectVehicle = ({
       return;
     }
 
-    const vehicleData = addedVehicles.find(
-      (v) => v.number === selectedVehicle
-    );
+    const vehicleData = addedVehicles.find((v) => v.number === selectedVehicle);
     if (!vehicleData) {
       alert("Vehicle not found");
       return;
@@ -216,7 +230,6 @@ const SelectVehicle = ({
           </span>
         </div>
 
-        {/* Existing Vehicle List */}
         <div className="w-full bg-white rounded-xl p-6 mb-4">
           <h2 className="text-xl font-semibold text-[#242424] mb-4">
             Select a Vehicle to Subscribe
@@ -234,7 +247,7 @@ const SelectVehicle = ({
                 onClick={() => setSelectedVehicle(vehicle.number)}
               >
                 <img
-                  src={brezzaImg}
+                  src={getVehicleImage(vehicleType)} 
                   alt={vehicle.model}
                   className="w-20 h-12 object-cover rounded"
                 />
@@ -242,9 +255,7 @@ const SelectVehicle = ({
                   <div className="font-medium text-gray-900">
                     {vehicle.brand} {vehicle.model}
                   </div>
-                  <div className="text-xs text-gray-500">
-                    {vehicle.number}
-                  </div>
+                  <div className="text-xs text-gray-500">{vehicle.number}</div>
                 </div>
                 <input
                   type="checkbox"
@@ -261,7 +272,6 @@ const SelectVehicle = ({
           )}
         </div>
 
-        {/* Add New Vehicle */}
         <div className="bg-white rounded-xl p-6 w-full border border-gray-100 mb-20">
           <h2 className="text-xl font-semibold text-[#242424] mb-3">
             Add Vehicle
@@ -335,20 +345,17 @@ const SelectVehicle = ({
           )}
         </div>
 
-        {/* Proceed Button */}
-
-          <Button
-            text={isProceeding ? "Processing..." : "Proceed to AMC"}
-            className={`w-full py-3 rounded-lg font-semibold ${
-              selectedVehicle
-                ? "bg-[#266DDF] text-white hover:bg-blue-700"
-                : "bg-gray-300 text-gray-700 cursor-not-allowed"
-            }`}
-            onClick={handleProceed}
-            disabled={!selectedVehicle || isProceeding}
-          />
-        </div>
-      
+        <Button
+          text={isProceeding ? "Processing..." : "Proceed to AMC"}
+          className={`w-full py-3 rounded-lg font-semibold ${
+            selectedVehicle
+              ? "bg-[#266DDF] text-white hover:bg-blue-700"
+              : "bg-gray-300 text-gray-700 cursor-not-allowed"
+          }`}
+          onClick={handleProceed}
+          disabled={!selectedVehicle || isProceeding}
+        />
+      </div>
     </Modal>
   );
 };

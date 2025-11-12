@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "../components/Modal";
 import Button from "../components/Button";
-import otpImg from "../assets/AnimationPhone.webp";
+import otpImg from "../assets/Animation.svg";
 import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { verifyOtp, sendOtp } from "../api/authApi"; // ⬅️ add sendOtp
+import { verifyOtp, sendOtp } from "../api/authApi"; 
 import { getUserVehicles } from "../api/vehicleApi";
 
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));

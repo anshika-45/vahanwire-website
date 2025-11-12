@@ -30,14 +30,14 @@ const ComponentLoader = () => (
 );
 
 const VehicleAmcFilter = () => {
-  const { setIsLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
 
   const {
     plans,
-    vehicle,
+    vehicle: locationVehicle,
     selectedPlan: initialSelectedPlan,
   } = location.state || {};
 
@@ -51,7 +51,24 @@ const VehicleAmcFilter = () => {
     features,
   } = useAmcData();
 
-  const [selectedPlanState, setSelectedPlanState] = useState(null);
+  const [vehicle, setVehicle] = useState(() => {
+    const stored = sessionStorage.getItem('failedPaymentData');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return parsed.vehicle || locationVehicle;
+    }
+    return locationVehicle;
+  });
+
+  const [selectedPlanState, setSelectedPlanState] = useState(() => {
+    const stored = sessionStorage.getItem('failedPaymentData');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return parsed.selectedPlan || null;
+    }
+    return null;
+  });
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
 
@@ -59,18 +76,32 @@ const VehicleAmcFilter = () => {
   const txnid = searchParams.get("txnid");
 
   useEffect(() => {
-    setIsLoggedIn(true);
+    if (!isLoggedIn) {
+      navigate("/", { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
     document.body.style.overflow = "auto";
     document.documentElement.style.overflow = "auto";
     return () => {
       document.body.style.overflow = "auto";
       document.documentElement.style.overflow = "auto";
     };
-  }, [setIsLoggedIn]);
+  }, []);
 
   useEffect(() => {
     if (status === "success" || status === "failed") {
       setShowPopup(status);
+      
+      if (status === "failed") {
+        const stored = sessionStorage.getItem('failedPaymentData');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setVehicle(parsed.vehicle);
+          setSelectedPlanState(parsed.selectedPlan);
+        }
+      }
     }
   }, [status]);
 
@@ -85,19 +116,24 @@ const VehicleAmcFilter = () => {
       vehicleNumber: vehicle.vehicleNumber,
     });
 
-    console.log("kjejkckhuhgi",purchaseResponse);
-
     if (!purchaseResponse.success) {
       alert(purchaseResponse.message || "Failed to create AMC purchase");
       return;
     }
-   console.log("ej2fbhjvhv",purchaseResponse);
+
     const purchaseData = purchaseResponse.data;
-    setSelectedPlanState({
+    const planData = {
       ...plan,
       purchaseId: purchaseData._id,
       vehicleNumber: vehicle.vehicleNumber,
-    });
+    };
+
+    sessionStorage.setItem('failedPaymentData', JSON.stringify({
+      selectedPlan: planData,
+      vehicle: vehicle
+    }));
+
+    setSelectedPlanState(planData);
     setIsPopupOpen(true);
   };
 
@@ -113,12 +149,18 @@ const VehicleAmcFilter = () => {
     setSearchParams(searchParams, { replace: true });
   };
 
-  const handleRetry = () => {
+  const handleSuccessClose = () => {
+    sessionStorage.removeItem('failedPaymentData');
     setShowPopup(null);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
   };
+
+  if (!isLoggedIn) {
+    return null;
+  }
+
   return (
     <section className="bg-white w-full min-h-screen">
       <AMC
@@ -159,9 +201,6 @@ const VehicleAmcFilter = () => {
         <Suspense fallback={<BannerLoader />}>
           <AmcBanner onBuy={handleBuyNow} />
         </Suspense>
-        {/* <Suspense fallback={<BannerLoader />}>
-          <AddBanner />
-        </Suspense> */}
       </div>
 
       {isPopupOpen && (
@@ -178,12 +217,8 @@ const VehicleAmcFilter = () => {
       {showPopup === "success" && (
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <Suspense fallback={<div className="text-white">Loading...</div>}>
-            <SuccessPurchase 
-              onClose={(data) => {
-                if (data) {
-                  addPurchasedCard(data);
-                }
-              }}
+            <SuccessPurchase
+              onClose={handleSuccessClose}
               purchaseData={selectedPlanState}
             />
           </Suspense>
@@ -196,7 +231,7 @@ const VehicleAmcFilter = () => {
             <FailedPurchase
               reason="Your UPI payment was not completed or cancelled."
               onClose={handleClosePaymentPopup}
-              onRetry={handleRetry}
+              purchaseData={selectedPlanState}
             />
           </Suspense>
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import bgImage from "../assets/GetHelp.webp";
+import bgImage from "../assets/GetHelp.svg";
 
 const steps = [
   {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import locationIcon from "../assets/location-pin.webp";
-import dropdownIcon from "../assets/down-arrow.webp";
+import locationIcon from "../assets/LocationIcon.svg";
+import dropdownIcon from "../assets/down-arrow.svg";
 import { SearchIcon } from "lucide-react";
 import { getCityFromCoords } from "../api/authApi";
 

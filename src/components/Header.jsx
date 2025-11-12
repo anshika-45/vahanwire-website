@@ -8,8 +8,8 @@ const Logo = lazy(() => import("./Logo"));
 const VerifyNumberPopup = lazy(() => import("../popup/VerifyNumberPopup"));
 const AccountSidebar = lazy(() => import("./AccountSidebar"));
 import { User } from "lucide-react";
-import dropdownIcon from "../assets/down-arrow.webp";
-import searchIcon from "../assets/search.webp";
+import dropdownIcon from "../assets/down-arrow.svg";
+import searchIcon from "../assets/SearchIcon.svg";
 
 const LazyFallback = () => (
   <div className="w-4 h-4 bg-[#ffffff] animate-pulse"></div>

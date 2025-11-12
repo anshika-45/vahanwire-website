@@ -8,7 +8,7 @@ const GetHelp = () => {
         <h1 className='text-2xl sm:text-3xl md:text-4xl font-medium text-[#242424] mb-4'>
                 Get Help on the Go in 3 Simple Steps
             </h1>
-        <p className='text-sm sm:text-base text-[#5C5C5C] mt-4'>
+        <p className='text-xs sm:text-lg text-[#5C5C5C] mt-4'>
                 Find nearby services, make a quick payment, and let our provider reach you — right where you are.
                 </p>
             </div>

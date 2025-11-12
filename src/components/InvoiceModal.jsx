@@ -33,8 +33,7 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
             status: data.payment.paymentStatus,
             payment: data.payment.paymentId,
             serviceCharge: data.plan.price || 0,
-            gst: Math.round((data.plan.price || 0) * 0.18),
-            total: Math.round((data.plan.price || 0) * 1.18),
+            total:  data.plan.price 
           });
         } else {
           setError("Failed to fetch invoice");
@@ -95,7 +94,6 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
 
               <Section title="Charges">
                 <Item label="Service Charge" value={`₹${invoice.serviceCharge}`} />
-                <Item label="GST" value={`₹${invoice.gst}`} />
               </Section>
             </>
           )}

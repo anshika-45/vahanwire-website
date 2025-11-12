@@ -1,11 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAmcData } from "../context/AmcDataContext";
-import carIcon from "../assets/car.webp";
-import carIconDark from "../assets/car-1.webp";
-import bikeIcon from "../assets/motorbike.webp";
-import bikeIconDark from "../assets/motorbike-1.webp";
-
+import carIcon from "../assets/car.svg";
+import carIconDark from "../assets/car-1.svg";
+import bikeIcon from "../assets/motorbike.svg";
+import bikeIconDark from "../assets/motorbike-1.svg";
 const AmcTabs = ({ showRemoveFilter }) => {
   const { amcType, setAmcType, getAmcTabs, vehicleType, clearFilter } = useAmcData();
   const navigate = useNavigate();

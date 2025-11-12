@@ -46,3 +46,13 @@ export const getCityFromCoords = async (lat, lon) => {
   });
   return response.data;
 };
+
+export const logoutUser = async () => {
+  try {
+    const response = await axiosInstance.post("/users/user/logout");
+    return response.data;
+  } catch (error) {
+    console.error("Logout API Error:", error);
+    throw error;
+  }
+};

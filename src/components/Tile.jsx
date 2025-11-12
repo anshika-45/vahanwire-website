@@ -14,7 +14,6 @@ const Tile = React.memo(function Tile({
   const handleTileClick = () => {
     navigate(linkHref);
     window.scrollTo({ top: 0, behavior: "smooth" });
-
   };
 
   return (
@@ -22,36 +21,40 @@ const Tile = React.memo(function Tile({
       className={`tile ${isHovered ? "hovered" : ""} 
         flex flex-col justify-between w-full
         max-w-[300px] sm:max-w-[350px] md:max-w-[400px]
-        h-45 sm:h-50 md:h-50 lg:h-50
         rounded-[12px] p-4 sm:p-5 md:p-6 lg:p-7 xl:p-[30px]
-        bg-white cursor-pointer border-none
+        bg-white cursor-pointer border-none text-left
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleTileClick}
     >
-      <div className="flex items-start gap-2 sm:gap-3">
-        {icon && (
-        <img
-        loading="lazy"
-        src={icon}
-        alt=""
-        className="w-20 sm:w-24 md:w-28 lg:w-36 h-20 sm:h-24 md:h-28 lg:h-36 object-contain flex-shrink-0"
-        width="144"
-        height="144"
-        decoding="async"
-        />
-        )}
-        <div>
-          <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold mt-1 sm:mt-2 md:mt-3 text-[#242424]">
+      <div className="flex items-start gap-3 sm:gap-4">
+        {/* Icon container with fixed dimensions */}
+        <div className="flex justify-center items-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 flex-shrink-0">
+          {icon && (
+            <img
+              loading="lazy"
+              src={icon}
+              alt=""
+              className="max-w-full max-h-full object-contain"
+              width="144"
+              height="144"
+              decoding="async"
+            />
+          )}
+        </div>
+
+        {/* Text content */}
+        <div className="flex flex-col justify-start">
+          <h3 className="text-sm sm:text-base md:text-lg font-semibold text-[#242424]">
             {title}
           </h3>
-          <p className="text-xs mt-1 text-[#5C5C5C]">{desc}</p>
+          <p className="text-xs sm:text-sm text-[#5C5C5C] mt-1 leading-snug">
+            {desc}
+          </p>
 
           {linkText && (
-            <span
-              className="text-sm mt-2 sm:mt-3 font-semibold flex items-end gap-1 text-[#266DDF] hover:text-blue-700"
-            >
+            <span className="text-sm mt-2 sm:mt-3 font-semibold flex items-center gap-1 text-[#266DDF] hover:text-blue-700">
               {linkText}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -72,11 +75,12 @@ const Tile = React.memo(function Tile({
         </div>
       </div>
 
+      {/* Hover effect styles */}
       <style>{`
         .tile {
           position: relative;
           border: 1px solid #C4D9F9;
-          transition: box-shadow 250ms ease; 
+          transition: box-shadow 250ms ease, border 250ms ease;
         }
         .tile.hovered {
           border: 1px solid transparent;
@@ -90,6 +94,7 @@ const Tile = React.memo(function Tile({
             ) border-box;
           background-origin: border-box;
           background-clip: padding-box, border-box;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.10);
         }
         .tile::before {
           content: "";
@@ -119,15 +124,12 @@ const Tile = React.memo(function Tile({
           0%   { background-position: 0% 50%; }
           100% { background-position: 100% 50%; }
         }
-        .tile.hovered {
-          box-shadow: 0 8px 20px rgba(0,0,0,0.10);
-        }
         @media (prefers-reduced-motion: reduce) {
           .tile, .tile::before { transition: none !important; }
         }
       `}</style>
-      </button>
-      );
+    </button>
+  );
 });
 
 Tile.displayName = "Tile";

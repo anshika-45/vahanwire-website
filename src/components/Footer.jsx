@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/Footerlogo.webp";
+import logo from "../assets/LogoFooter.svg";
 import bgImg from "../assets/Footerbg.webp";
 import { Link } from "react-router-dom";
 import FooterIcons from "./FooterIcons";
@@ -26,10 +26,18 @@ const Footer = () => {
         style={{ backgroundImage: `url(${bgImg})` }}
       ></div>
       <div className="relative container flex flex-col justify-between">
-        <div className="grid lg:grid-cols-5 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-12 md:pt-40 md:mt-30 pt-10">
+        <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-12 md:pt-40 md:mt-30 pt-10">
           <div className="h-auto mb-8 sm:mb-6 md:mb-0">
-            <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <img loading="lazy" src={logo} alt="Logo" className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6 cursor-pointer" />
+            <Link
+              to="/"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              <img
+                loading="lazy"
+                src={logo}
+                alt="Logo"
+                className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6 cursor-pointer"
+              />
             </Link>{" "}
             <p className="text-gray-300 text-xs sm:text-sm leading-tight mb-4 sm:mb-6 space-y-0.5">
               VahanWire connects you to nearby
@@ -38,7 +46,9 @@ const Footer = () => {
               <br />
               auto parts — in one Platform.
             </p>
-            <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 ">Follow Us</h2>
+            <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 ">
+              Follow Us
+            </h2>
             <div className="flex space-x-4">
               <FooterIcons />
             </div>
@@ -48,7 +58,9 @@ const Footer = () => {
               onClick={() => toggleSection("quickLinks")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">Quick Links</h3>
+              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">
+                Quick Links
+              </h3>
               <ChevronDown
                 size={18}
                 className={`md:hidden transition-transform ${
@@ -62,7 +74,13 @@ const Footer = () => {
               }`}
             >
               <li>
-                <Link to="/" className="hover:text-white transition" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                <Link
+                  to="/"
+                  className="hover:text-white transition"
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: "smooth" })
+                  }
+                >
                   Home
                 </Link>
               </li>
@@ -77,12 +95,18 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/privacy-policy" className="hover:text-white transition">
+                <Link
+                  to="/privacy-policy"
+                  className="hover:text-white transition"
+                >
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link to="/terms-condition" className="hover:text-white transition">
+                <Link
+                  to="/terms-condition"
+                  className="hover:text-white transition"
+                >
                   Terms & Conditions
                 </Link>
               </li>
@@ -93,7 +117,9 @@ const Footer = () => {
               onClick={() => toggleSection("forUser")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">For User</h3>
+              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">
+                For User
+              </h3>
               <ChevronDown
                 size={18}
                 className={`md:hidden transition-transform ${
@@ -133,7 +159,9 @@ const Footer = () => {
               onClick={() => toggleSection("forMechanic")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">For Mechanic</h3>
+              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">
+                For Mechanic
+              </h3>
               <ChevronDown
                 size={18}
                 className={`md:hidden transition-transform ${
@@ -173,7 +201,9 @@ const Footer = () => {
               onClick={() => toggleSection("contact")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">Contact For AMC Support</h3>
+              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">
+                Contact For AMC Support
+              </h3>
               <ChevronDown
                 size={18}
                 className={`md:hidden transition-transform ${
@@ -190,14 +220,21 @@ const Footer = () => {
                 <div className="bg-[#FBBA01] rounded-full p-2 flex-shrink-0 mt-0.5">
                   <MapPin size={14} className="text-[#000000] sm:w-4 md:w-4" />
                 </div>
-                <a href="#" className="hover:text-white transition text-xs sm:text-sm">
-                  Tower-B, Noida One, 819,<br /> Industrial Area, Sector 62,<br /> Noida,
-                  Uttar Pradesh 201309
+                <a
+                  href="#"
+                  className="hover:text-white transition text-xs sm:text-sm"
+                >
+                  Tower-B, Noida One, 819,
+                  <br /> Industrial Area, Sector 62,
+                  <br /> Noida, Uttar Pradesh 201309
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <div className="bg-[#FBBA01] rounded-full p-2 flex-shrink-0">
-                  <MailOpenIcon size={14} className="text-[#000000] sm:w-4 md:w-4" />
+                  <MailOpenIcon
+                    size={14}
+                    className="text-[#000000] sm:w-4 md:w-4"
+                  />
                 </div>
                 <a
                   href="mailto:info@vahanwire.com"
@@ -208,7 +245,10 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-2">
                 <div className="bg-[#FBBA01] rounded-full p-2 flex-shrink-0">
-                  <MailOpenIcon size={14} className="text-[#000000] sm:w-4 md:w-4" />
+                  <MailOpenIcon
+                    size={14}
+                    className="text-[#000000] sm:w-4 md:w-4"
+                  />
                 </div>
                 <a
                   href="mailto:amc@vahanwire.com"

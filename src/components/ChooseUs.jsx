@@ -1,22 +1,19 @@
 import React from "react";
-import Applogo from "../assets/Apple.webp";
-import Playlogo from "../assets/playstore.webp";
-import checkIcon from "../assets/check-circle.webp";
-import Choose1 from "../assets/choose1.webp";
-import Choose2 from "../assets/choose2.webp";
-import Choose3 from "../assets/choose3.webp";
-
-// NEW imports (replace the old appImage import)
-import bgMobile from "../assets/bg-mobile.png";
-import mobile from "../assets/mobile.png";
+import Applogo from "../assets/Apple.svg";
+import Playlogo from "../assets/Playstore.svg";
+import checkIcon from "../assets/CheckIcon.svg";
+import Choose1 from "../assets/Choose1.svg";
+import Choose2 from "../assets/Choose2.svg";
+import Choose3 from "../assets/Choose3.svg";
+import mobile from "../assets/Mobile.svg"; // ✅ Keep only this
 
 const ChooseUs = () => {
   return (
     <section className="bg-[#FAFCFF] overflow-hidden md:mt-10">
       <div className="mx-auto px-4 sm:px-6 md:px-6 md:max-w-lg lg:max-w-4xl">
-        {/* Half–Half on lg+, stacked on small */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 md:gap-6 items-center justify-items-center">
-          {/* LEFT: content (unchanged) */}
+          
+          {/* LEFT SIDE CONTENT */}
           <div className="bg-white rounded-2xl border border-[#BCD2F5] py-4 sm:py-6 md:py-8 px-4 sm:px-6 sm:space-y-5 text-left w-full">
             <div>
               <h2 className="text-lg sm:text-xl md:text-2xl text-[#222222] mb-4 sm:mb-6 font-semibold">
@@ -68,7 +65,7 @@ const ChooseUs = () => {
                     alt="Download on App Store"
                     role="img"
                     decoding="async"
-                    className="h-8 sm:h-10 md:h-11 object-contain"
+                    className="h-8 sm:h-10 md:h-11 object-contain cursor-pointer"
                   />
                 </a>
                 <a
@@ -97,21 +94,21 @@ const ChooseUs = () => {
                   src={Choose1}
                   alt="User testimonial 1"
                   decoding="async"
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
                 <img
                   loading="lazy"
                   src={Choose2}
                   alt="User testimonial 2"
                   decoding="async"
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
                 <img
                   loading="lazy"
                   src={Choose3}
                   alt="User testimonial 3"
                   decoding="async"
-                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white"
+                  className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
               </div>
               <p className="text-[#242424] text-xs sm:text-sm">
@@ -120,27 +117,15 @@ const ChooseUs = () => {
             </div>
           </div>
 
-          {/* RIGHT: image composition (bg + phone) */}
+          {/* RIGHT SIDE — ONLY PHONE IMAGE */}
           <div className="w-full flex justify-center lg:justify-end">
-            <div className="relative w-full h-[260px] sm:h-[320px] md:h-[400px] lg:h-[440px] xl:h-[510px]">
-              {/* Bigger Background */}
-              <img
-                src={bgMobile}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                className="w-full h-full object-cover lg:scale-150" 
-              />
-
-              {/* Mobile Phone Center */}
-              <img
-                src={mobile}
-                alt="VahanWire mobile app preview"
-                loading="lazy"
-                decoding="async"
-                className="absolute top-1/2 lg:left-[47%] md:left-[48%] left-1/2 -translate-x-1/3 -translate-y-1/2 w-[28%] sm:w-[20%] md:w-[28%] lg:w-[43%] h-auto"
-              />
-            </div>
+            <img
+              src={mobile}
+              alt="VahanWire mobile app preview"
+              loading="lazy"
+              decoding="async"
+              className="w-[60%] sm:w-[50%] md:w-[50%] lg:w-[65%] h-auto drop-shadow-xl"
+            />
           </div>
         </div>
       </div>
