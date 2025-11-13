@@ -8,10 +8,10 @@ function Navbar() {
     { name: "Home", path: "/" },
     { name: "Vehicle AMC", path: "/vehicle-amc" },
     { name: "Mechanic", path: "", comingSoon: true },
-    { name: "Services", path: "", comingSoon: true },
+    { name: "Tow Truck", path: "", comingSoon: true },
     { name: "Service Center", path: "", comingSoon: true },
     { name: "Petrol Pump", path: "", comingSoon: true },
-    { name: "Tow Truck", path: "", comingSoon: true },
+    { name: "Vahan Shop", path: "", comingSoon: true },
   ];
   const handleLinkClick = () => {
     setIsOpen(false);

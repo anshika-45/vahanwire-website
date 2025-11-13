@@ -176,41 +176,55 @@ const SelectVehicle = ({
     }
   };
 
-  const handleProceed = async () => {
-    if (!selectedVehicle) {
-      setErrors({ proceed: "Please select a vehicle to continue" });
-      return;
-    }
+const handleProceed = async () => {
+  if (!selectedVehicle) {
+    setErrors({ proceed: "Please select a vehicle to continue" });
+    return;
+  }
 
-    const vehicleData = addedVehicles.find((v) => v.number === selectedVehicle);
-    if (!vehicleData) {
-      alert("Vehicle not found");
-      return;
-    }
+  const vehicleData = addedVehicles.find((v) => v.number === selectedVehicle);
+  if (!vehicleData) {
+    alert("Vehicle not found");
+    return;
+  }
 
-    setIsProceeding(true);
-    const response = await selectAMCVehicle({
-      vehicleNumber: vehicleData.number,
-      brand: vehicleData.brand,
-      model: vehicleData.model,
-      vehicleType,
-      amcPlanCategory: amcType,
-    });
-    setIsProceeding(false);
+  setIsProceeding(true);
 
-    if (response?.success) {
-      const { hasActiveAMC, activeAMC, plans, vehicle } = response.data;
-      if (hasActiveAMC) {
-        alert("This vehicle already has an active AMC plan.");
-      } else {
+  selectAMCVehicle({
+    vehicleNumber: vehicleData.number,
+    brand: vehicleData.brand,
+    model: vehicleData.model,
+    vehicleType,
+    amcPlanCategory: amcType,
+  })
+    .then((response) => {
+      console.log("response", response);
+
+      if (response?.success) {
+        const { hasActiveAMC, plans, vehicle } = response.data;
+
+        if (hasActiveAMC) {
+          alert("This vehicle already has an active AMC plan.");
+          setIsProceeding(false);
+          return;
+        }
+
         const filterData = { plans, vehicle, selectedPlan: plan };
         activateFilter(filterData);
         navigate("/vehicle-amc-filter", { state: filterData });
+      } else {
+        alert(response?.message || "Failed to process request.");
       }
-    } else {
-      alert(response?.message || "Failed to process request.");
-    }
-  };
+
+      setIsProceeding(false);
+    })
+    .catch((error) => {
+      console.error("handleProceed error:", error);
+      alert("Something went wrong. Please try again later.");
+      setIsProceeding(false);
+    });
+};
+
 
   const handleCancelAdd = () => {
     setShowModel(false);

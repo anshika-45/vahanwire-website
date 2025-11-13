@@ -18,14 +18,21 @@ const mapApiDataToAMC = (apiData) => {
 
   return apiData.map((item) => {
     const isPlanPending = item.planStatus === "pending";
-    const isRefundPending = ["submitted", "under_process"].includes(item.refundStatus);
+    const isRefundPending = ["submitted", "under_process"].includes(
+      item.refundStatus
+    );
     const isRefundApproved = item.refundStatus === "approved";
     const isRefundRejected = item.refundStatus === "rejected";
 
     let status = "Active";
     let statusBadge = "Active AMC";
 
-    if (isPlanPending && !isRefundPending && !isRefundApproved && !isRefundRejected) {
+    if (
+      isPlanPending &&
+      !isRefundPending &&
+      !isRefundApproved &&
+      !isRefundRejected
+    ) {
       status = "Pending";
       statusBadge = "AMC Activation Pending";
     } else if (isRefundPending) {
@@ -45,18 +52,16 @@ const mapApiDataToAMC = (apiData) => {
     return {
       id: item._id,
       plan: item.planName,
-      vehicle: item.vehicleType.toUpperCase(),
       validity: `${item.planDuration} Months`,
       orderId: item.purchaseId,
-      description: item.planFeatures.join(", "),
+      features: item.planFeatures.join(", "),
       status: status,
       statusBadge: statusBadge,
       bgColor:
         bgColors[item.planName] ||
         "bg-gradient-to-br from-[#252525] to-[#404040]",
-      vehicleInfo: item.vehicleType.toUpperCase(),
+      vehicleType: item.vehicleType,
       refundApplied: isRefundPending,
-      refundRequestDate: item.refundRequestDate || item.updatedAt,
       refundFinalStatus: isRefundApproved
         ? "Approved"
         : isRefundRejected
@@ -67,17 +72,38 @@ const mapApiDataToAMC = (apiData) => {
       planStatus: item.planStatus,
       logoSrc: "/src/assets/Logo-AMC.svg",
       carImageSrc: "/src/assets/Car-AMC.svg",
+      bikeImageSrc: "/src/assets/Bike-AMC.svg",
       planPrice: item.planPrice,
       planStartDate: item.planStartDate,
       planEndDate: item.planEndDate,
       paymentId: item.paymentId,
       refundRequestId: item.refundRequestId,
-      vehicle: item.vehicle,
+      vehicleNumber: item.vehicleNumber,
       vehicleBrand: item.vehicleBrand,
       vehicleModel: item.vehicleModel,
-      planDescription: item.planDescription
+      planDescription: item.planDescription,
     };
   });
+};
+
+const fetchAMCPlans = async (
+  setAmcData,
+  purchasedCards,
+  fetchRefundStatus,
+  setLoading
+) => {
+  setLoading(true);
+  const response = await getMyAMCPlans();
+  if (response.success && response.data) {
+    const mappedData = mapApiDataToAMC(response.data);
+    setAmcData([...mappedData, ...purchasedCards]);
+    mappedData.forEach((amc) => {
+      if (amc.refundRequestId) fetchRefundStatus(amc.id, amc.refundRequestId);
+    });
+  } else {
+    setAmcData([...purchasedCards]);
+  }
+  setLoading(false);
 };
 
 const getTimelineStatus = (refundStatus, timeline = []) => {
@@ -130,12 +156,17 @@ export default function MyAMCPage() {
   const [loading, setLoading] = useState(true);
   const [refundStatusData, setRefundStatusData] = useState({});
 
+  useEffect(() => {
+    fetchAMCPlans(setAmcData, purchasedCards, fetchRefundStatus, setLoading);
+  }, []);
+
   const tabs = ["All", "Active", "Pending", "Rejected"];
   const filtered = amcData.filter((a) =>
     activeTab === "All" ? true : a.status === activeTab
   );
 
-  console.log("ke2fbkjbkhbhjb",selectedInvoice);
+  console.log("ke2fbkjbkhbhjb", selectedInvoice);
+  console.log("amcData", amcData);
 
   const fetchRefundStatus = async (amcId, refundRequestId) => {
     try {
@@ -152,33 +183,6 @@ export default function MyAMCPage() {
       console.error(`Error fetching refund status for AMC ${amcId}:`, error);
     }
   };
-
-  useEffect(() => {
-    const fetchAMCPlans = async () => {
-      try {
-        setLoading(true);
-        const response = await getMyAMCPlans();
-        console.log("jcebwdjkbkjb",response);
-        if (response.success && response.data) {
-          const mappedData = mapApiDataToAMC(response.data);
-          setAmcData([...mappedData, ...purchasedCards]);
-
-          mappedData.forEach((amc) => {
-            if (amc.refundRequestId) {
-              fetchRefundStatus(amc.id, amc.refundRequestId);
-            }
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching AMC plans:", error);
-        setAmcData([...purchasedCards]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAMCPlans();
-  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -213,8 +217,10 @@ export default function MyAMCPage() {
     const updatedAmcData = amcData.map((amc) => {
       const refundData = refundStatusData[amc.id];
       if (refundData) {
-        const isRefundPending = ["submitted", "under_process"].includes(refundData.status);
-        
+        const isRefundPending = ["submitted", "under_process"].includes(
+          refundData.status
+        );
+
         return {
           ...amc,
           refundStatus: refundData.status,
@@ -282,7 +288,7 @@ export default function MyAMCPage() {
   }
 
   function handleEditVehicle(item) {
-    console.log("oooo",item);
+    console.log("oooo", item);
     setSelectedVehicle({
       id: item.id,
       vehicleNumber: item.vehicle,
@@ -348,7 +354,10 @@ export default function MyAMCPage() {
         return {
           ...amc,
           status: amc.planStatus === "pending" ? "Pending" : "Active",
-          statusBadge: amc.planStatus === "pending" ? "AMC Activation Pending" : "Active AMC",
+          statusBadge:
+            amc.planStatus === "pending"
+              ? "AMC Activation Pending"
+              : "Active AMC",
           refundApplied: false,
           refundStatus: "none",
           refundFinalStatus: null,
@@ -377,7 +386,10 @@ export default function MyAMCPage() {
   };
 
   const shouldShowActionButtons = (item) => {
-    return (item.planStatus === "active" || item.planStatus === "pending") && item.refundStatus === "none";
+    return (
+      (item.planStatus === "active" || item.planStatus === "pending") &&
+      item.refundStatus === "none"
+    );
   };
 
   if (loading) {
@@ -437,9 +449,13 @@ export default function MyAMCPage() {
                       validity={item.validity}
                       bgColor={item.bgColor}
                       logoSrc={item.logoSrc}
-                      carImageSrc={item.carImageSrc}
-                      vehicle={item.vehicle}
+                      vehicle={item.vehicleNumber}
                       planDescription={item.planDescription}
+                      carImageSrc={
+                        item.vehicleType?.toLowerCase() === "car"
+                          ? item.carImageSrc
+                          : item.bikeImageSrc
+                      }
                       onDownloadInvoice={() => handleDownloadInvoice(item)}
                     />
 
@@ -465,7 +481,8 @@ export default function MyAMCPage() {
                         </div>
 
                         <p className="text-[#1C1C28] text-xs mb-2">
-                          {item.planStatus === "pending" && item.refundStatus === "none"
+                          {item.planStatus === "pending" &&
+                          item.refundStatus === "none"
                             ? "Your AMC payment is successful. Waiting for admin approval to activate."
                             : item.status === "Active"
                             ? "Your AMC is active. You can raise service requests."
@@ -551,25 +568,25 @@ export default function MyAMCPage() {
                       <h3 className="text-lg md:text-xl font-bold text-gray-900 text-center mb-1 md:mb-2">
                         Refund Request Status
                       </h3>
-                      
+
                       {item.refundStatus === "submitted" && (
                         <p className="text-center text-orange-600 font-medium mb-2 text-xs md:text-sm">
                           Awaiting admin approval
                         </p>
                       )}
-                      
+
                       {item.refundStatus === "under_process" && (
                         <p className="text-center text-blue-600 font-medium mb-2 text-xs md:text-sm">
                           It will take 5 to 7 Working Days
                         </p>
                       )}
-                      
+
                       {item.status === "Approved" && (
                         <p className="text-center text-green-600 font-medium mb-2 text-xs md:text-sm">
                           Your refund has been approved successfully
                         </p>
                       )}
-                      
+
                       {item.status === "Rejected" && (
                         <p className="text-center text-red-600 font-medium mb-2 text-xs md:text-sm">
                           Your refund request has been rejected
@@ -595,12 +612,14 @@ export default function MyAMCPage() {
                         <div className="flex flex-col items-center flex-shrink-0">
                           <div
                             className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
-                              timelineStatus.submitted || item.status === "Rejected"
+                              timelineStatus.submitted ||
+                              item.status === "Rejected"
                                 ? "bg-green-600"
                                 : "bg-gray-300"
                             }`}
                           >
-                            {(timelineStatus.submitted || item.status === "Rejected") && (
+                            {(timelineStatus.submitted ||
+                              item.status === "Rejected") && (
                               <svg
                                 className="w-4 md:w-5 h-4 md:h-5 text-white"
                                 fill="none"
@@ -656,10 +675,15 @@ export default function MyAMCPage() {
                           </p>
                         </div>
 
-                        <div className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
-                          item.status === "Rejected" ? "bg-red-400" : 
-                          timelineStatus.under_process ? "bg-green-600" : "bg-gray-300"
-                        }`} />
+                        <div
+                          className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
+                            item.status === "Rejected"
+                              ? "bg-red-400"
+                              : timelineStatus.under_process
+                              ? "bg-green-600"
+                              : "bg-gray-300"
+                          }`}
+                        />
 
                         <div className="flex flex-col items-center flex-shrink-0">
                           <div
@@ -687,25 +711,37 @@ export default function MyAMCPage() {
                                   d="M6 18L18 6M6 6l12 12"
                                 />
                               </svg>
-                            ) : timelineStatus.under_process && (
-                              <div className="w-4 md:w-5 h-4 md:h-5 rounded-full bg-green-600" />
+                            ) : (
+                              timelineStatus.under_process && (
+                                <div className="w-4 md:w-5 h-4 md:h-5 rounded-full bg-green-600" />
+                              )
                             )}
                           </div>
-                          <p className={`font-semibold text-xs md:text-sm text-center ${
-                            item.status === "Rejected" ? "text-red-600" : "text-[#1C1C28]"
-                          }`}>
-                            {item.status === "Rejected" ? "Rejected" : "Under Process"}
+                          <p
+                            className={`font-semibold text-xs md:text-sm text-center ${
+                              item.status === "Rejected"
+                                ? "text-red-600"
+                                : "text-[#1C1C28]"
+                            }`}
+                          >
+                            {item.status === "Rejected"
+                              ? "Rejected"
+                              : "Under Process"}
                           </p>
                           <p className="text-xs text-gray-500 mt-1">
-                            {item.status === "Rejected" 
+                            {item.status === "Rejected"
                               ? timelineDates.completed
-                                ? new Date(timelineDates.completed).toLocaleDateString("en-GB", {
+                                ? new Date(
+                                    timelineDates.completed
+                                  ).toLocaleDateString("en-GB", {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric",
                                   }) +
                                   ", " +
-                                  new Date(timelineDates.completed).toLocaleTimeString("en-GB", {
+                                  new Date(
+                                    timelineDates.completed
+                                  ).toLocaleTimeString("en-GB", {
                                     hour: "2-digit",
                                     minute: "2-digit",
                                     hour12: true,

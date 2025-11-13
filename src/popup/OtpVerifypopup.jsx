@@ -10,7 +10,7 @@ import { getUserVehicles } from "../api/vehicleApi";
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
 
-const RESEND_SECONDS = 60; // ⬅️ show 60s timer
+const RESEND_SECONDS = 30; // ⬅️ show 60s timer
 
 const OtpVerifypopup = ({
   isOpen,
