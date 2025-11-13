@@ -106,29 +106,40 @@ const SelectVehicle = ({
   const handleSearch = async () => {
     const errorMsg = validateVehicleNumber(vehicleNumber);
     if (errorMsg) return setErrors({ number: errorMsg });
-
+  
     const normalizedNumber = vehicleNumber.toUpperCase();
     if (addedVehicles.find((v) => v.number === normalizedNumber)) {
       setErrors({ number: "This vehicle is already in your list" });
       return;
     }
-
+  
     setIsLoading(true);
     const data = await searchUserVehicle(normalizedNumber);
     setIsLoading(false);
-
-    if (data?.data?.hasAMC) {
+  
+    const response = data?.data;
+  
+    // 🚨 Handle vehicle registered by another user
+    if (response?.alreadyRegisteredByOtherUser) {
+      setErrors({
+        number:
+          "This vehicle is already registered by another user. Please check the number or try a different one.",
+      });
+      return;
+    }
+  
+    if (response?.hasAMC) {
       setErrors({
         number: `This vehicle already has an active AMC plan (${
-          data.data.amcDetails?.planName || "Active"
+          response.amcDetails?.planName || "Active"
         }). Please select another vehicle.`,
       });
       return;
     }
-
-    const foundVehicle = data?.data?.vehicle;
-
-    if (data?.data?.found && !data?.data?.hasAMC) {
+  
+    const foundVehicle = response?.vehicle;
+  
+    if (response?.found && foundVehicle && !response?.hasAMC) {
       const newVehicle = {
         number: foundVehicle.vehicleNumber.toUpperCase(),
         model: foundVehicle.model,
@@ -144,7 +155,7 @@ const SelectVehicle = ({
       setErrors({});
     }
   };
-
+  
   const handleAddVehicle = async () => {
     const numberError = validateVehicleNumber(vehicleNumber);
     const brandError = !brand.trim() ? "Please enter the vehicle brand" : "";
