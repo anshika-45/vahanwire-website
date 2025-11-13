@@ -70,20 +70,20 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
   const verifyVehicleNumber = async (regNumber) => {
     setIsLoading(true);
     try {
-      const data = await searchUserVehicle(regNumber);
+      const data = await searchUserVehicle(regNumber); // API call
       setIsLoading(false);
-      if ((data.found && data.vehicle) || (data.data?.found && data.data?.vehicle)) {
-        const vehicle = data.vehicle || data.data.vehicle;
-        return { found: true, vehicle };
-      } else {
-        return { found: false };
-      }
+  
+      // The actual payload might be nested under data.data depending on axios setup
+      const result = data?.data || data;
+  
+      return result;
     } catch (error) {
       setIsLoading(false);
       console.error("Error verifying vehicle:", error);
-      return { found: false };
+      return { found: false, vehicle: null, error: "Server error while searching vehicle" };
     }
   };
+  
 
   const handleSearch = async () => {
     const validation = validateVehicleNumber(vehicleNumber);
@@ -92,9 +92,32 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
       return;
     }
     setNumberError("");
+  
     const formattedNumber = validation.formattedNumber;
     const result = await verifyVehicleNumber(formattedNumber);
-    if (result.found && result.vehicle) {
+  
+    // Handle API response
+    if (!result.found) {
+      // Vehicle not found → allow manual entry
+      setShowModel(true);
+      setVehicleNumber(formattedNumber);
+      return;
+    }
+  
+    if (result.alreadyRegisteredByOtherUser) {
+      setNumberError("This vehicle is already registered by another user.");
+      return;
+    }
+  
+    if (result.hasAMC) {
+      const { amcDetails } = result;
+      setNumberError(
+        `This vehicle already has an active AMC plan (${amcDetails?.planName || "Unknown"}).`
+      );
+      return;
+    }
+  
+    if (result.vehicle) {
       setVehicleData({
         vehicleNumber: result.vehicle.vehicleNumber,
         brand: result.vehicle.brand,
@@ -103,9 +126,9 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
       setShowSelectVehicle(true);
     } else {
       setShowModel(true);
-      setVehicleNumber(formattedNumber);
     }
   };
+  
 
   const handleAddVehicle = async () => {
     let hasError = false;
