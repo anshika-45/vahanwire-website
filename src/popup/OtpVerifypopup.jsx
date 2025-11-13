@@ -5,12 +5,12 @@ import otpImg from "../assets/Animation.svg";
 import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { verifyOtp, sendOtp } from "../api/authApi"; 
-import { getUserVehicles } from "../api/vehicleApi";
+import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
 
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
 
-const RESEND_SECONDS = 60; // ⬅️ show 60s timer
+const RESEND_SECONDS = 30;
 
 const OtpVerifypopup = ({
   isOpen,
@@ -30,7 +30,6 @@ const OtpVerifypopup = ({
   const [error, setError] = useState("");
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
-  // start/refresh timer whenever popup opens
   useEffect(() => {
     if (!isOpen) return;
     setTimer(RESEND_SECONDS);
@@ -55,37 +54,88 @@ const OtpVerifypopup = ({
     }
   };
 
+  // const handleOtpSubmit = async () => {
+  //   const fullOtp = otp.join("").trim();
+  //   if (fullOtp.length !== 4) {
+  //     setError("Please enter the 4-digit OTP");
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+  //     setError("");
+  //     const response = await verifyOtp(phoneNumber, fullOtp);
+
+  //     if (response?.success && response?.data) {
+  //       const { accessToken, user } = response.data;
+  //       if (accessToken) localStorage.setItem("token", accessToken);
+  //       if (user) localStorage.setItem("user", JSON.stringify(user));
+
+  //       setIsLoggedIn(true);
+        
+  //       if (isFromLogin) {
+  //         onClose();
+  //       } else {
+  //         console.log("ecnejkrnbwjkbnk");
+  //         // Fetch user vehicles to determine which popup to show
+  //         const vehicles = await getUserVehicleWithoutAMC();
+  //         setUserVehicles(vehicles);
+          
+  //         if (vehicles && vehicles.length > 0) {
+  //           // User has existing vehicles - show SelectVehicle
+  //           setShowSelectVehicle(true);
+  //         } else {
+  //           // User has no vehicles - show EnterVehicleNumber
+  //           setShowVehiclePopup(true);
+  //         }
+  //       }
+  //     } else {
+  //       setError(response?.message || "Invalid OTP. Try again.");
+  //     }
+  //   } catch (err) {
+  //     console.error("OTP verification failed:", err);
+  //     setError(
+  //       err?.response?.data?.message ||
+  //         "Failed to verify OTP. Please try again."
+  //     );
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
   const handleOtpSubmit = async () => {
     const fullOtp = otp.join("").trim();
     if (fullOtp.length !== 4) {
       setError("Please enter the 4-digit OTP");
       return;
     }
-
+  
     try {
       setLoading(true);
       setError("");
       const response = await verifyOtp(phoneNumber, fullOtp);
-
+  
       if (response?.success && response?.data) {
         const { accessToken, user } = response.data;
         if (accessToken) localStorage.setItem("token", accessToken);
         if (user) localStorage.setItem("user", JSON.stringify(user));
-
+  
         setIsLoggedIn(true);
         
         if (isFromLogin) {
           onClose();
         } else {
-          // Fetch user vehicles to determine which popup to show
-          const vehicles = await getUserVehicles();
-          setUserVehicles(vehicles);
-          
-          if (vehicles && vehicles.length > 0) {
-            // User has existing vehicles - show SelectVehicle
-            setShowSelectVehicle(true);
-          } else {
-            // User has no vehicles - show EnterVehicleNumber
+          try {
+            const vehicles = await getUserVehicleWithoutAMC();
+            setUserVehicles(vehicles);
+            
+            if (vehicles && vehicles.length > 0) {
+              setShowSelectVehicle(true);
+            } else {
+              setShowVehiclePopup(true);
+            }
+          } catch (vehicleError) {
             setShowVehiclePopup(true);
           }
         }
