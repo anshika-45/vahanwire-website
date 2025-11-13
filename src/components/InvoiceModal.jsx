@@ -6,11 +6,21 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  console.log("ejkbcbbe",invoiceId);
+  
   useEffect(() => {
-    if (!isOpen || !invoiceId) return;
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isOpen]);
 
-    const fetchInvoice = async () => {
+  useEffect(() => {
+     if (!isOpen || !invoiceId) return;
+
+     const fetchInvoice = async () => {
       setLoading(true);
       setError("");
       try {
@@ -54,17 +64,17 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
   return (
     <div className="fixed inset-0 z-[9999] grid place-items-center p-3 sm:p-4" aria-modal="true" role="dialog">
       <div className="fixed inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
-      <div className="relative w-full max-w-[480px] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div className="relative w-[95%] max-w-sm sm:max-w-md md:max-w-lg bg-white rounded-xl sm:rounded-2xl shadow-2xl border border-slate-200 overflow-hidden max-h-[85vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 bg-[#D9E7FE] border-b border-slate-200">
-          <h2 className="text-sm sm:text-base font-semibold text-slate-800 mx-auto">Invoice Details</h2>
-          <button onClick={onClose} aria-label="Close" className="absolute right-4 text-slate-600 hover:text-slate-800">
-            <X className="h-5 w-5" />
+        <div className="flex items-center justify-between px-3 sm:px-5 py-2 sm:py-2.5 bg-[#D9E7FE] border-b border-slate-200 flex-shrink-0">
+          <h2 className="text-xs sm:text-sm font-semibold text-slate-800 mx-auto">Invoice Details</h2>
+          <button onClick={onClose} aria-label="Close" className="absolute right-3 sm:right-4 text-slate-600 hover:text-slate-800">
+            <X className="h-4 w-4 sm:h-5 sm:w-5" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="px-5 py-4 space-y-3 text-sm text-slate-800">
+        <div className="px-3 sm:px-5 py-3 sm:py-4 space-y-2 sm:space-y-3 text-xs sm:text-sm text-slate-800 overflow-y-auto flex-1 hide-scrollbar">
           {loading && <p>Loading...</p>}
           {error && <p className="text-red-500">{error}</p>}
           {invoice && (
@@ -100,11 +110,11 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
         </div>
 
         {invoice && (
-          <div className="px-5 pb-4">
-            <div className="w-full rounded-xl bg-[#266DDF] px-4 py-3 text-white">
-              <div className="flex items-center justify-between text-sm">
+          <div className="px-3 sm:px-5 py-3 sm:py-4 flex-shrink-0 border-t border-slate-200">
+            <div className="w-full rounded-lg sm:rounded-xl bg-[#266DDF] px-3 sm:px-4 py-2 sm:py-3 text-white">
+              <div className="flex items-center justify-between text-xs sm:text-sm">
                 <span className="font-semibold">Total Amount</span>
-                <span className="text-base font-bold">₹{invoice.total}</span>
+                <span className="text-sm sm:text-base font-bold">₹{invoice.total}</span>
               </div>
             </div>
           </div>
@@ -115,20 +125,20 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
 }
 
 function Section({ title, children }) {
-  return (
-    <section className="rounded-xl border border-slate-200 bg-[#FAFAFA] p-3 space-y-2">
-      <h3 className="text-[11px] sm:text-xs font-semibold uppercase text-slate-600 tracking-wide">{title}</h3>
-      {children}
-    </section>
-  );
-}
-
-function Item({ label, value }) {
-  return (
-    <div className="flex justify-between text-xs sm:text-sm">
-      <span className="text-slate-600">{label}</span>
-      <span className="font-medium text-slate-800">{value}</span>
-    </div>
-  );
-}
+   return (
+     <section className="rounded-lg sm:rounded-xl border border-slate-200 bg-[#FAFAFA] p-2 sm:p-3 space-y-1 sm:space-y-2">
+       <h3 className="text-[10px] sm:text-xs font-semibold uppercase text-slate-600 tracking-wide">{title}</h3>
+       {children}
+     </section>
+   );
+ }
+ 
+ function Item({ label, value }) {
+   return (
+     <div className="flex justify-between text-[11px] sm:text-xs gap-2">
+       <span className="text-slate-600">{label}</span>
+       <span className="font-medium text-slate-800 text-right truncate">{value}</span>
+     </div>
+   );
+ }
 

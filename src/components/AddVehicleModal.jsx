@@ -28,6 +28,22 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
   const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
+    if (!open) {
+      setForm({
+        vehicleNumber: "",
+        brand: "",
+        model: "",
+        year: "",
+        fuelType: "",
+      });
+      setErrors({});
+      setTouched({});
+      setSubmitError("");
+      setVehicleType("car");
+    }
+  }, [open]);
+
+  useEffect(() => {
     if (!open) return;
     document.body.style.overflow = "hidden";
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -168,7 +184,10 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3 text-sm">
+          <form
+            onSubmit={handleSubmit}
+            className="p-4 sm:p-6 space-y-3 text-sm"
+          >
             {/* Vehicle type toggle */}
             <div className="flex justify-center gap-4">
               {["car", "bike"].map((type) => (
@@ -176,7 +195,7 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
                   key={type}
                   type="button"
                   onClick={() => setVehicleType(type)}
-                  className={`relative flex flex-col items-center w-24 h-14 rounded-xl ${
+                  className={`relative flex flex-col items-center w-28 h-18 rounded-xl ${
                     vehicleType === type
                       ? "border-[#266DDF] bg-[#ECF3FD]"
                       : "border border-transparent hover:bg-[#ECF3FD]"
@@ -232,9 +251,7 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
                     placeholder={`Enter ${field}`}
                   />
                   {errors[field] && touched[field] && (
-                    <p className="text-red-600 text-xs mt-1">
-                      {errors[field]}
-                    </p>
+                    <p className="text-red-600 text-xs mt-1">{errors[field]}</p>
                   )}
                 </div>
               )

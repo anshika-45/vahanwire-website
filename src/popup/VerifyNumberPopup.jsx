@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import Button from "../components/Button";
 import phoneGif from "../assets/Animation.svg";
 import OtpVerifypopup from "./OtpVerifypopup";
@@ -10,6 +10,14 @@ const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false }) => {
   const [showError, setShowError] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setNumber("");
+      setError("");
+      setShowError(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen && !showOtp) return null;
 

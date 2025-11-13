@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import verifyIcon from "../assets/verify.webp";
@@ -18,6 +18,20 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
   const [showModel, setShowModel] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [vehicleData, setVehicleData] = useState(null);
+
+
+  useEffect(() => {
+    if (!isOpen) {
+      setVehicleNumber("");
+      setVehicleModel("");
+      setBrand("");
+      setShowModel(false);
+      setNumberError("");
+      setModelError("");
+      setBrandError("");
+      setVehicleData(null);
+    }
+  }, [isOpen]);
 
   if (!isOpen && !showSelectVehicle) return null;
 
