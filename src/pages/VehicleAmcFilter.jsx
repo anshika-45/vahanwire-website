@@ -81,14 +81,14 @@ const VehicleAmcFilter = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  useEffect(() => {
-    document.body.style.overflow = "auto";
-    document.documentElement.style.overflow = "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.body.style.overflow = "auto";
+  //   document.documentElement.style.overflow = "auto";
+  //   return () => {
+  //     document.body.style.overflow = "auto";
+  //     document.documentElement.style.overflow = "auto";
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (status === "success" || status === "failed") {
@@ -112,7 +112,7 @@ const VehicleAmcFilter = () => {
       setVehicleType(stored);
     }
   }, []);
-  
+
   const handleBuyNow = async (plan) => {
     if (!vehicle?.vehicleNumber) {
       alert("Please select a vehicle first.");
@@ -207,7 +207,7 @@ const VehicleAmcFilter = () => {
 
       <div className="flex flex-col space-y-10">
         <Suspense fallback={<BannerLoader />}>
-          <AmcBanner onBuy={handleBuyNow} />
+          <AmcBanner onBuy={handleBuyNow} onBuyNow={handleBuyNow} plan={plans?.[0]}/>
         </Suspense>
       </div>
 

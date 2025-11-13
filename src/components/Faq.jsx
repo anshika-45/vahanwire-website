@@ -7,7 +7,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
     <div className="bg-white max-w-6xl mx-auto mt-3 sm:mt-4 md:mt-6 rounded-lg mb-2 overflow-hidden border-white ">
       <button
         onClick={onClick}
-        className="w-full text-left px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 flex justify-between items-center text-black font-medium text-sm sm:text-base md:text-lg focus:outline-none"
+        className="w-full text-left px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 flex justify-between items-center text-black font-medium text-sm sm:text-base md:text-lg focus:outline-none cursor-pointer"
       >
         {question}
         <img
