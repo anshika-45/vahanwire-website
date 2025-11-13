@@ -21,12 +21,6 @@ const servicesData = [
     linkText: "View Details",
   },
   {
-    icon: patrolIcon,
-    title: "Patrol Pump",
-    desc: "Find nearby fuel stations and get fuel delivery in select areas.",
-    linkText: "View Details",
-  },
-  {
     icon: towtruckIcon,
     title: "Tow Truck",
     desc: "Stuck on the road? Get fast, GPS-tracked towing support anytime.",
@@ -36,6 +30,12 @@ const servicesData = [
     icon: serviceIcon,
     title: "Service Centre",
     desc: "Book appointments with trusted car & bike service centers in your city.",
+    linkText: "View Details",
+  },
+    {
+    icon: patrolIcon,
+    title: "Petrol Pump",
+    desc: "Find nearby fuel stations and get fuel delivery in select areas.",
     linkText: "View Details",
   },
   {

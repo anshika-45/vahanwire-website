@@ -17,7 +17,7 @@ const Banner = React.memo(() => {
     <div className="relative w-full">
       <div>
         <div
-          className="relative w-full h-[79vh] sm:h-[80vh] md:h-[100vh] bg-center bg-cover overflow-hidden"
+          className="relative w-full h-[79vh] sm:h-[80vh] md:h-[80vh] bg-center bg-cover overflow-hidden"
           style={{
             backgroundImage: `url(${bannerImg})`,
           }}

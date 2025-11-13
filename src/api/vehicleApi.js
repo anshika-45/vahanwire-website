@@ -31,6 +31,8 @@ export const searchUserVehicle = async (vehicleNumber) => {
 };
 
 export const getUserVehicleWithoutAMC = async () => {
+  console.log("kjwcdbjkbjk")
   const res = await axiosInstance.get("/vehicle/without-amc");
+  console.log("kjejcjbjkbjb",res.data.data.vehicles);
   return res.data?.data?.vehicles || [];
 };

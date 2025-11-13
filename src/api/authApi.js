@@ -56,3 +56,25 @@ export const logoutUser = async () => {
     throw error;
   }
 };
+
+export const getActiveCities = async () => {
+  try {
+    const response = await axiosInstance.get(`/amc-admin-city/active`);
+    console.log("kjbecjkbkje",response);
+    return response;
+  } catch (error) {
+    console.error("Error fetching active cities:", error);
+    throw error;
+  }
+};
+export const updateCity = async (cityData) => {
+  try {
+    console.log("Updating city:", cityData);
+    const response = await axiosInstance.put(`/users/update-city`, cityData);
+    console.log("City update response:", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating city:", error);
+    throw error;
+  }
+};

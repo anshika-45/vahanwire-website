@@ -12,11 +12,20 @@ export const useAmcData = () => {
 };
 
 export const AmcDataProvider = ({ children }) => {
-  const [vehicleType, setVehicleType] = useState("car");
+  const [vehicleType, setVehicleType] = useState(() => {
+    const stored = sessionStorage.getItem('selectedVehicleType');
+    return stored || "car";
+  });
   const [amcType, setAmcType] = useState("luxury");
   const [purchasedCards, setPurchasedCards] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
   const [filterData, setFilterData] = useState(null);
+
+  // Persist vehicleType to sessionStorage
+  const handleSetVehicleType = (type) => {
+    setVehicleType(type);
+    sessionStorage.setItem('selectedVehicleType', type);
+  };
 
   const getAmcTabs = useMemo(() => {
     if (vehicleType === "bike") {
@@ -53,7 +62,7 @@ export const AmcDataProvider = ({ children }) => {
     <AmcDataContext.Provider
       value={{
         vehicleType,
-        setVehicleType,
+        setVehicleType: handleSetVehicleType,
         amcType,
         setAmcType,
         getAmcTabs,

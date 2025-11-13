@@ -29,7 +29,7 @@ const Modal = ({ isOpen, onClose, onBack, children, proceedButton }) => {
             <img src={closeIcon} loading="lazy" alt="Close" className="w-4 sm:w-5 h-4 sm:h-5" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 bg-[#EFEFEF]">
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 bg-[#EFEFEF] hide-scrollbar">
           {children}
         </div>
         {proceedButton && (

@@ -28,15 +28,20 @@ const slides = [
     id: 6,
     title: "Mechanic Service",
     desc: "Instant roadside assistance.",
+    img: amc,
+  },
+  {
+    id: 7,
+    title: "AMC Plan",
+    desc: "Annual Maintenance Contract.",
     img: mechanic,
   },
-  { id: 7, title: "AMC Plan", desc: "Annual Maintenance Contract.", img: amc },
 
   {
     id: 9,
     title: "Battery Jumpstart",
     desc: "Quick and safe power boost.",
-    img: mechanic,
+    img: amc,
   },
   {
     id: 10,
@@ -48,13 +53,12 @@ const slides = [
 export default function Slider() {
   return (
     <div className="homeSlider max-w-screen relative pt-5 mt-3 lg:mb-6">
-      <div className="md:block hidden absolute w-[10vw] bg-white left-0 top-0 bottom-0 z-30"></div>
-      <div className="md:max-w-screen max-w-[1300px] px-3 md:px-0">
+      <div className="container">
         <Swiper
           spaceBetween={30}
           centeredSlides={true}
           autoplay={{
-            delay: 2500,
+            delay: 2000,
             disableOnInteraction: false,
           }}
           loop={true}
@@ -76,7 +80,7 @@ export default function Slider() {
               spaceBetween: 25,
             },
             1280: {
-              slidesPerView: 4,
+              slidesPerView: 3,
               spaceBetween: 20,
             },
           }}
