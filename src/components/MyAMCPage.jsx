@@ -75,7 +75,7 @@ const mapApiDataToAMC = (apiData) => {
       vehicle: item.vehicle,
       vehicleBrand: item.vehicleBrand,
       vehicleModel: item.vehicleModel,
-      planDescription: item.planDescription
+      planDescription: item.planDescription,
     };
   });
 };
