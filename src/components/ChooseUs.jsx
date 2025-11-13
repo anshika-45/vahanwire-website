@@ -12,7 +12,6 @@ const ChooseUs = () => {
     <section className="bg-[#FAFCFF] overflow-hidden md:mt-10">
       <div className="mx-auto px-4 sm:px-6 md:px-6 md:max-w-lg lg:max-w-4xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 md:gap-6 items-center justify-items-center">
-          
           {/* LEFT SIDE CONTENT */}
           <div className="bg-white rounded-2xl border border-[#BCD2F5] py-4 sm:py-6 md:py-8 px-4 sm:px-6 sm:space-y-5 text-left w-full">
             <div>
@@ -31,7 +30,7 @@ const ChooseUs = () => {
               ].map((item, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-2 sm:gap-3 text-xs sm:text-sm font-normal"
+                  className="flex items-start gap-2 sm:gap-3 text-xs sm:text-[17px] font-normal"
                 >
                   <img
                     loading="lazy"
@@ -48,7 +47,7 @@ const ChooseUs = () => {
             <hr className="border-[#BCD2F5] my-4 sm:my-6" />
 
             <div>
-              <p className="font-semibold text-xs sm:text-sm mb-3 sm:mb-4">
+              <p className="font-semibold text-xs sm:text-lg mb-3 sm:mb-4">
                 Download App Now
               </p>
               <div className="flex gap-2 sm:gap-3">
@@ -111,7 +110,7 @@ const ChooseUs = () => {
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
               </div>
-              <p className="text-[#242424] text-xs sm:text-sm">
+              <p className="text-[#242424] text-xs sm:text-[16px]">
                 <b>400k+</b> users around the globe
               </p>
             </div>

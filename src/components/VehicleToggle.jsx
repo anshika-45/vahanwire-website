@@ -47,7 +47,7 @@ const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
               className="hidden"
             />
             <div className="flex items-center gap-1 md:gap-2">
-              <span className="w-5 md:w-[24px] h-5 md:h-[24px] relative flex-shrink-0">
+              <span className="w-5 md:w-[30px] h-5 md:h-[30px] relative flex-shrink-0">
                 <img
                   src={vector}
                   alt="Radio outer"
@@ -75,7 +75,7 @@ const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
               src={isSelected ? option.imgColor : option.imgGrey}
               alt={option.label}
               loading="lazy"
-              className="w-8 md:w-[50px] h-6 md:h-[34px] object-contain flex-shrink-0"
+              className="w-13 md:w-[75px] h-6 md:h-[40px] object-contain flex-shrink-0"
             />
           </label>
         );

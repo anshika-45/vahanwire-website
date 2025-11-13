@@ -229,7 +229,3 @@ const CarCards = () => {
 };
 
 export { CarCards as default, CarCards };
-export const getVehicleCount = async () => {
-  const vehicles = await getUserVehicles();
-  return vehicles.length;
-};

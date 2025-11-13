@@ -105,6 +105,14 @@ const VehicleAmcFilter = () => {
     }
   }, [status]);
 
+  useEffect(() => {
+    // Restore vehicleType from sessionStorage on page load
+    const stored = sessionStorage.getItem('selectedVehicleType');
+    if (stored && stored !== vehicleType) {
+      setVehicleType(stored);
+    }
+  }, []);
+  
   const handleBuyNow = async (plan) => {
     if (!vehicle?.vehicleNumber) {
       alert("Please select a vehicle first.");

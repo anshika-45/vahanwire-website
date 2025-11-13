@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import Modal from "../components/Modal";
 import Payment from "./Payment";
 import { initiatePayment } from "../api/paymentApi";
-import coupon from "../assets/coupon.png"; 
+import couponImg from "../assets/coupon.png";
 import ViewCoupons from "./ViewCoupons";
 const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
@@ -13,9 +13,16 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
   const [viewCouponOpen, setViewCouponOpen] = useState(false);
+  const [coupon, setCoupon] = useState(null);
 
   const handleViewCoupon = () => {
     setViewCouponOpen(!viewCouponOpen);
+  };
+  const handleRemoveCoupon = () => {
+    setCoupon(null);
+  };
+  const couponDetails = (details = {}) => {
+    setCoupon(details);
   };
 
   useEffect(() => {
@@ -59,6 +66,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
 
   const amount = plan?.price || 0;
   const discount = 100;
+  // const couponAmount = coupon ? coupon.discountAmount : 0;
   const subtotal = amount - discount;
   const gstRate = 0.18;
   const gstAmount = subtotal * gstRate;
@@ -68,6 +76,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
     { label: "Items", value: "1" },
     { label: "Amount", value: `₹${amount.toLocaleString()}` },
     { label: "Discount", value: `-₹${discount}` },
+    // { label: "Coupon", value: `-₹${coupon ? coupon.discountAmount : "0"}` },
     { label: "GST (18%)", value: `₹${Math.round(gstAmount).toLocaleString()}` },
   ];
 
@@ -188,27 +197,62 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
           <p className="text-sm text-[#242424] mb-2">Enter Code</p>
 
           <div className="bg-[#F8F8F8] rounded-lg px-4 py-3 flex justify-between items-center border border-[#94b6ed]">
-            <div className="flex flex-col gap-[2px]">
+            <div className="flex flex-col gap-[2px] justify-center items-center ">
               <p className="flex items-center gap-2 text-[#242424] text-md font-bold">
-                <img src={coupon} alt="coupon icon" className="w-5 h-5 object-contain" />
-                Get a CashBack with...
+                <img
+                  src={couponImg}
+                  alt="coupon icon"
+                  className="w-5 h-5 object-contain"
+                />
+                {coupon ? (
+                  <>{`You Saved ₹${coupon.discountAmount}`}</>
+                ) : (
+                  <>Get a CashBack with...</>
+                )}
               </p>
 
               <button
                 onClick={handleViewCoupon}
-                className="text-[#266DDF] cursor-pointer"
+                className="text-[#266DDF] cursor-pointer text-center grow-0"
               >
                 view all coupons &gt;
               </button>
               {viewCouponOpen && (
                 <div className="fixed top-0 bottom-0 min-w-screen left-0 right-0 min-h-screen bg-black/50 z-40 flex justify-center items-center">
-                  <ViewCoupons handleClick={handleViewCoupon} />
+                  <ViewCoupons
+                    coupon={coupon}
+                    couponDetails={couponDetails}
+                    handleClick={handleViewCoupon}
+                  />
                 </div>
               )}
             </div>
 
-            <button
-              className="
+            {coupon ? (
+              <>
+                <button
+                  onClick={handleRemoveCoupon}
+                  className="
+                text-red-600
+                border border-red-500
+                px-6 py-2
+                rounded-lg
+                font-medium
+                text-sm
+                bg-transparent
+                hover:bg-red-600
+                hover:text-white
+                transition
+              "
+                >
+                  Remove
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={handleViewCoupon}
+                  className="
                 text-[#266DDF]
                 border border-[#266DDF]
                 px-6 py-2
@@ -220,9 +264,11 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
                 hover:text-white
                 transition
               "
-            >
-              Apply
-            </button>
+                >
+                  Apply
+                </button>
+              </>
+            )}
           </div>
         </div>
 

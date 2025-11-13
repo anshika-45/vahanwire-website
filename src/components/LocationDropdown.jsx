@@ -1,143 +1,115 @@
 import React, { useState, useEffect, useCallback } from "react";
 import locationIcon from "../assets/LocationIcon.svg";
 import dropdownIcon from "../assets/down-arrow.svg";
-import { SearchIcon } from "lucide-react";
-import { getCityFromCoords } from "../api/authApi";
+import { getActiveCities, getMyProfile, updateCity } from "../api/authApi";
 
 const LocationDropdown = ({ onLocationSelect }) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("Select Location");
+  const [selectedCityId, setSelectedCityId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [cities, setCities] = useState([]);
   const [error, setError] = useState(null);
-  const [currentLocation, setCurrentLocation] = useState(null);
-  const [autoDetectAttempted, setAutoDetectAttempted] = useState(false);
-
-  const locations = [
-    "Noida Sec 15",
-    "Noida Sec 62",
-    "Delhi CP",
-    "Gurgaon MG Road",
-  ];
-
-  const getShortAddress = (address) => {
-    const parts = address.split(",");
-    if (parts.length >= 2) {
-      return `${parts[0].trim()}, ${parts[1].trim()}`;
-    }
-    return address.length > 30 ? address.substring(0, 30) + "..." : address;
-  };
-
-  const getCurrentLocation = useCallback(async (isAutoDetect = false) => {
-    if (isAutoDetect && autoDetectAttempted) {
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-    
-    if (!isAutoDetect) {
-      setOpen(false);
-    }
-
-    if (!navigator.geolocation) {
-      setError("Geolocation is not supported");
-      setLoading(false);
-      if (isAutoDetect) {
-        setAutoDetectAttempted(true);
-      }
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        try {
-          const { latitude, longitude } = position.coords;
-          const data = await getCityFromCoords(latitude, longitude);
-
-          if (data.success) {
-            const shortAddress = getShortAddress(data.address);
-            setSelected(shortAddress);
-            const locationData = {
-              address: data.address,
-              shortAddress: shortAddress,
-              city: data.city,
-              coordinates: {
-                lat: latitude,
-                lon: longitude,
-              },
-            };
-            setCurrentLocation(locationData);
-
-            if (onLocationSelect) {
-              onLocationSelect(locationData);
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching city:", error);
-          setError("Failed to fetch location");
-        } finally {
-          setLoading(false);
-          if (isAutoDetect) {
-            setAutoDetectAttempted(true);
-          }
-        }
-      },
-      (error) => {
-        console.error("Geolocation error:", error);
-        
-        // Handle different geolocation errors
-        let errorMessage = "Failed to get current location";
-        if (error.code === error.PERMISSION_DENIED) {
-          errorMessage = "Location access denied";
-        } else if (error.code === error.TIMEOUT) {
-          errorMessage = "Location request timeout";
-        } else if (error.code === error.POSITION_UNAVAILABLE) {
-          errorMessage = "Location unavailable";
-        }
-        
-        setError(errorMessage);
-        setLoading(false);
-        if (isAutoDetect) {
-          setAutoDetectAttempted(true);
-        }
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 300000,
-      }
-    );
-  }, [onLocationSelect, autoDetectAttempted]);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
   useEffect(() => {
-    getCurrentLocation(true);
+    const checkToken = () => {
+      const token = localStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    };
+
+    const interval = setInterval(checkToken, 1000);
+
+    window.addEventListener("storage", checkToken);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("storage", checkToken);
+    };
   }, []);
 
-  const handleClick = useCallback(() => {
-    setOpen((prev) => !prev);
-  }, []);
+  useEffect(() => {
+    if (isLoggedIn) {
+      initializeLocation();
+    } else {
+      setSelected("Select Location");
+      setSelectedCityId(null);
+      setCities([]);
+    }
+  }, [isLoggedIn]);
 
-  const handleLocationClick = useCallback(
-    (location) => {
-      setSelected(location);
-      setOpen(false);
+  const initializeLocation = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-      if (onLocationSelect) {
-        onLocationSelect({
-          address: location,
-          city: location,
-          coordinates: null,
-        });
+      const [citiesResponse, profileResponse] = await Promise.all([
+        getActiveCities(),
+        getMyProfile()
+      ]);
+
+      if (citiesResponse.data.success) {
+        const cityList = citiesResponse.data.data || [];
+        setCities(cityList);
+
+        const userData = profileResponse.data;
+        const userCity = cityList.find(
+          (c) => c._id === userData?.selectedCity
+        );
+
+        if (userCity) {
+          setSelected(userCity.displayName);
+          setSelectedCityId(userCity._id);
+          if (onLocationSelect) onLocationSelect(userCity);
+        } else if (cityList.length > 0) {
+          await setDefaultCity(cityList);
+        }
+      } else {
+        setError("Failed to load active cities");
       }
-    },
-    [onLocationSelect]
-  );
+    } catch (error) {
+      console.error("Error initializing location:", error);
+      setError("Failed to load cities");
+    } finally {
+      setLoading(false);
+    }
+  }, [onLocationSelect]);
 
-  // Retry auto-detection if user grants permission after initial denial
-  const handleRetryLocation = useCallback(() => {
-    setError(null);
-    getCurrentLocation(false);
-  }, [getCurrentLocation]);
+  const setDefaultCity = async (cityList) => {
+    const firstCity = cityList[0];
+    if (!firstCity) return;
+
+    setSelected(firstCity.displayName);
+    setSelectedCityId(firstCity._id);
+
+    try {
+      await updateCity({ cityId: firstCity._id });
+      console.log("Default city saved:", firstCity.displayName);
+    } catch (error) {
+      console.error("Error saving default city:", error);
+    }
+
+    if (onLocationSelect) onLocationSelect(firstCity);
+  };
+
+  const handleClick = () => setOpen((prev) => !prev);
+
+  const handleLocationClick = async (city) => {
+    setSelected(city.displayName);
+    setSelectedCityId(city._id);
+    setOpen(false);
+
+    try {
+      const response = await updateCity({ cityId: city._id });
+      if (response.success) {
+        console.log("City updated successfully:", city.displayName);
+      }
+    } catch (error) {
+      console.error("Error updating user city:", error);
+    }
+
+    if (onLocationSelect) onLocationSelect(city);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -145,7 +117,6 @@ const LocationDropdown = ({ onLocationSelect }) => {
         setOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
@@ -154,85 +125,78 @@ const LocationDropdown = ({ onLocationSelect }) => {
     <div id="locationDropdown" className="relative">
       <div
         id="webScreen"
-        className="hidden md:flex items-center border text-sm min-w-[200px] max-w-[250px] py-2 px-3 rounded-[6px] border-gray-300 bg-white cursor-pointer hover:border-gray-400 transition-colors"
-        onClick={handleClick}
+        className="hidden md:flex items-center border text-sm min-w-[200px] max-w-[250px] py-3 px-3 rounded-[6px] border-[#E3EDFC] bg-white cursor-pointer transition-colors"
+        onClick={isLoggedIn ? handleClick : undefined}
       >
         <div className="flex-shrink-0 mr-2">
-          <img className="w-5 h-5 object-contain" src={locationIcon} alt="" />
+          <img className="w-5 h-5 object-contain" src={locationIcon} alt="location" />
         </div>
         <span className="flex-1 truncate text-sm font-medium">
-          {loading ? "Detecting..." : selected}
+          {loading ? "Loading..." : selected}
         </span>
-        <div className="flex-shrink-0 ml-2">
-          <img
-            className={`w-4 h-4 transition-transform ${
-              open ? "rotate-180" : ""
-            }`}
-            src={dropdownIcon}
-            alt=""
-          />
-        </div>
+        {isLoggedIn && (
+          <div className="flex-shrink-0 ml-2">
+            <img
+              className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`}
+              src={dropdownIcon}
+              alt="dropdown"
+            />
+          </div>
+        )}
       </div>
 
       <div id="mobileScreen" className="md:hidden block">
-        <div onClick={handleClick} role="button" className="flex items-center">
+        <div
+          onClick={isLoggedIn ? handleClick : undefined}
+          role="button"
+          className="flex items-center"
+        >
           {selected === "Select Location" ? (
-            <img className="w-5 h-5 object-contain" src={locationIcon} alt="" />
+            <img className="w-5 h-5 object-contain" src={locationIcon} alt="location" />
           ) : (
             <span className="text-[12px] px-1 leading-4 border-b-2 border-black flex items-center gap-1 font-medium max-w-[120px] truncate">
-              <img
-                className="w-4 h-4 object-contain flex-shrink-0"
-                src={locationIcon}
-                alt=""
-              />
-              {loading ? "Detecting..." : selected}
+              <img className="w-4 h-4 object-contain flex-shrink-0" src={locationIcon} alt="" />
+              {loading ? "Loading..." : selected}
             </span>
           )}
         </div>
       </div>
 
-      <section id="locationMenu">
-        {open && (
-          <div className="absolute top-[calc(100%+4px)] left-0 min-w-[250px] z-50 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-fadeIn">
-            <div className="p-2 border-b border-gray-200 bg-gray-50">
-              <button
-                onClick={handleRetryLocation}
-                disabled={loading}
-                className="w-full px-3 py-2 text-sm font-medium text-left hover:bg-white rounded-md flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <SearchIcon className="w-4 h-4 text-blue-600" />
-                <span className="text-gray-700 text-sm">
-                  {loading ? "Detecting..." : "Use Current Location"}
-                </span>
-              </button>
+      {open && isLoggedIn && (
+        <div className="absolute top-[calc(100%+4px)] left-0 min-w-[250px] z-50 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-fadeIn">
+          {error && (
+            <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border-b border-red-100">
+              <span>{error}</span>
             </div>
+          )}
 
-            {error && (
-              <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border-b border-red-100 flex justify-between items-center">
-                <span>{error}</span>
-                <button
-                  onClick={handleRetryLocation}
-                  className="text-blue-600 hover:text-blue-800 text-xs font-medium"
-                >
-                  Retry
-                </button>
-              </div>
-            )}
-
+          {loading ? (
+            <div className="px-3 py-4 text-center text-sm text-gray-500">
+              Loading cities...
+            </div>
+          ) : cities.length === 0 ? (
+            <div className="px-3 py-4 text-center text-sm text-gray-500">
+              No cities available
+            </div>
+          ) : (
             <ul className="max-h-[280px] overflow-y-auto">
-              {locations.map((location, index) => (
+              {cities.map((city) => (
                 <li
-                  key={index}
-                  onClick={() => handleLocationClick(location)}
-                  className="px-3 py-2.5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer text-sm font-medium text-gray-800 transition-colors last:border-b-0"
+                  key={city._id}
+                  onClick={() => handleLocationClick(city)}
+                  className={`px-3 py-2.5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer text-sm font-medium transition-colors last:border-b-0 ${
+                    selectedCityId === city._id
+                      ? "bg-blue-50 text-blue-700"
+                      : "text-gray-800"
+                  }`}
                 >
-                  {location}
+                  {city.displayName}
                 </li>
               ))}
             </ul>
-          </div>
-        )}
-      </section>
+          )}
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes fadeIn {
@@ -245,7 +209,6 @@ const LocationDropdown = ({ onLocationSelect }) => {
             transform: translateY(0);
           }
         }
-
         .animate-fadeIn {
           animation: fadeIn 0.2s ease-out;
         }

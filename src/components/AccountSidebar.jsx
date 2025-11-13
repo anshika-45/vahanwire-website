@@ -96,7 +96,7 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
                 {item.label}
               </span>
               {item.badge && (
-                <span className="text-gray-900 font-semibold shrink-0">
+                <span className="sm:mr-20 md:mr-30 lg:mr-35 text-gray-900 font-semibold shrink-0">
                   {item.badge}
                 </span>
               )}

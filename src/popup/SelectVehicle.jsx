@@ -176,41 +176,55 @@ const SelectVehicle = ({
     }
   };
 
-  const handleProceed = async () => {
-    if (!selectedVehicle) {
-      setErrors({ proceed: "Please select a vehicle to continue" });
-      return;
-    }
+const handleProceed = async () => {
+  if (!selectedVehicle) {
+    setErrors({ proceed: "Please select a vehicle to continue" });
+    return;
+  }
 
-    const vehicleData = addedVehicles.find((v) => v.number === selectedVehicle);
-    if (!vehicleData) {
-      alert("Vehicle not found");
-      return;
-    }
+  const vehicleData = addedVehicles.find((v) => v.number === selectedVehicle);
+  if (!vehicleData) {
+    alert("Vehicle not found");
+    return;
+  }
 
-    setIsProceeding(true);
-    const response = await selectAMCVehicle({
-      vehicleNumber: vehicleData.number,
-      brand: vehicleData.brand,
-      model: vehicleData.model,
-      vehicleType,
-      amcPlanCategory: amcType,
-    });
-    setIsProceeding(false);
+  setIsProceeding(true);
 
-    if (response?.success) {
-      const { hasActiveAMC, activeAMC, plans, vehicle } = response.data;
-      if (hasActiveAMC) {
-        alert("This vehicle already has an active AMC plan.");
-      } else {
+  selectAMCVehicle({
+    vehicleNumber: vehicleData.number,
+    brand: vehicleData.brand,
+    model: vehicleData.model,
+    vehicleType,
+    amcPlanCategory: amcType,
+  })
+    .then((response) => {
+      console.log("response", response);
+
+      if (response?.success) {
+        const { hasActiveAMC, plans, vehicle } = response.data;
+
+        if (hasActiveAMC) {
+          alert("This vehicle already has an active AMC plan.");
+          setIsProceeding(false);
+          return;
+        }
+
         const filterData = { plans, vehicle, selectedPlan: plan };
         activateFilter(filterData);
         navigate("/vehicle-amc-filter", { state: filterData });
+      } else {
+        alert(response?.message || "Failed to process request.");
       }
-    } else {
-      alert(response?.message || "Failed to process request.");
-    }
-  };
+
+      setIsProceeding(false);
+    })
+    .catch((error) => {
+      console.error("handleProceed error:", error);
+      alert("Something went wrong. Please try again later.");
+      setIsProceeding(false);
+    });
+};
+
 
   const handleCancelAdd = () => {
     setShowModel(false);
@@ -252,10 +266,10 @@ const SelectVehicle = ({
                   className="w-20 h-12 object-cover rounded"
                 />
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900">
+                  <div className="font-medium text-[18px] text-gray-900">
                     {vehicle.brand} {vehicle.model}
                   </div>
-                  <div className="text-xs text-gray-500">{vehicle.number}</div>
+                  <div className="text-xs md:text-[17px] text-gray-500">{vehicle.number}</div>
                 </div>
                 <input
                   type="checkbox"
@@ -277,7 +291,7 @@ const SelectVehicle = ({
             Add Vehicle
           </h2>
 
-          <label className="text-xs text-gray-700 mb-1">Vehicle Number</label>
+          <label className="text-sm lg:text-[16px]">Vehicle Number</label>
           <input
             type="text"
             placeholder="Enter Registration Number"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 function Navbar() {
@@ -8,26 +8,54 @@ function Navbar() {
     { name: "Home", path: "/" },
     { name: "Vehicle AMC", path: "/vehicle-amc" },
     { name: "Mechanic", path: "", comingSoon: true },
-    { name: "Services", path: "", comingSoon: true },
+    { name: "Tow Truck", path: "", comingSoon: true },
     { name: "Service Center", path: "", comingSoon: true },
     { name: "Petrol Pump", path: "", comingSoon: true },
-    { name: "Tow Truck", path: "", comingSoon: true },
-  ];
+    { name: "Vahan Shop", path: "", comingSoon: true },
+  ];  
   const handleLinkClick = () => {
     setIsOpen(false);
   };
+  const navItemRef = useRef(null);
+  const badgeRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const element = navItemRef.current;
+      const rec = window.innerWidth - element.getBoundingClientRect().right;
+      if (rec < 250) {
+        if (badgeRef.current) {
+          badgeRef.current.style.right = "0px";
+        }
+      } else {
+        if (badgeRef.current) {
+          badgeRef.current.style.right = "auto";
+        }
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <>
       <nav
-        className="hidden md:flex items-center justify-center h-12 w-full bg-[#E9F0FC]"
+        className="hidden md:flex items-center justify-center lg:h-12 h-14 w-full bg-[#E9F0FC]"
         role="navigation"
         aria-label="Main navigation"
       >
-        <ul className="flex justify-center gap-15 text-[17px] text-[#242424]">
+        <ul className="flex container justify-center gap-15 text-[17px] text-[#242424]">
           {menuItems.map((item, index) => (
-            <li key={index} className="relative group">
+            <li ref={navItemRef} key={index} className="relative group">
               {item.comingSoon && (
-                <span className="absolute top-[25px] left-1 transform -translate-x-1 bg-gradient-to-r from-[#fb0200] to-[#4184ed] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap ">
+                <span
+                  ref={badgeRef}
+                  className="absolute md:top-[25px] top-full transform bg-gradient-to-r from-[#fb0200] to-[#4184ed] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap "
+                >
                   Coming Soon
                 </span>
               )}
@@ -51,6 +79,51 @@ function Navbar() {
                 {item.name}
               </Link>
             </li>
+            // <li
+            //   key={index}
+            //   ref={(el) => (parentRefs.current[index] = el)}
+            //   className="relative group"
+            //   onMouseEnter={() => {
+            //     const badge = badgeRefs.current[index];
+            //     if (badge) badge.style.opacity = 1;
+            //   }}
+            //   onMouseLeave={() => {
+            //     const badge = badgeRefs.current[index];
+            //     if (badge) badge.style.opacity = 0;
+            //   }}
+            // >
+            //   {item.comingSoon && (
+            //     <span
+            //       ref={(el) => (badgeRefs.current[index] = el)}
+            //       className="absolute bg-gradient-to-r from-[#fb0200] to-[#4184ed]
+            //      text-white text-xs px-2 py-1 rounded
+            //      transition-opacity duration-300 opacity-0 pointer-events-none
+            //      whitespace-nowrap z-50"
+            //     >
+            //       Coming Soon
+            //     </span>
+            //   )}
+
+            //   <Link
+            //     to={item.path}
+            //     aria-current={
+            //       location.pathname === item.path ||
+            //       (item.path === "/vehicle-amc" &&
+            //         location.pathname === "/vehicle-amc-filter")
+            //         ? "page"
+            //         : undefined
+            //     }
+            //     className={`cursor-pointer transition-colors text-extrabold text-xs sm:text-sm md:text-base ${
+            //       location.pathname === item.path ||
+            //       (item.path === "/vehicle-amc" &&
+            //         location.pathname === "/vehicle-amc-filter")
+            //         ? "text-[#266DDF] font-bold"
+            //         : "hover:text-[#266DDF]"
+            //     }`}
+            //   >
+            //     {item.name}
+            //   </Link>
+            // </li>
           ))}
         </ul>
       </nav>

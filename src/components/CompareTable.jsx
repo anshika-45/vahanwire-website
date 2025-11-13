@@ -71,46 +71,36 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
     }
   };
 
-  const fetchPlans = async () => {
-    setLoading(true);
+const mapPlansData = (plans = []) => {
+  if (!Array.isArray(plans) || plans.length === 0) return [];
 
-    if (plansAre && Array.isArray(plansAre) && plansAre.length > 0) {
-      const mappedPlans = plansAre.map((plan) => ({
-        _id: plan._id,
-        key: plan.planSubCategory?.toLowerCase(),
-        name: plan.planName,
-        price: plan.planTotalAmount,
-      }));
+  return plans.map((plan) => ({
+    _id: plan?._id,
+    key: plan?.planSubCategory?.toLowerCase(),
+    name: plan?.planName,
+    price: plan?.planTotalAmount || 0,
+  }));
+};
 
-      const order = { premium: 1, standard: 2, basic: 3 };
-      mappedPlans.sort(
-        (a, b) =>
-          (order[a.planSubCategory] || 4) - (order[b.planSubCategory] || 4)
-      );
+const fetchPlans = async () => {
+  setLoading(true);
 
-      setPlans(mappedPlans);
-    } else {
-      const res = await getAMCPlansByCategory(vehicleType, amcType);
-      if (res.success && Array.isArray(res.data)) {
-        const mappedPlans = res.data.map((plan) => ({
-          _id: plan._id,
-          key: plan.planSubCategory?.toLowerCase(),
-          name: plan.planName,
-          price: plan.planTotalAmount,
-        }));
+  let data = [];
 
-        const order = { premium: 1, standard: 2, basic: 3 };
-        mappedPlans.sort(
-          (a, b) =>
-            (order[a.planSubCategory] || 4) - (order[b.planSubCategory] || 4)
-        );
-
-        setPlans(mappedPlans);
-      }
+  if (Array.isArray(plansAre) && plansAre.length > 0) {
+    data = plansAre;
+  } else {
+    const res = await getAMCPlansByCategory(vehicleType, amcType);
+    if (res?.success && Array.isArray(res.data)) {
+      data = res.data;
     }
+  }
 
-    setLoading(false);
-  };
+  const mappedPlans = mapPlansData(data);
+  setPlans(mappedPlans);
+
+  setLoading(false);
+};
 
   useEffect(() => {
     fetchPlans();
@@ -243,7 +233,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
                   >
                     <td
                       ref={rowIndex === 0 ? firstColumnRef : null}
-                      className="py-4 px-4 sm:px-6 text-left font-bold text-[#242424] border-x-2 border-[#E0EDFF] min-w-[200px] relative"
+                      className="py-4 px-4 sm:px-6 text-left text-[17px] font-bold text-[#242424] border-x-2 border-[#E0EDFF] min-w-[200px] relative"
                       style={{ width: "20%" }}
                       onMouseEnter={handleFirstColumnMouseEnter}
                       onMouseLeave={handleMouseLeave}
@@ -308,7 +298,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
                             <X size={16} className="text-white" />
                           </div>
                         ) : (
-                          <span className="text-[#242424] font-medium text-sm sm:text-base">
+                          <span className="text-[#242424] font-semibold text-[17px] ">
                             {feature.values[plan.key]}
                           </span>
                         )}

@@ -16,7 +16,7 @@ function BreadcrumbBar() {
   return (
     <div className="bg-[#FAFAFA] text-gray-600 text-sm px-4 md:px-8 lg:px-16 xl:px-[100px] py-3 md:py-4 border-t border-gray-300 w-full overflow-x-auto">
       <nav className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 whitespace-nowrap">
-        <Link to="/" className="hover:text-[#266DDF] flex-shrink-0">
+        <Link to="/" className="hover:text-[#266DDF] flex-shrink-0 text-[16px]">
           Home
         </Link>
         {pathnames.map((name, index) => {
@@ -38,11 +38,13 @@ function BreadcrumbBar() {
             >
               <span>{">"}</span>
               {isLast ? (
-                <span className="text-gray-900 capitalize">{displayName}</span>
+                <span className="text-gray-900 capitalize text-[17px] ">
+                  {displayName}
+                </span>
               ) : (
                 <Link
                   to={routeTo}
-                  className="hover:text-[#266DDF] capitalize"
+                  className="hover:text-[#266DDF] capitalize text-[17px]"
                 >
                   {displayName}
                 </Link>
