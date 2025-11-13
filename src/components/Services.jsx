@@ -2,8 +2,8 @@ import React from "react";
 import Tile from "./Tile";
 import amcIcon from "../assets/Tile1.svg";
 import mechanicIcon from "../assets/Tile2.svg";
-import towtruckIcon from "../assets/Tile3.svg";
-import patrolIcon from "../assets/Tile4.svg";
+import patrolIcon from "../assets/Tile3.svg";
+import towtruckIcon from "../assets/Tile4.svg";
 import serviceIcon from "../assets/Tile5.svg";
 import ecommerceIcon from "../assets/Tile6.svg";
 const servicesData = [
@@ -16,7 +16,7 @@ const servicesData = [
   },
   {
     icon: mechanicIcon,
-    title: "Find Mechanic",
+    title: "Mechanic",
     desc: "Locate verified mechanics near you for instant repairs at home or on-road.",
     linkText: "View Details",
   },
@@ -27,27 +27,28 @@ const servicesData = [
     linkText: "View Details",
   },
   {
-    icon: serviceIcon,
-    title: "Service Centre",
+    icon: ecommerceIcon,
+    title: "E-Commerce",
     desc: "Book appointments with trusted car & bike service centers in your city.",
     linkText: "View Details",
   },
-    {
+  {
     icon: patrolIcon,
     title: "Petrol Pump",
     desc: "Find nearby fuel stations and get fuel delivery in select areas.",
     linkText: "View Details",
   },
   {
-    icon: ecommerceIcon,
-    title: "E-Commerce",
-    desc: "Get exclusive deals on automotive parts and accessories online.",
+    icon: serviceIcon,
+    title: "Service Centre",
+    desc: "Book appointments with trusted car & bike service centers in your city.",
     linkText: "View Details",
   },
+   
 ];
 const Services = React.memo(() => {
   return (
-    <div className="justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]">
+    <div className="justify-items-center pt-14 pb-10 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]">
       <div className="container">
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]">
           Our Main Services
