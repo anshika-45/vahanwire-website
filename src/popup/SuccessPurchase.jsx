@@ -1,8 +1,17 @@
-import React from "react";
+import React , {useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
 const SuccessPurchase = ({ onClose, selectedPlan }) => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, []);
+
 
   const handleClose = () => {
     if (onClose) {

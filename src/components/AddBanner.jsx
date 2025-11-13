@@ -5,7 +5,7 @@ import GooglePlay from "../assets/Playstore.svg";
 const AddBanner = () => {
   return (
     <>
-      <section className="w-full pt-40 mt-50 flex justify-center relative max-md:pt-50 max-md:mt-60 max-sm:pt-0 max-sm:mt-0 max-sm:pb-8">
+      <section className="w-full pt-40 mt-30 flex justify-center relative max-md:pt-50 max-md:mt-60 max-sm:pt-0 max-sm:mt-0 max-sm:pb-8">
         <div className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-b from-white to-[#00AB11] opacity-50 hidden sm:block"></div>
         <div className="absolute top-0 bottom-0 right-0 w-1/2 bg-gradient-to-b from-white to-[#157EFD] opacity-50 hidden sm:block"></div>
         <div

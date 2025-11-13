@@ -36,3 +36,13 @@ export const getUserVehicleWithoutAMC = async () => {
   console.log("kjejcjbjkbjb",res.data.data.vehicles);
   return res.data?.data?.vehicles || [];
 };
+
+export const updateAMCPurchaseVehicle = async (purchaseId, vehicleData) => {
+  console.log("lkengwkjnjknjnjknjknknkn");
+  const res = await axiosInstance.post("/amc-purchase/update-amc-vehicle", {
+    purchaseId,
+    ...vehicleData
+  });
+  console.log("kjksacbjkbjkassscs",res);
+  return res.data;
+};

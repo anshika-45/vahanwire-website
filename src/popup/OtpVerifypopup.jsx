@@ -31,6 +31,14 @@ const OtpVerifypopup = ({
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
   useEffect(() => {
+    if (!isOpen) {
+      setOtp(["", "", "", ""]);
+      setError("");
+      inputRefs[0].current?.focus();
+    }
+  }, [isOpen]);
+  
+  useEffect(() => {
     if (!isOpen) return;
     setTimer(RESEND_SECONDS);
     const interval = setInterval(() => {

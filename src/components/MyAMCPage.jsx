@@ -7,7 +7,11 @@ import InvoiceModal from "./InvoiceModal";
 import EditVehicleModal from "./EditVehicleModal";
 import RefundRequestModal from "./RefundRequestModal";
 import { useAmcData } from "../context/AmcDataContext";
-import { getMyAMCPlans, checkRefundStatus } from "../api/amcApi";
+import {
+  getMyAMCPlans,
+  checkRefundStatus,
+  cancelRefundRequest,
+} from "../api/amcApi";
 import EditVehicleModal2 from "./EditVehicleModal2";
 
 const mapApiDataToAMC = (apiData) => {
@@ -25,7 +29,7 @@ const mapApiDataToAMC = (apiData) => {
     const isRefundApproved = item.refundStatus === "approved";
     const isRefundRejected = item.refundStatus === "rejected";
 
-    const canEditVehicle = item.vehicleEditableUntil 
+    const canEditVehicle = item.vehicleEditableUntil
       ? new Date() < new Date(item.vehicleEditableUntil)
       : false;
 
@@ -90,6 +94,7 @@ const mapApiDataToAMC = (apiData) => {
       vehicleEditableUntil: item.vehicleEditableUntil,
       canEditVehicle: canEditVehicle,
       canRequestRefund: canEditVehicle,
+      refundCancelledByUser: item.refundCancelledByUser || false,
     };
   });
 };
@@ -162,7 +167,7 @@ export default function MyAMCPage() {
   const [amcData, setAmcData] = useState([]);
   const [expiryTimestamps, setExpiryTimestamps] = useState({});
   const [loading, setLoading] = useState(true);
-  const [refundStatusData, setRefundStatusData] = useState({}); 
+  const [refundStatusData, setRefundStatusData] = useState({});
   const [currentTime, setCurrentTime] = useState(Date.now());
   useEffect(() => {
     fetchAMCPlans(setAmcData, purchasedCards, fetchRefundStatus, setLoading);
@@ -171,13 +176,16 @@ export default function MyAMCPage() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(Date.now());
-      setAmcData((prev) => 
+      setAmcData((prev) =>
         prev.map((item) => {
           if (!item.vehicleEditableUntil) return item;
-          
+
           const canEdit = new Date() < new Date(item.vehicleEditableUntil);
-          
-          if (item.canEditVehicle !== canEdit || item.canRequestRefund !== canEdit) {
+
+          if (
+            item.canEditVehicle !== canEdit ||
+            item.canRequestRefund !== canEdit
+          ) {
             return {
               ...item,
               canEditVehicle: canEdit,
@@ -199,20 +207,22 @@ export default function MyAMCPage() {
 
   const getRemainingTime = (vehicleEditableUntil) => {
     if (!vehicleEditableUntil) return null;
-    
+
     const expiry = new Date(vehicleEditableUntil).getTime();
     const now = currentTime;
     const diff = expiry - now;
-    
+
     if (diff <= 0) return null;
-    
+
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
+
     if (hours > 0) {
-      return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+      return `${hours} hour${hours !== 1 ? "s" : ""} ${minutes} minute${
+        minutes !== 1 ? "s" : ""
+      }`;
     }
-    return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+    return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
   };
 
   const fetchRefundStatus = async (amcId, refundRequestId) => {
@@ -230,7 +240,7 @@ export default function MyAMCPage() {
       console.error(`Error fetching refund status for AMC ${amcId}:`, error);
     }
   };
-
+  console.log("ewnfkfchiohoihiofhi", selectedCancelAMC);
   useEffect(() => {
     if (!loading) {
       setAmcData((prev) => {
@@ -339,9 +349,9 @@ export default function MyAMCPage() {
       alert("24-hour edit window has expired");
       return;
     }
-    
+
     setSelectedVehicle({
-      id: item.id,
+      purchaseId: item.id,
       vehicleNumber: item.vehicleNumber,
       brand: item.vehicleBrand,
       model: item.vehicleModel,
@@ -355,7 +365,7 @@ export default function MyAMCPage() {
       alert("24-hour refund request window has expired");
       return;
     }
-    
+
     setSelectedRefundAMC({
       plan: item.plan,
       orderId: item.orderId,
@@ -404,29 +414,84 @@ export default function MyAMCPage() {
     setShowRefundModal(false);
   }
 
-  function handleCancelRefund() {
-    const updatedAmcData = amcData.map((amc) => {
-      if (amc.id === selectedCancelAMC?.id) {
-        return {
-          ...amc,
-          status: amc.planStatus === "pending" ? "Pending" : "Active",
-          statusBadge:
-            amc.planStatus === "pending"
-              ? "AMC Activation Pending"
-              : "Active AMC",
-          refundApplied: false,
-          refundStatus: "none",
-          refundFinalStatus: null,
-          refundRequestDate: null,
-          refundTimeline: [],
-        };
-      }
-      return amc;
-    });
+  // function handleCancelRefund() {
+  //   const updatedAmcData = amcData.map((amc) => {
+  //     if (amc.id === selectedCancelAMC?.id) {
+  //       return {
+  //         ...amc,
+  //         status: amc.planStatus === "pending" ? "Pending" : "Active",
+  //         statusBadge:
+  //           amc.planStatus === "pending"
+  //             ? "AMC Activation Pending"
+  //             : "Active AMC",
+  //         refundApplied: false,
+  //         refundStatus: "none",
+  //         refundFinalStatus: null,
+  //         refundRequestDate: null,
+  //         refundTimeline: [],
+  //       };
+  //     }
+  //     return amc;
+  //   });
 
-    setAmcData(updatedAmcData);
+  //   setAmcData(updatedAmcData);
+  //   setShowCancel(false);
+  //   setSelectedCancelAMC(null);
+  // }
+
+  function handleCancelRefund() {
     setShowCancel(false);
     setSelectedCancelAMC(null);
+  }
+
+  async function handleConfirmCancelRefund() {
+    try {
+      if (!selectedCancelAMC?.refundRequestId) {
+        alert("Refund request ID not found");
+        return;
+      }
+
+      const response = await cancelRefundRequest(
+        selectedCancelAMC.refundRequestId
+      );
+      console.log("ovr3bbjbndjcnjnjdcccccc", response);
+      if (response) {
+        const updatedAmcData = amcData.map((amc) => {
+          if (amc.id === selectedCancelAMC?.id) {
+            return {
+              ...amc,
+              status: amc.planStatus === "pending" ? "Pending" : "Active",
+              statusBadge:
+                amc.planStatus === "pending"
+                  ? "AMC Activation Pending"
+                  : "Active AMC",
+              refundApplied: false,
+              refundStatus: "none",
+              refundFinalStatus: null,
+              refundRequestDate: null,
+              refundTimeline: [],
+              refundRequestId: null,
+              refundCancelledByUser: true,
+              canRequestRefund: false,
+            };
+          }
+          return amc;
+        });
+
+        setAmcData(updatedAmcData);
+        setRefundStatusData((prev) => {
+          const updated = { ...prev };
+          delete updated[selectedCancelAMC.id];
+          return updated;
+        });
+        setShowCancel(false);
+        setSelectedCancelAMC(null);
+      }
+    } catch (error) {
+      console.error("Error cancelling refund:", error);
+      alert(error.response?.data?.message || "Failed to cancel refund request");
+      setShowCancel(false);
+    }
   }
 
   const shouldShowCancelRefund = (item) => {
@@ -442,13 +507,19 @@ export default function MyAMCPage() {
   };
 
   const shouldShowActionButtons = (item) => {
-    return (
+    const canShowEditVehicle =
       (item.planStatus === "active" || item.planStatus === "pending") &&
       item.refundStatus === "none" &&
-      (item.canEditVehicle || item.canRequestRefund)
-    );
-  };
+      item.canEditVehicle;
 
+    const canShowRequestRefund =
+      (item.planStatus === "active" || item.planStatus === "pending") &&
+      item.refundStatus === "none" &&
+      !item.refundCancelledByUser &&
+      item.canRequestRefund;
+
+    return canShowEditVehicle || canShowRequestRefund;
+  };
 
   if (loading) {
     return (
@@ -460,7 +531,6 @@ export default function MyAMCPage() {
       </div>
     );
   }
-
 
   return (
     <>
@@ -503,7 +573,6 @@ export default function MyAMCPage() {
                   key={item.id}
                   className="flex flex-col gap-3 md:gap-4 bg-white rounded-xl p-3 md:p-6"
                 >
-                  
                   <div className="flex flex-col md:flex-row gap-3 md:gap-4">
                     <MyAMCCard
                       plan={item.plan}
@@ -527,7 +596,7 @@ export default function MyAMCPage() {
                             {item.plan}
                           </h3>
                           <span
-                            className={`px-3 md:px-6 py-2 md:py-3 rounded-full text-xs font-medium whitespace-nowrap ${
+                            className={`px-3 md:px-6 py-2 md:py-3 rounded-full text-[15px] font-medium whitespace-nowrap ${
                               item.status === "Active"
                                 ? "bg-[#E0F2DC] text-[#32AB15]"
                                 : item.status === "Rejected"
@@ -541,7 +610,7 @@ export default function MyAMCPage() {
                           </span>
                         </div>
 
-                        <p className="text-[#1C1C28] text-xs mb-2">
+                        <p className="text-[#1C1C28] text-[16px] mb-2">
                           {item.planStatus === "pending" &&
                           item.refundStatus === "none"
                             ? "Your AMC payment is successful. Waiting for admin approval to activate."
@@ -556,19 +625,18 @@ export default function MyAMCPage() {
                             : "Your refund request is under process."}
                         </p>
 
-                        <p className="text-[#1C1C28] text-xs mb-2 leading-normal line-clamp-3">
+                        <p className="text-[#1C1C28] text-[16px] mb-2 leading-normal line-clamp-3">
                           {item.planDescription}
                         </p>
 
                         <div className="mb-2">
-                          <span className="text-xs md:text-sm font-semibold text-gray-900">
+                          <span className="text-xs md:text-lg  text-gray-900">
                             Order ID:{" "}
                           </span>
                           <span className="text-xs md:text-sm text-[#000000] font-bold">
                             {item.orderId}
                           </span>
                         </div>
-
 
                         {/* {item.expiryWarning &&
                           item.status === "Active" &&
@@ -578,12 +646,12 @@ export default function MyAMCPage() {
                               {item.expiryWarning}
                             </span>
                           )} */}
-                           {remainingTime && item.refundStatus === "none" && (
-                       <span className=" text-[#FF3B30] inline-block bg-red-50 px-2 md:px-3 py-2 rounded-lg text-xs">
-                        This edit expires in {remainingTime}. Service usage won't reflect afterward.
-                      </span>
-                   
-                  )}
+                        {remainingTime && item.refundStatus === "none" && (
+                          <span className=" text-[#FF3B30] inline-block bg-red-50 px-2 md:px-3 py-2 rounded-lg text-xs">
+                            This edit expires in {remainingTime}. Service usage
+                            won't reflect afterward.
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex flex-col md:flex-row gap-2 md:gap-4 p-2 md:p-3 mt-2 flex-wrap">
@@ -597,26 +665,33 @@ export default function MyAMCPage() {
 
                         {shouldShowActionButtons(item) && (
                           <>
-                            {item.canEditVehicle && (
-                              <button
-                                onClick={() => handleEditVehicle(item)}
-                                className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium"
-                              >
-                                <Edit
-                                  size={16}
-                                  className="md:w-[18px] md:h-[18px]"
-                                />
-                                Edit Vehicle
-                              </button>
-                            )}
-                            {item.canRequestRefund && (
-                              <button
-                                onClick={() => handleRequestRefund(item)}
-                                className="px-4 md:px-6 py-2 bg-[#266DDF] text-white rounded-lg hover:bg-[#1d5bc7] transition font-medium text-xs md:text-sm whitespace-nowrap"
-                              >
-                                Request Refund
-                              </button>
-                            )}
+                            {item.canEditVehicle &&
+                              item.refundStatus === "none" &&
+                              (item.planStatus === "active" ||
+                                item.planStatus === "pending") && (
+                                <button
+                                  onClick={() => handleEditVehicle(item)}
+                                  className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium"
+                                >
+                                  <Edit
+                                    size={16}
+                                    className="md:w-[18px] md:h-[18px]"
+                                  />
+                                  Edit Vehicle
+                                </button>
+                              )}
+                            {item.canRequestRefund &&
+                              !item.refundCancelledByUser &&
+                              item.refundStatus === "none" &&
+                              (item.planStatus === "active" ||
+                                item.planStatus === "pending") && (
+                                <button
+                                  onClick={() => handleRequestRefund(item)}
+                                  className="px-4 md:px-6 py-2 bg-[#266DDF] text-white rounded-lg hover:bg-[#1d5bc7] transition font-medium text-xs md:text-sm whitespace-nowrap"
+                                >
+                                  Request Refund
+                                </button>
+                              )}
                           </>
                         )}
 
@@ -920,8 +995,8 @@ export default function MyAMCPage() {
 
       <ConfirmCancelRefundModal
         open={showCancel}
-        onClose={() => setShowCancel(false)}
-        onConfirm={handleCancelRefund}
+        onClose={handleCancelRefund}
+        onConfirm={handleConfirmCancelRefund}
       />
 
       {showInvoiceModal && selectedInvoice && (
@@ -937,6 +1012,7 @@ export default function MyAMCPage() {
         onClose={() => setShowEditModal(false)}
         initial={selectedVehicle}
         initialVehicleType={selectedVehicle?.vehicleType}
+        purchaseId={selectedVehicle?.purchaseId}
         onSubmit={handleEditSubmit}
       />
 

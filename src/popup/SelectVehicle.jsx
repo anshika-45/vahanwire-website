@@ -92,6 +92,17 @@ const SelectVehicle = ({
     }
   }, [addedVehicleNumber, addedVehicleBrand, addedVehicleModel]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setVehicleNumber("");
+      setVehicleModel("");
+      setBrand("");
+      setErrors({});
+      setShowModel(false);
+      setSelectedVehicle(null);
+    }
+  }, [isOpen]);
+
   const handleSearch = async () => {
     const errorMsg = validateVehicleNumber(vehicleNumber);
     if (errorMsg) return setErrors({ number: errorMsg });

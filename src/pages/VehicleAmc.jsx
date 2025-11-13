@@ -133,15 +133,15 @@ const VehicleAmc = () => {
       <Suspense fallback={<TableLoader />}>
         <CompareTable features={features} onBuy={handlePlanBuy} />
       </Suspense>
-      <Suspense fallback={<BannerLoader />}>
+      {/* <Suspense fallback={<BannerLoader />}>
         <LatestOffer />
-      </Suspense>
+      </Suspense> */}
 
-      <div className="flex flex-col lg:flex-col gap-6">
+      {/* <div className="flex flex-col lg:flex-col gap-6">
         <Suspense fallback={<BannerLoader />}>
           <AmcBanner onBuy={handleGenericBuy} />
         </Suspense>
-      </div>
+      </div> */}
       <Suspense fallback={null}>
         <VerifyNumberPopup
           isOpen={isVerifyOpen}

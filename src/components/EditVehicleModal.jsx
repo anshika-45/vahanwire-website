@@ -190,7 +190,7 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
                   key={type}
                   type="button"
                   onClick={() => setVehicleType(type)}
-                  className={`relative flex flex-col items-center w-24 h-14 rounded-xl ${
+                  className={`relative flex flex-col items-center w-28 h-18 rounded-xl ${
                     vehicleType === type
                       ? "border-[#266DDF] bg-[#ECF3FD]"
                       : "border border-transparent hover:bg-[#ECF3FD]"
@@ -216,7 +216,7 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
                         : bikeOutline
                     }
                     alt={type}
-                    className="h-7 mt-8"
+                    className="h-8 mt-8"
                   />
                 </button>
               ))}

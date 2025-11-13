@@ -201,15 +201,15 @@ const VehicleAmcFilter = () => {
           vehicle={vehicle}
         />
       </Suspense>
-      <Suspense fallback={<BannerLoader />}>
+      {/* <Suspense fallback={<BannerLoader />}>
         <LatestOffer />
-      </Suspense>
+      </Suspense> */}
 
-      <div className="flex flex-col space-y-10">
+      {/* <div className="flex flex-col space-y-10">
         <Suspense fallback={<BannerLoader />}>
           <AmcBanner onBuy={handleBuyNow} onBuyNow={handleBuyNow} plan={plans?.[0]}/>
         </Suspense>
-      </div>
+      </div> */}
 
       {isPopupOpen && (
         <Suspense fallback={null}>

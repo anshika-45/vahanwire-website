@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-// image imports (adjust paths if your assets live elsewhere)
 import carColor from "../assets/CarFill.svg";
 import carOutline from "../assets/CarFade.svg";
 import bikeColor from "../assets/BikeFill.svg";
 import bikeOutline from "../assets/BikeFade.svg";
+import { updateAMCPurchaseVehicle } from "../api/vehicleApi";
 
 export default function EditVehicleModal2({
   open,
@@ -11,6 +11,7 @@ export default function EditVehicleModal2({
   onSubmit = () => {},
   initial = null,
   initialVehicleType = null,
+  purchaseId = null,
 }) {
   const [vehicleType, setVehicleType] = useState("car");
   const [form, setForm] = useState({
@@ -22,7 +23,6 @@ export default function EditVehicleModal2({
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-  const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -33,9 +33,7 @@ export default function EditVehicleModal2({
     };
   }, [open]);
 
-  // infer vehicle type from various sources
   const inferVehicleType = () => {
-    // precedence: initialVehicleType prop -> initial.vehicleType -> initial.vehicleInfo -> initial.vehicle (text) -> default car
     const pref =
       initialVehicleType ||
       (initial && initial.vehicleType) ||
@@ -60,7 +58,6 @@ export default function EditVehicleModal2({
       p.includes("hatch")
     )
       return "car";
-    // fallback to car
     return "car";
   };
 
@@ -88,7 +85,6 @@ export default function EditVehicleModal2({
 
     setErrors({});
     setTouched({});
-    setSubmitError("");
     setIsSubmitting(false);
   }, [initial, initialVehicleType, open]);
 
@@ -104,52 +100,14 @@ export default function EditVehicleModal2({
     switch (name) {
       case "vehicleNumber": {
         if (!v) return "Vehicle number is required";
-        const clean = formatVehicleNumber(v);
-        const vehicleNumberRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{0,4}[0-9]{1,4}$/;
-        if (!vehicleNumberRegex.test(clean))
-          return "Vehicle number format: State code (2) + Digits (1-2) + Letters (0-4) + Digits (1-4)";
-        if (clean.length < 6 || clean.length > 12)
-          return "Vehicle number should be between 6-12 characters";
         return "";
       }
       case "brand": {
         if (!v) return "Brand is required";
-        if (v.length < 2) return "Brand name must be at least 2 characters";
-        if (!/^[A-Za-z0-9\s&.\-]{2,}$/.test(v))
-          return "Brand can contain letters, numbers, &, ., -";
-        if (v.length > 50) return "Brand name cannot exceed 50 characters";
         return "";
       }
       case "model": {
         if (!v) return "Model is required";
-        if (v.length < 1) return "Model cannot be empty";
-        if (!/^[A-Za-z0-9\s&.\-]{1,}$/.test(v))
-          return "Model can contain letters, numbers, &, ., -";
-        if (v.length > 50) return "Model name cannot exceed 50 characters";
-        return "";
-      }
-      case "year": {
-        if (!v) return "Manufacture year is required";
-        if (!/^\d{4}$/.test(v)) return "Year must be in YYYY format (e.g., 2023)";
-        const yearNum = parseInt(v, 10);
-        const currentYear = new Date().getFullYear();
-        if (yearNum < 1900 || yearNum > currentYear + 1)
-          return `Year must be between 1900 and ${currentYear + 1}`;
-        return "";
-      }
-      case "fuelType": {
-        if (!v) return "Fuel type is required";
-        const allowed = [
-          "petrol",
-          "diesel",
-          "electric",
-          "cng",
-          "hybrid",
-          "lpg",
-          "ev",
-        ];
-        if (!allowed.includes(v.toLowerCase()))
-          return "Valid fuel types: Petrol, Diesel, Electric, CNG, Hybrid, LPG, EV";
         return "";
       }
       default:
@@ -157,38 +115,24 @@ export default function EditVehicleModal2({
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    Object.keys(form).forEach((k) => {
-      newErrors[k] = validateField(k, form[k]);
-    });
-    setErrors(newErrors);
-    return !Object.values(newErrors).some(Boolean);
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // Reject invalid characters for specific fields
+
     let processed = value;
-    
+
     if (name === "vehicleNumber") {
       processed = formatVehicleNumber(value);
     } else if (name === "year") {
-      // Only allow digits
       processed = value.replace(/\D/g, "");
       if (processed.length > 4) processed = processed.slice(0, 4);
     } else if (name === "brand" || name === "model") {
-      // Only allow alphanumeric, spaces, &, ., -
       processed = value.replace(/[^a-zA-Z0-9\s&.\-]/g, "");
     } else if (name === "fuelType") {
-      // Only allow letters and spaces
       processed = value.replace(/[^a-zA-Z\s]/g, "");
     }
-    
+
     setForm((p) => ({ ...p, [name]: processed }));
-    setSubmitError("");
-    
+
     if (touched[name])
       setErrors((p) => ({ ...p, [name]: validateField(name, processed) }));
   };
@@ -204,7 +148,6 @@ export default function EditVehicleModal2({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitError("");
 
     const allTouched = Object.keys(form).reduce(
       (acc, k) => ({ ...acc, [k]: true }),
@@ -212,8 +155,13 @@ export default function EditVehicleModal2({
     );
     setTouched(allTouched);
 
-    if (!validateForm()) {
-      setSubmitError("Please fix all validation errors");
+    const newErrors = {};
+    ["vehicleNumber", "brand", "model"].forEach((k) => {
+      newErrors[k] = validateField(k, form[k]);
+    });
+    setErrors(newErrors);
+
+    if (Object.values(newErrors).some(Boolean)) {
       return;
     }
 
@@ -227,24 +175,24 @@ export default function EditVehicleModal2({
         year: form.year.trim(),
         fuelType: form.fuelType.trim(),
       };
-      
+
+      const actualPurchaseId = purchaseId || (initial && initial.purchaseId);
+
+      if (actualPurchaseId) {
+        await updateAMCPurchaseVehicle(actualPurchaseId, payload);
+      }
+
       await onSubmit(payload);
       onClose();
     } catch (error) {
-      setSubmitError(
-        error?.message || "Failed to update vehicle. Please try again."
-      );
       setIsSubmitting(false);
     }
   };
 
   if (!open) return null;
 
-  // show colored image for selected type, outline for the other if you ever toggle
   const carSrc = vehicleType === "car" ? carColor : carOutline;
   const bikeSrc = vehicleType === "bike" ? bikeColor : bikeOutline;
-
-  // Only show one image (the inferred/selected vehicle). Clicking it toggles between types (optional).
   const displayedSrc = vehicleType === "car" ? carSrc : bikeSrc;
   const displayedAlt = vehicleType === "car" ? "Car" : "Bike";
 
@@ -332,8 +280,6 @@ export default function EditVehicleModal2({
                 <div className="flex-1 border-t border-slate-300" />
               </div>
 
-            
-
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
                   Select Brand
@@ -376,12 +322,6 @@ export default function EditVehicleModal2({
                 )}
               </div>
 
-              {submitError && (
-                <div className="bg-red-50 border border-red-300 rounded-lg px-3 py-2 text-red-700 text-xs sm:text-sm">
-                  {submitError}
-                </div>
-              )}
-
               <div className="flex flex-col sm:flex-row justify-start gap-2 pt-2 sm:pt-3">
                 <button
                   type="button"
@@ -393,7 +333,7 @@ export default function EditVehicleModal2({
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting || Object.values(errors).some(Boolean)}
+                  disabled={isSubmitting}
                   className="px-6 sm:px-8 py-2 rounded-lg border-2 border-blue-600 text-[#266DDF] font-semibold hover:bg-blue-700 hover:text-white transition w-full sm:w-auto whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? "Saving..." : "Save"}

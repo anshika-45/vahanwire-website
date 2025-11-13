@@ -83,13 +83,16 @@ export const getAmcInvoice = async (amcPurchaseId) => {
   }
 };
 
-// export const cancelRefundRequest = async (refundRequestId) => {
-//   try {
-//     const response = await axiosInstance.put(`/amc-refund/refund-request/${refundRequestId}/cancel`);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error fetching AMC invoice:", error);
-//     throw error;
-//   }
-// };
+export const cancelRefundRequest = async (refundRequestId) => {
+  try {
+    console.log("kewjckbjk",refundRequestId);
+    console.log("jecw jebjhbe");
+    const response = await axiosInstance.put(`/amc-refund/refund-request/${refundRequestId}/cancel`);
+    console.log("nwcbjbejbjwe",response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching AMC invoice:", error);
+    throw error;
+  }
+};
 
