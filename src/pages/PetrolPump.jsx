@@ -15,7 +15,7 @@ const PetrolPump = () => {
   useDarkOverlay={true}
  />
         </Suspense>
-                <div className="mt-6 md:mt-18 lg:mt-12 xl:mt-0" />
+        <div className="mt-6 md:mt-12 lg:mt-12 xl:mt-0" />
       </div>
     </>
   );

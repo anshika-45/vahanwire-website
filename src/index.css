@@ -177,3 +177,139 @@ font-family: Roboto, sans-serif;
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.ticker-container {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(
+    to right,
+    #F80200 10%,
+    #F8BA01 30%,
+    #32AB15 60%,
+    #4184ED 90%
+  );
+  padding: 5px 0;
+}
+
+/* Inner ticker wrapper */
+.ticker {
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.ticker__move {
+  display: inline-block;
+  white-space: nowrap;
+  animation: tickerMove 5s ease-in-out infinite alternate;
+  font-weight: 550;
+}
+
+@keyframes tickerMove {
+  0% {
+    transform: translateX(-10%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-10%);
+  }
+}
+
+.ticker-item {
+  padding: 0 5px;
+  font-size: 16px;
+  color: #050505;
+}
+
+.gradient-text {
+  background-image: linear-gradient(
+    to right,
+    #F80200 10%,
+    #F8BA01 40%,
+    #32AB15 50%,
+    #4184ED 90%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mech-img-animation3 {
+  animation: scaleOutward 2.8s ease infinite;
+  animation-delay: 0.3s;
+}
+.mech-img-animation4 {
+  animation: scaleOutward2 2s ease infinite;
+  animation-delay: 0s;
+}
+.mech-img-animation6 {
+  animation: scaleOutward3 2s ease infinite;
+  animation-delay: 0.6s;
+}
+
+@keyframes scaleOutward {
+  0% {
+    transform: scale(0.1);
+    transform-origin: right;
+    transform: translateY(-10px);
+    z-index: -1;
+    visibility: hidden;
+    top: 80%;
+    left: 70px;
+  }
+  20% {
+    z-index: -1;
+    left: 0px;
+  }
+  50% {
+    left: -20px;
+  }
+  100% {
+    transform: scale(1);
+    transform: translateY(0);
+    visibility: visible;
+    z-index: 1;
+    left: -50px;
+    top: -40px;
+  }
+}
+@keyframes scaleOutward2 {
+  0% {
+    transform: scale(0.1);
+    transform-origin: left;
+
+    visibility: hidden;
+    right: 30px;
+    top: 100px;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    visibility: visible;
+    z-index: 1;
+    right: -50px;
+    top: -40px;
+  }
+}
+@keyframes scaleOutward3 {
+  0% {
+    transform: scale(0.1);
+    transform-origin: bottom;
+    z-index: -1;
+    visibility: hidden;
+    bottom: 100px;
+    left: 70px;
+  }
+  20% {
+    z-index: -1;
+  }
+  100% {
+    transform: scale(1);
+    visibility: visible;
+    z-index: 1;
+    left: -50px;
+    bottom: 40px;
+  }
+}
