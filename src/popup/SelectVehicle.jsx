@@ -8,7 +8,7 @@ import bikeImg from "../assets/bike2.png";
 import verifyIcon from "../assets/verify.webp";
 import {
   searchUserVehicle,
-  addUserVehicle,
+   addUserVehicleWithoutAMC,
   getUserVehicleWithoutAMC,
 } from "../api/vehicleApi";
 import { selectAMCVehicle } from "../api/amcApi";
@@ -40,6 +40,12 @@ const SelectVehicle = ({
   const getVehicleImage = (vehicleType) => {
     return vehicleType?.toLowerCase() === "bike" ? bikeImg : carImg;
   };
+
+  const truncateText = (text, maxLength = 10) => {
+    if (!text) return "";
+    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+  };
+
   const validateVehicleNumber = (number) => {
     const cleaned = number.trim().toUpperCase().replace(/[-\s]/g, "");
 
@@ -119,7 +125,6 @@ const SelectVehicle = ({
   
     const response = data?.data;
   
-    // 🚨 Handle vehicle registered by another user
     if (response?.alreadyRegisteredByOtherUser) {
       setErrors({
         number:
@@ -156,47 +161,86 @@ const SelectVehicle = ({
     }
   };
   
-  const handleAddVehicle = async () => {
-    const numberError = validateVehicleNumber(vehicleNumber);
-    const brandError = !brand.trim() ? "Please enter the vehicle brand" : "";
-    const modelError = !vehicleModel.trim() ? "Please enter the vehicle model" : "";
+const handleAddVehicle = async () => {
+  const numberError = validateVehicleNumber(vehicleNumber);
+  const brandError = !brand.trim() ? "Please enter the vehicle brand" : "";
+  const modelError = !vehicleModel.trim() ? "Please enter the vehicle model" : "";
 
-    if (numberError || brandError || modelError) {
-      setErrors({ number: numberError, brand: brandError, model: modelError });
-      return;
-    }
+  if (numberError || brandError || modelError) {
+    setErrors({
+      number: numberError,
+      brand: brandError,
+      model: modelError,
+    });
+    return;
+  }
 
-    const normalizedNumber = vehicleNumber.toUpperCase();
-    if (addedVehicles.find((v) => v.number === normalizedNumber)) {
-      setErrors({ number: "This vehicle already exists in your list" });
-      return;
-    }
+  const normalizedNumber = vehicleNumber.toUpperCase();
 
-    setIsLoading(true);
-    const response = await addUserVehicle({
+  if (addedVehicles.find((v) => v.number === normalizedNumber)) {
+    setErrors({ number: "This vehicle already exists in your list" });
+    return;
+  }
+
+  setIsLoading(true);
+
+  try {
+    const apiRes = await addUserVehicleWithoutAMC({
       vehicleNumber: normalizedNumber,
       brand: brand.trim(),
       model: vehicleModel.trim(),
     });
+
     setIsLoading(false);
 
-    if (response?.status === 201) {
+    const msg = apiRes?.data?.message;
+
+    if (msg === "Vehicle already exists in your account") {
+      setErrors({ number: msg });
+      return;
+    }
+
+    if (msg === "This vehicle is already registered with another user") {
+      setErrors({ number: msg });
+      return;
+    }
+
+    if (msg?.includes("active AMC")) {
+      setErrors({ number: msg });
+      return;
+    }
+
+    if (apiRes?.status === 201 && msg === "Vehicle added successfully") {
       const newVehicle = {
         number: normalizedNumber,
         model: vehicleModel.trim(),
         brand: brand.trim(),
       };
+
       setAddedVehicles((prev) => [...prev, newVehicle]);
       setSelectedVehicle(newVehicle.number);
+
       setVehicleNumber("");
       setBrand("");
       setVehicleModel("");
       setShowModel(false);
       setErrors({});
-    } else {
-      setErrors({ number: "Failed to add vehicle. Try again." });
+
+      return;
     }
-  };
+
+    setErrors({ number: "Failed to add vehicle. Try again." });
+
+  } catch (error) {
+    setIsLoading(false);
+
+    const msg =
+      error?.response?.data?.message ||
+      "Something went wrong. Please try again.";
+
+    setErrors({ number: msg });
+  }
+};
 
 const handleProceed = async () => {
   if (!selectedVehicle) {
@@ -247,7 +291,6 @@ const handleProceed = async () => {
     });
 };
 
-
   const handleCancelAdd = () => {
     setShowModel(false);
     setVehicleNumber("");
@@ -288,8 +331,8 @@ const handleProceed = async () => {
                   className="w-20 h-12 object-cover rounded"
                 />
                 <div className="flex-1">
-                  <div className="font-medium text-[18px] text-gray-900">
-                    {vehicle.brand} {vehicle.model}
+                  <div className="font-medium text-[18px] text-gray-900" title={`${vehicle.brand} ${vehicle.model}`}>
+                    {truncateText(vehicle.brand, 9)} {truncateText(vehicle.model, 9)}
                   </div>
                   <div className="text-xs md:text-[17px] text-gray-500">{vehicle.number}</div>
                 </div>
@@ -336,6 +379,7 @@ const handleProceed = async () => {
                 placeholder="Enter Brand"
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
+                maxLength={10}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-xs mb-2"
               />
               {errors.brand && (
@@ -348,6 +392,7 @@ const handleProceed = async () => {
                 placeholder="Enter Model"
                 value={vehicleModel}
                 onChange={(e) => setVehicleModel(e.target.value)}
+                maxLength={10}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-xs mb-3"
               />
               {errors.model && (

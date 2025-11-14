@@ -10,6 +10,7 @@ const SuccessPurchase = React.lazy(() => import("../popup/SuccessPurchase"));
 const FailedPurchase = React.lazy(() => import("../popup/FailedPurchase"));
 import { useAuth } from "../context/AuthContext";
 import { createAMCPurchase } from "../api/amcApi";
+import {getPaymentStatus } from "../api/paymentApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import AMC from "../components/AMC";
 import useAmcData from "../hooks/useAmcData";
@@ -34,6 +35,7 @@ const VehicleAmcFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
+   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
   const {
     plans,
@@ -81,6 +83,7 @@ const VehicleAmcFilter = () => {
     }
   }, [isLoggedIn, navigate]);
 
+  
   // useEffect(() => {
   //   document.body.style.overflow = "auto";
   //   document.documentElement.style.overflow = "auto";
@@ -90,7 +93,45 @@ const VehicleAmcFilter = () => {
   //   };
   // }, []);
 
-  useEffect(() => {
+
+    useEffect(() => {
+    const checkPaymentStatus = async () => {
+      const txnid = searchParams.get("txnid");
+      const status = searchParams.get("status");
+
+      if (txnid && !status) {
+        setIsCheckingStatus(true);
+        try {
+          const result = await getPaymentStatus(txnid);
+          
+          if (result.success) {
+            const paymentStatus = result.data.status;
+            
+            if (paymentStatus === "success") {
+              setShowPopup("success");
+              searchParams.set("status", "success");
+            } else if (paymentStatus === "failed") {
+              setShowPopup("failed");
+              searchParams.set("status", "failed");
+            } else if (paymentStatus === "pending") {
+              setTimeout(() => checkPaymentStatus(), 3000);
+              return;
+            }
+            
+            setSearchParams(searchParams, { replace: true });
+          }
+        } catch (error) {
+          console.error("Status check failed:", error);
+        } finally {
+          setIsCheckingStatus(false);
+        }
+      }
+    };
+
+    checkPaymentStatus();
+  }, [searchParams.get("txnid")]);
+
+   useEffect(() => {
     if (status === "success" || status === "failed") {
       setShowPopup(status);
       
@@ -101,6 +142,8 @@ const VehicleAmcFilter = () => {
           setVehicle(parsed.vehicle);
           setSelectedPlanState(parsed.selectedPlan);
         }
+      } else if (status === "success") {
+        sessionStorage.removeItem('failedPaymentData');
       }
     }
   }, [status]);
@@ -151,10 +194,12 @@ const VehicleAmcFilter = () => {
   };
 
   const handleClosePaymentPopup = () => {
+    sessionStorage.removeItem('failedPaymentData');
     setShowPopup(null);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
+    navigate('/vehicle-amc-filter', { replace: true });
   };
 
   const handleSuccessClose = () => {
@@ -167,6 +212,17 @@ const VehicleAmcFilter = () => {
 
   if (!isLoggedIn) {
     return null;
+  }
+
+  if (isCheckingStatus) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Verifying payment status...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

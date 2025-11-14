@@ -26,6 +26,7 @@ export const addUserVehicle = async (vehicleData) => {
 };
 
 export const searchUserVehicle = async (vehicleNumber) => {
+  console.log("jkkwcnkjbejec",vehicleNumber);
     const res = await axiosInstance.get(`/vehicle/search?vehicleNumber=${vehicleNumber}`);
     return res.data;
 };
@@ -45,4 +46,11 @@ export const updateAMCPurchaseVehicle = async (purchaseId, vehicleData) => {
   });
   console.log("kjksacbjkbjkassscs",res);
   return res.data;
+};
+
+export const addUserVehicleWithoutAMC = async (vehicleData) => {
+  console.log("ekjqbjkbjqbhjbhj");
+  const res = await axiosInstance.post("/vehicle/add-vehicle-without-amc", vehicleData);
+  console.log("ejcbjbehjbew",res);
+  return res;
 };
