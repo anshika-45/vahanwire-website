@@ -61,7 +61,7 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
   ];
 
   return (
-    <aside className="w-full md:w-72 lg:w-80 bg-white rounded-[20px] overflow-hidden shadow-sm">
+    <aside className="w-full xl:w-80  bg-white rounded-[20px] overflow-hidden shadow-sm">
       <div className="px-4 py-3">
         <h2 className="text-base sm:text-[17px] md:text-[18px] font-medium text-[#2F3A41]">
           My Account

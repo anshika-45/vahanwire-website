@@ -537,7 +537,7 @@ export default function MyAMCPage() {
       <div className="w-full">
         <div className="space-y-2 md:space-y-3 bg-[#F4F4F4] p-3 md:p-4 rounded-xl">
           <div className="rounded-xl p-2 md:p-3 m-2 md:m-3 mt-0 overflow-x-auto">
-            <nav className="flex gap-1 md:gap-8 border-b border-[#D9D9D9] min-w-max md:min-w-full">
+            <nav className="flex gap-x-4 md:gap-8 border-b border-[#D9D9D9] min-w-max md:min-w-full">
               {tabs.map((tab) => (
                 <button
                   key={tab}

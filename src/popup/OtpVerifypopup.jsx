@@ -163,7 +163,7 @@ const OtpVerifypopup = ({
             <h1 className="text-xl font-semibold text-[#242424] text-center mb-2">
               Verify Your Number
             </h1>
-            <p className="text-xs text-[#333333] mb-4">
+            <p className="text-base text-[#333333] mb-4">
               Enter the OTP sent to {phoneNumber}
             </p>
 
@@ -198,14 +198,14 @@ const OtpVerifypopup = ({
             {error && <div className="text-[#CB0200] text-xs mb-2">{error}</div>}
 
             {timer > 0 ? (
-              <div className="text-xs text-[#CB0200] mb-4">
+              <div className="text-base text-[#CB0200] mb-4">
                 Resend OTP in {timer}s
               </div>
             ) : (
               <button
                 onClick={handleResend}
                 disabled={resendLoading}
-                className="text-xs text-[#266DDF] underline mb-4 disabled:opacity-60"
+                className="text-base text-[#266DDF] underline mb-4 disabled:opacity-60"
               >
                 {resendLoading ? "Sending..." : "Resend OTP"}
               </button>

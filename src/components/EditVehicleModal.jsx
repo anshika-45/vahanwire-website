@@ -64,6 +64,7 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
         if (clean.length < 8 || clean.length > 12)
           return "Vehicle number should be 8–12 characters";
         return "";
+        
       }
   
       case "brand":

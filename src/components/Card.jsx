@@ -1,18 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Card1Img from "../assets/Card1.svg";
 import Card2Img from "../assets/Card2.svg";
 import Card3Img from "../assets/Card3.svg";
 import Card4Img from "../assets/Card4.svg";
+
+const AnimatedCounter = ({ targetValue, isPercentage, isRating, isSuffix }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    let currentValue = 0;
+    const increment = Math.ceil(targetValue / 100);
+    const timer = setInterval(() => {
+      currentValue += increment;
+      if (currentValue >= targetValue) {
+        setDisplayValue(targetValue);
+        clearInterval(timer);
+      } else {
+        setDisplayValue(currentValue);
+      }
+    }, 150);
+
+    return () => clearInterval(timer);
+  }, [targetValue]);
+
+  if (isPercentage) return `${displayValue}%`;
+  if (isRating) return `${(displayValue / 10).toFixed(1)}★`;
+  if (isSuffix) return `${displayValue.toLocaleString()}+`;
+  return displayValue.toLocaleString();
+};
+
 const YellowCards = () => {
   const cardData = [
-    { image: Card1Img, title: "98%", description: "Customer Satisfaction" },
+    { image: Card1Img, title: 98, description: "Customer Satisfaction", isPercentage: true },
     {
       image: Card2Img,
-      title: "5,000+",
+      title: 5000,
       description: "Active Service Providers",
+      isSuffix: true,
     },
-    { image: Card3Img, title: "4.8★", description: "Average App Rating" },
-    { image: Card4Img, title: "1,00,000+", description: "Services Completed" },
+    { image: Card3Img, title: 48, description: "Average App Rating", isRating: true },
+    { image: Card4Img, title: 100000, description: "Services Completed", isSuffix: true },
   ];
   return (
     <div
@@ -45,7 +72,12 @@ const YellowCards = () => {
             className="md:text-3xl text-lg text-[#242424] font-bold 
                          mb-1 sm:mb-1.5 md:mb-2 max-sm:text-base max-sm:mb-0.5"
           >
-            {card.title}
+            <AnimatedCounter 
+              targetValue={card.title} 
+              isPercentage={card.isPercentage}
+              isRating={card.isRating}
+              isSuffix={card.isSuffix}
+            />
           </h3>
           <p className="text-[#242424] text-xs sm:text-sm md:text-base max-sm:text-[10px]">
             {card.description}

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import aboutBanner from "../assets/AboutUs.svg";
 import aboutAppImage from "../assets/Mobile.svg";
-const AddBanner = React.lazy(() => import("../components/AddBanner"));
+
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 
 const ComponentFallback = () => (
@@ -15,7 +15,9 @@ const AboutUs = () => {
     <>
       <div>
         <Suspense fallback={<ComponentFallback />}>
-          <PageBanner title="About Us" image={aboutBanner} />
+          <PageBanner title="About Us" image={aboutBanner} useGradientTitle={false}
+  useDarkOverlay={false} showTicker={false}
+ height="250px"/>
         </Suspense>
         <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
           <div>
@@ -53,7 +55,7 @@ const AboutUs = () => {
               <img
                 src={aboutAppImage}
                 alt="VahanWire App Interface"
-                className="w-[160px] md:w-[140px] lg:w-[165px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200"
+                className="w-[140px] md:w-[120px] lg:w-[140px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200"
                 loading="lazy"
                 width={300}  
                 height={600}

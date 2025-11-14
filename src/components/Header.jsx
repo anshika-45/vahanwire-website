@@ -21,29 +21,60 @@ const Header = () => {
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+
+  const pages = {
+    home: "/",
+    about: "/about-us",
+    amc: "/my-account?view=amc",
+    profile: "/my-account?view=profile",
+    vehicle: "/my-account?view=vehicles",
+    contact: "/contact-us",
+  };
 
   const handleChange = (e) => {
-    setQuery(e.target.value);
+    const value = e.target.value;
+    setQuery(value);
+
+    if (value.trim() === "") {
+      setSuggestions([]);
+      return;
+    }
+
+    try {
+      const regex = new RegExp(value, "i");
+      const matched = Object.keys(pages).filter((page) => regex.test(page));
+
+      if (matched.length > 0) {
+        setSuggestions(matched);
+      } else {
+        setSuggestions(["__no_match__"]);
+      }
+    } catch {
+      setSuggestions(["__no_match__"]);
+    }
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && query.trim() !== "") {
       e.preventDefault();
 
-      const pages = {
-        home: "/",
-        about: "/about",
-        amc: "/my-account?view=amc",
-        profile: "/my-account?view=profile",
-        vehicle: "my-account?view=vehicles",
-      };
-
       const lowerQuery = query.toLowerCase();
-      if (Object.prototype.hasOwnProperty.call(pages, lowerQuery)) {
+      if (pages[lowerQuery]) {
         navigate(pages[lowerQuery]);
       }
-      return;
+      //  else {
+      //   navigate(`/search?query=${encodeURIComponent(query)}`);
+      // }
     }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    if (suggestion === "__no_match__") return;
+
+    navigate(pages[suggestion]);
+    setQuery("");
+    setSuggestions([]);
   };
   const dropdownRef = useRef(null);
   const handleProfileClick = () => {
@@ -71,6 +102,7 @@ const Header = () => {
   };
   const handleClick = () => {
     setOpen(!open);
+    setQuery("");
   };
   return (
     <div className="bg-white md:py-6 py-3.5 z-50">
@@ -150,37 +182,59 @@ const Header = () => {
             )}
           </div>
         </div>
-        <div
-          id="headerSearchbarForMobile"
-          className={`${
-            open ? "max-h-7 py-1 my-2 opacity-100" : "max-h-0 opacity-0"
-          } duration-200 ease-in-out transition-all`}
-        >
-          <div className="relative md:hidden block">
-            <label htmlFor="mobile-search-input" className="sr-only">
-              Search
-            </label>
-            <img
-              src={searchIcon}
-              loading="lazy"
-              alt="Search"
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
-            />
-            <input
-              id="search-input"
-              className={`py-2 pl-10 pr-4 text-sm ${
-                open
-                  ? "w-full rounded-[6px] border-2 border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
-                  : ""
-              }`}
-              value={query}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-              type="text"
-              placeholder="Search..."
-            />
+        {open && (
+          <div
+            id="headerSearchbarForMobile"
+            className={`search-bar-animation relative max-h-7 py-1 my-2`}
+          >
+            <div className="relative md:hidden block">
+              <label htmlFor="mobile-search-input" className="sr-only">
+                Search
+              </label>
+              <img
+                src={searchIcon}
+                loading="lazy"
+                alt="Search"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
+              />
+              <input
+                id="search-input"
+                className={`py-2 pl-10 pr-4 text-sm ${
+                  open
+                    ? "w-full rounded-[6px] border-2 border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
+                    : ""
+                }`}
+                value={query}
+                type="text"
+                onChange={handleChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Search..."
+              />
+            </div>
+            {query.trim() !== "" && suggestions.length > 0 && (
+              <div className="absolute bg-white border border-[#E3EDFC] rounded-md mt-1 w-full shadow-sm z-20">
+                {suggestions.map((item, index) =>
+                  item === "__no_match__" ? (
+                    <div
+                      key={index}
+                      className="px-4 py-2 text-gray-500 cursor-default"
+                    >
+                      No matching pages found
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      onClick={() => handleSuggestionClick(item)}
+                      className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                    >
+                      {item}
+                    </div>
+                  )
+                )}
+              </div>
+            )}
           </div>
-        </div>
+        )}
       </div>
       <Suspense fallback={<LazyFallback />}>
         <VerifyNumberPopup

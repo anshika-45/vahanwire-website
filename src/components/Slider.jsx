@@ -3,6 +3,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import mechanic from "../assets/oMechanic-Service.webp";
 import amc from "../assets/oAMC.webp";
 import towtruck from "../assets/oTow-Truck-Service.webp";
+import mechanicNewImage from "../assets/mechanic.jpg";
+import post2 from "../assets/Post2.jpg";
+import post3 from "../assets/Post3.jpg";
+import post4 from "../assets/Post4.jpg";
 import leftIcon from "../assets/leftarrow.webp";
 import rightIcon from "../assets/rightarrow.webp";
 import "swiper/css";
@@ -22,7 +26,7 @@ const slides = [
     id: 4,
     title: "Battery Jumpstart",
     desc: "Quick and safe power boost.",
-    img: mechanic,
+    img: post4,
   },
   {
     id: 6,
@@ -34,31 +38,50 @@ const slides = [
     id: 7,
     title: "AMC Plan",
     desc: "Annual Maintenance Contract.",
-    img: mechanic,
+    img: post3,
   },
 
   {
     id: 9,
     title: "Battery Jumpstart",
     desc: "Quick and safe power boost.",
-    img: amc,
+    img: post2,
   },
   {
     id: 10,
     title: "Flat Tyre Fix",
     desc: "On-the-spot repair and inflation.",
-    img: towtruck,
+    img: mechanicNewImage,
+  },
+  {
+    id: 11,
+    title: "Mechanic Service",
+    desc: "Instant roadside assistance.",
+    img: mechanic,
+  },
+  {
+    id: 12,
+    title: "AMC Plan",
+    desc: "Annual Maintenance Contract.",
+    img: post2,
+  },
+
+  {
+    id: 13,
+    title: "Battery Jumpstart",
+    desc: "Quick and safe power boost.",
+    img: post4,
   },
 ];
 export default function Slider() {
   return (
     <div className="homeSlider max-w-screen relative pt-5 mt-3 lg:mb-6">
-      <div className="container">
+      <div className="">
         <Swiper
           spaceBetween={30}
           centeredSlides={true}
           autoplay={{
-            delay: 2000,
+            delay: 1500,
             disableOnInteraction: false,
           }}
           loop={true}
@@ -97,9 +120,9 @@ export default function Slider() {
           {slides.map((s, index) => {
             return (
               <SwiperSlide key={s.id}>
-                <div className=" w-full h-[250px]">
+                <div className=" w-full lg:h-[270px] h-[240px]">
                   <img
-                    className="object-center h-full rounded-2xl"
+                    className="object-contain h-full rounded-2xl"
                     src={s.img}
                     alt=""
                   />

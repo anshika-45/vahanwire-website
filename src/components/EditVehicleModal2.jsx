@@ -83,9 +83,9 @@ export default function EditVehicleModal2({
       case "vehicleNumber": {
         const clean = v.toUpperCase().replace(/\s/g, "");
         if (!clean) return "Vehicle number is required";
-        const regex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{0,4}[0-9]{3,4}$/;
+        const regex = /^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{1,4}$/;
         if (!regex.test(clean)) return "Please enter a valid number (e.g., DL01AB1234)";
-        if (clean.length < 8 || clean.length > 12) return "Vehicle number should be 8–12 characters";
+        if (clean.length < 8 || clean.length > 10) return "Vehicle number should be 8–10 characters";
         return "";
       }
       case "brand": {

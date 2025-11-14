@@ -72,7 +72,7 @@ const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false }) => {
             </h1>
             <label
               htmlFor="phone"
-              className="w-full text-xs text-[#5C5C5C] mb-1"
+              className="w-full text-base text-[#5C5C5C] mb-2"
             >
               Phone Number*
             </label>
@@ -91,7 +91,7 @@ const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false }) => {
         px-3 py-2 sm:py-3 
         mb-2 
         focus:outline-none focus:ring-1 focus:ring-[#BCD2F5] 
-        text-left text-sm bg-[#F8F8F8] text-[#A1A1A1]
+        text-left text-sm bg-[#F8F8F8] text-[#5C5C5C]
       "
             />
 
