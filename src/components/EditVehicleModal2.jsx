@@ -36,28 +36,14 @@ export default function EditVehicleModal2({
   const inferVehicleType = () => {
     const pref =
       initialVehicleType ||
-      (initial && initial.vehicleType) ||
-      (initial && initial.vehicleInfo) ||
-      (initial && initial.vehicle) ||
+      initial?.vehicleType ||
+      initial?.vehicleInfo ||
+      initial?.vehicle ||
       "";
     if (!pref) return "car";
     const p = String(pref).toLowerCase();
-    if (
-      p.includes("bike") ||
-      p.includes("motor") ||
-      p.includes("two") ||
-      p.includes("scooter") ||
-      p.includes("motorcycle")
-    )
+    if (p.includes("bike") || p.includes("motor") || p.includes("two") || p.includes("scooter") || p.includes("motorcycle"))
       return "bike";
-    if (
-      p.includes("car") ||
-      p.includes("auto") ||
-      p.includes("four") ||
-      p.includes("sedan") ||
-      p.includes("hatch")
-    )
-      return "car";
     return "car";
   };
 
@@ -90,24 +76,43 @@ export default function EditVehicleModal2({
 
   const isEditMode = !!(initial || initialVehicleType);
 
-  const formatVehicleNumber = (value) =>
-    String(value || "")
-      .replace(/\s/g, "")
-      .toUpperCase();
-
   const validateField = (name, value) => {
     const v = String(value || "").trim();
+    
     switch (name) {
       case "vehicleNumber": {
-        if (!v) return "Vehicle number is required";
+        const clean = v.toUpperCase().replace(/\s/g, "");
+        if (!clean) return "Vehicle number is required";
+        const regex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{0,4}[0-9]{3,4}$/;
+        if (!regex.test(clean)) return "Please enter a valid number (e.g., DL01AB1234)";
+        if (clean.length < 8 || clean.length > 12) return "Vehicle number should be 8–12 characters";
         return "";
       }
       case "brand": {
         if (!v) return "Brand is required";
+        if (/\d/.test(v)) return "Brand cannot contain numbers";
+        if (v.length < 2) return "Brand must be at least 2 characters";
+        if (v.length > 20) return "Brand cannot exceed 20 characters";
         return "";
       }
       case "model": {
         if (!v) return "Model is required";
+        if (v.length < 2) return "Model must be at least 2 characters";
+        if (v.length > 25) return "Model cannot exceed 25 characters";
+        return "";
+      }
+      case "year": {
+        if (!v) return "";
+        if (!/^\d{4}$/.test(v)) return "Enter a valid 4-digit year";
+        const yearNum = Number(v);
+        const curr = new Date().getFullYear();
+        if (yearNum < 1900 || yearNum > curr + 1) return `Year must be between 1900 and ${curr + 1}`;
+        return "";
+      }
+      case "fuelType": {
+        if (!v) return "";
+        const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
+        if (!valid.includes(v.toLowerCase())) return "Invalid fuel type (try Petrol, Diesel, Electric)";
         return "";
       }
       default:
@@ -117,33 +122,34 @@ export default function EditVehicleModal2({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     let processed = value;
 
     if (name === "vehicleNumber") {
-      processed = formatVehicleNumber(value);
+      processed = value.toUpperCase().replace(/\s+/g, "");
+      if (errors.vehicleNumber) {
+        setErrors((p) => ({ ...p, vehicleNumber: "" }));
+      }
     } else if (name === "year") {
-      processed = value.replace(/\D/g, "");
-      if (processed.length > 4) processed = processed.slice(0, 4);
-    } else if (name === "brand" || name === "model") {
-      processed = value.replace(/[^a-zA-Z0-9\s&.\-]/g, "");
+      processed = value.replace(/\D/g, "").slice(0, 4);
+    } else if (name === "brand") {
+      processed = value.replace(/[0-9]/g, "").replace(/\s+/g, " ").slice(0, 20);
+    } else if (name === "model") {
+      processed = value.replace(/\s+/g, " ").slice(0, 25);
     } else if (name === "fuelType") {
       processed = value.replace(/[^a-zA-Z\s]/g, "");
     }
 
     setForm((p) => ({ ...p, [name]: processed }));
 
-    if (touched[name])
+    if (touched[name]) {
       setErrors((p) => ({ ...p, [name]: validateField(name, processed) }));
+    }
   };
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
     setTouched((p) => ({ ...p, [name]: true }));
-    const processed =
-      name === "vehicleNumber" ? formatVehicleNumber(value) : value;
-    setForm((p) => ({ ...p, [name]: processed }));
-    setErrors((p) => ({ ...p, [name]: validateField(name, processed) }));
+    setErrors((p) => ({ ...p, [name]: validateField(name, value) }));
   };
 
   const handleSubmit = async (e) => {
@@ -156,19 +162,17 @@ export default function EditVehicleModal2({
     setTouched(allTouched);
 
     const newErrors = {};
-    ["vehicleNumber", "brand", "model"].forEach((k) => {
+    Object.keys(form).forEach((k) => {
       newErrors[k] = validateField(k, form[k]);
     });
     setErrors(newErrors);
 
-    if (Object.values(newErrors).some(Boolean)) {
-      return;
-    }
+    if (Object.values(newErrors).some(Boolean)) return;
 
     setIsSubmitting(true);
     try {
       const payload = {
-        vehicleNumber: formatVehicleNumber(form.vehicleNumber),
+        vehicleNumber: form.vehicleNumber.replace(/\s/g, ""),
         vehicleType,
         brand: form.brand.trim(),
         model: form.model.trim(),
@@ -176,7 +180,7 @@ export default function EditVehicleModal2({
         fuelType: form.fuelType.trim(),
       };
 
-      const actualPurchaseId = purchaseId || (initial && initial.purchaseId);
+      const actualPurchaseId = purchaseId || initial?.purchaseId;
 
       if (actualPurchaseId) {
         await updateAMCPurchaseVehicle(actualPurchaseId, payload);
@@ -186,14 +190,39 @@ export default function EditVehicleModal2({
       onClose();
     } catch (error) {
       setIsSubmitting(false);
+      
+      const errorMessage = error?.response?.data?.message || error?.message || "";
+      const errorCode = error?.response?.data?.code || error?.code;
+      
+      if (errorCode === 11000 || errorMessage.includes("E11000") || errorMessage.includes("duplicate key")) {
+        setErrors((p) => ({ ...p, vehicleNumber: "This vehicle number already exists in your account" }));
+        setTouched((p) => ({ ...p, vehicleNumber: true }));
+      } else if (errorMessage.toLowerCase().includes("vehicle number already exists") || 
+          errorMessage.toLowerCase().includes("already exists in your account")) {
+        setErrors((p) => ({ ...p, vehicleNumber: errorMessage }));
+        setTouched((p) => ({ ...p, vehicleNumber: true }));
+      } else if (errorMessage.toLowerCase().includes("registered by another user")) {
+        setErrors((p) => ({ ...p, vehicleNumber: errorMessage }));
+        setTouched((p) => ({ ...p, vehicleNumber: true }));
+      } else if (errorMessage.toLowerCase().includes("active amc")) {
+        setErrors((p) => ({ ...p, vehicleNumber: errorMessage }));
+        setTouched((p) => ({ ...p, vehicleNumber: true }));
+      } else if (errorMessage.toLowerCase().includes("cannot edit vehicle")) {
+        setErrors((p) => ({ ...p, vehicleNumber: errorMessage }));
+        setTouched((p) => ({ ...p, vehicleNumber: true }));
+      } else if (errorMessage) {
+        setErrors((p) => ({ ...p, vehicleNumber: errorMessage }));
+        setTouched((p) => ({ ...p, vehicleNumber: true }));
+      } else {
+        setErrors((p) => ({ ...p, vehicleNumber: "Failed to update vehicle. Please try again." }));
+        setTouched((p) => ({ ...p, vehicleNumber: true }));
+      }
     }
   };
 
   if (!open) return null;
 
-  const carSrc = vehicleType === "car" ? carColor : carOutline;
-  const bikeSrc = vehicleType === "bike" ? bikeColor : bikeOutline;
-  const displayedSrc = vehicleType === "car" ? carSrc : bikeSrc;
+  const displayedSrc = vehicleType === "car" ? carColor : bikeColor;
   const displayedAlt = vehicleType === "car" ? "Car" : "Bike";
 
   return (
@@ -252,7 +281,7 @@ export default function EditVehicleModal2({
             >
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Enter Vehicle Number
+                  Vehicle Number
                 </label>
                 <input
                   name="vehicleNumber"
@@ -264,8 +293,7 @@ export default function EditVehicleModal2({
                       ? "border-red-500 bg-red-50"
                       : "border-slate-300"
                   }`}
-                  placeholder="Enter Vehicle Number"
-                  maxLength={15}
+                  placeholder="e.g., DL01AB1234"
                 />
                 {errors.vehicleNumber && touched.vehicleNumber && (
                   <p className="text-red-600 text-xs mt-1">
@@ -274,15 +302,9 @@ export default function EditVehicleModal2({
                 )}
               </div>
 
-              <div className="flex items-center gap-4 py-1">
-                <div className="flex-1 border-t border-slate-300" />
-                <span className="text-slate-500 text-xs">OR</span>
-                <div className="flex-1 border-t border-slate-300" />
-              </div>
-
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Select Brand
+                  Brand
                 </label>
                 <input
                   name="brand"
@@ -294,7 +316,7 @@ export default function EditVehicleModal2({
                       ? "border-red-500 bg-red-50"
                       : "border-slate-300"
                   }`}
-                  placeholder="Enter Brand"
+                  placeholder="e.g., Honda"
                 />
                 {errors.brand && touched.brand && (
                   <p className="text-red-600 text-xs mt-1">{errors.brand}</p>
@@ -303,7 +325,7 @@ export default function EditVehicleModal2({
 
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Select Model
+                  Model
                 </label>
                 <input
                   name="model"
@@ -315,7 +337,7 @@ export default function EditVehicleModal2({
                       ? "border-red-500 bg-red-50"
                       : "border-slate-300"
                   }`}
-                  placeholder="Enter Model"
+                  placeholder="e.g., City"
                 />
                 {errors.model && touched.model && (
                   <p className="text-red-600 text-xs mt-1">{errors.model}</p>

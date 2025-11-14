@@ -5,6 +5,8 @@ import { AmcDataProvider } from "./context/AmcDataContext.jsx";
 import MainLayout from "./layouts/MainLayout";
 import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
+import ProtectedRoute from "./context/ProtectedRoute.jsx";
+import "./api/axiosInstance.js";
 
 const Homepage = React.lazy(() => import("./pages/Homepage"));
 const VehicleAmc = React.lazy(() => import("./pages/VehicleAmc"));
@@ -39,9 +41,23 @@ function App() {
                   <Route path="/contact-us" element={<ContactUs />} />
                   <Route path="/terms-condition" element={<TermsCondition />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/my-account" element={<MyAccount />} />
+                  <Route 
+                    path="/my-account" 
+                    element={
+                      <ProtectedRoute>
+                        <MyAccount />
+                      </ProtectedRoute>
+                    } 
+                  />
                 </Route>
-                <Route path="/payment-status" element={<PaymentStatus />} />
+                <Route 
+                  path="/payment-status" 
+                  element={
+                    <ProtectedRoute>
+                      <PaymentStatus />
+                    </ProtectedRoute>
+                  } 
+                />
               </Routes>
             </Suspense>
           </BrowserRouter>

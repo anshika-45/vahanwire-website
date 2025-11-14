@@ -19,7 +19,7 @@ const OtpVerifypopup = ({
   phoneNumber,
   isFromLogin = false,
 }) => {
-  const { setIsLoggedIn } = useAuth();
+  const { setIsLoggedIn, setUser } = useAuth();
   const [showVehiclePopup, setShowVehiclePopup] = useState(false);
   const [userVehicles, setUserVehicles] = useState([]);
   const [showSelectVehicle, setShowSelectVehicle] = useState(false);
@@ -62,56 +62,6 @@ const OtpVerifypopup = ({
     }
   };
 
-  // const handleOtpSubmit = async () => {
-  //   const fullOtp = otp.join("").trim();
-  //   if (fullOtp.length !== 4) {
-  //     setError("Please enter the 4-digit OTP");
-  //     return;
-  //   }
-
-  //   try {
-  //     setLoading(true);
-  //     setError("");
-  //     const response = await verifyOtp(phoneNumber, fullOtp);
-
-  //     if (response?.success && response?.data) {
-  //       const { accessToken, user } = response.data;
-  //       if (accessToken) localStorage.setItem("token", accessToken);
-  //       if (user) localStorage.setItem("user", JSON.stringify(user));
-
-  //       setIsLoggedIn(true);
-        
-  //       if (isFromLogin) {
-  //         onClose();
-  //       } else {
-  //         console.log("ecnejkrnbwjkbnk");
-  //         // Fetch user vehicles to determine which popup to show
-  //         const vehicles = await getUserVehicleWithoutAMC();
-  //         setUserVehicles(vehicles);
-          
-  //         if (vehicles && vehicles.length > 0) {
-  //           // User has existing vehicles - show SelectVehicle
-  //           setShowSelectVehicle(true);
-  //         } else {
-  //           // User has no vehicles - show EnterVehicleNumber
-  //           setShowVehiclePopup(true);
-  //         }
-  //       }
-  //     } else {
-  //       setError(response?.message || "Invalid OTP. Try again.");
-  //     }
-  //   } catch (err) {
-  //     console.error("OTP verification failed:", err);
-  //     setError(
-  //       err?.response?.data?.message ||
-  //         "Failed to verify OTP. Please try again."
-  //     );
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
   const handleOtpSubmit = async () => {
     const fullOtp = otp.join("").trim();
     if (fullOtp.length !== 4) {
@@ -126,8 +76,14 @@ const OtpVerifypopup = ({
   
       if (response?.success && response?.data) {
         const { accessToken, user } = response.data;
-        if (accessToken) localStorage.setItem("token", accessToken);
-        if (user) localStorage.setItem("user", JSON.stringify(user));
+        
+        if (accessToken) {
+          localStorage.setItem("token", accessToken);
+        }
+        if (user) {
+          localStorage.setItem("user", JSON.stringify(user));
+          setUser(user);
+        }
   
         setIsLoggedIn(true);
         
@@ -162,21 +118,18 @@ const OtpVerifypopup = ({
   };
 
   const handleResend = async () => {
-    if (timer > 0 || resendLoading) return; // guard
+    if (timer > 0 || resendLoading) return;
     try {
       setResendLoading(true);
       setError("");
 
-      // call your backend to resend OTP
       const resp = await sendOtp(phoneNumber);
 
-      // optional: handle backend messages
       if (resp?.success === false) {
         setError(resp?.message || "Could not send OTP. Please try again.");
         return;
       }
 
-      // reset input + timer
       setOtp(["", "", "", ""]);
       inputRefs[0].current?.focus();
       setTimer(RESEND_SECONDS);
@@ -214,7 +167,6 @@ const OtpVerifypopup = ({
               Enter the OTP sent to {phoneNumber}
             </p>
 
-            {/* Change Number with icon BEFORE label */}
             <Button
               onClick={onBack}
               className="flex items-center gap-1 px-1 py-0 bg-[#EFEFEF] text-[#333333] text-xs rounded-full border border-gray-200 hover:bg-gray-200 transition-all mb-4"
@@ -225,7 +177,6 @@ const OtpVerifypopup = ({
               <span className="text-xs text-[#333333] ">Change Number</span>
             </Button>
 
-            {/* OTP Inputs */}
             <div id="otp-inputs" className="flex gap-2 mb-3" role="group">
               {otp.map((digit, idx) => (
                 <input
@@ -244,10 +195,8 @@ const OtpVerifypopup = ({
               ))}
             </div>
 
-            {/* Error */}
             {error && <div className="text-[#CB0200] text-xs mb-2">{error}</div>}
 
-            {/* Resend block */}
             {timer > 0 ? (
               <div className="text-xs text-[#CB0200] mb-4">
                 Resend OTP in {timer}s
@@ -262,7 +211,6 @@ const OtpVerifypopup = ({
               </button>
             )}
 
-            {/* Submit */}
             <Button
               text={loading ? "Verifying..." : "Submit"}
               disabled={loading}

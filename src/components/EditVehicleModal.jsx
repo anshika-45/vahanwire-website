@@ -67,14 +67,11 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
       }
   
       case "brand":
-  if (!value.trim()) return "Brand is required";
-  if (!isNaN(value.trim())) return "Brand cannot be a number";
-  if (/\d/.test(value.trim())) return "Brand cannot contain numbers";
-  if (value.trim().length < 2) return "Brand must be at least 2 characters";
-  if (value.trim().length > 20) return "Brand cannot exceed 20 characters";
-
-  return "";
-
+        if (!value.trim()) return "Brand is required";
+        if (/\d/.test(value.trim())) return "Brand cannot contain numbers";
+        if (value.trim().length < 2) return "Brand must be at least 2 characters";
+        if (value.trim().length > 20) return "Brand cannot exceed 20 characters";
+        return "";
   
       case "model":
         if (!value.trim()) return "Model is required";
@@ -123,12 +120,13 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
     }
   
     if (name === "year") {
-      cleanValue = cleanValue.replace(/\D/g, ""); // digits only
+      cleanValue = cleanValue.replace(/\D/g, "");
       if (cleanValue.length > 4) cleanValue = cleanValue.slice(0, 4);
     }
   
     if (name === "brand") {
-      cleanValue = cleanValue.replace(/\s+/g, " "); // only single spaces
+      cleanValue = cleanValue.replace(/[0-9]/g, "");
+      cleanValue = cleanValue.replace(/\s+/g, " ");
       cleanValue = cleanValue.slice(0, 20);
     }
   
@@ -203,10 +201,8 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
   return (
     <>
       <Backdrop onClose={onClose} />
-      {/* modal container */}
       <div className="fixed inset-0 z-[9999] grid place-items-center p-3 sm:p-4">
         <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-slate-200">
-          {/* header */}
           <div className="flex justify-between items-center bg-[#D9E7FE] rounded-t-2xl px-4 sm:px-6 py-3 sm:py-4 border-b">
             <h2 className="font-semibold text-center flex-1 text-sm sm:text-base">
               Edit Vehicle Details
@@ -216,9 +212,7 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
             </button>
           </div>
 
-          {/* body */}
           <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3 text-sm">
-            {/* Vehicle type toggle */}
             <div className="flex justify-center gap-4">
               {["car", "bike"].map((type) => (
                 <button
@@ -257,7 +251,6 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
               ))}
             </div>
 
-            {/* Form inputs */}
             {["vehicleNumber", "year", "fuelType", "brand", "model"].map(
               (field) => (
                 <div key={field}>

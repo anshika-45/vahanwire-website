@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import userIcon from "../assets/user.svg";
 import vehicleIcon from "../assets/Carr.svg";
 import moneyIcon from "../assets/Money.svg";
@@ -10,7 +9,6 @@ import { logoutUser } from "../api/authApi";
 
 const AccountSidebar = ({ activeView, setActiveView }) => {
   const { logout } = useAuth();
-  const navigate = useNavigate();
   const [vehicleCount, setVehicleCount] = useState(0);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -47,7 +45,6 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
       console.error("Logout API failed:", error);
     } finally {
       logout();
-      navigate("/", { replace: true });
     }
   };
 

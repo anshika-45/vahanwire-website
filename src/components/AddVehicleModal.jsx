@@ -69,18 +69,10 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
   
       case "brand":
         if (!value.trim()) return "Brand is required";
-      
-        if (/\d/.test(value)) return "Brand cannot contain numbers"; // NEW RULE
-      
-        if (value.trim().length < 2)
-          return "Brand must be at least 2 characters";
-      
-        if (value.trim().length > 20)
-          return "Brand cannot exceed 20 characters";
-      
+        if (/\d/.test(value.trim())) return "Brand cannot contain numbers";
+        if (value.trim().length < 2) return "Brand must be at least 2 characters";
+        if (value.trim().length > 20) return "Brand cannot exceed 20 characters";
         return "";
-      
-        
   
       case "model":
         if (!value.trim()) return "Model is required";
@@ -109,7 +101,6 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
         return "";
     }
   };
-  
 
   const validateForm = () => {
     const newErrors = {};
@@ -124,22 +115,20 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
     const { name, value } = e.target;
     let cleanValue = value;
   
-    // Special input sanitization
     if (name === "vehicleNumber") {
-      cleanValue = cleanValue.toUpperCase().replace(/\s+/g, "");  // no spaces, uppercase
+      cleanValue = cleanValue.toUpperCase().replace(/\s+/g, "");
     }
   
     if (name === "year") {
-      cleanValue = cleanValue.replace(/\D/g, ""); // digits only
+      cleanValue = cleanValue.replace(/\D/g, "");
       if (cleanValue.length > 4) cleanValue = cleanValue.slice(0, 4);
     }
   
     if (name === "brand") {
-      cleanValue = cleanValue.replace(/\d+/g, ""); // remove any numbers
-      cleanValue = cleanValue.replace(/\s+/g, " "); // single spacing only
-      cleanValue = cleanValue.slice(0, 20); // max length
+      cleanValue = cleanValue.replace(/[0-9]/g, "");
+      cleanValue = cleanValue.replace(/\s+/g, " ");
+      cleanValue = cleanValue.slice(0, 20);
     }
-    
   
     if (name === "model") {
       cleanValue = cleanValue.replace(/\s+/g, " ");
@@ -148,7 +137,6 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
   
     setForm((prev) => ({ ...prev, [name]: cleanValue }));
   
-    // Validate on typing if touched
     if (touched[name]) {
       setErrors((prev) => ({
         ...prev,
@@ -156,7 +144,6 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
       }));
     }
   };
-  
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
@@ -217,7 +204,6 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
       <Backdrop onClose={onClose} />
       <div className="fixed inset-0 z-[9999] grid place-items-center p-3 sm:p-4">
         <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-slate-200">
-          {/* Header */}
           <div className="flex justify-between items-center bg-[#D9E7FE] rounded-t-2xl px-4 sm:px-6 py-3 sm:py-4 border-b">
             <h2 className="font-semibold text-center flex-1 text-sm sm:text-base">
               Add New Vehicle
@@ -227,12 +213,10 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
             </button>
           </div>
 
-          {/* Form */}
           <form
             onSubmit={handleSubmit}
             className="p-4 sm:p-6 space-y-3 text-sm"
           >
-            {/* Vehicle type toggle */}
             <div className="flex justify-center gap-4">
               {["car", "bike"].map((type) => (
                 <button
@@ -271,7 +255,6 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
               ))}
             </div>
 
-            {/* Form Inputs */}
             {["vehicleNumber", "year", "fuelType", "brand", "model"].map(
               (field) => (
                 <div key={field}>

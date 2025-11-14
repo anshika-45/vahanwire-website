@@ -64,6 +64,14 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
     };
   };
 
+  const validateBrand = (value) => {
+    if (!value.trim()) return "Please enter the vehicle brand";
+    if (/\d/.test(value.trim())) return "Brand cannot contain numbers";
+    if (value.trim().length < 2) return "Brand must be at least 2 characters";
+    if (value.trim().length > 10) return "Brand cannot exceed 10 characters";
+    return "";
+  };
+
   const handleSearch = async () => {
     const validation = validateVehicleNumber(vehicleNumber);
     if (!validation.isValid) {
@@ -124,9 +132,11 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
   };
 
   const handleAddVehicle = async () => {
+    const brandValidation = validateBrand(brand);
     let hasError = false;
-    if (!brand.trim()) {
-      setBrandError("Please enter the vehicle brand");
+    
+    if (brandValidation) {
+      setBrandError(brandValidation);
       hasError = true;
     }
     if (!vehicleModel.trim()) {
@@ -258,7 +268,8 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
                   placeholder="Enter Brand"
                   value={brand}
                   onChange={(e) => {
-                    setBrand(e.target.value);
+                    const value = e.target.value.replace(/[0-9]/g, "");
+                    setBrand(value.slice(0, 10));
                     setBrandError("");
                   }}
                   className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]

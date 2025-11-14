@@ -48,7 +48,6 @@ const SelectVehicle = ({
 
   const validateVehicleNumber = (number) => {
     const cleaned = number.trim().toUpperCase().replace(/[-\s]/g, "");
-
     if (!cleaned) return "Please enter the vehicle number";
     const indianPattern = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
     const tempPattern = /^TEMP[0-9]{4,6}$/;
@@ -59,6 +58,14 @@ const SelectVehicle = ({
     if (/^[A-Z]{2}0{1,2}[A-Z]{1,3}0+$/.test(cleaned))
       return "Vehicle number cannot contain all zeros";
     return ""; 
+  };
+
+  const validateBrand = (value) => {
+    if (!value.trim()) return "Please enter the vehicle brand";
+    if (/\d/.test(value.trim())) return "Brand cannot contain numbers";
+    if (value.trim().length < 2) return "Brand must be at least 2 characters";
+    if (value.trim().length > 10) return "Brand cannot exceed 10 characters";
+    return "";
   };
 
   useEffect(() => {
@@ -163,7 +170,7 @@ const SelectVehicle = ({
   
 const handleAddVehicle = async () => {
   const numberError = validateVehicleNumber(vehicleNumber);
-  const brandError = !brand.trim() ? "Please enter the vehicle brand" : "";
+  const brandError = validateBrand(brand);
   const modelError = !vehicleModel.trim() ? "Please enter the vehicle model" : "";
 
   if (numberError || brandError || modelError) {
@@ -378,7 +385,10 @@ const handleProceed = async () => {
                 type="text"
                 placeholder="Enter Brand"
                 value={brand}
-                onChange={(e) => setBrand(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[0-9]/g, "");
+                  setBrand(value.slice(0, 10));
+                }}
                 maxLength={10}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-xs mb-2"
               />
