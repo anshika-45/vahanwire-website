@@ -8,7 +8,7 @@ import bikeImg from "../assets/bike2.png";
 import verifyIcon from "../assets/verify.webp";
 import {
   searchUserVehicle,
-  addUserVehicle,
+   addUserVehicleWithoutAMC,
   getUserVehicleWithoutAMC,
 } from "../api/vehicleApi";
 import { selectAMCVehicle } from "../api/amcApi";
@@ -156,47 +156,99 @@ const SelectVehicle = ({
     }
   };
   
-  const handleAddVehicle = async () => {
-    const numberError = validateVehicleNumber(vehicleNumber);
-    const brandError = !brand.trim() ? "Please enter the vehicle brand" : "";
-    const modelError = !vehicleModel.trim() ? "Please enter the vehicle model" : "";
+const handleAddVehicle = async () => {
+  // Validate fields
+  const numberError = validateVehicleNumber(vehicleNumber);
+  const brandError = !brand.trim() ? "Please enter the vehicle brand" : "";
+  const modelError = !vehicleModel.trim() ? "Please enter the vehicle model" : "";
 
-    if (numberError || brandError || modelError) {
-      setErrors({ number: numberError, brand: brandError, model: modelError });
-      return;
-    }
+  // If any error, show inline
+  if (numberError || brandError || modelError) {
+    setErrors({
+      number: numberError,
+      brand: brandError,
+      model: modelError,
+    });
+    return;
+  }
 
-    const normalizedNumber = vehicleNumber.toUpperCase();
-    if (addedVehicles.find((v) => v.number === normalizedNumber)) {
-      setErrors({ number: "This vehicle already exists in your list" });
-      return;
-    }
+  const normalizedNumber = vehicleNumber.toUpperCase();
 
-    setIsLoading(true);
-    const response = await addUserVehicle({
+  // prevent duplicate in UI list
+  if (addedVehicles.find((v) => v.number === normalizedNumber)) {
+    setErrors({ number: "This vehicle already exists in your list" });
+    return;
+  }
+
+  setIsLoading(true);
+
+  try {
+    const apiRes = await addUserVehicleWithoutAMC({
       vehicleNumber: normalizedNumber,
       brand: brand.trim(),
       model: vehicleModel.trim(),
     });
+
     setIsLoading(false);
 
-    if (response?.status === 201) {
+    const msg = apiRes?.data?.message;
+
+    // ❌ Error: Already in this user's account
+    if (msg === "Vehicle already exists in your account") {
+      setErrors({ number: msg });
+      return;
+    }
+
+    // ❌ Error: Registered with another user
+    if (msg === "This vehicle is already registered with another user") {
+      setErrors({ number: msg });
+      return;
+    }
+
+    // ❌ Error: Has active AMC
+    if (msg?.includes("active AMC")) {
+      setErrors({ number: msg });
+      return;
+    }
+
+    // 🎉 Success case
+    if (apiRes?.status === 201 && msg === "Vehicle added successfully") {
       const newVehicle = {
         number: normalizedNumber,
         model: vehicleModel.trim(),
         brand: brand.trim(),
       };
+
+      // add to UI list
       setAddedVehicles((prev) => [...prev, newVehicle]);
       setSelectedVehicle(newVehicle.number);
+
+      // reset all fields
       setVehicleNumber("");
       setBrand("");
       setVehicleModel("");
       setShowModel(false);
       setErrors({});
-    } else {
-      setErrors({ number: "Failed to add vehicle. Try again." });
+
+      return;
     }
-  };
+
+    // Fallback unexpected case
+    setErrors({ number: "Failed to add vehicle. Try again." });
+
+  } catch (error) {
+    setIsLoading(false);
+
+    // Extract backend error message
+    const msg =
+      error?.response?.data?.message ||
+      "Something went wrong. Please try again.";
+
+    setErrors({ number: msg });
+  }
+};
+
+
 
 const handleProceed = async () => {
   if (!selectedVehicle) {

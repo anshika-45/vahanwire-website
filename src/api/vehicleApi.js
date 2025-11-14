@@ -46,3 +46,8 @@ export const updateAMCPurchaseVehicle = async (purchaseId, vehicleData) => {
   console.log("kjksacbjkbjkassscs",res);
   return res.data;
 };
+
+export const addUserVehicleWithoutAMC = async (vehicleData) => {
+  const res = await axiosInstance.post("/vehicle/add-vehicle-without-amc", vehicleData);
+  return res;
+};

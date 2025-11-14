@@ -11,3 +11,9 @@ export const verifyPayment = async (txnid) => {
     console.log(response);
     return response.data;
 };
+
+
+export const getPaymentStatus = async (txnid) => {
+    const response = await axiosInstance.get(`/amc-pay/payment-status/${txnid}`);
+    return response.data;
+};
