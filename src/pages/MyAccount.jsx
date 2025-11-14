@@ -19,7 +19,7 @@ const CardLoader = () => (
 );
 
 function MyAccount() {
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const viewParam = searchParams.get("view");
