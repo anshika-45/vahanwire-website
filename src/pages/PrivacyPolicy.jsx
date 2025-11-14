@@ -84,9 +84,9 @@ const PrivacyPolicy = () => {
     <div className="bg-[rgba(244,244,244,1)]">
       <div>
         <Suspense fallback={<ComponentFallback />}>
-          <PageBanner title="Privacy Policy" image={privacyPolicyBanner} seGradientTitle={false}
+          <PageBanner title="Privacy Policy" subtitle="We may update or amend this Privacy Policy at any time without prior notice. We encourage you to review this page periodically for any changes."  image={privacyPolicyBanner} useGradientTitle={false}
   useDarkOverlay={false} showTicker={false}
- height="250px" />
+ height="250px"/>
         </Suspense>
       </div>
       <div>
@@ -94,11 +94,7 @@ const PrivacyPolicy = () => {
           <TwoColumnInfoLayout title="Privacy Policy" sections={sections} />
         </Suspense>
       </div>
-      {/* <div className="mt-20">
-        <Suspense fallback={<ComponentFallback />}>
-          <AddBanner />
-        </Suspense>
-      </div> */}
+
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import aboutBanner from "../assets/AboutUs.svg";
 import aboutAppImage from "../assets/Mobile.svg";
-const AddBanner = React.lazy(() => import("../components/AddBanner"));
+
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 
 const ComponentFallback = () => (
@@ -15,7 +15,7 @@ const AboutUs = () => {
     <>
       <div>
         <Suspense fallback={<ComponentFallback />}>
-        <PageBanner title="About Us" image={aboutBanner} useGradientTitle={false}
+          <PageBanner title="About Us" image={aboutBanner} useGradientTitle={false}
   useDarkOverlay={false} showTicker={false}
  height="250px"/>
         </Suspense>

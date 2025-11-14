@@ -162,7 +162,7 @@ const TermsCondition = () => {
     <div className="bg-[rgba(244,244,244,1)]">
       <div>
         <Suspense fallback={<ComponentFallback />}>
-          <PageBanner title="Terms & Conditions" image={termsConditionBanner} seGradientTitle={false}
+          <PageBanner title="Terms & Conditions" image={termsConditionBanner} useGradientTitle={false}
   useDarkOverlay={false} showTicker={false}
  height="250px" />
         </Suspense>

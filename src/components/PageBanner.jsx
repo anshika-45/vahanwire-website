@@ -1,31 +1,41 @@
+// src/components/PageBanner.jsx
 import React from "react";
 import PropTypes from "prop-types";
-import "../index.css"; // keep this if you already have the CSS for ticker & animations
+import "../index.css"; 
 
 const PageBanner = ({
   title = "Coming Soon",
   image,
   useGradientTitle = true,
   useDarkOverlay = true,
-  height = "500px",
-  showTicker = true, 
+  height = null, 
+  showTicker = true,
 }) => {
+  
+  const responsiveHeightClasses = "h-[35vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
+
   return (
     <section
-      className="relative w-full overflow-hidden"
+      className={`relative w-full overflow-hidden ${height ? "" : responsiveHeightClasses}`}
       aria-label={title + " banner"}
-      style={{ minHeight: height }}
+      style={height ? { minHeight: height } : undefined}
     >
-      {/* Background image */}
-      <div
-        className="absolute inset-0 bg-center bg-cover"
-        style={{
-          backgroundImage: `url(${image})`,
-          filter: useDarkOverlay ? "brightness(0.35)" : "none",
-        }}
+
+      <img
+        src={image}
+        alt="decorative image" 
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+        loading="lazy"
+        decoding="async"
       />
 
-      {/* Ticker — only rendered when showTicker is true */}
+      <div
+        className={`absolute inset-0 pointer-events-none ${
+          useDarkOverlay ? "bg-black/40" : "bg-transparent"
+        }`}
+      />
+
       {showTicker && (
         <div className="relative z-10">
           <div className="ticker-container">
@@ -47,14 +57,15 @@ const PageBanner = ({
         </div>
       )}
 
-      {/* Centered large title */}
       <div
-        className="relative z-10 flex items-center justify-center"
-        style={{ minHeight: height }}
+        className={`relative z-10 flex items-center justify-center ${height ? "" : responsiveHeightClasses}`}
+        style={height ? { minHeight: height } : undefined}
       >
         <h1
           className={`text-center leading-tight banner-title ${
-            useGradientTitle ? "gradient-text text-5xl sm:text-6xl md:text-6xl font-extrabold" : "text-white text-4xl sm:text-2xl md:text-4xl font-bold"
+            useGradientTitle
+              ? "gradient-text text-4xl sm:text-5xl md:text-6xl font-extrabold"
+              : "text-white text-3xl sm:text-4xl md:text-5xl font-bold"
           }`}
         >
           {title}
@@ -72,5 +83,4 @@ PageBanner.propTypes = {
   height: PropTypes.string,
   showTicker: PropTypes.bool,
 };
-
 export default PageBanner;
