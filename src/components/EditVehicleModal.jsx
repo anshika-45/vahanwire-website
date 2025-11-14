@@ -65,32 +65,45 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
           return "Vehicle number should be 8–12 characters";
         return "";
       }
+  
       case "brand":
-        if (!value.trim()) return "Brand is required";
-        if (value.length < 2) return "Brand must be at least 2 characters";
-        return "";
+  if (!value.trim()) return "Brand is required";
+  if (!isNaN(value.trim())) return "Brand cannot be a number";
+  if (/\d/.test(value.trim())) return "Brand cannot contain numbers";
+  if (value.trim().length < 2) return "Brand must be at least 2 characters";
+  if (value.trim().length > 20) return "Brand cannot exceed 20 characters";
+
+  return "";
+
+  
       case "model":
         if (!value.trim()) return "Model is required";
+        if (value.trim().length > 25)
+          return "Model cannot exceed 25 characters";
         return "";
+  
       case "year": {
         if (!value.trim()) return "Year is required";
-        const yearNum = +value;
+        if (!/^\d{4}$/.test(value)) return "Enter a valid 4-digit year";
+        const yearNum = Number(value);
         const curr = new Date().getFullYear();
         if (yearNum < 1900 || yearNum > curr + 1)
           return `Year must be between 1900 and ${curr + 1}`;
         return "";
       }
+  
       case "fuelType": {
         if (!value.trim()) return "Fuel type is required";
         const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
         if (!valid.includes(value.toLowerCase()))
-          return "Invalid fuel type (try Petrol, Diesel, Electric, etc.)";
+          return "Invalid fuel type (try Petrol, Diesel, Electric)";
         return "";
       }
+  
       default:
         return "";
     }
-  };
+  };  
 
   const validateForm = () => {
     const newErrors = {};
@@ -103,15 +116,37 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const newValue = name === "vehicleNumber" ? value.toUpperCase() : value;
-    setForm((prev) => ({ ...prev, [name]: newValue }));
+    let cleanValue = value;
+  
+    if (name === "vehicleNumber") {
+      cleanValue = cleanValue.toUpperCase().replace(/\s+/g, "");
+    }
+  
+    if (name === "year") {
+      cleanValue = cleanValue.replace(/\D/g, ""); // digits only
+      if (cleanValue.length > 4) cleanValue = cleanValue.slice(0, 4);
+    }
+  
+    if (name === "brand") {
+      cleanValue = cleanValue.replace(/\s+/g, " "); // only single spaces
+      cleanValue = cleanValue.slice(0, 20);
+    }
+  
+    if (name === "model") {
+      cleanValue = cleanValue.replace(/\s+/g, " ");
+      cleanValue = cleanValue.slice(0, 25);
+    }
+  
+    setForm((prev) => ({ ...prev, [name]: cleanValue }));
+  
     if (touched[name]) {
       setErrors((prev) => ({
         ...prev,
-        [name]: validateField(name, newValue),
+        [name]: validateField(name, cleanValue),
       }));
     }
   };
+  
 
   const handleBlur = (e) => {
     const { name, value } = e.target;

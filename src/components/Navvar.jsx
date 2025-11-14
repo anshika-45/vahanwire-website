@@ -6,7 +6,7 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const menuItems = [
     { name: "Home", path: "/" },
-    { name: "AMC", path: "/vehicle-amc" },
+    { name: "Vehicle AMC", path: "/vehicle-amc" },
     { name: "Mechanic", path: "", comingSoon: true },
     { name: "Tow Truck", path: "", comingSoon: true },
     { name: "E-Commerce", path: "", comingSoon: true },

@@ -83,6 +83,7 @@ const VehicleAmcFilter = () => {
     }
   }, [isLoggedIn, navigate]);
 
+  
   // useEffect(() => {
   //   document.body.style.overflow = "auto";
   //   document.documentElement.style.overflow = "auto";
@@ -193,10 +194,12 @@ const VehicleAmcFilter = () => {
   };
 
   const handleClosePaymentPopup = () => {
+    sessionStorage.removeItem('failedPaymentData');
     setShowPopup(null);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
+    navigate('/vehicle-amc-filter', { replace: true });
   };
 
   const handleSuccessClose = () => {
