@@ -82,8 +82,8 @@ function MyAccount() {
         </div>
         
         <div className="max-w-[1400px] mx-auto px-4 sm:px-5 md:px-8 lg:px-10">
-          <div className="flex flex-col md:flex-row gap-15">
-            <div className="w-full md:w-72 shrink-0">
+          <div className="flex flex-col xl:flex-row gap-15">
+            <div className="w-full xl:w-72 shrink-0">
               <AccountSidebar
                 activeView={activeView}
                 setActiveView={handleChangeView}

@@ -84,7 +84,9 @@ const PrivacyPolicy = () => {
     <div className="bg-[rgba(244,244,244,1)]">
       <div>
         <Suspense fallback={<ComponentFallback />}>
-          <PageBanner title="Privacy Policy" image={privacyPolicyBanner} />
+          <PageBanner title="Privacy Policy" image={privacyPolicyBanner} seGradientTitle={false}
+  useDarkOverlay={false} showTicker={false}
+ height="250px" />
         </Suspense>
       </div>
       <div>

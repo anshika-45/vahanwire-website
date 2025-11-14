@@ -37,6 +37,8 @@ const ChooseUs = () => {
                     src={checkIcon}
                     alt=""
                     decoding="async"
+                    width="24"
+                    height="24"
                     className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 mt-0.5"
                   />
                   <span className="text-[#242424]">{item}</span>

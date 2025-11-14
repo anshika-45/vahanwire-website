@@ -48,7 +48,9 @@ const ContactUs = () => {
   return (
     <div>
       <Suspense fallback={<ComponentFallback />}>
-        <PageBanner title="Contact Us" image={contactBanner} />
+        <PageBanner title="Contact Us" image={contactBanner} seGradientTitle={false}
+  useDarkOverlay={false} showTicker={false}
+ height="250px"/>
       </Suspense>
 
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 items-stretch">

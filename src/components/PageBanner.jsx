@@ -1,29 +1,76 @@
 import React from "react";
+import PropTypes from "prop-types";
+import "../index.css"; // keep this if you already have the CSS for ticker & animations
 
-/**
- * Reusable Page Banner Component
- * @param {string} title - The heading to display on the banner
- * @param {string} image - The background image for the banner
- */
-
-const PageBanner = ({ title, image }) => {
+const PageBanner = ({
+  title = "Coming Soon",
+  image,
+  useGradientTitle = true,
+  useDarkOverlay = true,
+  height = "500px",
+  showTicker = true, 
+}) => {
   return (
-    <div className="relative w-full  h-[260px] overflow-hidden bg-red-100">
-     
-      <img
-        src={image}
-        alt={title}
-        className="absolute inset-0 w-full h-[260px]"
+    <section
+      className="relative w-full overflow-hidden"
+      aria-label={title + " banner"}
+      style={{ minHeight: height }}
+    >
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-center bg-cover"
+        style={{
+          backgroundImage: `url(${image})`,
+          filter: useDarkOverlay ? "brightness(0.35)" : "none",
+        }}
       />
 
-    
-      <div className="relative z-10 flex items-center justify-center h-full">
-        <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-semibold">
+      {/* Ticker — only rendered when showTicker is true */}
+      {showTicker && (
+        <div className="relative z-10">
+          <div className="ticker-container">
+            <div className="ticker">
+              <div className="ticker__move">
+                {Array.from({ length: 7 }).map((_, i) => (
+                  <span key={i} className="ticker-item">
+                    Coming Soon&nbsp;&nbsp;|&nbsp;&nbsp;
+                  </span>
+                ))}
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <span key={`d${i}`} className="ticker-item">
+                    Coming Soon&nbsp;&nbsp;|&nbsp;&nbsp;
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Centered large title */}
+      <div
+        className="relative z-10 flex items-center justify-center"
+        style={{ minHeight: height }}
+      >
+        <h1
+          className={`text-center leading-tight banner-title ${
+            useGradientTitle ? "gradient-text text-5xl sm:text-6xl md:text-6xl font-extrabold" : "text-white text-4xl sm:text-2xl md:text-4xl font-bold"
+          }`}
+        >
           {title}
         </h1>
       </div>
-    </div>
+    </section>
   );
+};
+
+PageBanner.propTypes = {
+  title: PropTypes.string,
+  image: PropTypes.string.isRequired,
+  useGradientTitle: PropTypes.bool,
+  useDarkOverlay: PropTypes.bool,
+  height: PropTypes.string,
+  showTicker: PropTypes.bool,
 };
 
 export default PageBanner;

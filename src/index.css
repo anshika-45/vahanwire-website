@@ -177,3 +177,80 @@ font-family: Roboto, sans-serif;
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.ticker-container {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(
+    to right,
+    #F80200 10%,
+    #F8BA01 30%,
+    #32AB15 60%,
+    #4184ED 90%
+  );
+  padding: 5px 0;
+}
+
+/* Inner ticker wrapper */
+.ticker {
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+}
+
+.ticker__move {
+  display: inline-block;
+  white-space: nowrap;
+  animation: tickerMove 5s ease-in-out infinite alternate;
+  font-weight: 550;
+}
+
+@keyframes tickerMove {
+  0% {
+    transform: translateX(-10%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-10%);
+  }
+}
+
+.ticker-item {
+  padding: 0 5px;
+  font-size: 16px;
+  color: #050505;
+}
+
+.gradient-text {
+  background-image: linear-gradient(
+    to right,
+    #F80200 10%,
+    #F8BA01 40%,
+    #32AB15 50%,
+    #4184ED 90%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+
+
+
+
+.search-bar-animation {
+  animation: showSearchBar 0.4s ease forwards;
+}
+
+@keyframes showSearchBar {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
