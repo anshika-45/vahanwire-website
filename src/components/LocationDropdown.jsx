@@ -45,7 +45,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
 
       const [citiesResponse, profileResponse] = await Promise.all([
         getActiveCities(),
-        getMyProfile()
+        getMyProfile(),
       ]);
 
       if (citiesResponse.data.success) {
@@ -53,9 +53,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
         setCities(cityList);
 
         const userData = profileResponse.data;
-        const userCity = cityList.find(
-          (c) => c._id === userData?.selectedCity
-        );
+        const userCity = cityList.find((c) => c._id === userData?.selectedCity);
 
         if (userCity) {
           setSelected(userCity.displayName);
@@ -129,7 +127,11 @@ const LocationDropdown = ({ onLocationSelect }) => {
         onClick={isLoggedIn ? handleClick : undefined}
       >
         <div className="flex-shrink-0 mr-2">
-          <img className="w-5 h-5 object-contain" src={locationIcon} alt="location" />
+          <img
+            className="w-5 h-5 object-contain"
+            src={locationIcon}
+            alt="location"
+          />
         </div>
         <span className="flex-1 truncate text-sm font-medium">
           {loading ? "Loading..." : selected}
@@ -137,7 +139,9 @@ const LocationDropdown = ({ onLocationSelect }) => {
         {isLoggedIn && (
           <div className="flex-shrink-0 ml-2">
             <img
-              className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`}
+              className={`w-4 h-4 transition-transform ${
+                open ? "rotate-180" : ""
+              }`}
               src={dropdownIcon}
               alt="dropdown"
             />
@@ -152,10 +156,18 @@ const LocationDropdown = ({ onLocationSelect }) => {
           className="flex items-center"
         >
           {selected === "Select Location" ? (
-            <img className="w-5 h-5 object-contain" src={locationIcon} alt="location" />
+            <img
+              className="w-5 h-5 object-cover shrink-0"
+              src={locationIcon}
+              alt="location"
+            />
           ) : (
             <span className="text-[12px] px-1 leading-4 border-b-2 border-black flex items-center gap-1 font-medium max-w-[120px] truncate">
-              <img className="w-4 h-4 object-contain flex-shrink-0" src={locationIcon} alt="" />
+              <img
+                className="w-5 h-5 object-cover shrink-0"
+                src={locationIcon}
+                alt=""
+              />
               {loading ? "Loading..." : selected}
             </span>
           )}
@@ -163,7 +175,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
       </div>
 
       {open && isLoggedIn && (
-        <div className="absolute top-[calc(100%+4px)] left-0 min-w-[250px] z-50 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-fadeIn">
+        <div className="absolute md:top-[calc(100%+4px)] top-[calc(100%+10px)] md:right-1/2 md:translate-x-1/2 right-0  min-w-[250px] z-50 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-fadeIn">
           {error && (
             <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border-b border-red-100">
               <span>{error}</span>

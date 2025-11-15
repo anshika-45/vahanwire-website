@@ -161,8 +161,8 @@ font-family: Roboto, sans-serif;
 .swiper-pagination-bullet-active {
   transition: all 0.4s ease;
   transform-origin: center;
-  transform: scale(3, 1);
-  border-radius: 2px !important;
+  transform: scale(2, 1);
+  border-radius: 1.5px !important;
 }
 
 .homeSlider .swiper-pagination-bullet {
@@ -249,28 +249,19 @@ font-family: Roboto, sans-serif;
   animation-delay: 0.6s;
 }
 
+
 @keyframes scaleOutward {
   0% {
     transform: scale(0.1);
     transform-origin: right;
     transform: translateY(-10px);
-    z-index: -1;
     visibility: hidden;
-    top: 80%;
     left: 70px;
-  }
-  20% {
-    z-index: -1;
-    left: 0px;
-  }
-  50% {
-    left: -20px;
   }
   100% {
     transform: scale(1);
     transform: translateY(0);
     visibility: visible;
-    z-index: 1;
     left: -50px;
     top: -40px;
   }
@@ -279,16 +270,14 @@ font-family: Roboto, sans-serif;
   0% {
     transform: scale(0.1);
     transform-origin: left;
-
     visibility: hidden;
-    right: 30px;
+    right: 0px;
     top: 100px;
   }
   100% {
     opacity: 1;
     transform: scale(1);
     visibility: visible;
-    z-index: 1;
     right: -50px;
     top: -40px;
   }
@@ -297,19 +286,14 @@ font-family: Roboto, sans-serif;
   0% {
     transform: scale(0.1);
     transform-origin: bottom;
-    z-index: -1;
     visibility: hidden;
-    bottom: 100px;
     left: 70px;
-  }
-  20% {
-    z-index: -1;
   }
   100% {
     transform: scale(1);
     visibility: visible;
-    z-index: 1;
     left: -50px;
     bottom: 40px;
   }
 }
+

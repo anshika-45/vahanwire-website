@@ -18,7 +18,7 @@ export default function AnimatedTextTicker({
   if (texts.length === 1) {
     return (
       <div
-        className={`relative overflow-visible h-20 sm:h-24 md:h-28 ${className}`}
+        className={`relative overflow-visible h-20 sm:h-24 md:h-26 ${className}`}
         style={{ lineHeight: 1.2, display: "flex", alignItems: "center", paddingBottom: "8px" }}
       >
         <span

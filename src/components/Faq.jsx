@@ -4,7 +4,7 @@ import minusIcon from "../assets/MinusIcon.svg";
 import AddBanner from "./AddBanner";
 const FAQItem = ({ question, answer, isOpen, onClick }) => {
   return (
-    <div className="bg-white max-w-6xl mx-auto mt-3 sm:mt-4 md:mt-6 rounded-lg mb-2 overflow-hidden border-white ">
+    <div className="bg-white max-w-6xl mx-auto mt-3 sm:mt-4 md:mt-6 rounded-lg mb-2 overflow-hidden border-white md:ml-30 md:mr-30 ">
       <button
         onClick={onClick}
         className="w-full text-left px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 flex justify-between items-center text-black font-medium text-sm sm:text-base md:text-lg focus:outline-none cursor-pointer"

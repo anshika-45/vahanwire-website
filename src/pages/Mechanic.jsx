@@ -14,32 +14,7 @@ const blankImg =
 
 export default function Mechanic() {
   return (
-    <div className="duration-300 ease-in transition-all lg:pb-7 pb-20 xl:mb-0 mb-20">
-      {/* <div className="lg:block hidden w-full p-2 bg-[linear-gradient(to_right,_#dc2626_0%,_#ca8a04_40%,_#16a34a_80%,_#2563eb_100%)]">
-        <div className="container">
-          {[
-            "Coming Soon  |",
-            "Coming Soon  |",
-            "Coming Soon  |",
-            "Coming Soon  |",
-            "Coming Soon  |",
-
-            "Coming Soon  |",
-
-            "Coming Soon  |",
-
-            "Coming Soon  |",
-
-            "Coming Soon  |",
-          ].map((e) => {
-            return (
-              <span className="px-2 text-lg">
-                <>{e}</>
-              </span>
-            );
-          })}
-        </div>
-      </div> */}
+    <div className="duration-300 ease-in transition-all lg:pb-7 pb-20 xl:mb-0 mb-10">
       <PageBanner
         title=""
         image={blankImg}
@@ -90,20 +65,24 @@ export default function Mechanic() {
             </div>
           </div>
 
-          <div className="relative p-3 ">
-            <img className="h-full w-full" src={mobileAside} alt="" />
+          <div className="relative px-3 aspect-[4/3] ">
+            <img
+              className="h-full p-2 w-full md:object-cover"
+              src={mobileAside}
+              alt=""
+            />
             <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ">
-              <div className="mech-img-animation3 absolute lg:block hidden">
+              <div className="mech-img-animation3 absolute lg:block hidden top-1/2 z-10">
                 <img className="h-full w-full" src={threef} alt="" />
               </div>
-              <div className="mech-img-animation4 absolute lg:block hidden">
+              <div className="mech-img-animation4 absolute lg:block hidden z-10">
                 <img className="h-full w-full" src={fouref} alt="" />
               </div>
-              <div className="mech-img-animation6 absolute lg:block hidden">
+              <div className="mech-img-animation6 absolute lg:block hidden bottom-10 z-10">
                 <img className="h-full w-full" src={sixef} alt="" />
               </div>
               <img
-                className="xl:h-full h-[800px] scale-105 w-full object-center"
+                className="xl:h-full w-full lg:scale-110 xl:scale-100 object-cover"
                 src={mobileCentered}
                 alt=""
               />

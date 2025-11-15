@@ -14,6 +14,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 const slides = [
+
   {
     id: 1,
     title: "Mechanic Service",
@@ -72,11 +73,72 @@ const slides = [
     desc: "Quick and safe power boost.",
     img: post4,
   },
+  {
+    id: 14,
+    title: "Mechanic Service",
+    desc: "Instant roadside assistance.",
+    img: mechanic,
+  },
+  {
+    id: 15,
+    title: "AMC Plan",
+    desc: "Annual Maintenance Contract.",
+    img: amc,
+  },
+  {
+    id: 16,
+    title: "Battery Jumpstart",
+    desc: "Quick and safe power boost.",
+    img: post4,
+  },
+  {
+    id: 17,
+    title: "Mechanic Service",
+    desc: "Instant roadside assistance.",
+    img: amc,
+  },
+  {
+    id: 18,
+    title: "AMC Plan",
+    desc: "Annual Maintenance Contract.",
+    img: post3,
+  },
+  {
+    id: 19,
+    title: "Battery Jumpstart",
+    desc: "Quick and safe power boost.",
+    img: post2,
+  },
+  {
+    id: 20,
+    title: "Flat Tyre Fix",
+    desc: "On-the-spot repair and inflation.",
+    img: mechanicNewImage,
+  },
+  {
+    id: 21,
+    title: "Mechanic Service",
+    desc: "Instant roadside assistance.",
+    img: mechanic,
+  },
+  {
+    id: 22,
+    title: "AMC Plan",
+    desc: "Annual Maintenance Contract.",
+    img: post2,
+  },
+  {
+    id: 23,
+    title: "Battery Jumpstart",
+    desc: "Quick and safe power boost.",
+    img: post4,
+  },
 ];
+
 export default function Slider() {
   return (
     <div className="homeSlider max-w-screen relative pt-5 mt-3 lg:mb-6">
-      <div className="">
+      <div>
         <Swiper
           spaceBetween={30}
           centeredSlides={true}
@@ -99,13 +161,17 @@ export default function Slider() {
               spaceBetween: 20,
             },
             1024: {
-              slidesPerView: 3,
+              slidesPerView: 4,
               spaceBetween: 25,
             },
             1280: {
-              slidesPerView: 3,
+              slidesPerView: 4,
               spaceBetween: 20,
             },
+            2560:{
+              slidesPerView:6,
+              spaceBetween:30
+            }
           }}
           pagination={{
             clickable: true,

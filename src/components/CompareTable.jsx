@@ -155,7 +155,7 @@ const fetchPlans = async () => {
   }
 
   return (
-    <div className="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 pb-20 mt-10 sm:mt-16 md:mt-20">
+    <div className="relative w-full max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:pb-0 pb-20 mt-10 sm:mt-16 md:mt-20 pt-1">
       <div className="w-full overflow-x-auto overflow-y-hidden relative scroll-smooth">
         <div
           className="min-w-[700px] inline-block align-middle w-full relative"
@@ -180,11 +180,11 @@ const fetchPlans = async () => {
             ></div>
           )}
           <table className="w-full border-collapse text-center">
-            <thead className="bg-[#FFFFFF] border-2 border-[#E9F0FC] sticky top-0 z-20">
+            <thead className="bg-[#FFFFFF] sticky top-0 z-20">
               <tr className="h-[120px]">
                 <th
                   ref={firstColumnRef}
-                  className="py-10 px-4 sm:px-6 text-center text-[#242424] font-bold text-2xl sm:text-3xl border-2 border-[#E0EDFF] bg-[#F9FBFF] relative"
+                  className="py-10 px-4 sm:px-6 text-center text-[#242424] text-2xl sm:text-3xl border-2 border-[#E0EDFF] bg-[#F9FBFF] relative"
                   style={{ width: "20%" }}
                   onMouseEnter={handleFirstColumnMouseEnter}
                   onMouseLeave={handleMouseLeave}
@@ -196,7 +196,7 @@ const fetchPlans = async () => {
                   <th
                     key={plan._id}
                     style={{ width: "20%" }}
-                    className="py-4 px-4 sm:px-6 border-2 border-[#E0EDFF] bg-[#F9FBFF] transition-all duration-300"
+                    className="py-4 px-4 sm:px-6 border-2 border-[#BCD2F5] bg-white transition-all duration-300"
                     onMouseEnter={() => handleMouseEnter(colIndex)}
                     onMouseLeave={handleMouseLeave}
                   >
@@ -207,15 +207,17 @@ const fetchPlans = async () => {
                       <p className="text-[#242424] text-lg sm:text-xl font-bold">
                         ₹ {plan.price}
                       </p>
-                      <Button
-                        text="Buy Now"
-                        className={`mt-6 border-2 w-full h-full border-[#4184ED] px-4 py-2 rounded transition-colors duration-300 text-sm sm:text-base ${
+                      <button
+                        className={`mt-6 border-2 w-full h-full font-medium hover:opacity-90 border-[#4184ED] px-4 py-2 rounded transition-colors duration-300 text-sm sm:text-base
+                        ${
                           hoveredCol === colIndex
-                            ? "bg-[#4184ED] text-white"
-                            : "bg-white text-[#242424] hover:bg-[#0961f0] hover:text-white"
-                        }`}
+                            ? "bg-[#4184ed] text-white"
+                            : "bg-white"
+                        } `}
                         onClick={() => handleBuyClick(plan)}
-                      />
+                      >
+                        Buy Now
+                      </button>
                     </div>
                   </th>
                 ))}
@@ -228,12 +230,13 @@ const fetchPlans = async () => {
                   <tr
                     key={rowIndex}
                     className={`${
-                      rowIndex % 2 === 0 ? "bg-white" : "bg-[#F7FAFF]"
+                      rowIndex % 2 === 0 ? "bg-white" : "bg-[#E9F0FC]"
                     }`}
                   >
                     <td
                       ref={rowIndex === 0 ? firstColumnRef : null}
-                      className="py-4 px-4 sm:px-6 text-left text-[17px] font-bold text-[#242424] border-x-2 border-[#E0EDFF] min-w-[200px] relative"
+                      className={`py-4 px-4 sm:px-6 text-left text-[17px] font-bold border-2 border-[#BCD2F5] text-[#242424] min-w-[200px] relative
+                      `}
                       style={{ width: "20%" }}
                       onMouseEnter={handleFirstColumnMouseEnter}
                       onMouseLeave={handleMouseLeave}
@@ -284,7 +287,7 @@ const fetchPlans = async () => {
                     {plans.map((plan, colIndex) => (
                       <td
                         key={plan._id}
-                        className="py-4 px-4 sm:px-6 h-[80px] border-r-2 border-[#E0EDFF] transition-all duration-300 min-w-[150px] sm:min-w-[180px]"
+                        className="py-4 px-4 sm:px-6 h-[80px] border-2 border-[#BCD2F5]  transition-all duration-300 min-w-[150px] sm:min-w-[180px]"
                         style={{ width: "20%" }}
                         onMouseEnter={() => handleMouseEnter(colIndex)}
                         onMouseLeave={handleMouseLeave}

@@ -2,7 +2,7 @@ import React, { useState, Suspense } from "react";
 import { createContact } from "../api/authApi";
 import { MailOpen, Phone, MapPin } from "lucide-react";
 import contactBanner from "../assets/ContactUs.svg";
-import contactImage from "../assets/contact-us-card.webp";
+import contactImage from "../assets/ContactUs2.svg";
 
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
@@ -12,6 +12,7 @@ const ComponentFallback = () => (
     <div className="animate-pulse bg-gray-200 rounded-lg h-32 w-full max-w-4xl"></div>
   </div>
 );
+
 const ContactUs = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -19,17 +20,66 @@ const ContactUs = () => {
     phoneNumber: "",
     reason: "",
   });
+
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
+  const validateForm = () => {
+  let newErrors = {};
+
+  // Full Name Validation
+  if (!formData.fullName.trim()) {
+    newErrors.fullName = "Full name is required.";
+  } else if (/\d/.test(formData.fullName)) {
+    newErrors.fullName = "Name should not contain numbers.";
+  } else if (formData.fullName.trim().length < 3) {
+    newErrors.fullName = "Name must be at least 3 characters.";
+  }
+
+  // Email Validation
+  if (!formData.email.trim()) {
+    newErrors.email = "Email is required.";
+  } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+    newErrors.email = "Enter a valid email.";
+  }
+
+  // Phone Number Validation
+  if (!formData.phoneNumber.trim()) {
+    newErrors.phoneNumber = "Phone number is required.";
+  } else if (!/^[6-9]\d{9}$/.test(formData.phoneNumber)) {
+    newErrors.phoneNumber =
+      "Phone must start with 6-9 and be exactly 10 digits.";
+  }
+
+  // Reason Validation
+  if (!formData.reason.trim()) {
+    newErrors.reason = "Reason is required.";
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+  const { id, value } = e.target;
+
+  // Prevent letters in phone
+  if (id === "phoneNumber" && /[^0-9]/.test(value)) return;
+
+  setFormData({ ...formData, [id]: value });
+  setErrors({ ...errors, [id]: "" });
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     setMessage(null);
+
+    if (!validateForm()) return;
+
+    setIsLoading(true);
 
     try {
       const response = await createContact(formData);
@@ -48,147 +98,145 @@ const ContactUs = () => {
   return (
     <div>
       <Suspense fallback={<ComponentFallback />}>
-        <PageBanner title="Contact Us" image={contactBanner} useGradientTitle={false}
-  useDarkOverlay={false} showTicker={false}
- height="250px" />
+        <PageBanner
+          title="Contact Us"
+          image={contactBanner}
+          useGradientTitle={false}
+          useDarkOverlay={false}
+          showTicker={false}
+          height="250px"
+        />
       </Suspense>
 
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 items-stretch">
-        <div className="bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl p-8 flex flex-col justify-end">
-          <div className="md:flex md:items-end md:space-x-6">
-            <div className="md:w-2/5">
-              <h2 className="text-4xl text-[rgba(51,51,51,1)] mb-6">
-                Contact Us
-              </h2>
-              <ul className="space-y-4 text-gray-700 text-sm">
-                <li className="flex items-center space-x-3">
-                  <div className="bg-[#FBBA01] rounded-full p-2 shrink-0">
-                    <MailOpen size={14} className="text-[#000000]" />
-                  </div>
-                  <span>Info@Vahanwire.com</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <div className="bg-[#FBBA01] rounded-full p-2 shrink-0">
-                    <MailOpen size={14} className="text-[#000000]" />
-                  </div>
-                  <span>Amc@Vahanwire.com</span>
-                </li>
-                <li className="flex items-center space-x-3">
-                  <div className="bg-[#FBBA01] rounded-full p-2 shrink-0">
-                    <Phone size={14} className="text-[#000000]" />
-                  </div>
-                  <span>01203221368</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="bg-[#FBBA01] rounded-full p-2 shrink-0">
-                    <MapPin size={14} className="text-[#000000]" />
-                  </div>
-                  <span>
-                    TOWER B-819, Noida One, 819, Industrial Area, <br /> Sector
-                    62, Noida, Uttar Pradesh 201309
-                  </span>
-                </li>
-              </ul>
+
+        {/* LEFT SIDE CARD */}
+        <div className="relative rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] overflow-hidden">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${contactImage})` }}
+          ></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+          <div className="relative top-26 z-10 p-8 md:p-10 flex flex-col justify-end h-[360px] md:h-[420px]">
+            <h2 className="text-3xl md:text-4xl sm:text-lg font-medium text-white mb-4">
+              Contact Us
+            </h2>
+
+            <div className="flex flex-wrap items-center md:gap-6 gap-6 sm:gap-2 text-white/70 mb-4">
+              <div className="flex items-center gap-2">
+                <div className="bg-[#FBBA01] rounded-full p-2">
+                  <MailOpen size={16} className="text-black" />
+                </div>
+                <span>Info@Vahanwire.com</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="bg-[#FBBA01] rounded-full p-2">
+                  <MailOpen size={16} className="text-black" />
+                </div>
+                <span>Amc@Vahanwire.com</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <div className="bg-[#FBBA01] rounded-full p-2">
+                  <Phone size={16} className="text-black" />
+                </div>
+                <span>0120 3221368</span>
+              </div>
             </div>
 
-            <div className="md:w-3/5 flex justify-center mt-6 md:mt-0">
-              <img
-                src={contactImage}
-                alt="Contact Illustration"
-                className="w-[180px] sm:w-[220px] md:w-[280px] object-contain"
-                loading="lazy"
-                width={280}  
-                height={200}
-                decoding="async"
-              />
+            <div className="flex items-center gap-2">
+              <div className="bg-[#FBBA01] rounded-full p-2">
+                <MapPin size={16} className="text-black" />
+              </div>
+              <p className="text-white/70 text-sm leading-relaxed">
+                TOWER B-819, Noida One, 819, Industrial Area, Sector 62,
+                Noida, Uttar Pradesh 201309
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl p-8 flex flex-col justify-center">
+        {/* RIGHT SIDE FORM */}
+        <div className="bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl p-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            Welcome to <span className="text-[#266DDF]">VahanWire!</span>
+            Welcome to VahanWire!
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+
+            {/* FULL NAME */}
             <div>
-              <label
-                htmlFor="fullName"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Full Name
-              </label>
+              <label className="block text-sm font-medium mb-2">Full Name*</label>
               <input
                 type="text"
                 id="fullName"
+                name="fullName"
+                placeholder="Enter your name"
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="Enter your name"
-                required
-                className="w-full border-none rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#266DDF] bg-gray-100"
+                className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#266DDF]"
               />
+              {errors.fullName && (
+                <p className="text-red-600 text-sm mt-1">{errors.fullName}</p>
+              )}
             </div>
 
+            {/* EMAIL */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email
-              </label>
+              <label className="block text-sm font-medium mb-2">Email*</label>
               <input
                 type="email"
+                name="email"
                 id="email"
+                placeholder="Enter your email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
-                required
-                className="w-full border-none rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#266DDF] bg-gray-100"
+                className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#266DDF]"
               />
+              {errors.email && (
+                <p className="text-red-600 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
 
+            {/* PHONE */}
             <div>
-              <label
-                htmlFor="phoneNumber"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Phone Number
-              </label>
+              <label className="block text-sm font-medium mb-2">Phone Number*</label>
               <input
                 type="tel"
                 id="phoneNumber"
+                name="phoneNumber"
+                placeholder="Enter your phone number"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                placeholder="Enter your number"
-                required
-                className="w-full border-none rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#266DDF] bg-gray-100"
+                className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#266DDF]"
               />
+              {errors.phoneNumber && (
+                <p className="text-red-600 text-sm mt-1">{errors.phoneNumber}</p>
+              )}
             </div>
 
+            {/* REASON */}
             <div>
-              <label
-                htmlFor="reason"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Reason
-              </label>
+              <label className="block text-sm font-medium mb-2">Reason*</label>
               <input
                 type="text"
+                name="reason"
                 id="reason"
+                placeholder="Enter reason "
                 value={formData.reason}
                 onChange={handleChange}
-                placeholder="Enter reason..."
-                required
-                className="w-full border-none rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#266DDF] bg-gray-100"
+                className="w-full bg-gray-100 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-[#266DDF]"
               />
+              {errors.reason && (
+                <p className="text-red-600 text-sm mt-1">{errors.reason}</p>
+              )}
             </div>
 
             {message && (
               <p
                 className={`text-sm ${
-                  message.type === "success"
-                    ? "text-green-600"
-                    : "text-red-600"
+                  message.type === "success" ? "text-green-600" : "text-red-600"
                 }`}
               >
                 {message.text}
@@ -200,21 +248,16 @@ const ContactUs = () => {
               disabled={isLoading}
               className={`w-full ${
                 isLoading ? "bg-gray-400" : "bg-[#266DDF] hover:bg-[#1E5BC0]"
-              } text-white py-3 rounded-lg font-medium transition-all text-sm shadow-sm`}
+              } text-white py-3 rounded-lg text-sm transition shadow-sm`}
             >
               {isLoading ? "Submitting..." : "Submit"}
             </button>
           </form>
         </div>
       </div>
-
-      {/* <div className="mt-20">
-        <Suspense fallback={<ComponentFallback />}>
-          <AddBanner />
-        </Suspense>
-      </div> */}
     </div>
   );
 };
 
 export default ContactUs;
+

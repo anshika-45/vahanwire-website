@@ -16,7 +16,7 @@ const AmcTabs = ({ showRemoveFilter }) => {
 
   return (
     <div className="relative flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-0 sm:gap-0 w-fit sm:w-fit mx-auto mt-4 sm:mt-8 mb-4 sm:mb-8 bg-[#F2F2F2] border-[#d8d8d8] rounded-full">
-      <div className="flex items-center gap-0 flex-wrap sm:flex-nowrap justify-center">
+      <div className="flex items-center gap-0 flex-wrap sm:flex-nowrap justify-center border border-[#D9D9D9] rounded-4xl">
         {getAmcTabs
           .filter((tab) => !showRemoveFilter || amcType === tab.value)
           .map((tab) => {

@@ -26,44 +26,74 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
 
   const memoizedSections = useMemo(() => sections, [sections]);
 
+  // React.useEffect(() => {
+  //   const container = scrollContainerRef.current;
+  //   if (!container) return;
+
+  //   const observers = [];
+  //   const options = {
+  //     root: container,
+  //     rootMargin: "-20% 0px -60% 0px",
+  //     threshold: 0.5,
+  //   };
+
+  //   const handleIntersect = (entries) => {
+  //     entries.forEach((entry) => {
+  //       if (entry.isIntersecting) {
+  //         const index = parseInt(entry.target.dataset.index);
+  //         setActiveIndex(index);
+  //       }
+  //     });
+  //   };
+
+  //   const observer = new IntersectionObserver(handleIntersect, options);
+
+  //   contentRefs.current.forEach((ref, index) => {
+  //     if (ref) {
+  //       ref.dataset.index = index;
+  //       observer.observe(ref);
+  //       observers.push(observer);
+  //     }
+  //   });
+
+  //   return () => {
+  //     observers.forEach((obs) => obs.disconnect());
+  //   };
+  // }, [memoizedSections]);
+
   React.useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
-    const observers = [];
-    const options = {
-      root: container,
-      rootMargin: "-20% 0px -60% 0px",
-      threshold: 0.5,
-    };
-
-    const handleIntersect = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const index = parseInt(entry.target.dataset.index);
-          setActiveIndex(index);
-        }
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersect, options);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = Number(entry.target.dataset.index);
+            setActiveIndex(index);
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: 0.3,
+        rootMargin: "0px 0px -20% 0px",
+      }
+    );
 
     contentRefs.current.forEach((ref, index) => {
       if (ref) {
         ref.dataset.index = index;
         observer.observe(ref);
-        observers.push(observer);
       }
     });
 
-    return () => {
-      observers.forEach((obs) => obs.disconnect());
-    };
+    return () => observer.disconnect();
   }, [memoizedSections]);
 
   return (
-    <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-[450px_1fr] gap-6 md:gap-10">
-      <aside className="bg-white rounded-lg md:h-fit h-[400px] md:sticky top-[180px] self-start shadow-sm border border-[#E9F0FC] max-h-[600px] overflow-y-auto">
+    <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-[450px_1fr] gap-8 md:gap-10">
+      <aside className="bg-white rounded-lg md:h-fit h-[400px] lg:sticky top-[180px] self-start shadow-sm border border-[#E9F0FC] max-h-[600px] overflow-y-auto hide-scrollbar">
         <h3 className="text-sm font-semibold text-[#242424] px-4 py-4 border-b border-[#E9F0FC]">
           {title}
         </h3>
@@ -86,7 +116,7 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
                   <ChevronRight
                     size={16}
                     className={`transition-transform duration-200 ${
-                      isActive ? "rotate-90 text-[#266DDF]" : "text-gray-400"
+                      isActive ? " text-[#266DDF]" : "text-gray-400 rotate-90"
                     }`}
                     aria-label={isActive ? "Expanded" : "Collapsed"}
                   />
@@ -100,7 +130,7 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
       <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="max-h-[600px] md:h-auto h-[300px] overflow-y-auto pr-2 md:pr-4 space-y-8 scroll-smooth custom-scrollbar"
+          className="max-h-[600px] md:h-auto h-[300px] overflow-y-auto pr-2 md:pr-4 space-y-8 scroll-smooth hide-scrollbar"
           onScroll={() => {}}
         >
           {memoizedSections.map((section, index) => {
@@ -110,7 +140,7 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
                 key={index}
                 ref={(el) => (contentRefs.current[index] = el)}
                 data-index={index}
-                className="scroll-mt-28"
+                className=""
               >
                 <div
                   className={`rounded-lg p-6 bg-white border transition-colors ${

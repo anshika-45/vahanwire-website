@@ -3,225 +3,230 @@ import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import verifyIcon from "../assets/verify.webp";
 import Modal from "../components/Modal";
-import { searchUserVehicle, addUserVehicleWithoutAMC } from "../api/vehicleApi";
+import { addUserVehicleWithoutAMC, searchUserVehicle } from "../api/vehicleApi";
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
 
 const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
-  const { vehicleType } = useAmcData();
-  const [vehicleNumber, setVehicleNumber] = useState("");
-  const [vehicleModel, setVehicleModel] = useState("");
-  const [brand, setBrand] = useState("");
+  const [ formData, setFormData ] = useState({
+     vehicleNumber: "",
+     brand: "",
+     model: "",
+     year: "",
+     fuelType: "",
+  });
+  const [error, setErrors] = useState({
+    vehicleNumber: "",
+    brand: "",
+    model: "",
+    year: "",
+    fuelType: "",
+  })
+
   const [showSelectVehicle, setShowSelectVehicle] = useState(false);
-  const [numberError, setNumberError] = useState("");
-  const [modelError, setModelError] = useState("");
-  const [brandError, setBrandError] = useState("");
   const [showModel, setShowModel] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [vehicleData, setVehicleData] = useState(null);
 
-  useEffect(() => {
-    if (!isOpen) {
-      setVehicleNumber("");
-      setVehicleModel("");
-      setBrand("");
-      setShowModel(false);
-      setNumberError("");
-      setModelError("");
-      setBrandError("");
-      setVehicleData(null);
-    }
-  }, [isOpen]);
-
-  if (!isOpen && !showSelectVehicle) return null;
-
-  const validateVehicleNumber = (number) => {
-    const cleanedNumber = number.trim().toUpperCase().replace(/[-\s]/g, "");
-    const indianVehicleRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
-    const alternateRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1}[0-9]{3,4}$/;
-
-    if (cleanedNumber.length < 8 || cleanedNumber.length > 15) {
-      return {
-        isValid: false,
-        message: "Vehicle number should be between 8–15 characters",
-      };
-    }
-
-    if (
-      !indianVehicleRegex.test(cleanedNumber) &&
-      !alternateRegex.test(cleanedNumber)
-    ) {
-      return {
-        isValid: false,
-        message:
-          "Please enter a valid vehicle number (e.g., MH12AB1234 or DL3S9999)",
-      };
-    }
-
-    return {
-      isValid: true,
-      message: "",
-      formattedNumber: cleanedNumber,
-    };
-  };
-
-  const validateBrand = (value) => {
-    if (!value.trim()) return "Please enter the vehicle brand";
-    if (/\d/.test(value.trim())) return "Brand cannot contain numbers";
-    if (value.trim().length < 2) return "Brand must be at least 2 characters";
-    if (value.trim().length > 10) return "Brand cannot exceed 10 characters";
-    return "";
-  };
-
-  const handleSearch = async () => {
-    const validation = validateVehicleNumber(vehicleNumber);
-    if (!validation.isValid) {
-      setNumberError(validation.message);
-      return;
-    }
-    setNumberError("");
-
-    const formattedNumber = validation.formattedNumber;
-    setIsLoading(true);
-
-    try {
-      console.log("ekfnjknjkwnjkne");
-      const response = await searchUserVehicle(formattedNumber);
-      console.log("ekfnjknjkwnjkne22222");
-      setIsLoading(false);
-
-      const data = response?.data || response;
-
-      if (!data.found) {
-        setShowModel(true);
-        setVehicleNumber(formattedNumber);
-        return;
-      }
-
-      if (data.alreadyRegisteredByOtherUser) {
-        setNumberError("This vehicle is already registered by another user.");
-        return;
-      }
-
-      if (data.hasAMC) {
-        const { amcDetails } = data;
-        setNumberError(
-          `This vehicle already has an active AMC plan (${
-            amcDetails?.planName || "Unknown"
-          }).`
-        );
-        return;
-      }
-
-      if (data.vehicle) {
-        setVehicleData({
-          vehicleNumber: data.vehicle.vehicleNumber,
-          brand: data.vehicle.brand,
-          model: data.vehicle.model,
-        });
-        setShowSelectVehicle(true);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Search error:", error);
-      const errorMsg =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Error searching vehicle. Please try again.";
-      setNumberError(errorMsg);
-    }
-  };
-
-  const handleAddVehicle = async () => {
-    const brandValidation = validateBrand(brand);
-    let hasError = false;
-    
-    if (brandValidation) {
-      setBrandError(brandValidation);
-      hasError = true;
-    }
-    if (!vehicleModel.trim()) {
-      setModelError("Please enter the vehicle model");
-      hasError = true;
-    }
-    if (hasError) return;
-
-    const validation = validateVehicleNumber(vehicleNumber);
-    if (!validation.isValid) {
-      setNumberError(validation.message);
-      return;
-    }
-
-    setIsLoading(true);
-    const newVehicle = {
-      vehicleNumber: validation.formattedNumber,
-      brand: brand.trim(),
-      model: vehicleModel.trim(),
-      vehicleType: vehicleType,
-    };
-
-    try {
-      const response = await addUserVehicleWithoutAMC(newVehicle);
-      setIsLoading(false);
-
-      const data = response?.data || response;
-
-      if (response.status === 201 || data.statusCode === 201) {
-        const vehicleInfo = data?.data || data;
-        setVehicleData({
-          vehicleNumber: vehicleInfo.vehicleNumber,
-          brand: vehicleInfo.brand,
-          model: vehicleInfo.model,
-        });
-        setShowSelectVehicle(true);
-      } else if (response.status === 200 || data.statusCode === 200) {
-        setNumberError(
-          data.message || "Vehicle already exists in your account"
-        );
-      }
-    } catch (error) {
-      setIsLoading(false);
-      console.error("Add vehicle error:", error);
-      const errorMsg =
-        error?.response?.data?.message ||
-        error?.message ||
-        "Failed to add vehicle. Please try again.";
-      setNumberError(errorMsg);
-    }
-  };
-
-  const handleClose = () => {
-    setVehicleNumber("");
-    setVehicleModel("");
-    setBrand("");
+useEffect(()=> {
+  if(!isOpen){
+    setFormData({
+     vehicleNumber: "",
+     brand: "",
+     model: "",
+     year: "",
+     fuelType: "",
+    });
+    setErrors({
+      vehicleNumber: "",
+      brand: "",
+      model: "",
+      year: "",
+      fuelType: "",
+    })
     setShowModel(false);
-    setNumberError("");
-    setModelError("");
-    setBrandError("");
     setVehicleData(null);
     setShowSelectVehicle(false);
+  }
+},[])
+
+if (!isOpen && !showSelectVehicle) return null;
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  let val = value;
+
+  if (name === "vehicleNumber")
+    val = value.toUpperCase().replace(/\s/g, "");
+  if (name === "brand")
+    val = value.replace(/[0-9]/g, "").slice(0, 15);
+  if (name === "fuelType")
+    val = value.toLowerCase().replace(/[0-9]/g, "");
+  if (name === "year")
+    val = value.replace(/[^0-9]/g, "").slice(0, 4);
+
+  setFormData((prev) => ({ ...prev, [name]: val }));
+  setErrors((prev) => ({ ...prev, [name]: "" }));
+};
+
+const hasValidBrand = (value) => /[^a-zA-Z\s]/.test(value);
+
+const hasValid = (value) => /[^a-zA-Z0-9\s]/.test(value);
+
+const validateVehicleNumber = (num) => {
+  const cleaned = num.trim().toUpperCase().replace(/[-\s]/g, "");
+  const regex1 = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
+  const regex2 = /^[A-Z]{2}[0-9]{1,2}[A-Z][0-9]{3,4}$/;
+
+  if (cleaned.length < 8 || cleaned.length > 15)
+    return "Vehicle number should be 8–15 characters";
+  if (!regex1.test(cleaned) && !regex2.test(cleaned))
+    return "Invalid number (e.g. MH12AB1234)";
+
+  return "";
+};
+
+const validateBrand = (v) => {
+  if (!v.trim()) return "Brand is required";
+  if (hasValidBrand(v)) return "Brand cannot contain special characters";
+  if (v.length < 2) return "Brand must be at least 2 characters";
+  return "";
+};
+
+const validateModel = (v) => {
+  if (!v.trim()) return "Model is required";
+  if (hasValid(v)) return "Model cannot contain special characters";
+  if (v.length < 2) return "Brand must be at least 2 characters";
+  return "";
+};
+
+const validateYear = (y) => {
+  if (!y) return "Year is required";
+  if (y.length !== 4) return "Year must be 4 digits";
+  const yr = Number(y);
+  if (yr < 1990 || yr > new Date().getFullYear())
+    return "Invalid year";
+  return "";
+};
+
+const validateFuelType = (v) => {
+  if (!v.trim()) return "Fuel type is required";
+  const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
+  if (!valid.includes(v.toLowerCase())) return "Invalid fuel type (try Petrol, Diesel, Electric)";
+  if (hasValid(v)) return "Fuel type cannot contain special characters";
+  return "";
+};
+
+
+const handleSearch = async () => {
+  const err = validateVehicleNumber(formData.vehicleNumber);
+
+  if (err) {
+    setErrors((prev) => ({ ...prev, vehicleNumber: err }));
+    return;
+  }
+
+  setIsLoading(true);
+
+  try{
+     const response = await searchUserVehicle(formData.vehicleNumber);
+
+     setIsLoading(false);
+
+     const data = response?.data || response;
+
+     if (!data.found) {
+      setShowModel(true);
+      return;
+    }
+
+    if (data.alreadyRegisteredByOtherUser) {
+      setErrors((prev) => ({
+        ...prev,
+        vehicleNumber: "This vehicle is already registered by another user.",
+      }));
+      return;
+    }
+
+    if (data.hasAMC) {
+      setErrors((prev) => ({
+        ...prev,
+        vehicleNumber: `This vehicle already has an active AMC plan (${data?.amcDetails?.planName || " "})`,
+      }));
+      return;
+    }
+
+    if (data.vehicle) {
+      setVehicleData({
+        vehicleNumber: data.vehicle.vehicleNumber,
+        brand: data.vehicle.brand,
+        model: data.vehicle.model,
+      });
+      setShowSelectVehicle(true);
+    }
+  }catch(error){
+    setIsLoading(false);
+    const message = error?.response?.data?.message || error?.message || "Error Searching Message";
+    setErrors((prev) => ({ ...prev, vehicleNumber: message })); 
+  }
+}
+
+const handleAddVehicle = async () => {
+  const e = {
+    vehicleNumber: validateVehicleNumber(formData.vehicleNumber),
+    brand: validateBrand(formData.brand),
+    model: validateModel(formData.model),
+    year: validateYear(formData.year),
+    fuelType: validateFuelType(formData.fuelType)
+  }
+
+  setErrors((prev) => ({...prev, ...e}));
+
+  const hasError = Object.values(e).some((msg) => msg !== "");
+  if (hasError) return;
+
+  setIsLoading(true);
+
+  try{
+    const payload = {
+      vehicleNumber: formData.vehicleNumber,
+      brand: formData.brand,
+      model: formData.model,
+      year: formData.year,
+      fuelType: formData.fuelType
+    }
+
+    const response = await addUserVehicleWithoutAMC(payload);
+    console.log("kwcenjbwej",response);
+    setIsLoading(false);
+
+    const data = response?.data || response;
+
+    if (response.status === 201 || data.statusCode === 201) {
+      setVehicleData(data.data);
+      setShowSelectVehicle(true);
+    }else {
+      setErrors((prev) => ({
+        ...prev,
+        vehicleNumber: data.message || "Vehicle already exists",
+      }));
+    }
+  }catch(error){
+    setIsLoading(false);
+    const msg = error?.response?.data?.message || "Failed to add vehicle. Try again.";
+    setErrors((prev) => ({ ...prev, vehicleNumber: msg }));
+  }
+}
+  const handleClose = () => {
     onClose();
   };
 
   const handleBack = () => {
-    setVehicleNumber("");
-    setVehicleModel("");
-    setBrand("");
-    setShowModel(false);
-    setNumberError("");
-    setModelError("");
-    setBrandError("");
-    setVehicleData(null);
-    setShowSelectVehicle(false);
     onBack();
   };
 
   return (
     <>
-      <Modal
-        isOpen={isOpen && !showSelectVehicle}
-        onClose={handleClose}
-        onBack={handleBack}
-      >
+      <Modal isOpen={isOpen && !showSelectVehicle} onClose={handleClose} onBack={handleBack}>
         <div className="w-full max-w-[550px] flex flex-col items-center p-5">
           <div className="w-full flex items-center gap-3 bg-green-50 border border-green-200 text-[#6AAC5E] rounded-lg px-3 py-4 mb-4">
             <img src={verifyIcon} alt="verify" className="w-5 h-5" />
@@ -240,21 +245,18 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
             </label>
             <input
               type="text"
-              placeholder="Enter Registration Number (e.g. MH12AB1234)"
-              value={vehicleNumber}
-              onChange={(e) =>
-                setVehicleNumber(
-                  e.target.value.toUpperCase().replace(/\s/g, "")
-                )
-              }
-              className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
-              hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
+              name="vehicleNumber"
+              placeholder="Enter Registration Number"
+              value={formData.vehicleNumber}
+              onChange={handleChange}
               maxLength={15}
               disabled={isLoading}
+              className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
+              hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"         
             />
-            {numberError && (
+            {error.vehicleNumber && (
               <div className="text-[#CB0200] text-xs mb-3 w-full">
-                {numberError}
+                {error.vehicleNumber}
               </div>
             )}
 
@@ -265,20 +267,17 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
                 </label>
                 <input
                   type="text"
+                  name="brand"
                   placeholder="Enter Brand"
-                  value={brand}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[0-9]/g, "");
-                    setBrand(value.slice(0, 10));
-                    setBrandError("");
-                  }}
+                  value={formData.brand}
+                  onChange={handleChange}
                   className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
                   hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
                   maxLength={10}
                 />
-                {brandError && (
+                {error.brand && (
                   <div className="text-[#CB0200] text-xs mb-2 w-full">
-                    {brandError}
+                    {error.brand}
                   </div>
                 )}
 
@@ -287,21 +286,58 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
                 </label>
                 <input
                   type="text"
+                  name="model"
                   placeholder="Enter Model"
-                  value={vehicleModel}
-                  onChange={(e) => {
-                    setVehicleModel(e.target.value);
-                    setModelError("");
-                  }}
+                  value={formData.model}
+                  onChange={handleChange}
                   className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
                   hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
                   maxLength={10}
                 />
-                {modelError && (
+                {error.model && (
                   <div className="text-[#CB0200] text-xs mb-3 w-full">
-                    {modelError}
+                    {error.model}
                   </div>
                 )}
+
+                <label className="w-full text-xs text-[#333333] mb-1">
+                  Year
+                </label>
+                <input
+                  type="text"
+                  name="year"
+                  placeholder="Enter Year"
+                  value={formData.year}
+                  onChange={handleChange}
+                  className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
+                  hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
+                  maxLength={10}
+                />
+                {error.year && (
+                  <div className="text-[#CB0200] text-xs mb-3 w-full">
+                    {error.year}
+                  </div>
+                )}
+
+
+                <label className="w-full text-xs text-[#333333] mb-1">
+                  FuelType
+                </label>
+                <input
+                  type="text"
+                  name="fuelType"
+                  placeholder="Enter Fuel Type"
+                  value={formData.fuelType}
+                  onChange={handleChange}
+                  className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
+                  hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
+                  maxLength={10}
+                />
+                {error.fuelType && (
+                  <div className="text-[#CB0200] text-xs mb-3 w-full">
+                    {error.fuelType}
+                  </div>
+                )}  
               </>
             )}
 
@@ -322,13 +358,7 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
       </Modal>
 
       {showSelectVehicle && vehicleData && (
-        <Suspense
-          fallback={
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="text-white"></div>
-            </div>
-          }
-        >
+        <Suspense fallback={<></>}>
           <SelectVehicle
             isOpen={showSelectVehicle}
             onClose={handleClose}
@@ -336,12 +366,14 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
             addedVehicleNumber={vehicleData.vehicleNumber}
             addedVehicleBrand={vehicleData.brand}
             addedVehicleModel={vehicleData.model}
+            addedVehicleYear={vehicleData.year}
+            addedVehicleFuelType={vehicleData.fuelType}
             plan={plan}
           />
         </Suspense>
       )}
     </>
   );
-};
+}
 
 export default EnterVehicleNumber;

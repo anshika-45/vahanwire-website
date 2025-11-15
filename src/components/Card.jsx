@@ -51,7 +51,7 @@ const YellowCards = () => {
         <div
           key={index}
           className="bg-white rounded-lg flex flex-col items-center text-center shadow-md 
-                     pb-6 pt-4 px-3  h-auto relative 
+                     py-8 px-4  h-auto relative 
                      "
         >
           <div

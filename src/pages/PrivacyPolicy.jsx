@@ -5,7 +5,7 @@ const PageBanner = React.lazy(() => import("../components/PageBanner"));
 const TwoColumnInfoLayout = React.lazy(() => import("../components/TwoColumnInfoLayout"));
 
 const ComponentFallback = () => (
-  <div className="flex items-center justify-center py-8">
+  <div className="flex items-center justify-center md:py-8 sm:py-3 py-8">
     <div className="animate-pulse bg-gray-200 rounded-lg h-32 w-full max-w-4xl"></div>
   </div>
 );

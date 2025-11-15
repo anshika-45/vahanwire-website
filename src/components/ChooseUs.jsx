@@ -5,17 +5,16 @@ import checkIcon from "../assets/CheckIcon.svg";
 import Choose1 from "../assets/Choose1.svg";
 import Choose2 from "../assets/Choose2.svg";
 import Choose3 from "../assets/Choose3.svg";
-import mobile from "../assets/Mobile.svg"; // ✅ Keep only this
+import mobile from "../assets/Mobile.svg"; 
 
 const ChooseUs = () => {
   return (
-    <section className="bg-[#FAFCFF] overflow-hidden md:mt-10">
-      <div className="mx-auto px-4 sm:px-6 md:px-6 md:max-w-lg lg:max-w-4xl">
+    <section className="bg-[#FAFCFF] overflow-hidden md:mt-8">
+      <div className="mx-auto px-4 sm:px-6 md:px-4 md:max-w-lg lg:max-w-4xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 md:gap-6 items-center justify-items-center">
-          {/* LEFT SIDE CONTENT */}
           <div className="bg-white rounded-2xl border border-[#BCD2F5] py-4 sm:py-6 md:py-8 px-4 sm:px-6 sm:space-y-5 text-left w-full">
             <div>
-              <h2 className="text-lg sm:text-xl md:text-2xl text-[#222222] mb-4 sm:mb-6 font-semibold">
+              <h2 className="text-lg sm:text-xl md:text-[20px] text-[#222222] mb-4 sm:mb-6 font-semibold text-center">
                 Smart & Reliable Vehicle Care
               </h2>
               <div className="border-t border-[#BCD2F5] my-3 sm:my-4"></div>
@@ -30,7 +29,7 @@ const ChooseUs = () => {
               ].map((item, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-2 sm:gap-3 text-xs sm:text-[17px] font-normal"
+                  className="flex items-start gap-2 sm:gap-3 text-xs sm:text-[15px] font-normal"
                 >
                   <img
                     loading="lazy"
@@ -66,7 +65,9 @@ const ChooseUs = () => {
                     alt="Download on App Store"
                     role="img"
                     decoding="async"
-                    className="h-8 sm:h-10 md:h-11 object-contain cursor-pointer"
+                    width="108"
+                    height="40"
+                    className="h-8 sm:h-10 md:h-11 w-auto object-contain cursor-pointer"
                   />
                 </a>
                 <a
@@ -82,7 +83,9 @@ const ChooseUs = () => {
                     alt="Get it on Google Play"
                     role="img"
                     decoding="async"
-                    className="h-8 sm:h-10 md:h-11 object-contain cursor-pointer"
+                    width="108"
+                    height="40"
+                    className="h-8 sm:h-10 md:h-11 w-auto object-contain cursor-pointer"
                   />
                 </a>
               </div>
@@ -95,6 +98,8 @@ const ChooseUs = () => {
                   src={Choose1}
                   alt="User testimonial 1"
                   decoding="async"
+                  width="40"
+                  height="40"
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
                 <img
@@ -102,6 +107,8 @@ const ChooseUs = () => {
                   src={Choose2}
                   alt="User testimonial 2"
                   decoding="async"
+                  width="40"
+                  height="40"
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
                 <img
@@ -109,6 +116,8 @@ const ChooseUs = () => {
                   src={Choose3}
                   alt="User testimonial 3"
                   decoding="async"
+                  width="40"
+                  height="40"
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
               </div>
@@ -118,15 +127,19 @@ const ChooseUs = () => {
             </div>
           </div>
 
-          {/* RIGHT SIDE — ONLY PHONE IMAGE */}
           <div className="w-full flex justify-center lg:justify-end">
-            <img
-              src={mobile}
-              alt="VahanWire mobile app preview"
-              loading="lazy"
-              decoding="async"
-              className="w-[60%] sm:w-[50%] md:w-[50%] lg:w-[65%] h-auto drop-shadow-xl"
-            />
+            <div className="aspect-[2/3]">
+                         <img
+             src={mobile}
+             alt="VahanWire mobile app preview"
+             loading="lazy"
+             decoding="async"
+             width="250"
+             height="500"
+             className="w-full h-[450px] drop-shadow-xl"
+           />
+            </div>
+
           </div>
         </div>
       </div>
