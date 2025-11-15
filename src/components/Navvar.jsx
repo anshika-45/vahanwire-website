@@ -7,7 +7,7 @@ function Navbar() {
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "Vehicle AMC", path: "/vehicle-amc" },
-    { name: "Mechanic", path: "", comingSoon: true },
+    { name: "Mechanic", path: "/mechanic" },
     { name: "Tow Truck", path: "/tow-truck" },
     { name: "E-Commerce", path: "/service-center"},
     { name: "Petrol Pump", path: "/petrol-pump"},
