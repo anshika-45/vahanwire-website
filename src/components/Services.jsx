@@ -44,20 +44,19 @@ const servicesData = [
     desc: "Book appointments with trusted car & bike service centers in your city.",
     linkText: "View Details",
   },
-   
 ];
 const Services = React.memo(() => {
   return (
-    <div className="justify-items-center pt-14 pb-10 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]">
+    <div className="justify-items-center pt-7 md:pt-14 pb-10 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF] duration-300 transition-all ease-in">
       <div className="container">
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]">
           Our Main Services
         </h1>
-        <p className="text-xs sm:text-lg text-[#5C5C5C] text-center pt-2 md:pt-4">
+        <p className="text-xs sm:text-lg md:text-md text-[#5C5C5C] text-center pt-2 md:pt-4">
           Explore a full range of essential vehicle and home services —<br />
           from mechanic support to doorstep repairs, towing, payments, and more.
         </p>
-        <div className="mt-6 sm:mt-8 md:mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
+        <div className="mt-6 sm:mt-8 md:mt-12 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
           {servicesData.map((service, index) => (
             <Tile key={index} {...service} />
           ))}

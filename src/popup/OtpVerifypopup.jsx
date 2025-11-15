@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import otpImg from "../assets/Animation.svg";
 import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { verifyOtp, sendOtp } from "../api/authApi"; 
+import { verifyOtp, sendOtp } from "../api/authApi";
 import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
 
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
@@ -30,78 +30,80 @@ const OtpVerifypopup = ({
   const [error, setError] = useState("");
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
-  useEffect(() => {
-    if (!isOpen) {
-      setOtp(["", "", "", ""]);
-      setError("");
-      inputRefs[0].current?.focus();
-    }
-  }, [isOpen]);
-  
-  useEffect(() => {
-    if (!isOpen) return;
-    setTimer(RESEND_SECONDS);
-    const interval = setInterval(() => {
-      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isOpen]);
+useEffect(() => {
+  if (!isOpen) {
+    setOtp(["", "", "", ""]);
+    setError("");
+    inputRefs[0].current?.focus();
+  }
+}, [isOpen]);
 
-  const handleChange = (value, idx) => {
-    if (/^[0-9]?$/.test(value)) {
-      const next = [...otp];
-      next[idx] = value;
-      setOtp(next);
-      if (value && idx < 3) inputRefs[idx + 1].current?.focus();
-    }
-  };
+useEffect(() => {
+  if (!isOpen) return;
+  setTimer(RESEND_SECONDS);
+  const interval = setInterval(() => {
+    setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+  }, 1000);
+  return () => clearInterval(interval);
+}, [isOpen]);
 
-  const handleKeyDown = (e, idx) => {
-    if (e.key === "Backspace" && !otp[idx] && idx > 0) {
-      inputRefs[idx - 1].current?.focus();
-    }
-  };
+const handleChange = (value, idx) => {
+  if (/^[0-9]?$/.test(value)) {
+    const next = [...otp];
+    next[idx] = value;
+    setOtp(next);
+    if (value && idx < 3) inputRefs[idx + 1].current?.focus();
+  }
+};
 
-  const handleOtpSubmit = async () => {
-    const fullOtp = otp.join("").trim();
-    if (fullOtp.length !== 4) {
-      setError("Please enter the 4-digit OTP");
-      return;
+const handleKeyDown = (e, idx) => {
+  if (e.key === "Backspace" && !otp[idx] && idx > 0) {
+    inputRefs[idx - 1].current?.focus();
+  }
+};
+
+const handleOtpSubmit = async () => {
+  const fullOtp = otp.join("").trim();
+  if (fullOtp.length !== 4) {
+  setError("Please enter 4-digit OTP");
+    return;
+  }
+
+try {
+  setLoading(true);
+  setError("");
+
+  const response = await verifyOtp(phoneNumber, fullOtp);
+
+  if (response?.success && response?.data) {
+    const { accessToken, user } = response.data;
+
+    if (accessToken) {
+      localStorage.setItem("token", accessToken);
     }
-  
-    try {
-      setLoading(true);
-      setError("");
-      const response = await verifyOtp(phoneNumber, fullOtp);
-  
-      if (response?.success && response?.data) {
-        const { accessToken, user } = response.data;
         
-        if (accessToken) {
-          localStorage.setItem("token", accessToken);
-        }
-        if (user) {
-          localStorage.setItem("user", JSON.stringify(user));
-          setUser(user);
-        }
-  
-        setIsLoggedIn(true);
-        
-        if (isFromLogin) {
-          onClose();
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
+    }
+
+    setIsLoggedIn(true);
+
+    if (isFromLogin) {
+        onClose();
+    } else {
+      try {
+        const vehicles = await getUserVehicleWithoutAMC();
+        setUserVehicles(vehicles);
+
+        if (vehicles && vehicles.length > 0) {
+          setShowSelectVehicle(true);
         } else {
-          try {
-            const vehicles = await getUserVehicleWithoutAMC();
-            setUserVehicles(vehicles);
-            
-            if (vehicles && vehicles.length > 0) {
-              setShowSelectVehicle(true);
-            } else {
-              setShowVehiclePopup(true);
-            }
-          } catch (vehicleError) {
-            setShowVehiclePopup(true);
-          }
+          setShowVehiclePopup(true);
+        }
+        } catch (vehicleError) {
+          setShowVehiclePopup(true);
+        }
         }
       } else {
         setError(response?.message || "Invalid OTP. Try again.");
@@ -117,49 +119,40 @@ const OtpVerifypopup = ({
     }
   };
 
-  const handleResend = async () => {
-    if (timer > 0 || resendLoading) return;
-    try {
-      setResendLoading(true);
-      setError("");
+const handleResend = async () => {
+  if (timer > 0 || resendLoading) return;
+  try {
+    setResendLoading(true);
+    setError("");
 
-      const resp = await sendOtp(phoneNumber);
+    const resp = await sendOtp(phoneNumber);
 
-      if (resp?.success === false) {
-        setError(resp?.message || "Could not send OTP. Please try again.");
-        return;
-      }
+    if (resp?.success === false) {
+      setError(resp?.message || "Could not send OTP. Please try again.");
+      return;
+    }
 
-      setOtp(["", "", "", ""]);
-      inputRefs[0].current?.focus();
-      setTimer(RESEND_SECONDS);
+    setOtp(["", "", "", ""]);
+    inputRefs[0].current?.focus();
+    setTimer(RESEND_SECONDS);
     } catch (err) {
-      console.error("Resend OTP failed:", err);
-      setError(
-        err?.response?.data?.message ||
-          "Could not send OTP. Please try again."
-      );
+    console.error("Resend OTP failed:", err);
+     setError(
+      err?.response?.data?.message || "Could not send OTP. Please try again."
+     );
     } finally {
       setResendLoading(false);
     }
   };
 
-  if (!isOpen && !showVehiclePopup && !showSelectVehicle) return null;
+if (!isOpen && !showVehiclePopup && !showSelectVehicle) return null;
 
-  return (
-    <>
-      {!showVehiclePopup && !showSelectVehicle && (
-        <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
-          <div className="bg-white rounded-xl p-5 flex flex-col items-center m-8">
-            <img
-              src={otpImg}
-              loading="lazy"
-              alt="OTP Animation"
-              className="md:w-60 md:h-60 w-40 h-40 mb-4"
-              width={160}
-              height={160}
-              decoding="async"
-            />
+return (
+  <>
+    {!showVehiclePopup && !showSelectVehicle && (
+      <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
+        <div className="bg-white rounded-xl p-5 flex flex-col items-center m-8">
+          <img src={otpImg} loading="lazy" alt="OTP Animation" className="md:w-60 md:h-60 w-40 h-40 mb-4" width={160} height={160} decoding="async" />
             <h1 className="text-xl font-semibold text-[#242424] text-center mb-2">
               Verify Your Number
             </h1>
@@ -195,7 +188,9 @@ const OtpVerifypopup = ({
               ))}
             </div>
 
-            {error && <div className="text-[#CB0200] text-xs mb-2">{error}</div>}
+            {error && (
+              <div className="text-[#CB0200] text-xs mb-2">{error}</div>
+            )}
 
             {timer > 0 ? (
               <div className="text-base text-[#CB0200] mb-4">
@@ -222,11 +217,11 @@ const OtpVerifypopup = ({
       )}
 
       {showVehiclePopup && (
-          <EnterVehicleNumber
-            isOpen={showVehiclePopup}
-            onClose={onClose}
-            onBack={() => setShowVehiclePopup(false)}
-          />
+        <EnterVehicleNumber
+          isOpen={showVehiclePopup}
+          onClose={onClose}
+          onBack={() => setShowVehiclePopup(false)}
+        />
       )}
 
       {showSelectVehicle && (

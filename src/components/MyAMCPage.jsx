@@ -90,6 +90,8 @@ const mapApiDataToAMC = (apiData) => {
       vehicleNumber: item.vehicleNumber,
       vehicleBrand: item.vehicleBrand,
       vehicleModel: item.vehicleModel,
+      vehicleYear: item.vehicleYear,
+      vehicleFuelType: item.vehicleFuelType,
       planDescription: item.planDescription,
       vehicleEditableUntil: item.vehicleEditableUntil,
       canEditVehicle: canEditVehicle,
@@ -355,6 +357,8 @@ export default function MyAMCPage() {
       vehicleNumber: item.vehicleNumber,
       brand: item.vehicleBrand,
       model: item.vehicleModel,
+      year: item.vehicleYear,
+      fuelType: item.vehicleFuelType,
       vehicleType: item.vehicleType?.toLowerCase() || "car",
     });
     setShowEditModal(true);

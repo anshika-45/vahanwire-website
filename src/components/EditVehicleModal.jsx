@@ -15,175 +15,175 @@ const Backdrop = ({ onClose }) => (
 
 const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
   const [vehicleType, setVehicleType] = useState("car");
-  const [form, setForm] = useState({
+  const [formData, setFormData] = useState({
     vehicleNumber: "",
     brand: "",
     model: "",
     year: "",
     fuelType: "",
   });
-  const [errors, setErrors] = useState({});
+  const [error,setErrors] = useState({
+     vehicleNumber: "",
+     brand: "",
+     model: "",
+     year: "",
+     fuelType: "",
+   })
   const [touched, setTouched] = useState({});
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  useEffect(() => {
-    if (!open) return;
-    document.body.style.overflow = "hidden";
-    const onKey = (e) => e.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
+useEffect(() => {
+  if (!open) return;
+  document.body.style.overflow = "hidden";
+  const onKey = (e) => e.key === "Escape" && onClose();
+  window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "auto";
       window.removeEventListener("keydown", onKey);
-    };
-  }, [open, onClose]);
+  };
+}, [open, onClose]);
 
-  useEffect(() => {
-    if (initial) {
-      setVehicleType(initial.vehicleType || "car");
-      setForm({
-        vehicleNumber: initial.vehicleNumber || "",
-        brand: initial.brand || "",
-        model: initial.model || "",
-        year: initial.year || "",
-        fuelType: initial.fuelType || "",
-      });
-      setErrors({});
-      setTouched({});
-    }
-  }, [initial]);
+useEffect(() => {
+  if (initial) {
+    setVehicleType(initial.vehicleType || "car");
+    setFormData({
+      vehicleNumber: initial.vehicleNumber || "",
+      brand: initial.brand || "",
+      model: initial.model || "",
+      year: initial.year || "",
+      fuelType: initial.fuelType || "",
+    });
+    setErrors({});
+    setTouched({});
+  }
+}, [initial]);
 
-  const validateField = (name, value) => {
-    switch (name) {
-      case "vehicleNumber": {
-        const clean = value.replace(/\s/g, "").toUpperCase();
-        if (!clean) return "Vehicle number is required";
-        const regex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{0,4}[0-9]{3,4}$/;
-        if (!regex.test(clean))
-          return "Please enter a valid number (e.g., DL01AB1234)";
-        if (clean.length < 8 || clean.length > 12)
-          return "Vehicle number should be 8–12 characters";
-        return "";
-        
-      }
-  
-      case "brand":
-        if (!value.trim()) return "Brand is required";
-        if (/\d/.test(value.trim())) return "Brand cannot contain numbers";
-        if (value.trim().length < 2) return "Brand must be at least 2 characters";
-        if (value.trim().length > 20) return "Brand cannot exceed 20 characters";
-        return "";
-  
-      case "model":
-        if (!value.trim()) return "Model is required";
-        if (value.trim().length > 25)
-          return "Model cannot exceed 25 characters";
-        return "";
-  
-      case "year": {
-        if (!value.trim()) return "Year is required";
-        if (!/^\d{4}$/.test(value)) return "Enter a valid 4-digit year";
-        const yearNum = Number(value);
-        const curr = new Date().getFullYear();
-        if (yearNum < 1900 || yearNum > curr + 1)
-          return `Year must be between 1900 and ${curr + 1}`;
-        return "";
-      }
-  
-      case "fuelType": {
-        if (!value.trim()) return "Fuel type is required";
-        const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
-        if (!valid.includes(value.toLowerCase()))
-          return "Invalid fuel type (try Petrol, Diesel, Electric)";
-        return "";
-      }
-  
-      default:
-        return "";
-    }
-  };  
+const hasValidBrand = (value) => /[^a-zA-Z\s]/.test(value);
 
-  const validateForm = () => {
-    const newErrors = {};
-    for (const key of Object.keys(form)) {
-      newErrors[key] = validateField(key, form[key]);
-    }
-    setErrors(newErrors);
-    return !Object.values(newErrors).some((err) => err);
+const hasValid = (value) => /[^a-zA-Z0-9\s]/.test(value);
+  
+const validateVehicleNumber = (num) => {
+  const cleaned = num.trim().toUpperCase().replace(/[-\s]/g, "");
+  const regex1 = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
+  const regex2 = /^[A-Z]{2}[0-9]{1,2}[A-Z][0-9]{3,4}$/;
+  if (cleaned.length < 8 || cleaned.length > 15)
+    return "Vehicle number should be 8–15 characters";
+  if (!regex1.test(cleaned) && !regex2.test(cleaned))
+    return "Invalid number (e.g. MH12AB1234)";
+  return "";
+};
+  
+const validateBrand = (v) => {
+  if (!v.trim()) return "Brand is required";
+  if (hasValidBrand(v)) return "Brand cannot contain special characters";
+  if (v.length < 2) return "Brand must be at least 2 characters";
+  return "";
+};
+  
+const validateModel = (v) => {
+  if (!v.trim()) return "Model is required";
+  if (hasValid(v)) return "Model cannot contain special characters";
+  if (v.length < 2) return "Brand must be at least 2 characters";
+  return "";
+};
+  
+const validateYear = (y) => {
+  if (!y) return "Year is required";
+  if (y.length !== 4) return "Year must be 4 digits";
+  const yr = Number(y);
+  if (yr < 1990 || yr > new Date().getFullYear())
+    return "Invalid year";
+  return "";
+};
+  
+const validateFuelType = (v) => {
+  if (!v.trim()) return "Fuel type is required";
+  const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
+  if (!valid.includes(v.toLowerCase())) return "Invalid fuel type (try Petrol, Diesel, Electric)";
+  if (hasValid(v)) return "Fuel type cannot contain special characters";
+  return "";
+};
+  
+const validateForm = () => {
+  const newErrors = {
+    vehicleNumber: validateVehicleNumber(formData.vehicleNumber),
+    brand: validateBrand(formData.brand),
+    model: validateModel(formData.model),
+    year: validateYear(formData.year),
+    fuelType: validateFuelType(formData.fuelType),
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    let cleanValue = value;
-  
-    if (name === "vehicleNumber") {
-      cleanValue = cleanValue.toUpperCase().replace(/\s+/g, "");
-    }
-  
-    if (name === "year") {
-      cleanValue = cleanValue.replace(/\D/g, "");
-      if (cleanValue.length > 4) cleanValue = cleanValue.slice(0, 4);
-    }
-  
-    if (name === "brand") {
-      cleanValue = cleanValue.replace(/[0-9]/g, "");
-      cleanValue = cleanValue.replace(/\s+/g, " ");
-      cleanValue = cleanValue.slice(0, 20);
-    }
-  
-    if (name === "model") {
-      cleanValue = cleanValue.replace(/\s+/g, " ");
-      cleanValue = cleanValue.slice(0, 25);
-    }
-  
-    setForm((prev) => ({ ...prev, [name]: cleanValue }));
-  
-    if (touched[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: validateField(name, cleanValue),
-      }));
-    }
-  };
-  
+  setErrors(newErrors);
 
-  const handleBlur = (e) => {
-    const { name, value } = e.target;
-    setTouched((prev) => ({ ...prev, [name]: true }));
-    setErrors((prev) => ({
-      ...prev,
-      [name]: validateField(name, value),
-    }));
-  };
+  return !Object.values(newErrors).some((err) => err !== "");
+};
 
-  const handleSubmit = async (e) => {
+const validateOnBlur = (name, value) => {
+  let msg = "";
+
+  if (name === "vehicleNumber") msg = validateVehicleNumber(value);
+  if (name === "brand") msg = validateBrand(value);
+  if (name === "model") msg = validateModel(value);
+  if (name === "year") msg = validateYear(value);
+  if (name === "fuelType") msg = validateFuelType(value);
+
+  setErrors((prev) => ({ ...prev, [name]: msg }));
+};
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  let clean = value;
+
+  if (name === "vehicleNumber")
+    clean = clean.toUpperCase().replace(/\s/g, "");
+  if (name === "year")
+    clean = clean.replace(/[^0-9]/g, "").slice(0, 4);
+  if (name === "brand")
+    clean = clean.replace(/[^A-Za-z\s]/g, "").slice(0, 20);
+  if (name === "model")
+    clean = clean.replace(/\s+/g, " ").slice(0, 25);
+
+  setFormData((prev) => ({ ...prev, [name]: clean }));
+  if (touched[name]) validateOnBlur(name, clean);
+};
+
+const handleBlur = (e) => {
+  const { name, value } = e.target;
+
+  setTouched((prev) => ({ ...prev, [name]: true }));
+  validateOnBlur(name, value);
+};
+  
+const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError("");
 
-    const allTouched = Object.keys(form).reduce(
-      (acc, key) => ({ ...acc, [key]: true }),
+    const allTouched = Object.keys(formData).reduce(
+      (acc, k) => ({ ...acc, [k]: true }),
       {}
     );
     setTouched(allTouched);
 
     if (!validateForm()) {
-      setSubmitError("Vehicle Data is invalid");
+      setSubmitError("Please correct highlighted fields");
       return;
     }
 
     setLoading(true);
 
     const payload = {
-      vehicleNumber: form.vehicleNumber.replace(/\s/g, ""),
+      vehicleNumber: formData.vehicleNumber.toUpperCase(),
       vehicleType,
-      brandName: form.brand.trim(),
-      modelName: form.model.trim(),
-      fuelType: form.fuelType.trim().toUpperCase(),
-      year: form.year,
+      brandName: formData.brand.trim(),
+      modelName: formData.model.trim(),
+      fuelType: formData.fuelType.trim(),
+      year: formData.year,
     };
 
     try {
       const res = await updateUserVehicle(initial._id, payload);
+
       if (res?.data?.success || res?.success) {
         alert("Vehicle updated successfully!");
         onSubmit?.();
@@ -194,14 +194,15 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
     } catch (err) {
       setSubmitError("An error occurred while updating the vehicle");
     }
+
     setLoading(false);
   };
 
-  if (!open) return null;
+if (!open) return null;
 
-  return (
-    <>
-      <Backdrop onClose={onClose} />
+return (
+  <>
+    <Backdrop onClose={onClose} />
       <div className="fixed inset-0 z-[9999] grid place-items-center p-3 sm:p-4">
         <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-slate-200">
           <div className="flex justify-between items-center bg-[#D9E7FE] rounded-t-2xl px-4 sm:px-6 py-3 sm:py-4 border-b">
@@ -224,8 +225,7 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
                     vehicleType === type
                       ? "border-[#266DDF] bg-[#ECF3FD]"
                       : "border border-transparent hover:bg-[#ECF3FD]"
-                  }`}
-                >
+                  }`} >
                   <span
                     className={`absolute top-0 px-3 py-0.5 rounded-b-md text-[11px] font-semibold ${
                       vehicleType === type
@@ -264,19 +264,19 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
                   </label>
                   <input
                     name={field}
-                    value={form[field]}
+                    value={formData[field]}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     className={`w-full border rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
-                      errors[field] && touched[field]
+                      error[field] && touched[field]
                         ? "border-red-500 bg-red-50"
                         : "border-slate-300"
                     }`}
                     placeholder={`Enter ${field}`}
                   />
-                  {errors[field] && touched[field] && (
+                  {error[field] && touched[field] && (
                     <p className="text-red-600 text-xs mt-1">
-                      {errors[field]}
+                      {error[field]}
                     </p>
                   )}
                 </div>

@@ -29,7 +29,6 @@ const Footer = () => {
       ></div>
 
       <div className="relative container flex flex-col justify-between">
-        {/* NOTE: reduced small-screen vertical gap (gap-y-6) */}
         <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-0.5 md:pt-40 md:mt-30 pt-10">
           <div className="h-auto mb-6 sm:mb-6 md:mb-0">
             <Link
@@ -58,13 +57,13 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
+         
           <div className="mb-4 md:mb-0">
             <button
               onClick={() => toggleSection("quickLinks")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              {/* reduced heading bottom margin on small screens */}
+
               <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-4">
                 Quick Links
               </h3>
@@ -76,7 +75,6 @@ const Footer = () => {
               />
             </button>
 
-            {/* reduced vertical spacing in collapsed list on small screens */}
             <ul
               className={`space-y-2 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
                 expandedSections.quickLinks ? "flex flex-col" : "hidden"
@@ -122,7 +120,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* For User */}
+      
           <div className="mb-4 md:mb-0">
             <button
               onClick={() => toggleSection("forUser")}
@@ -149,7 +147,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/petrol-pump" className="hover:text-white transition">
                   Find Petrol Pumps
                 </Link>
               </li>
@@ -165,8 +163,6 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-
-          {/* For Mechanic */}
           <div className="mb-4 md:mb-0">
             <button
               onClick={() => toggleSection("forMechanic")}
@@ -188,7 +184,7 @@ const Footer = () => {
               }`}
             >
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/mechanic" className="hover:text-white transition">
                   Register As A Mechanic
                 </Link>
               </li>
@@ -203,33 +199,30 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/petrol-pump" className="hover:text-white transition">
                   Register Petrol Pump
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact */}
           <div className="mb-4 md:mb-0">
-            <button
+            {/* <button
               onClick={() => toggleSection("contact")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
-            >
+            > */}
               <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-4">
                 Contact For AMC Support
               </h3>
-              <ChevronDown
+              {/* <ChevronDown
                 size={18}
                 className={`md:hidden transition-transform ${
                   expandedSections.contact ? "rotate-180" : ""
                 }`}
-              />
-            </button>
+              /> 
+            </button> */}
             <ul
-              className={`space-y-2 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
-                expandedSections.contact ? "flex flex-col" : "hidden"
-              }`}
+              className="space-y-2 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col"
             >
               <li className="flex items-start gap-2">
                 <div className="bg-[#FBBA01] rounded-full p-2 flex-shrink-0 mt-0.5">
@@ -287,7 +280,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="text-center text-gray-400 text-xs sm:text-sm mb-2 pt-8 sm:pt-16 md:pt-34 pb-4">
+        <div className="text-center text-gray-400 text-xs sm:text-sm mb-2 pt-8 sm:pt-10 md:pt-16 pb-4">
           <div
             className="w-full h-0.5 mb-4"
             style={{

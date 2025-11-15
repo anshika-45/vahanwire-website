@@ -40,10 +40,12 @@ export const getUserVehicleWithoutAMC = async () => {
 
 export const updateAMCPurchaseVehicle = async (purchaseId, vehicleData) => {
   console.log("lkengwkjnjknjnjknjknknkn");
-  const res = await axiosInstance.post("/amc-purchase/update-amc-vehicle", {
+  console
+  const response = await axiosInstance.post("/amc-purchase/update-amc-vehicle", {
     purchaseId,
     ...vehicleData
   });
+  console.log("PPPP",response);
   console.log("kjksacbjkbjkassscs",res);
   return res.data;
 };
@@ -51,6 +53,14 @@ export const updateAMCPurchaseVehicle = async (purchaseId, vehicleData) => {
 export const addUserVehicleWithoutAMC = async (vehicleData) => {
   console.log("ekjqbjkbjqbhjbhj");
   const res = await axiosInstance.post("/vehicle/add-vehicle-without-amc", vehicleData);
+  console.log("jkkdwnckjn",res);
   console.log("ejcbjbehjbew",res);
   return res;
+};
+
+export const updateAMCVehicle = async (vehicleId, vehicleData) => {
+  console.log("lkengwk");
+  const res = await axiosInstance.put(`/vehicle/update-without-amc/${vehicleId}`,vehicleData);
+  console.log("kjksacbjkbjkassscs",res);
+  return res.data;
 };

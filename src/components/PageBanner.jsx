@@ -1,4 +1,3 @@
-// src/components/PageBanner.jsx
 import React from "react";
 import PropTypes from "prop-types";
 import "../index.css"; 
@@ -12,7 +11,7 @@ const PageBanner = ({
   showTicker = true,
 }) => {
   
-  const responsiveHeightClasses = "h-[35vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
+  const responsiveHeightClasses = "h-[40vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
 
   return (
     <section
@@ -32,14 +31,14 @@ const PageBanner = ({
 
       <div
         className={`absolute inset-0 pointer-events-none ${
-          useDarkOverlay ? "bg-black/40" : "bg-transparent"
-        }`}
+          useDarkOverlay ? "bg-black/70" : "bg-transparent"
+        }`}                                                                                                               
       />
 
       {showTicker && (
         <div className="relative z-10">
           <div className="ticker-container">
-            <div className="ticker">
+            <div className="ticker ">
               <div className="ticker__move">
                 {Array.from({ length: 7 }).map((_, i) => (
                   <span key={i} className="ticker-item">
@@ -64,7 +63,7 @@ const PageBanner = ({
         <h1
           className={`text-center leading-tight banner-title ${
             useGradientTitle
-              ? "gradient-text text-4xl sm:text-5xl md:text-6xl font-extrabold"
+              ? "gradient-text text-4xl sm:text-5xl md:text-6xl font-extrabold sm:font-normal"
               : "text-white text-3xl sm:text-4xl md:text-5xl font-bold"
           }`}
         >

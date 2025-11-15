@@ -13,6 +13,7 @@ export const getMyAMCPlans = async () => {
 
 export const selectAMCVehicle = async (vehicleData) => {
   const res = await axiosInstance.post("/amc-purchase/select-amc-vehicle",vehicleData);
+  console.log("jebwjbkwe",res);
   return res.data;
 };
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 const Tile = React.memo(function Tile({
   icon,
   title,
@@ -22,15 +21,14 @@ const Tile = React.memo(function Tile({
         flex flex-col justify-between w-full
         max-w-[300px] sm:max-w-[350px] md:max-w-[400px]
         rounded-[12px] p-3 sm:p-5 md:p-5 lg:p-6 xl:p-[30px]
-        bg-white cursor-pointer border-none text-left
+        bg-white cursor-pointer border-none text-left shadow-sm
       `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleTileClick}
     >
-      <div className="flex gap-3 sm:gap-4">
-        {/* Icon container with fixed dimensions */}
-        <div className="flex justify-center items-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 flex-shrink-0">
+      <div className="flex sm:flex-row flex-col justify-center gap-3 sm:gap-4 ">
+        <div className="sm:mx-0 mx-auto w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 flex-shrink-0">
           {icon && (
             <img
               loading="lazy"
@@ -44,17 +42,16 @@ const Tile = React.memo(function Tile({
           )}
         </div>
 
-        {/* Text content */}
         <div className="flex flex-col justify-between min-h-37">
-          <h3 className="text-sm sm:text-base md:text-lg font-semibold text-[#242424]">
+          <h3 className="text-[17px] sm:text-start text-center sm:text-base md:text-lg font-medium text-[#242424]">
             {title}
           </h3>
-          <p className="sm:text-[15px] xl:text-[16px] text-[#5C5C5C] mt-1 leading-snug">
+          <p className="sm:text-[15px] xl:text-[16px] sm:text-start text-center text-[#5C5C5C]">
             {desc}
           </p>
 
           {linkText && (
-            <span className="text-sm mt-2 sm:mt-3 font-semibold flex items-center gap-1 text-[#266DDF] hover:text-blue-700">
+            <span className="text-sm mt-2 sm:mt-3 font-semibold flex sm:justify-start justify-center items-center gap-1 text-[#266DDF] hover:text-blue-700">
               {linkText}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -75,7 +72,6 @@ const Tile = React.memo(function Tile({
         </div>
       </div>
 
-      {/* Hover effect styles */}
       <style>{`
         .tile {
           position: relative;
