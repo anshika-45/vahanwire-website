@@ -81,14 +81,14 @@ const VehicleAmcFilter = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  useEffect(() => {
-    document.body.style.overflow = "auto";
-    document.documentElement.style.overflow = "auto";
-    return () => {
-      document.body.style.overflow = "auto";
-      document.documentElement.style.overflow = "auto";
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.body.style.overflow = "auto";
+  //   document.documentElement.style.overflow = "auto";
+  //   return () => {
+  //     document.body.style.overflow = "auto";
+  //     document.documentElement.style.overflow = "auto";
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (status === "success" || status === "failed") {
@@ -201,7 +201,7 @@ const VehicleAmcFilter = () => {
           vehicle={vehicle}
         />
       </Suspense>
-      <Suspense fallback={<BannerLoader />}>
+      {/* <Suspense fallback={<BannerLoader />}>
         <LatestOffer />
       </Suspense>
 
@@ -209,7 +209,7 @@ const VehicleAmcFilter = () => {
         <Suspense fallback={<BannerLoader />}>
           <AmcBanner onBuy={handleBuyNow} />
         </Suspense>
-      </div>
+      </div> */}
 
       {isPopupOpen && (
         <Suspense fallback={null}>

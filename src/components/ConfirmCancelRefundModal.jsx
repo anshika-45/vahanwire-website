@@ -1,8 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import Button from "./Button";
 
 export default function ConfirmCancelRefundModal({ open, onClose, onConfirm }) {
   const dialogRef = useRef(null);
+
+  useEffect(() => {
+    if (open) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -58,19 +67,29 @@ export default function ConfirmCancelRefundModal({ open, onClose, onConfirm }) {
         </p>
 
         {/* Buttons (stacked vertically) */}
-        <div className="mt-8 flex flex-col gap-3">
-          <Button
-            className="w-full px-4 py-3 bg-[#266DDF] text-white rounded-lg hover:bg-[#1f5bc4] transition font-medium text-sm"
-            variant="primary"
+        <div className="mt-8 space-y-3">
+          <button
+            type="button"
             onClick={onConfirm}
-            text="Yes, I Want"
-          />
-          <Button
-            className="w-full px-4 py-3 border border-gray-300 text-gray-800 rounded-lg hover:bg-gray-50 transition font-medium text-sm"
-            variant="outline"
+            className="
+              w-full rounded-xl bg-blue-600 px-4 py-3 text-[15px] font-semibold
+              text-white shadow-sm transition hover:bg-blue-700 active:translate-y-[0.5px]
+            "
+          >
+            Yes, I Want
+          </button>
+
+          <button
+            type="button"
             onClick={onClose}
-            text="Not at the Moment"
-          />
+            className="
+              w-full rounded-xl border border-gray-300 bg-white
+              px-4 py-3 text-[15px] font-semibold text-gray-700
+              hover:bg-gray-50
+            "
+          >
+            Not at the Moment
+          </button>
         </div>
       </div>
 

@@ -11,12 +11,12 @@ const TrustandResult = () => {
       ></div>
       <div className="relative z-10 justify-items-center py-4 md:py-[50px]">
         <div className="container   ">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-medium text-white text-center">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-white">
             Powered by Trust & Results
           </h1>
-          <p className="text-xs sm:text-lg text-white text-center pt-2 md:pt-4 leading-relaxed">
+          <p className="text-xs sm:text-lg text-white text-center pt-2 md:pt-4">
           See why customers across India rely on VahanWire for fast, reliable,
-          and <br className="hidden md:block" />
+          and <br />
           transparent vehicle services — anytime, anywhere.
           </p>
         </div>

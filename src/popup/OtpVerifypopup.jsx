@@ -39,6 +39,14 @@ const OtpVerifypopup = ({
     return () => clearInterval(interval);
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setOtp(["", "", "", ""]);
+      setError("");
+      inputRefs[0].current?.focus();
+    }
+  }, [isOpen]);
+
   const handleChange = (value, idx) => {
     if (/^[0-9]?$/.test(value)) {
       const next = [...otp];
@@ -118,6 +126,14 @@ const OtpVerifypopup = ({
   
       if (response?.success && response?.data) {
         const { accessToken, user } = response.data;
+        
+        // Validate that user object has phone number
+        if (!user || !user.phone) {
+          setError("Profile incomplete. Please try again or contact support.");
+          setLoading(false);
+          return;
+        }
+        
         if (accessToken) localStorage.setItem("token", accessToken);
         if (user) localStorage.setItem("user", JSON.stringify(user));
   

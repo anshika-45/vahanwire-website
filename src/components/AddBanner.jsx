@@ -5,7 +5,7 @@ import GooglePlay from "../assets/Playstore.svg";
 const AddBanner = () => {
   return (
     <>
-      <section className="w-full pt-40 mt-50 flex justify-center relative max-md:pt-50 max-md:mt-60 max-sm:pt-0 max-sm:mt-0 max-sm:pb-8">
+      <section className="w-full pt-40 mt-40 flex justify-center relative max-md:pt-50 max-md:mt-60 max-sm:pt-0 max-sm:mt-0 max-sm:pb-8">
         <div className="absolute top-0 bottom-0 left-0 w-1/2 bg-gradient-to-b from-white to-[#00AB11] opacity-50 hidden sm:block"></div>
         <div className="absolute top-0 bottom-0 right-0 w-1/2 bg-gradient-to-b from-white to-[#157EFD] opacity-50 hidden sm:block"></div>
         <div
@@ -51,7 +51,9 @@ const AddBanner = () => {
                       src={AppStore}
                       alt="App Store"
                       role="img"
-                      className="h-10 sm:h-12 lg:h-16 shrink-0"
+                      width="108"
+                      height="40"
+                      className="h-10 sm:h-12 lg:h-16 w-auto shrink-0"
                     />
                   </a>
                   <a
@@ -66,7 +68,9 @@ const AddBanner = () => {
                       src={GooglePlay}
                       alt="Google Play"
                       role="img"
-                      className="h-10 sm:h-12 lg:h-16 shrink-0"
+                      width="108"
+                      height="40"
+                      className="h-10 sm:h-12 lg:h-16 w-auto shrink-0"
                     />
                   </a>
                 </div>
@@ -99,7 +103,9 @@ const AddBanner = () => {
                       alt="App Store"
                       role="img"
                       loading="lazy"
-                      className="h-10 sm:h-12 lg:h-16 shrink-0"
+                      width="108"
+                      height="40"
+                      className="h-10 sm:h-12 lg:h-16 w-auto shrink-0"
                     />
                   </a>
                   <a
@@ -114,7 +120,9 @@ const AddBanner = () => {
                       alt="Google Play"
                       role="img"
                       loading="lazy"
-                      className="h-10 sm:h-12 lg:h-16 shrink-0"
+                      width="108"
+                      height="40"
+                      className="h-10 sm:h-12 lg:h-16 w-auto shrink-0"
                     />
                   </a>
                 </div>

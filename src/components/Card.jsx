@@ -45,13 +45,13 @@ const YellowCards = () => {
     <div
       className="
                  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 
-                 gap-3"
+                 gap-5"
     >
       {cardData.map((card, index) => (
         <div
           key={index}
           className="bg-white rounded-lg flex flex-col items-center text-center shadow-md 
-                     pb-6 pt-4 px-3  h-auto relative 
+                     py-8 px-4 h-auto relative 
                      "
         >
           <div

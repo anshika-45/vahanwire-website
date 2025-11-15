@@ -1,0 +1,38 @@
+{
+    "sourceFile": "src/components/GetHelp.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1763184458892,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1763184483255,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n         <div className=\"text-center mb-6 sm:mb-8 md:mb-10\">\r\n         <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]'>\r\n                 Get Help on the Go in 3 Simple Steps\r\n             </h1>\r\n-        <p className='text-xs lg:text-xl sm:text-lg text-[#5C5C5C] mt-4'>\r\n+        <p className='text-xs sm:text-lg text-[#5C5C5C] text-center pt-2 md:pt-4'>\r\n                 Find nearby services, make a quick payment, and let our provider reach you — right where you are.\r\n                 </p>\r\n             </div>\r\n                 <Suspense fallback={<div className=\"flex items-center justify-center py-4\"><div className=\"animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]\"></div></div>}>\r\n"
+                },
+                {
+                    "date": 1763184518289,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React, { Suspense, lazy } from 'react';\r\n const HoverCards = lazy(() => import('./HoverCards'));\r\n const GetHelp = () => {\r\n     return (\r\n-        <div className=\"py-8 sm:py-12 md:py-5 flex flex-col items-center mt-4 sm:mt-6 md:mt-4\">\r\n+        <div className=\"justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]\">\r\n         <div className=\"w-full\">\r\n         <div className=\"text-center mb-6 sm:mb-8 md:mb-10\">\r\n         <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]'>\r\n                 Get Help on the Go in 3 Simple Steps\r\n"
+                },
+                {
+                    "date": 1763184528783,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React, { Suspense, lazy } from 'react';\r\n const HoverCards = lazy(() => import('./HoverCards'));\r\n const GetHelp = () => {\r\n     return (\r\n-        <div className=\"justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]\">\r\n+        <div className=\"py-8 sm:py-12 md:py-5 flex flex-col items-center mt-4 sm:mt-6 md:mt-4\">\r\n         <div className=\"w-full\">\r\n         <div className=\"text-center mb-6 sm:mb-8 md:mb-10\">\r\n         <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]'>\r\n                 Get Help on the Go in 3 Simple Steps\r\n"
+                },
+                {
+                    "date": 1763184537862,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React, { Suspense, lazy } from 'react';\r\n const HoverCards = lazy(() => import('./HoverCards'));\r\n const GetHelp = () => {\r\n     return (\r\n-        <div className=\"py-8 sm:py-12 md:py-5 flex flex-col items-center mt-4 sm:mt-6 md:mt-4\">\r\n+        <div className=\"py-8 sm:py-12 md:py-5 flex flex-col items-center mt-4 sm:mt-6 md:mt-4  justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]\">\r\n         <div className=\"w-full\">\r\n         <div className=\"text-center mb-6 sm:mb-8 md:mb-10\">\r\n         <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]'>\r\n                 Get Help on the Go in 3 Simple Steps\r\n"
+                },
+                {
+                    "date": 1763184554626,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React, { Suspense, lazy } from 'react';\r\n const HoverCards = lazy(() => import('./HoverCards'));\r\n const GetHelp = () => {\r\n     return (\r\n-        <div className=\"py-8 sm:py-12 md:py-5 flex flex-col items-center mt-4 sm:mt-6 md:mt-4  justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]\">\r\n+        <div className=\"py-8 sm:py-12 md:py-5 flex flex-col items-center mt-4 sm:mt-6 md:mt-4  \">\r\n         <div className=\"w-full\">\r\n         <div className=\"text-center mb-6 sm:mb-8 md:mb-10\">\r\n         <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]'>\r\n                 Get Help on the Go in 3 Simple Steps\r\n"
+                }
+            ],
+            "date": 1763184458892,
+            "name": "Commit-0",
+            "content": "import React, { Suspense, lazy } from 'react';\r\nconst HoverCards = lazy(() => import('./HoverCards'));\r\nconst GetHelp = () => {\r\n    return (\r\n        <div className=\"py-8 sm:py-12 md:py-5 flex flex-col items-center mt-4 sm:mt-6 md:mt-4\">\r\n        <div className=\"w-full\">\r\n        <div className=\"text-center mb-6 sm:mb-8 md:mb-10\">\r\n        <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]'>\r\n                Get Help on the Go in 3 Simple Steps\r\n            </h1>\r\n        <p className='text-xs lg:text-xl sm:text-lg text-[#5C5C5C] mt-4'>\r\n                Find nearby services, make a quick payment, and let our provider reach you — right where you are.\r\n                </p>\r\n            </div>\r\n                <Suspense fallback={<div className=\"flex items-center justify-center py-4\"><div className=\"animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]\"></div></div>}>\r\n                    <HoverCards />\r\n                </Suspense>\r\n            </div>\r\n        </div>\r\n    );\r\n}\r\nexport default GetHelp;"
+        }
+    ]
+}

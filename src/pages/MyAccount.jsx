@@ -90,7 +90,7 @@ function MyAccount() {
               />
             </div>
 
-            <div className="flex-1 w-full">
+            <div className="flex-1 w-full md:mb-10">
               {renderContent()}
             </div>
           </div>

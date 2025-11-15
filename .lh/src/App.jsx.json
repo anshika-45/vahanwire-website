@@ -1,0 +1,34 @@
+{
+    "sourceFile": "src/App.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1763049560583,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1763049568146,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n const AboutUs = React.lazy(() => import(\"./pages/AboutUs\"));\r\n const ContactUs = React.lazy(() => import(\"./pages/ContactUs\"));\r\n const TermsCondition = React.lazy(() => import(\"./pages/TermsCondition\"));\r\n const PrivacyPolicy = React.lazy(() => import(\"./pages/PrivacyPolicy\"));\r\n-const \r\n+const PetrolPump\r\n \r\n const LoadingFallback = () => (\r\n   <div className=\"flex items-center justify-center min-h-screen\">\r\n     <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-[#266DDF]\"></div>\r\n"
+                },
+                {
+                    "date": 1763049574678,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n const AboutUs = React.lazy(() => import(\"./pages/AboutUs\"));\r\n const ContactUs = React.lazy(() => import(\"./pages/ContactUs\"));\r\n const TermsCondition = React.lazy(() => import(\"./pages/TermsCondition\"));\r\n const PrivacyPolicy = React.lazy(() => import(\"./pages/PrivacyPolicy\"));\r\n-const PetrolPump\r\n+const PetrolPump =\r\n \r\n const LoadingFallback = () => (\r\n   <div className=\"flex items-center justify-center min-h-screen\">\r\n     <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-[#266DDF]\"></div>\r\n"
+                },
+                {
+                    "date": 1763049581359,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n const AboutUs = React.lazy(() => import(\"./pages/AboutUs\"));\r\n const ContactUs = React.lazy(() => import(\"./pages/ContactUs\"));\r\n const TermsCondition = React.lazy(() => import(\"./pages/TermsCondition\"));\r\n const PrivacyPolicy = React.lazy(() => import(\"./pages/PrivacyPolicy\"));\r\n-const PetrolPump = Recac\r\n+const PetrolPump = Recat\r\n \r\n const LoadingFallback = () => (\r\n   <div className=\"flex items-center justify-center min-h-screen\">\r\n     <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-[#266DDF]\"></div>\r\n"
+                },
+                {
+                    "date": 1763049592342,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,9 +14,9 @@\n const AboutUs = React.lazy(() => import(\"./pages/AboutUs\"));\r\n const ContactUs = React.lazy(() => import(\"./pages/ContactUs\"));\r\n const TermsCondition = React.lazy(() => import(\"./pages/TermsCondition\"));\r\n const PrivacyPolicy = React.lazy(() => import(\"./pages/PrivacyPolicy\"));\r\n-const PetrolPump = React.\r\n+const PetrolPump = React.lazy\r\n \r\n const LoadingFallback = () => (\r\n   <div className=\"flex items-center justify-center min-h-screen\">\r\n     <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-[#266DDF]\"></div>\r\n"
+                }
+            ],
+            "date": 1763049560583,
+            "name": "Commit-0",
+            "content": "import React, { Suspense } from \"react\";\r\nimport { BrowserRouter, Routes, Route } from \"react-router-dom\";\r\nimport { AuthProvider } from \"./context/AuthContext\";\r\nimport { AmcDataProvider } from \"./context/AmcDataContext.jsx\";\r\nimport MainLayout from \"./layouts/MainLayout\";\r\nimport ScrollToTop from \"./components/ScrollToTop\";\r\nimport ErrorBoundary from \"./components/ErrorBoundary\";\r\n\r\nconst Homepage = React.lazy(() => import(\"./pages/Homepage\"));\r\nconst VehicleAmc = React.lazy(() => import(\"./pages/VehicleAmc\"));\r\nconst MyAccount = React.lazy(() => import(\"./pages/MyAccount\"));\r\nconst VehicleAmcFilter = React.lazy(() => import(\"./pages/VehicleAmcFilter\"));\r\nconst PaymentStatus = React.lazy(() => import(\"./components/PaymentStatus\"));\r\nconst AboutUs = React.lazy(() => import(\"./pages/AboutUs\"));\r\nconst ContactUs = React.lazy(() => import(\"./pages/ContactUs\"));\r\nconst TermsCondition = React.lazy(() => import(\"./pages/TermsCondition\"));\r\nconst PrivacyPolicy = React.lazy(() => import(\"./pages/PrivacyPolicy\"));\r\nconst \r\n\r\nconst LoadingFallback = () => (\r\n  <div className=\"flex items-center justify-center min-h-screen\">\r\n    <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-[#266DDF]\"></div>\r\n  </div>\r\n);\r\n\r\nfunction App() {\r\n  return (\r\n    <ErrorBoundary>\r\n      <AuthProvider>\r\n        <AmcDataProvider>\r\n          <BrowserRouter>\r\n            <ScrollToTop />\r\n            <Suspense fallback={<LoadingFallback />}>\r\n              <Routes>\r\n                <Route element={<MainLayout />}>\r\n                  <Route path=\"/\" element={<Homepage />} />\r\n                  <Route path=\"/vehicle-amc\" element={<VehicleAmc />} />\r\n                  <Route path=\"/vehicle-amc-filter\" element={<VehicleAmcFilter />} />\r\n                  <Route path=\"/about-us\" element={<AboutUs />} />\r\n                  <Route path=\"/contact-us\" element={<ContactUs />} />\r\n                  <Route path=\"/terms-condition\" element={<TermsCondition />} />\r\n                  <Route path=\"/privacy-policy\" element={<PrivacyPolicy />} />\r\n                  <Route path=\"/my-account\" element={<MyAccount />} />\r\n                </Route>\r\n                <Route path=\"/payment-status\" element={<PaymentStatus />} />\r\n              </Routes>\r\n            </Suspense>\r\n          </BrowserRouter>\r\n        </AmcDataProvider>\r\n      </AuthProvider>\r\n    </ErrorBoundary>\r\n  );\r\n}\r\n\r\nexport default App;"
+        }
+    ]
+}

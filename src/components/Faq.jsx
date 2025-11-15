@@ -7,7 +7,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
     <div className="bg-white max-w-6xl mx-auto mt-3 sm:mt-4 md:mt-6 rounded-lg mb-2 overflow-hidden border-white ">
       <button
         onClick={onClick}
-        className="w-full text-left px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 flex justify-between items-center text-black font-medium text-sm sm:text-base md:text-lg focus:outline-none"
+        className="w-full text-left px-3 sm:px-4 md:px-6 py-4 sm:py-5 md:py-6 flex justify-between items-center text-black font-semibold text-sm sm:text-base md:text-lg focus:outline-none"
       >
         {question}
         <img
@@ -18,7 +18,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => {
         />
       </button>
       {isOpen && (
-        <p className="px-3 sm:px-4 md:px-5 pb-3 text-gray-500 text-xs sm:text-sm md:text-base">
+        <p className="px-3 sm:px-4 md:px-5 pb-3 text-gray-700 text-xs sm:text-sm md:text-base">
           {answer}
         </p>
       )}
@@ -59,7 +59,7 @@ const FAQ = () => {
     },
   ];
   return (
-    <div className=" bg-[#F4F4F4] mt-12 pt-8 pb-14  sm:mt-6 md:mt-4">
+    <div className=" bg-[#F4F4F4] pt-14 pb-18  ">
       <div className="container">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4 text-black text-center pb-2 sm:pb-3">
           Frequently Asked Questions

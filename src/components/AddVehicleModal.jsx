@@ -38,6 +38,22 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
     };
   }, [open, onClose]);
 
+  useEffect(() => {
+    if (!open) {
+      setForm({
+        vehicleNumber: "",
+        brand: "",
+        model: "",
+        year: "",
+        fuelType: "",
+      });
+      setErrors({});
+      setTouched({});
+      setSubmitError("");
+      setVehicleType("car");
+    }
+  }, [open]);
+
   const validateField = (name, value) => {
     switch (name) {
       case "vehicleNumber": {
@@ -156,7 +172,7 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
     <>
       <Backdrop onClose={onClose} />
       <div className="fixed inset-0 z-[9999] grid place-items-center p-3 sm:p-4">
-        <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl border border-slate-200">
+        <div className="w-full max-w-3xl rounded-2xl bg-white shadow-2xl">
           {/* Header */}
           <div className="flex justify-between items-center bg-[#D9E7FE] rounded-t-2xl px-4 sm:px-6 py-3 sm:py-4 border-b">
             <h2 className="font-semibold text-center flex-1 text-sm sm:text-base">
@@ -176,7 +192,7 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
                   key={type}
                   type="button"
                   onClick={() => setVehicleType(type)}
-                  className={`relative flex flex-col items-center w-24 h-14 rounded-xl ${
+                  className={`relative flex flex-col items-center w-28 h-24 rounded-xl ${
                     vehicleType === type
                       ? "border-[#266DDF] bg-[#ECF3FD]"
                       : "border border-transparent hover:bg-[#ECF3FD]"

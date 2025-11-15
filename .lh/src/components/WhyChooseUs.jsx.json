@@ -1,0 +1,34 @@
+{
+    "sourceFile": "src/components/WhyChooseUs.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1763184154154,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1763184172577,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,9 +6,9 @@\n       <div className=\"container\">\r\n         <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]\">\r\n           Why Choose Us?\r\n         </h1>\r\n-        <p className=\"text-xs sm:text-lg text-[#5C5C5C] pt-4 max-w-3xl mx-auto\">\r\n+        <p className=\"text-xs sm:text-lg text-[#5C5C5C] text-center pt-2 md:pt-4\">\r\n           VahanWire began in 2019 to simplify access to mechanics, fuel, and\r\n           vehicle services. Today, we lead India's app-based automotive service\r\n           market with a 70% share, helping the nation move smarter.\r\n         </p>\r\n"
+                },
+                {
+                    "date": 1763184226500,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React, { Suspense, lazy } from \"react\";\r\n const ChooseUs = React.lazy(() => import(\"./ChooseUs\"));\r\n const WhyChooseUs = () => {\r\n   return (\r\n-    <div className=\"bg-[#FAFCFF] py-5 lg:py-[65px] flex items-center justify-center mt-4 sm:mt-6 md:mt-4\">\r\n+    <div className=\"justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF]\">\r\n       <div className=\"container\">\r\n         <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]\">\r\n           Why Choose Us?\r\n         </h1>\r\n"
+                },
+                {
+                    "date": 1763184306095,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n           Why Choose Us?\r\n         </h1>\r\n         <p className=\"text-xs sm:text-lg text-[#5C5C5C] text-center pt-2 md:pt-4\">\r\n           VahanWire began in 2019 to simplify access to mechanics, fuel, and\r\n-          vehicle services. Today, we lead India's app-based <brautomotive service\r\n+          vehicle services. Today, we lead India's app-based <br/automotive service\r\n           market with a 70% share, helping the nation move smarter.\r\n         </p>\r\n         <div className=\"mt-8 md:mt-10 lg:mt-6\">\r\n           <Suspense\r\n"
+                },
+                {
+                    "date": 1763185335741,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n import React, { Suspense, lazy } from \"react\";\r\n const ChooseUs = React.lazy(() => import(\"./ChooseUs\"));\r\n const WhyChooseUs = () => {\r\n   return (\r\n-    <div className=\"justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 md:h-[] h-auto bg-[#FFFFFF]\">\r\n+    <div className=\"justify-items-center pt-10 pb-12 mt-4 sm:mt-6 md:mt-4 md:h-[400px] h-auto bg-[#FFFFFF]\">\r\n       <div className=\"container\">\r\n         <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]\">\r\n           Why Choose Us?\r\n         </h1>\r\n"
+                }
+            ],
+            "date": 1763184154154,
+            "name": "Commit-0",
+            "content": "import React, { Suspense, lazy } from \"react\";\r\nconst ChooseUs = React.lazy(() => import(\"./ChooseUs\"));\r\nconst WhyChooseUs = () => {\r\n  return (\r\n    <div className=\"bg-[#FAFCFF] py-5 lg:py-[65px] flex items-center justify-center mt-4 sm:mt-6 md:mt-4\">\r\n      <div className=\"container\">\r\n        <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]\">\r\n          Why Choose Us?\r\n        </h1>\r\n        <p className=\"text-xs sm:text-lg text-[#5C5C5C] pt-4 max-w-3xl mx-auto\">\r\n          VahanWire began in 2019 to simplify access to mechanics, fuel, and\r\n          vehicle services. Today, we lead India's app-based automotive service\r\n          market with a 70% share, helping the nation move smarter.\r\n        </p>\r\n        <div className=\"mt-8 md:mt-10 lg:mt-6\">\r\n          <Suspense\r\n            fallback={\r\n              <div className=\"flex items-center justify-center py-4\">\r\n                <div className=\"animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]\"></div>\r\n              </div>\r\n            }\r\n          >\r\n            <ChooseUs />\r\n          </Suspense>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  );\r\n};\r\nexport default WhyChooseUs;\r\n"
+        }
+    ]
+}

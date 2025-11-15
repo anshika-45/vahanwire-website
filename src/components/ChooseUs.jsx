@@ -37,6 +37,8 @@ const ChooseUs = () => {
                     src={checkIcon}
                     alt=""
                     decoding="async"
+                    width="24"
+                    height="24"
                     className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 mt-0.5"
                   />
                   <span className="text-[#242424]">{item}</span>
@@ -64,7 +66,9 @@ const ChooseUs = () => {
                     alt="Download on App Store"
                     role="img"
                     decoding="async"
-                    className="h-8 sm:h-10 md:h-11 object-contain cursor-pointer"
+                    width="108"
+                    height="40"
+                    className="h-8 sm:h-10 md:h-11 w-auto object-contain cursor-pointer"
                   />
                 </a>
                 <a
@@ -80,7 +84,9 @@ const ChooseUs = () => {
                     alt="Get it on Google Play"
                     role="img"
                     decoding="async"
-                    className="h-8 sm:h-10 md:h-11 object-contain cursor-pointer"
+                    width="108"
+                    height="40"
+                    className="h-8 sm:h-10 md:h-11 w-auto object-contain cursor-pointer"
                   />
                 </a>
               </div>
@@ -93,6 +99,8 @@ const ChooseUs = () => {
                   src={Choose1}
                   alt="User testimonial 1"
                   decoding="async"
+                  width="40"
+                  height="40"
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
                 <img
@@ -100,6 +108,8 @@ const ChooseUs = () => {
                   src={Choose2}
                   alt="User testimonial 2"
                   decoding="async"
+                  width="40"
+                  height="40"
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
                 <img
@@ -107,6 +117,8 @@ const ChooseUs = () => {
                   src={Choose3}
                   alt="User testimonial 3"
                   decoding="async"
+                  width="40"
+                  height="40"
                   className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
                 />
               </div>
@@ -118,13 +130,18 @@ const ChooseUs = () => {
 
           {/* RIGHT SIDE — ONLY PHONE IMAGE */}
           <div className="w-full flex justify-center lg:justify-end">
-            <img
-              src={mobile}
-              alt="VahanWire mobile app preview"
-              loading="lazy"
-              decoding="async"
-              className="w-[60%] sm:w-[50%] md:w-[50%] lg:w-[65%] h-auto drop-shadow-xl"
-            />
+            <div className="aspect-[2/3]">
+                         <img
+             src={mobile}
+             alt="VahanWire mobile app preview"
+             loading="lazy"
+             decoding="async"
+             width="280"
+             height="560"
+             className="w-full h-auto drop-shadow-xl"
+           />
+            </div>
+
           </div>
         </div>
       </div>

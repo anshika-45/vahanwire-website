@@ -1,0 +1,34 @@
+{
+    "sourceFile": "src/components/TrustandResult.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1763184383487,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1763184390442,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n         style={{ backgroundImage: `url(${bgImage})` }}\r\n       ></div>\r\n       <div className=\"relative z-10 justify-items-center py-4 md:py-[50px]\">\r\n         <div className=\"container   \">\r\n-          <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]\">\r\n+          <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-white\">\r\n             Powered by Trust & Results\r\n           </h1>\r\n           <p className=\"text-xs sm:text-lg text-white text-center pt-2 md:pt-4 leading-relaxed\">\r\n           See why customers across India rely on VahanWire for fast, reliable,\r\n"
+                },
+                {
+                    "date": 1763184411072,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n         <div className=\"container   \">\r\n           <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-white\">\r\n             Powered by Trust & Results\r\n           </h1>\r\n-          <p className=\"text-xs sm:text-lg text-white text-center pt-2 md:pt-4 leading-relaxed\">\r\n+          <p className=\"\">\r\n           See why customers across India rely on VahanWire for fast, reliable,\r\n           and <br className=\"hidden md:block\" />\r\n           transparent vehicle services — anytime, anywhere.\r\n           </p>\r\n"
+                },
+                {
+                    "date": 1763184419410,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,9 +13,9 @@\n         <div className=\"container   \">\r\n           <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-white\">\r\n             Powered by Trust & Results\r\n           </h1>\r\n-          <p className=\"\">\r\n+          <p className=\"text-xs sm:text-lg text-white text-center pt-2 md:pt-4\">\r\n           See why customers across India rely on VahanWire for fast, reliable,\r\n           and <br className=\"hidden md:block\" />\r\n           transparent vehicle services — anytime, anywhere.\r\n           </p>\r\n"
+                },
+                {
+                    "date": 1763184426099,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n             Powered by Trust & Results\r\n           </h1>\r\n           <p className=\"text-xs sm:text-lg text-white text-center pt-2 md:pt-4\">\r\n           See why customers across India rely on VahanWire for fast, reliable,\r\n-          and <br className=\"hidden md:block\" />\r\n+          and <br />\r\n           transparent vehicle services — anytime, anywhere.\r\n           </p>\r\n         </div>\r\n       </div>\r\n"
+                }
+            ],
+            "date": 1763184383487,
+            "name": "Commit-0",
+            "content": "import React from \"react\";\r\nimport bgImage from \"../assets/result.webp\";\r\nimport Card from \"./Card\";\r\nconst TrustandResult = () => {\r\n  return (\r\n    <div className=\"relative w-full h-auto mt-4 sm:mt-6 md:mt-4  pt-8 pb-14\">\r\n      <div className=\"absolute inset-0 bg-[#183f7f]\"></div>\r\n      <div\r\n        className=\"absolute inset-0 bg-cover bg-center opacity-80\"\r\n        style={{ backgroundImage: `url(${bgImage})` }}\r\n      ></div>\r\n      <div className=\"relative z-10 justify-items-center py-4 md:py-[50px]\">\r\n        <div className=\"container   \">\r\n          <h1 className=\"text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]\">\r\n            Powered by Trust & Results\r\n          </h1>\r\n          <p className=\"text-xs sm:text-lg text-white text-center pt-2 md:pt-4 leading-relaxed\">\r\n          See why customers across India rely on VahanWire for fast, reliable,\r\n          and <br className=\"hidden md:block\" />\r\n          transparent vehicle services — anytime, anywhere.\r\n          </p>\r\n        </div>\r\n      </div>\r\n      <div className=\"container relative z-10\">\r\n        <Card />\r\n      </div>\r\n    </div>\r\n  );\r\n};\r\nexport default TrustandResult;\r\n"
+        }
+    ]
+}

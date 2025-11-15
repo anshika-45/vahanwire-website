@@ -133,7 +133,7 @@ const VehicleAmc = () => {
       <Suspense fallback={<TableLoader />}>
         <CompareTable features={features} onBuy={handlePlanBuy} />
       </Suspense>
-      <Suspense fallback={<BannerLoader />}>
+      {/* <Suspense fallback={<BannerLoader />}>
         <LatestOffer />
       </Suspense>
 
@@ -141,7 +141,7 @@ const VehicleAmc = () => {
         <Suspense fallback={<BannerLoader />}>
           <AmcBanner onBuy={handleGenericBuy} />
         </Suspense>
-      </div>
+      </div> */}
       <Suspense fallback={null}>
         <VerifyNumberPopup
           isOpen={isVerifyOpen}

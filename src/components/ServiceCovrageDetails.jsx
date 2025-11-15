@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const features = [
   { label: "Flat Tyre (Tube)", qty: "10", left: "8" },
@@ -11,11 +11,21 @@ const features = [
 ];
 
 export default function ServiceCoverageDetails({ isOpen, onClose, plan }) {
+   useEffect(() => {
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-3 md:p-4 bg-black/40 ">
-      <div className="w-full max-w-sm md:max-w-3xl bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-sm md:max-w-3xl bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-h-[90vh] overflow-y-auto hide-scrollbar">
         
         {/* Header */}
         <div className="flex items-center justify-between px-4 md:px-6 py-3 bg-[#E9F0FC] relative">

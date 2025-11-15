@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/pages/AboutUs.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1763049273445,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1763050396918,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -53,9 +53,9 @@\n                 src={aboutAppImage}\r\n                 alt=\"VahanWire App Interface\"\r\n                 className=\"w-[160px] md:w-[140px] lg:w-[165px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200\"\r\n                 loading=\"lazy\"\r\n-                width={300}  \r\n+                width={250}  \r\n                 height={600}\r\n                 decoding=\"async\"\r\n               />\r\n             </div>\r\n"
+                },
+                {
+                    "date": 1763050411719,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -54,9 +54,9 @@\n                 alt=\"VahanWire App Interface\"\r\n                 className=\"w-[160px] md:w-[140px] lg:w-[165px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200\"\r\n                 loading=\"lazy\"\r\n                 width={250}  \r\n-                height={500}\r\n+                height={400}\r\n                 decoding=\"async\"\r\n               />\r\n             </div>\r\n           </div>\r\n"
+                },
+                {
+                    "date": 1763050417106,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -53,9 +53,9 @@\n                 src={aboutAppImage}\r\n                 alt=\"VahanWire App Interface\"\r\n                 className=\"w-[160px] md:w-[140px] lg:w-[165px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200\"\r\n                 loading=\"lazy\"\r\n-                width={250}  \r\n+                width={200}  \r\n                 height={400}\r\n                 decoding=\"async\"\r\n               />\r\n             </div>\r\n"
+                }
+            ],
+            "date": 1763049273443,
+            "name": "Commit-0",
+            "content": "import React, { Suspense } from \"react\";\r\nimport aboutBanner from \"../assets/AboutUs.svg\";\r\nimport aboutAppImage from \"../assets/Mobile.svg\";\r\nconst PageBanner = React.lazy(() => import(\"../components/PageBanner\"));\r\n\r\nconst ComponentFallback = () => (\r\n  <div className=\"flex items-center justify-center py-8\">\r\n    <div className=\"animate-pulse bg-gray-200 rounded-lg h-32 w-full max-w-4xl\"></div>\r\n  </div>\r\n);\r\n\r\nconst AboutUs = () => {\r\n  return (\r\n    <>\r\n      <div>\r\n        <Suspense fallback={<ComponentFallback />}>\r\n          <PageBanner title=\"About Us\" image={aboutBanner} />\r\n        </Suspense>\r\n        <div className=\"max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-2 gap-2 items-center\">\r\n          <div>\r\n            <h2 className=\"text-2xl md:text-5xl font-semibold text-[#242424] mb-6\">\r\n              About Us\r\n            </h2>\r\n            <p className=\"text-sm sm:text-base text-[#5C5C5C] leading-relaxed mb-4 text-justify\">\r\n              This website www.vahanwire.com (“Website”) and\r\n              its mobile application (“Application”) are owned and operated by\r\n              Vahanwire Technologies Pvt. Ltd., a company\r\n              incorporated under the laws of India, having its corporate office\r\n              at TOWER-B-819 Noida One, Industrial Area, Sector 62, Noida, Uttar\r\n              Pradesh 201309, India.\r\n            </p>\r\n\r\n            <p className=\"text-sm sm:text-base text-[#5C5C5C] leading-relaxed mb-4 text-justify\">\r\n              VahanWire enables users to connect with mechanics, multi-branded\r\n              service centers, tow providers, and petrol pump establishments\r\n              offering varied automotive services. Through our platform, users\r\n              can easily book, track, and manage services with trusted\r\n              providers.\r\n            </p>\r\n\r\n            <p className=\"text-sm sm:text-base text-[#5C5C5C] leading-relaxed text-jusify\">\r\n              These terms and conditions govern your access to and use of the\r\n              Website and Application. By using the Website/Application, you\r\n              acknowledge that VahanWire acts as a digital platform facilitating\r\n              the connection between users and service providers, and holds no\r\n              liability for the quality, fitness, or conduct of the services\r\n              provided.\r\n            </p>\r\n          </div>\r\n          <div className=\"flex justify-center md:justify-center\">\r\n            <div className=\"relative\">\r\n              <img\r\n                src={aboutAppImage}\r\n                alt=\"VahanWire App Interface\"\r\n                className=\"w-[160px] md:w-[140px] lg:w-[165px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200\"\r\n                loading=\"lazy\"\r\n                width={300}  \r\n                height={600}\r\n                decoding=\"async\"\r\n              />\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </>\r\n  );\r\n};\r\n\r\nexport default AboutUs;"
+        }
+    ]
+}

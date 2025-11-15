@@ -1,7 +1,7 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import bannerImg from "../assets/HomeBanner.webp";
 import { useNavigate } from "react-router-dom";
-import AnimatedText from "./AnimatedText";
+const AnimatedText = lazy(() => import("./AnimatedText"));
 
 const bannerTexts = [
   "Car Service",
@@ -17,9 +17,12 @@ const Banner = React.memo(() => {
     <div className="relative w-full">
       <div>
         <div
-          className="relative w-full h-[79vh] sm:h-[80vh] md:h-[80vh] bg-center bg-cover overflow-hidden"
+          className="relative w-full h-[79vh] sm:h-[80vh] md:h-[80vh] bg-center bg-cover overflow-hidden bg-gray-100"
           style={{
             backgroundImage: `url(${bannerImg})`,
+            backgroundAttachment: "fixed",
+            willChange: "background-image",
+            contentVisibility: "auto",
           }}
         >
           <div className="container">
@@ -32,15 +35,17 @@ const Banner = React.memo(() => {
 
                 {/* Animated Text */}
                 <div className="max-w-[350px] md:max-w-[450px]">
-                  <AnimatedText
-                    texts={bannerTexts}
-                    interval={500}
-                    duration={1000}
-                    outMs={360}
-                    inMs={540}
-                    animationClass="scale-90"
-                    className="transform origin-center transition-transform duration-400 overflow-visible text-4xl sm:text-6xl md:text-7xl font-semibold"
-                  />
+                  <Suspense fallback={<div className="h-16 md:h-24"></div>}>
+                    <AnimatedText
+                      texts={bannerTexts}
+                      interval={500}
+                      duration={1000}
+                      outMs={360}
+                      inMs={540}
+                      animationClass="scale-90"
+                      className="transform origin-center transition-transform duration-400 overflow-visible text-4xl sm:text-6xl md:text-7xl font-semibold"
+                    />
+                  </Suspense>
                 </div>
 
                 {/* Description */}

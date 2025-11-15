@@ -4,6 +4,7 @@ import bgImg from "../assets/Footerbg.webp";
 import { Link } from "react-router-dom";
 import FooterIcons from "./FooterIcons";
 import { MapPin, Phone, MailOpenIcon, ChevronDown } from "lucide-react";
+
 const Footer = () => {
   const [expandedSections, setExpandedSections] = useState({});
   const toggleSection = (section) => {
@@ -18,6 +19,7 @@ const Footer = () => {
       return newState;
     });
   };
+
   return (
     <footer className="relative h-auto text-white">
       <div className="absolute inset-0 bg-black z-0"></div>
@@ -25,9 +27,11 @@ const Footer = () => {
         className="absolute inset-0 bg-cover bg-center opacity-80 z-0"
         style={{ backgroundImage: `url(${bgImg})` }}
       ></div>
+
       <div className="relative container flex flex-col justify-between">
-        <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-12 md:pt-40 md:mt-30 pt-10">
-          <div className="h-auto mb-8 sm:mb-6 md:mb-0">
+        {/* NOTE: reduced small-screen vertical gap (gap-y-6) */}
+        <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-0.5 md:pt-40 md:mt-30 pt-10">
+          <div className="h-auto mb-6 sm:mb-6 md:mb-0">
             <Link
               to="/"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -38,7 +42,7 @@ const Footer = () => {
                 alt="Logo"
                 className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6 cursor-pointer"
               />
-            </Link>{" "}
+            </Link>
             <p className="text-gray-300 text-xs sm:text-sm leading-tight mb-4 sm:mb-6 space-y-0.5">
               VahanWire connects you to nearby
               <br />
@@ -53,12 +57,15 @@ const Footer = () => {
               <FooterIcons />
             </div>
           </div>
-          <div className="  mb-6 md:mb-0">
+
+          {/* Quick Links */}
+          <div className="mb-4 md:mb-0">
             <button
               onClick={() => toggleSection("quickLinks")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">
+              {/* reduced heading bottom margin on small screens */}
+              <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-4">
                 Quick Links
               </h3>
               <ChevronDown
@@ -68,8 +75,10 @@ const Footer = () => {
                 }`}
               />
             </button>
+
+            {/* reduced vertical spacing in collapsed list on small screens */}
             <ul
-              className={`space-y-3 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
+              className={`space-y-2 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
                 expandedSections.quickLinks ? "flex flex-col" : "hidden"
               }`}
             >
@@ -112,12 +121,14 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className="  mb-6 md:mb-0">
+
+          {/* For User */}
+          <div className="mb-4 md:mb-0">
             <button
               onClick={() => toggleSection("forUser")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">
+              <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-4">
                 For User
               </h3>
               <ChevronDown
@@ -128,7 +139,7 @@ const Footer = () => {
               />
             </button>
             <ul
-              className={`space-y-3 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
+              className={`space-y-2 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
                 expandedSections.forUser ? "flex flex-col" : "hidden"
               }`}
             >
@@ -154,12 +165,14 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className="  mb-6 md:mb-0">
+
+          {/* For Mechanic */}
+          <div className="mb-4 md:mb-0">
             <button
               onClick={() => toggleSection("forMechanic")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">
+              <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-4">
                 For Mechanic
               </h3>
               <ChevronDown
@@ -170,7 +183,7 @@ const Footer = () => {
               />
             </button>
             <ul
-              className={`space-y-3 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
+              className={`space-y-2 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
                 expandedSections.forMechanic ? "flex flex-col" : "hidden"
               }`}
             >
@@ -196,12 +209,14 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-          <div className="  mb-6 md:mb-0">
+
+          {/* Contact */}
+          <div className="mb-4 md:mb-0">
             <button
               onClick={() => toggleSection("contact")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             >
-              <h3 className="font-bold text-base sm:text-lg mb-4 sm:mb-6">
+              <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-4">
                 Contact For AMC Support
               </h3>
               <ChevronDown
@@ -212,7 +227,7 @@ const Footer = () => {
               />
             </button>
             <ul
-              className={`space-y-3 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
+              className={`space-y-2 sm:space-y-5 text-gray-300 text-xs sm:text-sm md:flex md:flex-col ${
                 expandedSections.contact ? "flex flex-col" : "hidden"
               }`}
             >
@@ -271,7 +286,8 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="text-center text-gray-400 text-xs sm:text-sm mb-2 pt-8 sm:pt-16 md:pt-34 pb-4">
+
+        <div className="text-center text-gray-400 text-xs sm:text-sm mb-2 pt-3 sm:pt-6 md:pt-15 pb-4">
           <div
             className="w-full h-0.5 mb-4"
             style={{
@@ -285,4 +301,5 @@ const Footer = () => {
     </footer>
   );
 };
+
 export default Footer;

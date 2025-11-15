@@ -15,6 +15,11 @@ const AboutUs = React.lazy(() => import("./pages/AboutUs"));
 const ContactUs = React.lazy(() => import("./pages/ContactUs"));
 const TermsCondition = React.lazy(() => import("./pages/TermsCondition"));
 const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
+const PetrolPump = React.lazy(() => import("./pages/PetrolPump"));
+const Mechanic = React.lazy(() => import("./pages/Mechanic"));
+const Ecommerce = React.lazy(() => import("./pages/ECommerce"));
+const TowTruck = React.lazy(() => import("./pages/TowTruck"));
+const ServiceCenter = React.lazy(() => import("./pages/ServiceCenter"));
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-screen">
@@ -34,12 +39,20 @@ function App() {
                 <Route element={<MainLayout />}>
                   <Route path="/" element={<Homepage />} />
                   <Route path="/vehicle-amc" element={<VehicleAmc />} />
-                  <Route path="/vehicle-amc-filter" element={<VehicleAmcFilter />} />
+                  <Route
+                    path="/vehicle-amc-filter"
+                    element={<VehicleAmcFilter />}
+                  />
                   <Route path="/about-us" element={<AboutUs />} />
                   <Route path="/contact-us" element={<ContactUs />} />
                   <Route path="/terms-condition" element={<TermsCondition />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/my-account" element={<MyAccount />} />
+                  <Route path="/petrol-pump" element={<PetrolPump />} />
+                  <Route path="/mechanic" element={<Mechanic />} />
+                  <Route path="/e-commerce" element={<Ecommerce />} />
+                  <Route path="/tow-truck" element={<TowTruck />} />
+                  <Route path="/service-center" element={<ServiceCenter />} />
                 </Route>
                 <Route path="/payment-status" element={<PaymentStatus />} />
               </Routes>

@@ -1,0 +1,86 @@
+{
+    "sourceFile": "src/components/PageBanner.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 17,
+            "patches": [
+                {
+                    "date": 1763049963163,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1763050102635,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,24 +1,17 @@\n-import React from \"react\";\r\n-\r\n-const PageBanner = ({ title, image, height = \"260px\" }) => {\r\n+const PageBanner = ({ title, image }) => {\r\n   return (\r\n-    <div\r\n-      className=\"relative w-full overflow-hidden\"\r\n-      style={{ height }} // ⬅ dynamic height\r\n-    >\r\n+    <div className=\"relative w-full\">\r\n       <img\r\n         src={image}\r\n         alt={title}\r\n-        className=\"absolute inset-0 w-full h-full object-cover\"\r\n+        className=\"w-full h-auto object-cover\"\r\n       />\r\n \r\n-      <div className=\"relative z-10 flex items-center justify-center h-full\">\r\n-        <h1 className=\"text-white text-2xl sm:text-3xl md:text-4xl font-semibold\">\r\n+      <div className=\"absolute inset-0 flex items-center justify-center\">\r\n+        <h1 className=\"text-white text-3xl sm:text-4xl font-semibold drop-shadow-lg\">\r\n           {title}\r\n         </h1>\r\n       </div>\r\n     </div>\r\n   );\r\n };\r\n-\r\n-export default PageBanner;\r\n"
+                },
+                {
+                    "date": 1763050123895,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,17 +1,24 @@\n-const PageBanner = ({ title, image }) => {\r\n+import React from \"react\";\r\n+\r\n+const PageBanner = ({ title, image, height = \"260px\" }) => {\r\n   return (\r\n-    <div className=\"relative w-full\">\r\n+    <div\r\n+      className=\"relative w-full overflow-hidden\"\r\n+      style={{ height }} // ⬅ dynamic height\r\n+    >\r\n       <img\r\n         src={image}\r\n         alt={title}\r\n-        className=\"w-full h-auto object-cover\"\r\n+        className=\"absolute inset-0 w-full h-full object-cover\"\r\n       />\r\n \r\n-      <div className=\"absolute inset-0 flex items-center justify-center\">\r\n-        <h1 className=\"text-white text-3xl sm:text-4xl font-semibold drop-shadow-lg\">\r\n+      <div className=\"relative z-10 flex items-center justify-center h-full\">\r\n+        <h1 className=\"text-white text-2xl sm:text-3xl md:text-4xl font-semibold\">\r\n           {title}\r\n         </h1>\r\n       </div>\r\n     </div>\r\n   );\r\n };\r\n+\r\n+export default PageBanner;\r\n"
+                },
+                {
+                    "date": 1763050140358,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,4 +21,24 @@\n   );\r\n };\r\n \r\n export default PageBanner;\r\n+\r\n+\r\n+const PageBanner = ({ title, image }) => {\r\n+  return (\r\n+    <div className=\"relative w-full\">\r\n+      <img\r\n+        src={image}\r\n+        alt={title}\r\n+        className=\"w-full h-auto object-cover\"\r\n+      />\r\n+\r\n+      <div className=\"absolute inset-0 flex items-center justify-center\">\r\n+        <h1 className=\"text-white text-3xl sm:text-4xl font-semibold drop-shadow-lg\">\r\n+          {title}\r\n+        </h1>\r\n+      </div>\r\n+    </div>\r\n+  );\r\n+};\r\n+\r\n"
+                },
+                {
+                    "date": 1763050176478,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -41,4 +41,6 @@\n     </div>\r\n   );\r\n };\r\n \r\n+export default PageBanner;\r\n+\r\n"
+                },
+                {
+                    "date": 1763050183554,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,26 +1,7 @@\n import React from \"react\";\r\n \r\n-const PageBanner = ({ title, image, height = \"260px\" }) => {\r\n-  return (\r\n-    <div\r\n-      className=\"relative w-full overflow-hidden\"\r\n-      style={{ height }} // ⬅ dynamic height\r\n-    >\r\n-      <img\r\n-        src={image}\r\n-        alt={title}\r\n-        className=\"absolute inset-0 w-full h-full object-cover\"\r\n-      />\r\n \r\n-      <div className=\"relative z-10 flex items-center justify-center h-full\">\r\n-        <h1 className=\"text-white text-2xl sm:text-3xl md:text-4xl font-semibold\">\r\n-          {title}\r\n-        </h1>\r\n-      </div>\r\n-    </div>\r\n-  );\r\n-};\r\n \r\n export default PageBanner;\r\n \r\n \r\n"
+                },
+                {
+                    "date": 1763050191319,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,7 @@\n import React from \"react\";\r\n \r\n \r\n-\r\n-export default PageBanner;\r\n-\r\n-\r\n const PageBanner = ({ title, image }) => {\r\n   return (\r\n     <div className=\"relative w-full\">\r\n       <img\r\n"
+                },
+                {
+                    "date": 1763050606228,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import React from \"react\";\r\n \r\n \r\n-const PageBanner = ({ title, image }) => {\r\n+const PageBanner = ({ title, image, }) => {\r\n   return (\r\n     <div className=\"relative w-full\">\r\n       <img\r\n         src={image}\r\n"
+                },
+                {
+                    "date": 1763050646011,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import React from \"react\";\r\n \r\n \r\n-const PageBanner = ({ title, image, }) => {\r\n+const PageBanner = ({ title, image,subtitle }) => {\r\n   return (\r\n     <div className=\"relative w-full\">\r\n       <img\r\n         src={image}\r\n@@ -13,8 +13,15 @@\n       <div className=\"absolute inset-0 flex items-center justify-center\">\r\n         <h1 className=\"text-white text-3xl sm:text-4xl font-semibold drop-shadow-lg\">\r\n           {title}\r\n         </h1>\r\n+\r\n+        {subtitle && (\r\n+          <p className=\"text-white text-sm sm:text-base md:text-lg mt-2 max-w-2xl drop-shadow-lg\">\r\n+            {subtitle}\r\n+          </p>\r\n+        )}\r\n+\r\n       </div>\r\n     </div>\r\n   );\r\n };\r\n"
+                },
+                {
+                    "date": 1763050726773,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,30 +0,0 @@\n-import React from \"react\";\r\n-\r\n-\r\n-const PageBanner = ({ title, image,subtitle }) => {\r\n-  return (\r\n-    <div className=\"relative w-full\">\r\n-      <img\r\n-        src={image}\r\n-        alt={title}\r\n-        className=\"w-full h-auto object-cover\"\r\n-      />\r\n-\r\n-      <div className=\"absolute inset-0 flex items-center justify-center\">\r\n-        <h1 className=\"text-white text-3xl sm:text-4xl font-semibold drop-shadow-lg\">\r\n-          {title}\r\n-        </h1>\r\n-\r\n-        {subtitle && (\r\n-          <p className=\"text-white text-sm sm:text-base md:text-lg mt-2 max-w-2xl drop-shadow-lg\">\r\n-            {subtitle}\r\n-          </p>\r\n-        )}\r\n-\r\n-      </div>\r\n-    </div>\r\n-  );\r\n-};\r\n-\r\n-export default PageBanner;\r\n-\r\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1763050738043,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,29 @@\n-\n+const PageBanner = ({ title, subtitle, image }) => {\r\n+  return (\r\n+    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] overflow-hidden\">\r\n+      \r\n+      {/* Background Image */}\r\n+      <img\r\n+        src={image}\r\n+        alt={title}\r\n+        className=\"absolute inset-0 w-full h-full object-cover\"\r\n+      />\r\n+\r\n+      {/* Text on Image */}\r\n+      <div className=\"relative z-10 flex flex-col items-center justify-center h-full text-center px-4\">\r\n+        \r\n+        <h1 className=\"text-white text-3xl sm:text-4xl md:text-5xl font-semibold drop-shadow-lg\">\r\n+          {title}\r\n+        </h1>\r\n+\r\n+        {subtitle && (\r\n+          <p className=\"text-white text-sm sm:text-base md:text-lg mt-2 max-w-2xl drop-shadow-lg\">\r\n+            {subtitle}\r\n+          </p>\r\n+        )}\r\n+      </div>\r\n+    </div>\r\n+  );\r\n+};\r\n+\r\n+export default PageBanner;\r\n"
+                },
+                {
+                    "date": 1763050759397,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n const PageBanner = ({ title, subtitle, image }) => {\r\n   return (\r\n-    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] overflow-hidden\">\r\n+    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[50vh] overflow-hidden\">\r\n       \r\n       {/* Background Image */}\r\n       <img\r\n         src={image}\r\n"
+                },
+                {
+                    "date": 1763050772891,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n const PageBanner = ({ title, subtitle, image }) => {\r\n   return (\r\n-    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[50vh] overflow-hidden\">\r\n+    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[45vh] overflow-hidden\">\r\n       \r\n       {/* Background Image */}\r\n       <img\r\n         src={image}\r\n"
+                },
+                {
+                    "date": 1763050778446,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n const PageBanner = ({ title, subtitle, image }) => {\r\n   return (\r\n-    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[45vh] overflow-hidden\">\r\n+    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[40vh] overflow-hidden\">\r\n       \r\n       {/* Background Image */}\r\n       <img\r\n         src={image}\r\n"
+                },
+                {
+                    "date": 1763050784186,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n const PageBanner = ({ title, subtitle, image }) => {\r\n   return (\r\n-    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[40vh] overflow-hidden\">\r\n+    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[30vh] overflow-hidden\">\r\n       \r\n       {/* Background Image */}\r\n       <img\r\n         src={image}\r\n"
+                },
+                {
+                    "date": 1763050803110,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n const PageBanner = ({ title, subtitle, image }) => {\r\n   return (\r\n-    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[30vh] overflow-hidden\">\r\n+    <div className=\"relative w-full h-full overflow-hidden\">\r\n       \r\n       {/* Background Image */}\r\n       <img\r\n         src={image}\r\n"
+                },
+                {
+                    "date": 1763050813390,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,7 +1,7 @@\n const PageBanner = ({ title, subtitle, image }) => {\r\n   return (\r\n-    <div className=\"relative w-full h-full overflow-hidden\">\r\n+    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[30vh] overflow-hidden\">\r\n       \r\n       {/* Background Image */}\r\n       <img\r\n         src={image}\r\n"
+                },
+                {
+                    "date": 1763050879359,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,17 +1,17 @@\n const PageBanner = ({ title, subtitle, image }) => {\r\n   return (\r\n-    <div className=\"relative w-full h-[40vh] sm:h-[50vh] md:h-[30vh] overflow-hidden\">\r\n+    <div className=\"relative w-full\">\r\n       \r\n-      {/* Background Image */}\r\n+      {/* Background Image – real height, no cropping */}\r\n       <img\r\n         src={image}\r\n         alt={title}\r\n-        className=\"absolute inset-0 w-full h-full object-cover\"\r\n+        className=\"w-full h-auto object-cover\"\r\n       />\r\n \r\n-      {/* Text on Image */}\r\n-      <div className=\"relative z-10 flex flex-col items-center justify-center h-full text-center px-4\">\r\n+      {/* Text on top of image */}\r\n+      <div className=\"absolute inset-0 flex flex-col items-center justify-center text-center px-4\">\r\n         \r\n         <h1 className=\"text-white text-3xl sm:text-4xl md:text-5xl font-semibold drop-shadow-lg\">\r\n           {title}\r\n         </h1>\r\n"
+                }
+            ],
+            "date": 1763049963163,
+            "name": "Commit-0",
+            "content": "import React from \"react\";\r\n\r\nconst PageBanner = ({ title, image, height = \"260px\" }) => {\r\n  return (\r\n    <div\r\n      className=\"relative w-full overflow-hidden\"\r\n      style={{ height }} // ⬅ dynamic height\r\n    >\r\n      <img\r\n        src={image}\r\n        alt={title}\r\n        className=\"absolute inset-0 w-full h-full object-cover\"\r\n      />\r\n\r\n      <div className=\"relative z-10 flex items-center justify-center h-full\">\r\n        <h1 className=\"text-white text-2xl sm:text-3xl md:text-4xl font-semibold\">\r\n          {title}\r\n        </h1>\r\n      </div>\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default PageBanner;\r\n"
+        }
+    ]
+}

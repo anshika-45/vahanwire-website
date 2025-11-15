@@ -5,8 +5,16 @@ import checked from "../assets/radio-checked.svg";
 import unchecked from "../assets/radio-unchecked.svg";
 
 export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
-  const [selectedCoupon, setSelectedCoupon] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+   const [selectedCoupon, setSelectedCoupon] = useState(null);
+   const [searchQuery, setSearchQuery] = useState("");
+
+   useEffect(() => {
+     const prev = document.body.style.overflow;
+     document.body.style.overflow = "hidden";
+     return () => {
+       document.body.style.overflow = prev;
+     };
+   }, []);
 
   const coupons = [
     {

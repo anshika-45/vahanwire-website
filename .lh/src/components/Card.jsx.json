@@ -1,0 +1,54 @@
+{
+    "sourceFile": "src/components/Card.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 9,
+            "patches": [
+                {
+                    "date": 1763184611812,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1763184623700,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n           className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n-                     pb-6 pt-4 px-6  h-auto relative \n+                     p px-6  h-auto relative \n                      \"\n         >\n           <div\n             className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n"
+                },
+                {
+                    "date": 1763184678877,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n           className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n-                     p px-6  h-auto relative \n+                     p h-auto relative \n                      \"\n         >\n           <div\n             className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n"
+                },
+                {
+                    "date": 1763184702790,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n           className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n-                     p h-auto relative \n+                     py-6 px-3 h-auto relative \n                      \"\n         >\n           <div\n             className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n"
+                },
+                {
+                    "date": 1763184709281,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n           className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n-                     py-6 px-3 h-auto relative \n+                     py-6 px-8 h-auto relative \n                      \"\n         >\n           <div\n             className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n"
+                },
+                {
+                    "date": 1763184733423,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n           className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n-                     py-6 px-8 h-auto relative \n+                     py-6 px- h-auto relative \n                      \"\n         >\n           <div\n             className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n"
+                },
+                {
+                    "date": 1763184826446,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,15 +44,15 @@\n   return (\n     <div\n       className=\"\n                  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 \n-                 gap-3\"\n+                 gap-4\"\n     >\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n           className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n-                     py-6 px- h-auto relative \n+                     py-6 px-6 h-auto relative \n                      \"\n         >\n           <div\n             className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n"
+                },
+                {
+                    "date": 1763184835237,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,9 +44,9 @@\n   return (\n     <div\n       className=\"\n                  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 \n-                 gap-4\"\n+                 gap-5\"\n     >\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n"
+                },
+                {
+                    "date": 1763184970882,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n           className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n-                     py-6 px-6 h-auto relative \n+                     py-8 px-6 h-auto relative \n                      \"\n         >\n           <div\n             className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n"
+                },
+                {
+                    "date": 1763185006916,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -50,9 +50,9 @@\n       {cardData.map((card, index) => (\n         <div\n           key={index}\n           className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n-                     py-8 px-6 h-auto relative \n+                     py-8 px-4 h-auto relative \n                      \"\n         >\n           <div\n             className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n"
+                }
+            ],
+            "date": 1763184611812,
+            "name": "Commit-0",
+            "content": "import React, { useState, useEffect } from \"react\";\nimport Card1Img from \"../assets/Card1.svg\";\nimport Card2Img from \"../assets/Card2.svg\";\nimport Card3Img from \"../assets/Card3.svg\";\nimport Card4Img from \"../assets/Card4.svg\";\n\nconst AnimatedCounter = ({ targetValue, isPercentage, isRating, isSuffix }) => {\n  const [displayValue, setDisplayValue] = useState(0);\n\n  useEffect(() => {\n    let currentValue = 0;\n    const increment = Math.ceil(targetValue / 100);\n    const timer = setInterval(() => {\n      currentValue += increment;\n      if (currentValue >= targetValue) {\n        setDisplayValue(targetValue);\n        clearInterval(timer);\n      } else {\n        setDisplayValue(currentValue);\n      }\n    }, 150);\n\n    return () => clearInterval(timer);\n  }, [targetValue]);\n\n  if (isPercentage) return `${displayValue}%`;\n  if (isRating) return `${(displayValue / 10).toFixed(1)}★`;\n  if (isSuffix) return `${displayValue.toLocaleString()}+`;\n  return displayValue.toLocaleString();\n};\n\nconst YellowCards = () => {\n  const cardData = [\n    { image: Card1Img, title: 98, description: \"Customer Satisfaction\", isPercentage: true },\n    {\n      image: Card2Img,\n      title: 5000,\n      description: \"Active Service Providers\",\n      isSuffix: true,\n    },\n    { image: Card3Img, title: 48, description: \"Average App Rating\", isRating: true },\n    { image: Card4Img, title: 100000, description: \"Services Completed\", isSuffix: true },\n  ];\n  return (\n    <div\n      className=\"\n                 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 \n                 gap-3\"\n    >\n      {cardData.map((card, index) => (\n        <div\n          key={index}\n          className=\"bg-white rounded-lg flex flex-col items-center text-center shadow-md \n                     pb-6 pt-4 px-6  h-auto relative \n                     \"\n        >\n          <div\n            className=\"bg-[#FBBA01] w-24 sm:w-28 md:w-32 lg:w-35 h-24 sm:h-28 md:h-32 lg:h-35 \n                       rounded-full flex items-center justify-center \n                       mb-3 sm:mb-4 md:mb-5 lg:mb-6 \n                       max-sm:w-16 max-sm:h-16 max-sm:mb-2\"\n          >\n            <img\n              loading=\"lazy\"\n              src={card.image}\n              alt=\"\"\n              className=\"w-12 sm:w-14 md:w-16 lg:w-18 h-12 sm:h-14 md:h-16 lg:h-18 object-contain \n                         max-sm:w-9 max-sm:h-9\"\n            />\n          </div>\n          <h3\n            className=\"md:text-3xl text-lg text-[#242424] font-bold \n                         mb-1 sm:mb-1.5 md:mb-2 max-sm:text-base max-sm:mb-0.5\"\n          >\n            <AnimatedCounter \n              targetValue={card.title} \n              isPercentage={card.isPercentage}\n              isRating={card.isRating}\n              isSuffix={card.isSuffix}\n            />\n          </h3>\n          <p className=\"text-[#242424] text-xs sm:text-sm md:text-base max-sm:text-[10px]\">\n            {card.description}\n          </p>\n        </div>\n      ))}\n    </div>\n  );\n};\nexport default YellowCards;\n"
+        }
+    ]
+}

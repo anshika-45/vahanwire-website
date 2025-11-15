@@ -10,7 +10,6 @@ const LatestOffer = React.lazy(() => import("../components/LatestOffer"));
 const WhyChooseUs = React.lazy(() => import("../components/WhyChooseUs"));
 const VideoSection = React.lazy(() => import("../components/VideoSection"));
 const TrustandResult = React.lazy(() => import("../components/TrustandResult"));
-
 const AmcBanner = React.lazy(() => import("../components/AmcBanner"));
 const ComponentFallback = () => (
   <div className="flex items-center justify-center py-8">
@@ -28,6 +27,9 @@ const Homepage = () => {
 
   return (
     <div>
+
+
+
       <Suspense fallback={<ComponentFallback />}>
         <Banner />
       </Suspense>

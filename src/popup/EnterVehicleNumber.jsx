@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
 import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import verifyIcon from "../assets/verify.webp";
@@ -19,17 +19,26 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [vehicleData, setVehicleData] = useState(null);
 
+  useEffect(() => {
+    if (!isOpen) {
+      setVehicleNumber("");
+      setVehicleModel("");
+      setBrand("");
+      setShowModel(false);
+      setNumberError("");
+      setModelError("");
+      setBrandError("");
+      setVehicleData(null);
+    }
+  }, [isOpen]);
+
   if (!isOpen && !showSelectVehicle) return null;
 
-  // ✅ Updated: Realistic Indian Vehicle Number Validation
   const validateVehicleNumber = (number) => {
     const cleanedNumber = number.trim().toUpperCase().replace(/[-\s]/g, "");
 
-    // Common India vehicle number format: MH12AB1234
-    // State Code (2 letters) + RTO (1–2 digits) + Series (1–3 letters) + Number (1–4 digits)
     const indianVehicleRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
 
-    // Some older vehicles or temporary numbers have different pattern (like DL3S1234, BR01T999)
     const alternateRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1}[0-9]{3,4}$/;
 
     if (cleanedNumber.length < 8 || cleanedNumber.length > 15) {

@@ -3,7 +3,13 @@ import { AlertTriangle, Trash2 } from "lucide-react";
 import bin from "../assets/bin.png"; 
 export default function EditVehicle({ isOpen, onClose, type = "edit" }) {
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "auto";
+    if (isOpen) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
   }, [isOpen]);
 
   if (!isOpen) return null;

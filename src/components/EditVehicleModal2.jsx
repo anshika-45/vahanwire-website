@@ -5,6 +5,15 @@ import carOutline from "../assets/CarFade.svg";
 import bikeColor from "../assets/BikeFill.svg";
 import bikeOutline from "../assets/BikeFade.svg";
 
+/**
+ * EditVehicleModal2
+ * - Enhanced validations for vehicleNumber, brand, model
+ * - Rejects gibberish like repeated chars, only-numbers, no-vowels (for longer strings), etc.
+ * - Validates vehicle number state code against a known list of Indian state codes
+ *
+ * Note: backend must still re-validate before saving (never trust client only).
+ */
+
 export default function EditVehicleModal2({
   open,
   onClose = () => {},
@@ -17,8 +26,6 @@ export default function EditVehicleModal2({
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -73,16 +80,12 @@ export default function EditVehicleModal2({
         vehicleNumber: initial.vehicleNumber || initial.vehicle || "",
         brand: initial.brand || initial.vehicleBrand || "",
         model: initial.model || initial.vehicleModel || "",
-        year: initial.year || "",
-        fuelType: initial.fuelType || "",
       });
     } else {
       setForm({
         vehicleNumber: "",
         brand: "",
         model: "",
-        year: "",
-        fuelType: "",
       });
     }
 
@@ -97,61 +100,114 @@ export default function EditVehicleModal2({
   const formatVehicleNumber = (value) =>
     String(value || "")
       .replace(/\s/g, "")
+      .replace(/-/g, "")
       .toUpperCase();
 
+  // --- Helper heuristics for brand/model validation ---
+  const normalize = (s = "") =>
+    String(s)
+      .normalize?.("NFC")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  const hasVowel = (s = "") => /[aeiou]/i.test(s);
+  const hasRepeatedChars = (s = "") => /(.)\1\1/.test(s); // 3 same chars in row
+  const isMostlyNumeric = (s = "") => {
+    const digits = (s.match(/\d/g) || []).length;
+    return digits / Math.max(1, s.length) > 0.5;
+  };
+  const isMostlySymbols = (s = "") => {
+    const lettersOrDigits = (s.match(/[A-Za-z0-9]/g) || []).length;
+    return lettersOrDigits === 0;
+  };
+
+  // Indian state codes (common) for basic validation of first 2 letters of reg no.
+  const STATE_CODES = new Set([
+    "AP","AR","AS","BR","CG","GA","GJ","HR","HP","JK","JH","KA","KL","LD","MP","MH","MN","ML","MZ","NL",
+    "OR","PB","RJ","SK","TN","TG","TR","UP","UT","WB","DL","DL1","DL2" // include DL variants loosely (mainly check DL)
+  ]);
+
+  // Validate single field and return string message or empty if valid
   const validateField = (name, value) => {
-    const v = String(value || "").trim();
+    const raw = value === undefined || value === null ? "" : String(value);
+    const v = normalize(raw);
+
     switch (name) {
       case "vehicleNumber": {
         if (!v) return "Vehicle number is required";
         const clean = formatVehicleNumber(v);
+
+        // Basic pattern: 2 letters (state), 1-2 digits (district), 1-4 letters, 1-4 digits
         const vehicleNumberRegex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{0,4}[0-9]{1,4}$/;
         if (!vehicleNumberRegex.test(clean))
-          return "Vehicle number format: State code (2) + Digits (1-2) + Letters (0-4) + Digits (1-4)";
+          return "Invalid number. Example: MH12AB1234 or DL3S9999";
+
         if (clean.length < 6 || clean.length > 12)
-          return "Vehicle number should be between 6-12 characters";
+          return "Vehicle number should be between 6 and 12 characters";
+
+        // Validate state code specifically (first two letters)
+        const stateCode = clean.slice(0, 2);
+        if (!STATE_CODES.has(stateCode)) {
+          // allow "DL" and common codes - if not in set, still show suggestion but not hard block for uncommon codes
+          return `Unknown state code "${stateCode}". Please check the first two letters (e.g., MH, DL, KA)`;
+        }
+
+        // extra heuristic: avoid nonsense like 'AA11AAAA' (too many repeated letters)
+        if (/(?:[A-Z])\1\1\1/.test(clean)) return "Invalid vehicle number (repeated letters detected)";
+
         return "";
       }
+
       case "brand": {
         if (!v) return "Brand is required";
         if (v.length < 2) return "Brand name must be at least 2 characters";
-        if (!/^[A-Za-z0-9\s&.\-]{2,}$/.test(v))
-          return "Brand can contain letters, numbers, &, ., -";
         if (v.length > 50) return "Brand name cannot exceed 50 characters";
+
+        // allowed characters: letters, numbers, spaces, &, ., -, ()
+        if (!/^[\p{L}0-9\s&.\-()\/]+$/u.test(v)) {
+          return "Brand can contain letters, numbers, spaces and & . - ( ) / characters";
+        }
+
+        if (isMostlySymbols(v)) return "Brand looks invalid";
+        if (hasRepeatedChars(v)) return "Brand looks invalid (repeated characters)";
+        if (isMostlyNumeric(v)) return "Brand cannot be mostly numbers";
+
+        // for longer brand names ensure at least one vowel present (helps avoid gibberish)
+        if (v.length >= 4 && !hasVowel(v)) return "Brand looks invalid";
+
+        // additional helpful heuristic: common garbage strings
+        const lower = v.toLowerCase();
+        const blacklist = ["asdf", "qwer", "test", "ghjkl", "zzz", "xxx", "abc", "gkhk", "kholjpi", "giho"];
+        if (blacklist.some((b) => lower.includes(b))) return "Brand looks invalid";
+
         return "";
       }
+
       case "model": {
         if (!v) return "Model is required";
-        if (v.length < 1) return "Model cannot be empty";
-        if (!/^[A-Za-z0-9\s&.\-]{1,}$/.test(v))
-          return "Model can contain letters, numbers, &, ., -";
-        if (v.length > 50) return "Model name cannot exceed 50 characters";
+        if (v.length > 60) return "Model name cannot exceed 60 characters";
+
+        // allow short technical names (i3, X7, K10) so min length 1
+        if (!/^[\p{L}0-9\s&.\-()#\/]+$/u.test(v)) {
+          return "Model can contain letters, numbers, spaces and . - ( ) # / characters";
+        }
+
+        if (isMostlySymbols(v)) return "Model looks invalid";
+        if (hasRepeatedChars(v)) return "Model looks invalid (repeated characters)";
+
+        // if model is longer, require it to contain at least one vowel or a number (avoid gibberish)
+        if (v.length >= 4 && !hasVowel(v) && !/\d/.test(v)) {
+          return "Model looks invalid — please provide a proper model name";
+        }
+
+        // reject clear garbage
+        const lowerM = v.toLowerCase();
+        const blacklistModel = ["asdf", "qwer", "test", "guy98", "gkhk", "zzzz", "abc", "kholjpi"];
+        if (blacklistModel.some((b) => lowerM.includes(b))) return "Model looks invalid";
+
         return "";
       }
-      case "year": {
-        if (!v) return "Manufacture year is required";
-        if (!/^\d{4}$/.test(v)) return "Year must be in YYYY format (e.g., 2023)";
-        const yearNum = parseInt(v, 10);
-        const currentYear = new Date().getFullYear();
-        if (yearNum < 1900 || yearNum > currentYear + 1)
-          return `Year must be between 1900 and ${currentYear + 1}`;
-        return "";
-      }
-      case "fuelType": {
-        if (!v) return "Fuel type is required";
-        const allowed = [
-          "petrol",
-          "diesel",
-          "electric",
-          "cng",
-          "hybrid",
-          "lpg",
-          "ev",
-        ];
-        if (!allowed.includes(v.toLowerCase()))
-          return "Valid fuel types: Petrol, Diesel, Electric, CNG, Hybrid, LPG, EV";
-        return "";
-      }
+
       default:
         return "";
     }
@@ -168,52 +224,47 @@ export default function EditVehicleModal2({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // Reject invalid characters for specific fields
+
+    // Reject invalid characters for specific fields (sanitization)
     let processed = value;
-    
     if (name === "vehicleNumber") {
       processed = formatVehicleNumber(value);
-    } else if (name === "year") {
-      // Only allow digits
-      processed = value.replace(/\D/g, "");
-      if (processed.length > 4) processed = processed.slice(0, 4);
     } else if (name === "brand" || name === "model") {
-      // Only allow alphanumeric, spaces, &, ., -
-      processed = value.replace(/[^a-zA-Z0-9\s&.\-]/g, "");
-    } else if (name === "fuelType") {
-      // Only allow letters and spaces
-      processed = value.replace(/[^a-zA-Z\s]/g, "");
+      // allow unicode letters, numbers, spaces and & . - ( ) / #
+      // remove control chars and most punctuation
+      processed = value.replace(/[<>$;"`\\|@%{}[\]^~]/g, "");
+      // don't aggressively strip valid unicode letters, allow them
     }
-    
+
     setForm((p) => ({ ...p, [name]: processed }));
     setSubmitError("");
-    
-    if (touched[name])
+
+    if (touched[name]) {
       setErrors((p) => ({ ...p, [name]: validateField(name, processed) }));
+    }
   };
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
     setTouched((p) => ({ ...p, [name]: true }));
-    const processed =
-      name === "vehicleNumber" ? formatVehicleNumber(value) : value;
+    const processed = name === "vehicleNumber" ? formatVehicleNumber(value) : value;
     setForm((p) => ({ ...p, [name]: processed }));
     setErrors((p) => ({ ...p, [name]: validateField(name, processed) }));
+  };
+
+  const hasValidationErrors = () => {
+    return Object.keys(form).some((field) => touched[field] && errors[field]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError("");
 
-    const allTouched = Object.keys(form).reduce(
-      (acc, k) => ({ ...acc, [k]: true }),
-      {}
-    );
+    const allTouched = Object.keys(form).reduce((acc, k) => ({ ...acc, [k]: true }), {});
     setTouched(allTouched);
 
     if (!validateForm()) {
-      setSubmitError("Please fix all validation errors");
+      setSubmitError("Please fix validation errors before saving.");
       return;
     }
 
@@ -222,18 +273,14 @@ export default function EditVehicleModal2({
       const payload = {
         vehicleNumber: formatVehicleNumber(form.vehicleNumber),
         vehicleType,
-        brand: form.brand.trim(),
-        model: form.model.trim(),
-        year: form.year.trim(),
-        fuelType: form.fuelType.trim(),
+        brand: normalize(form.brand).trim(),
+        model: normalize(form.model).trim(),
       };
-      
+
       await onSubmit(payload);
       onClose();
     } catch (error) {
-      setSubmitError(
-        error?.message || "Failed to update vehicle. Please try again."
-      );
+      setSubmitError(error?.message || "Failed to update vehicle. Please try again.");
       setIsSubmitting(false);
     }
   };
@@ -256,7 +303,7 @@ export default function EditVehicleModal2({
         aria-hidden="true"
       />
       <div className="fixed inset-0 z-[9999] grid place-items-center p-2 sm:p-4">
-        <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl border border-slate-200">
+        <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
           <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-200 bg-[#D9E7FE] rounded-t-2xl">
             <h2 className="text-sm sm:text-base font-semibold text-slate-800 flex-1 text-center">
               Edit Vehicle Details
@@ -320,9 +367,7 @@ export default function EditVehicleModal2({
                   maxLength={15}
                 />
                 {errors.vehicleNumber && touched.vehicleNumber && (
-                  <p className="text-red-600 text-xs mt-1">
-                    {errors.vehicleNumber}
-                  </p>
+                  <p className="text-red-600 text-xs mt-1">{errors.vehicleNumber}</p>
                 )}
               </div>
 
@@ -331,8 +376,6 @@ export default function EditVehicleModal2({
                 <span className="text-slate-500 text-xs">OR</span>
                 <div className="flex-1 border-t border-slate-300" />
               </div>
-
-            
 
               <div>
                 <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
@@ -393,7 +436,7 @@ export default function EditVehicleModal2({
                 </button>
                 <button
                   type="submit"
-                  disabled={isSubmitting || Object.values(errors).some(Boolean)}
+                  disabled={isSubmitting || hasValidationErrors()}
                   className="px-6 sm:px-8 py-2 rounded-lg border-2 border-blue-600 text-[#266DDF] font-semibold hover:bg-blue-700 hover:text-white transition w-full sm:w-auto whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? "Saving..." : "Save"}

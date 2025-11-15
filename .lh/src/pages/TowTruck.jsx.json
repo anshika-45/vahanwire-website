@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/pages/TowTruck.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1763050921508,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1763050921508,
+            "name": "Commit-0",
+            "content": "import React, { Suspense } from \"react\";\r\nimport PetrolPumpBanner from \"../assets/PetrolPump.svg\";\r\nconst PageBanner = React.lazy(() => import(\"../components/PageBanner\"));\r\n\r\nconst ComponentFallback = () => (\r\n  <div className=\"flex items-center justify-center py-8\">\r\n    <div className=\"animate-pulse bg-gray-200 rounded-lg h-32 w-full max-w-4xl\"></div>\r\n  </div>\r\n);\r\n\r\nconst PetrolPump = () => {\r\n  return (\r\n    <>\r\n      <div>\r\n        <Suspense fallback={<ComponentFallback />}>\r\n          <PageBanner title=\"Coming Soon\" image={PetrolPumpBanner} height=\"400px\" />\r\n        </Suspense>\r\n      </div>\r\n    </>\r\n  );\r\n};\r\n\r\nexport default PetrolPump;"
+        }
+    ]
+}

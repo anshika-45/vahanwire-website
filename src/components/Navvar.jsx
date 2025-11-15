@@ -7,11 +7,11 @@ function Navbar() {
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "Vehicle AMC", path: "/vehicle-amc" },
-    { name: "Mechanic", path: "", comingSoon: true },
-    { name: "Tow Truck", path: "", comingSoon: true },
-    { name: "Service Center", path: "", comingSoon: true },
-    { name: "Petrol Pump", path: "", comingSoon: true },
-    { name: "Vahan Shop", path: "", comingSoon: true },
+    { name: "Mechanic", path: "/mechanic"},
+    { name: "Tow Truck", path: "/tow-truck" },
+    { name: "Service Center", path: "/service-center" },
+    { name: "Petrol Pump", path: "/petrol-pump"},
+    { name: "E-Commerce", path: "/e-commerce" },
   ];  
   const handleLinkClick = () => {
     setIsOpen(false);
@@ -48,7 +48,7 @@ function Navbar() {
         role="navigation"
         aria-label="Main navigation"
       >
-        <ul className="flex container justify-center gap-15 text-[17px] text-[#242424]">
+        <ul className="flex container justify-center gap-15 text-[17px] text-[#000000]">
           {menuItems.map((item, index) => (
             <li ref={navItemRef} key={index} className="relative group">
               {item.comingSoon && (
@@ -140,15 +140,15 @@ function Navbar() {
             className="flex items-center justify-center p-4 self-start"
           >
             {isOpen ? (
-              <X size={24} className="text-[#242424]" />
+              <X size={24} className="text-[#000000]" />
             ) : (
-              <Menu size={24} className="text-[#242424]" />
+              <Menu size={24} className="text-[#000000]" />
             )}
           </button>
         </header>
         <main className="w-full">
           {isOpen && (
-            <ul className="flex flex-col gap-0 w-full text-[#242424] bg-white rounded-lg mt-2 shadow-lg border border-gray-200">
+            <ul className="flex flex-col gap-0 w-full text-[#000000] bg-white rounded-lg mt-2 shadow-lg border border-gray-200">
               {menuItems.map((item, index) => (
                 <li
                   key={index}
