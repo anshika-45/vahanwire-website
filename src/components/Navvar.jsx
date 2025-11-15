@@ -9,9 +9,9 @@ function Navbar() {
     { name: "Vehicle AMC", path: "/vehicle-amc" },
     { name: "Mechanic", path: "/mechanic" },
     { name: "Tow Truck", path: "/tow-truck" },
-    { name: "E-Commerce", path: "/service-center"},
+    { name: "E-Commerce", path: "/e-commerce"},
     { name: "Petrol Pump", path: "/petrol-pump"},
-    { name: "Service Center", path: "/e-commerce"},
+    { name: "Service Center", path: "/service-center"},
   ];  
   const handleLinkClick = () => {
     setIsOpen(false);

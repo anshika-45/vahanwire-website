@@ -27,6 +27,8 @@ const Header = () => {
     home: "/",
     about: "/about-us",
     amc: "/my-account?view=amc",
+    mechanic: "/mechanic",
+    Ecommerce: "/service-center",
     profile: "/my-account?view=profile",
     vehicle: "/my-account?view=vehicles",
     contact: "/contact-us",
@@ -61,11 +63,9 @@ const Header = () => {
 
       const lowerQuery = query.toLowerCase();
       if (pages[lowerQuery]) {
+        setOpen(false);
         navigate(pages[lowerQuery]);
       }
-      //  else {
-      //   navigate(`/search?query=${encodeURIComponent(query)}`);
-      // }
     }
   };
 
@@ -78,7 +78,7 @@ const Header = () => {
   };
   const dropdownRef = useRef(null);
   const handleProfileClick = () => {
-    setIsProfileModalOpen(true);
+    setIsProfileModalOpen(!isProfileModalOpen);
   };
   const handleSidebarSelect = (view) => {
     setIsProfileModalOpen(false);
