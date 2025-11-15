@@ -66,16 +66,14 @@ const hasValid = (value) => /[^a-zA-Z0-9\s]/.test(value);
 
 const validateVehicleNumber = (num) => {
   const cleaned = num.trim().toUpperCase().replace(/[-\s]/g, "");
-  const regex1 = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{1,4}$/;
-  const regex2 = /^[A-Z]{2}[0-9]{1,2}[A-Z][0-9]{3,4}$/;
-
-  if (cleaned.length < 8 || cleaned.length > 15)
-    return "Vehicle number should be 8–15 characters";
-  if (!regex1.test(cleaned) && !regex2.test(cleaned))
+  const regex = /^[A-Z]{2}[0-9]{1,2}[A-Z]{1,3}[0-9]{4}$/;
+  if (cleaned.length < 8 || cleaned.length > 12)
+    return "Vehicle number should be 8–12 characters";
+  if (!regex.test(cleaned))
     return "Invalid number (e.g. MH12AB1234)";
-
   return "";
 };
+  
 
 const validateBrand = (v) => {
   if (!v.trim()) return "Brand is required";
