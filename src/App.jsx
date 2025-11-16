@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { AmcDataProvider } from "./context/AmcDataContext.jsx";
+import { AMCPlansProvider } from './context/AmcPlanContext.jsx';
 import MainLayout from "./layouts/MainLayout";
 import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -34,6 +35,7 @@ function App() {
     <ErrorBoundary>
       <AuthProvider>
         <AmcDataProvider>
+        <AMCPlansProvider>
           <BrowserRouter>
             <ScrollToTop />
             <Suspense fallback={<LoadingFallback />}>
@@ -72,6 +74,7 @@ function App() {
               </Routes>
             </Suspense>
           </BrowserRouter>
+        </AMCPlansProvider>
         </AmcDataProvider>
       </AuthProvider>
     </ErrorBoundary>

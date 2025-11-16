@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { getAmcInvoice } from "../api/amcApi";
+import { getAmcInvoice } from "../api/authApi";
 
 export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
   const [invoice, setInvoice] = useState(null);

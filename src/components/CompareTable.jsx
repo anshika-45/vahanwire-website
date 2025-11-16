@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import Button from "./Button";
 import { Check, X } from "lucide-react";
 import detailIcon from "../assets/Vector.png";
 import PlanSummaryPage from "../popup/PlanSummaryPage";
 import { useAmcData } from "../context/AmcDataContext";
-import { getAMCPlansByCategory } from "../api/amcApi";
+import { useAMCPlans } from "../context/AmcPlanContext";
 import { createAMCPurchase } from "../api/amcApi";
 import "../index.css";
 
 const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
   const { vehicleType, amcType } = useAmcData();
+  const { fetchPlans, loading } = useAMCPlans();
   const [hoveredCol, setHoveredCol] = useState(null);
   const [hoverStyle, setHoverStyle] = useState({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const tableRef = useRef(null);
   const firstColumnRef = useRef(null);
@@ -27,7 +26,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
     if (!tableRef.current) return;
 
     const thElements = tableRef.current.querySelectorAll("thead th");
-    const targetTh = thElements[colIndex + 1]; 
+    const targetTh = thElements[colIndex + 1];
     if (targetTh) {
       const rect = targetTh.getBoundingClientRect();
       const containerRect =
@@ -71,40 +70,36 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
     }
   };
 
-const mapPlansData = (plans = []) => {
-  if (!Array.isArray(plans) || plans.length === 0) return [];
+  const mapPlansData = (plans = []) => {
+    if (!Array.isArray(plans) || plans.length === 0) return [];
 
-  return plans.map((plan) => ({
-    _id: plan?._id,
-    key: plan?.planSubCategory?.toLowerCase(),
-    name: plan?.planName,
-    price: plan?.planTotalAmount || 0,
-  }));
-};
-
-const fetchPlans = async () => {
-  setLoading(true);
-
-  let data = [];
-
-  if (Array.isArray(plansAre) && plansAre.length > 0) {
-    data = plansAre;
-  } else {
-    const res = await getAMCPlansByCategory(vehicleType, amcType);
-    if (res?.success && Array.isArray(res.data)) {
-      data = res.data;
-    }
-  }
-
-  const mappedPlans = mapPlansData(data);
-  setPlans(mappedPlans);
-
-  setLoading(false);
-};
+    return plans.map((plan) => ({
+      _id: plan?._id,
+      key: plan?.planSubCategory?.toLowerCase(),
+      name: plan?.planName,
+      price: plan?.planTotalAmount || 0,
+    }));
+  };
 
   useEffect(() => {
-    fetchPlans();
-  }, [plansAre, vehicleType, amcType]);
+    const loadPlans = async () => {
+      if (Array.isArray(plansAre) && plansAre.length > 0) {
+        const mappedPlans = mapPlansData(plansAre);
+        setPlans(mappedPlans);
+        return;
+      }
+
+      if (!vehicleType || !amcType) {
+        return;
+      }
+
+      const data = await fetchPlans(vehicleType, amcType);
+      const mappedPlans = mapPlansData(data);
+      setPlans(mappedPlans);
+    };
+
+    loadPlans();
+  }, [plansAre, vehicleType, amcType, fetchPlans]);
 
   const handleBuyClick = async (plan) => {
     if (onBuy) {
@@ -256,7 +251,11 @@ const fetchPlans = async () => {
                                 type="button"
                                 className="w-5 h-5 p-0 bg-none border-none cursor-pointer"
                                 aria-label={`Details for ${feature.label}`}
-                                onClick={() => setHoveredIcon(hoveredIcon === rowIndex ? null : rowIndex)}
+                                onClick={() =>
+                                  setHoveredIcon(
+                                    hoveredIcon === rowIndex ? null : rowIndex
+                                  )
+                                }
                               >
                                 <img
                                   loading="lazy"
