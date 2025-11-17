@@ -25,7 +25,6 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
       setError("");
       try {
         const res = await getAmcInvoice(invoiceId);
-        console.log("lknfwdjcnbb",res);
         if (res.success) {
           const data = res.data;
           setInvoice({

@@ -24,8 +24,7 @@ const EditVehicleModal2 = ({ open, onClose = () => {}, onSubmit = () => {}, init
   });
   const [touched, setTouched] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-console.log("cdlknswkhe",initial);
-console.log("ewjcijew",initialVehicleType);
+
 useEffect(() => {
   if (!open) return;
   document.body.style.overflow = "hidden";

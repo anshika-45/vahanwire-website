@@ -2,7 +2,7 @@ import React , {useEffect} from "react";
 import Button from "../components/Button";
 import failureIcon from "../assets/failedpurchase.png";
 
-const FailedPurchase = ({ onClose, reason }) => {
+const FailedPurchase = ({ onClose, reason , error, errorCode, errorReason}) => {
   
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -31,10 +31,10 @@ const FailedPurchase = ({ onClose, reason }) => {
 
         <p className="text-gray-600 mb-8 text-sm leading-relaxed">
           We couldn't complete your payment.{" "}
-          {reason ? (
+          {error ? (
             <>
               <br />
-              <span className="text-red-500 font-medium">Reason:</span> {reason}
+              <span className="text-red-500 font-medium">Reason:</span> {error} with Status {errorCode} due to {errorReason}
             </>
           ) : (
             "Please try again or use a different payment method."

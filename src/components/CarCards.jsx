@@ -103,7 +103,7 @@ const CarCards = () => {
     setLoading(true);
     try {
       const vehicles = await getUserVehicles();
-      console.log("jecbjhbjhbjhb",vehicles);
+     
       const formatted = vehicles.map((v, index) => ({
         _id: v._id,
         id: v._id,
@@ -118,7 +118,7 @@ const CarCards = () => {
         image: index % 2 === 0 ? vehicleImage1 : vehicleImage2,
         tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
       }));
-      console.log("keqbkjbckj",formatted);
+    
       setCars(formatted);
     } catch (error) {
       console.error("Error fetching vehicles:", error);
@@ -126,7 +126,7 @@ const CarCards = () => {
       setLoading(false);
     }
   };
-  console.log("kejj2bkjcbjh",cars);
+
   useEffect(() => {
     fetchUserVehicles();
   }, []);
