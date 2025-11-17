@@ -77,18 +77,33 @@ const validateVehicleNumber = (num) => {
     return "Invalid number (e.g. MH12AB1234)";
   return "";
 };
-  
 const validateBrand = (v) => {
-  if (!v.trim()) return "Brand is required";
-  if (hasValidBrand(v)) return "Brand cannot contain special characters";
-  if (v.length < 2) return "Brand must be at least 2 characters";
+  const trimmedValue = v.trim();
+  if (!trimmedValue) return "Brand is required";
+  if (hasValidBrand(trimmedValue))
+    return "Brand cannot contain special characters";
+  if (trimmedValue.length < 2) return "Brand must be at least 2 characters";
+  if (trimmedValue.length > 30) return "Brand cannot exceed 30 characters";
+  if (/\s{2,}/.test(trimmedValue))
+    return "Brand cannot contain multiple consecutive spaces";
   return "";
 };
+
   
 const validateModel = (v) => {
-  if (!v.trim()) return "Model is required";
-  if (hasValid(v)) return "Model cannot contain special characters";
-  if (v.length < 2) return "Brand must be at least 2 characters";
+  const trimmedValue = v.trim();
+
+  if (!trimmedValue) return "Model is required";
+  if (hasValid(trimmedValue))
+    return "Model cannot contain special characters";
+
+  if (trimmedValue.length < 2) return "Model must be at least 2 characters";
+
+  if (trimmedValue.length > 50) return "Model cannot exceed 50 characters";
+
+  if (/\s{2,}/.test(trimmedValue))
+    return "Model cannot contain multiple consecutive spaces";
+
   return "";
 };
   

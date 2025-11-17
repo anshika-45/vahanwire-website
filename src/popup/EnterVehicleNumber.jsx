@@ -86,18 +86,30 @@ const validateVehicleNumber = (num) => {
 
 
 const validateBrand = (v) => {
-  if (!v.trim()) return "Brand is required";
-  if (hasValidBrand(v)) return "Brand cannot contain special characters";
-  if (v.length < 2) return "Brand must be at least 2 characters";
+  const trimmedValue = v.trim();
+  if (!trimmedValue) return "Brand is required";
+  if (hasValidBrand(trimmedValue))
+    return "Brand cannot contain special characters";
+  if (trimmedValue.length < 2) return "Brand must be at least 2 characters";
+  if (trimmedValue.length > 30) return "Brand cannot exceed 30 characters";
+  if (/\s{2,}/.test(trimmedValue))
+    return "Brand cannot contain multiple consecutive spaces";
   return "";
 };
 
 const validateModel = (v) => {
-  if (!v.trim()) return "Model is required";
-  if (hasValid(v)) return "Model cannot contain special characters";
-  if (v.length < 2) return "Brand must be at least 2 characters";
+  const trimmedValue = v.trim();
+  if (!trimmedValue) return "Model is required";
+  if (hasValid(trimmedValue))
+    return "Model cannot contain special characters";
+  if (trimmedValue.length < 2) return "Model must be at least 2 characters";
+  if (trimmedValue.length > 50) return "Model cannot exceed 50 characters";
+  if (/\s{2,}/.test(trimmedValue))
+    return "Model cannot contain multiple consecutive spaces";
+
   return "";
 };
+
 
 const validateYear = (y) => {
   if (!y) return "Year is required";
@@ -277,7 +289,6 @@ const handleAddVehicle = async () => {
                   onChange={handleChange}
                   className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
                   hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
-                  maxLength={30}
                 />
                 {error.brand && (
                   <div className="text-[#CB0200] text-xs mb-2 w-full">
@@ -296,7 +307,6 @@ const handleAddVehicle = async () => {
                   onChange={handleChange}
                   className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
                   hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
-                  maxLength={50}
                 />
                 {error.model && (
                   <div className="text-[#CB0200] text-xs mb-3 w-full">
