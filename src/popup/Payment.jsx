@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
+
+  const navigate = useNavigate()
+
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
     if (paymentData?.payuData && paymentData?.payuUrl) {
@@ -9,6 +14,21 @@ const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
       console.log("No payment data available");
     }
   }, [paymentData]);
+
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      event.preventDefault();
+      navigate('/vehicle-amc-filter', { replace: true });
+    };
+
+    window.history.pushState(null, '', window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [navigate]);
 
   const submitToPayU = () => {
     if (!paymentData?.payuData || !paymentData?.payuUrl) {

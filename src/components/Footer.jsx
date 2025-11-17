@@ -21,7 +21,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative h-auto text-white">
+    <footer className="relative h-auto text-white px-3">
       <div className="absolute inset-0 bg-black z-0"></div>
       <div
         className="absolute inset-0 bg-cover bg-center opacity-80 z-0"
@@ -42,14 +42,14 @@ const Footer = () => {
                 className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6 cursor-pointer"
               />
             </Link>
-            <p className="text-gray-300 text-xs sm:text-sm leading-tight mb-4 sm:mb-6 space-y-0.5">
+            <p className="text-gray-300 text-[15px] sm:text-base leading-tight mb-4 sm:mb-6 space-y-0.5">
               VahanWire connects you to nearby
-              <br />
+            
               mechanics, fuel, services, payments, and
-              <br />
+             
               auto parts — in one Platform.
             </p>
-            <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 ">
+            <h2 className="text-lg sm:text-xl font-bold text-white sm:mb-6 ">
               Follow Us
             </h2>
             <div className="flex space-x-4">
@@ -189,12 +189,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/tow-truck" className="hover:text-white transition">
                   Register As A Tow
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/service-center" className="hover:text-white transition">
                   Register Your Service Station
                 </Link>
               </li>

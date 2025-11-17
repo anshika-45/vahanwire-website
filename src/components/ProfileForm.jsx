@@ -56,7 +56,8 @@ const ProfileForm = () => {
       const trimmedEmail = value.trim().toLowerCase();
       if (!trimmedEmail) {
         error = "Email is required";
-      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(trimmedEmail))
+{
         error = "Please enter a valid email address";
       } else if (trimmedEmail.length > 100) {
         error = "Email cannot exceed 100 characters";

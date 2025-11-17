@@ -14,7 +14,6 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 const slides = [
-
   {
     id: 1,
     title: "Mechanic Service",
@@ -137,7 +136,7 @@ const slides = [
 
 export default function Slider() {
   return (
-    <div className="homeSlider max-w-screen relative pt-5 mt-3 lg:mb-6">
+    <div className="homeSlider max-w-screen relative pt-4 lg:mb-6">
       <div>
         <Swiper
           spaceBetween={30}
@@ -168,10 +167,10 @@ export default function Slider() {
               slidesPerView: 4,
               spaceBetween: 20,
             },
-            2560:{
-              slidesPerView:6,
-              spaceBetween:30
-            }
+            2560: {
+              slidesPerView: 6,
+              spaceBetween: 30,
+            },
           }}
           pagination={{
             clickable: true,
@@ -186,9 +185,9 @@ export default function Slider() {
           {slides.map((s, index) => {
             return (
               <SwiperSlide key={s.id}>
-                <div className=" w-full lg:h-[270px] h-[240px]">
+                <div className=" w-full lg:h-[270px] h-[240px] md:p-0 p-3">
                   <img
-                    className="object-contain h-full rounded-2xl"
+                    className="object-contain w-full h-full rounded-2xl"
                     src={s.img}
                     alt=""
                   />

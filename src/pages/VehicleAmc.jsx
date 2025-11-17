@@ -56,7 +56,7 @@ const VehicleAmc = () => {
         if (vehicleExists) {
           // Vehicle exists, navigate to filter page
           navigate("/vehicle-amc-filter", {
-            state: filterData,
+            state: {...filterData, vehicleType},
             replace: true,
           });
         } else {

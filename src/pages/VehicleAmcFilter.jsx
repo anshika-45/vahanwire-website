@@ -37,6 +37,7 @@ const VehicleAmcFilter = () => {
     plans: locationPlans,
     vehicle: locationVehicle,
     selectedPlan: initialSelectedPlan,
+    vehicleType: locationVehicleType,
   } = location.state || {};
 
   const {
@@ -100,10 +101,24 @@ const VehicleAmcFilter = () => {
   const [showPopup, setShowPopup] = useState(null);
 
   useEffect(() => {
+    const handlePopState = (event) => {
+      event.preventDefault();
+      navigate('/vehicle-amc', { replace: true });
+    };
+
+    window.history.pushState(null, '', window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [navigate]);
+
+  useEffect(() => {
     if (locationVehicle && locationPlans) {
       const newVehicleData = {
         vehicle: locationVehicle,
-        vehicleType: vehicleType,
+        vehicleType: locationVehicleType || vehicleType,
         plans: locationPlans,
         timestamp: Date.now()
       };
@@ -112,8 +127,12 @@ const VehicleAmcFilter = () => {
       
       setVehicle(locationVehicle);
       setPlans(locationPlans);
+
+      if(locationVehicleType){
+        setVehicleType(locationVehicleType);
+      }
     }
-  }, [locationVehicle, locationPlans]);
+  }, [locationVehicle, locationPlans, locationVehicleType]);
 
   useEffect(() => {
     const saved = localStorage.getItem('selectedVehicleData');

@@ -13,7 +13,7 @@ import {
 } from "../api/vehicleApi";
 import { selectAMCVehicle } from "../api/amcApi";
 
-const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehicleBrand, addedVehicleModel, addedVehicleYear , addedVehicleFuelType, plan }) => {
+const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehicleBrand, addedVehicleModel, addedVehicleYear , addedVehicleFuelType, plan, addedVehicleType }) => {
 
   const navigate = useNavigate();
   const { vehicleType, amcType, activateFilter } = useAmcData();
@@ -117,7 +117,8 @@ useEffect(() => {
           model: addedVehicleModel,
           brand: addedVehicleBrand,
           year: addedVehicleYear,
-          fuelType: addedVehicleFuelType
+          fuelType: addedVehicleFuelType,
+          vehicleType: addedVehicleType
         };
         setAddedVehicles([preAddedVehicle]);
         setSelectedVehicle(preAddedVehicle.number);
@@ -131,7 +132,8 @@ useEffect(() => {
               model: v.model,
               brand: v.brand,
               year: v.year,
-              fuelType: v.fuelType
+              fuelType: v.fuelType,
+              vehicleType: v.vehicleType || "car"
             }));
             setAddedVehicles(formatted);
             setSelectedVehicle(formatted[0].number);
@@ -201,7 +203,8 @@ const handleSearch = async () => {
         brand: data.vehicle.brand,
         model: data.vehicle.model,
         year: data.vehicle.year,
-        fuelType: data.vehicle.fuelType
+        fuelType: data.vehicle.fuelType,
+        vehicleType: data.vehicle.vehicleType
       };
 
       setAddedVehicles((p) => [...p, newVehicle]);
@@ -262,7 +265,8 @@ const handleAddVehicle = async () => {
         brand: formData.brand,
         model: formData.model,
         year: formData.year,
-        fuelType: formData.fuelType
+        fuelType: formData.fuelType,
+        vehicleType: vehicleType
       };
       setAddedVehicles((p) => [...p, newVehicle]);
       setSelectedVehicle(newVehicle.number);
@@ -304,7 +308,7 @@ const handleProceed = async () => {
     vehicleNumber: vehicleData.number,
     brand: vehicleData.brand,
     model: vehicleData.model,
-    vehicleType,
+    vehicleType: vehicleData.vehicleType,
     year: vehicleData.year,
     fuelType: vehicleData.fuelType,
     amcPlanCategory: amcType,
@@ -370,9 +374,9 @@ return (
         <h2 className="text-xl font-semibold text-[#242424] mb-4">
           Select a Vehicle to Subscribe
         </h2>
-
-        {addedVehicles.length > 0 ? (
-            addedVehicles.map((vehicle, i) => (
+        
+    {addedVehicles.filter(v => v.vehicleType === vehicleType).length > 0 ? (
+    addedVehicles.filter(v => v.vehicleType === vehicleType).map((vehicle, i) =>  (
               <div
                 key={vehicle.number}
                 className={`flex items-center gap-4 rounded-xl border p-4 shadow-sm cursor-pointer transition-all ${
@@ -382,7 +386,7 @@ return (
                 } ${i > 0 ? "mt-3" : ""}`}
                 onClick={() => setSelectedVehicle(vehicle.number)}
               >
-              <img src={getVehicleImage()} alt={vehicle.model} className="w-20 h-12 object-cover rounded"/>
+              <img src={getVehicleImage(vehicle.vehicleType)} alt={vehicle.model} className="w-20 h-12 object-cover rounded"/>
                 <div className="flex-1">
                   <div
                     className="font-medium text-[18px] text-gray-900"
@@ -436,7 +440,7 @@ return (
                 placeholder="Enter Brand"
                 value={formData.brand}
                 onChange={handleChange}
-                maxLength={10}
+                maxLength={15}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-base mb-2"
               />
               {error.brand && (
@@ -450,7 +454,7 @@ return (
                 placeholder="Enter Model"
                 value={formData.model}
                 onChange={handleChange}
-                maxLength={10}
+                maxLength={30}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-base mb-3"
               />
               {error.model && (

@@ -107,7 +107,7 @@ const Header = () => {
   return (
     <div className="bg-white md:py-6 py-3.5 z-50">
       <div className="container">
-        <div className="flex items-center justify-between gap-1">
+        <div className="flex items-center md:justify-between">
           <Suspense fallback={<LazyFallback />}>
             <Logo />
           </Suspense>
@@ -117,7 +117,7 @@ const Header = () => {
               <SearchBar />
             </Suspense>
           </div>
-          <div className="flex items-center justify-end gap-3 basis-auto">
+          <div className="flex items-center justify-end md:gap-3 gap-3 basis-auto">
             <div className="flex items-center gap-1">
               <button
                 onClick={handleClick}
@@ -125,7 +125,7 @@ const Header = () => {
                 className="md:hidden block mr-1 border-r border-gray-300 pr-2 bg-transparent cursor-pointer min-w-[25px]"
               >
                 <img
-                  className="w-4 h-4 object-contain"
+                  className="w-6.5 h-6.5 object-contain"
                   src={searchIcon}
                   alt="search icon"
                 />
@@ -147,15 +147,18 @@ const Header = () => {
             {isLoggedIn && (
               <div className="relative" ref={dropdownRef}>
                 <div
-                  className="flex items-center gap-1 cursor-pointer hover:opacity-80"
+                  className="flex items-center gap-1 cursor-pointer hover:opacity-80 pr-1"
                   onClick={handleProfileClick}
                   role="button"
                   tabIndex={0}
                   aria-label="Open profile menu"
                   onKeyDown={(e) => e.key === "Enter" && handleProfileClick()}
                 >
-                  <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-full flex items-center justify-center">
-                    <User size={16} className="sm:w-5 sm:h-5 text-gray-800" />
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center">
+                    <User
+                      size={16}
+                      className="w-full h-full object-contain text-gray-800"
+                    />
                   </div>
                   <span className="hidden sm:inline text-sm sm:text-base text-gray-800">
                     Profile
@@ -195,7 +198,7 @@ const Header = () => {
                 src={searchIcon}
                 loading="lazy"
                 alt="Search"
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
               />
               <input
                 id="search-input"

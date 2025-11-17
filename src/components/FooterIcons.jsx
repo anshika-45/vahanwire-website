@@ -20,7 +20,7 @@ const FooterIcons = () => {
         { src: XIcon, alt: "X", link: "https://x.com/vahanwire" },
     ];
     return (
-        <div className="flex space-x-2 sm:space-x-3 mt-2">
+        <div className="flex space-x-2 sm:space-x-3 ">
             {socialData.map((item, idx) => (
                 <IconCircle key={idx} src={item.src} alt={item.alt} link={item.link} />
             ))}

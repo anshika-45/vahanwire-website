@@ -26,44 +26,12 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
 
   const memoizedSections = useMemo(() => sections, [sections]);
 
-  // React.useEffect(() => {
-  //   const container = scrollContainerRef.current;
-  //   if (!container) return;
-
-  //   const observers = [];
-  //   const options = {
-  //     root: container,
-  //     rootMargin: "-20% 0px -60% 0px",
-  //     threshold: 0.5,
-  //   };
-
-  //   const handleIntersect = (entries) => {
-  //     entries.forEach((entry) => {
-  //       if (entry.isIntersecting) {
-  //         const index = parseInt(entry.target.dataset.index);
-  //         setActiveIndex(index);
-  //       }
-  //     });
-  //   };
-
-  //   const observer = new IntersectionObserver(handleIntersect, options);
-
-  //   contentRefs.current.forEach((ref, index) => {
-  //     if (ref) {
-  //       ref.dataset.index = index;
-  //       observer.observe(ref);
-  //       observers.push(observer);
-  //     }
-  //   });
-
-  //   return () => {
-  //     observers.forEach((obs) => obs.disconnect());
-  //   };
-  // }, [memoizedSections]);
-
+  // Desktop only scroll sync
   React.useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
+
+    if (window.innerWidth < 768) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -92,14 +60,22 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
   }, [memoizedSections]);
 
   return (
-    <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-[450px_1fr] gap-8 md:gap-10">
-      <aside className="bg-white rounded-lg md:h-fit h-[400px] lg:sticky top-[180px] self-start shadow-sm border border-[#E9F0FC] max-h-[600px] overflow-y-auto hide-scrollbar">
+    <div className="
+      max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 
+      grid grid-cols-1 md:grid-cols-[350px_1fr] gap-8 md:gap-10">
+
+      {/* SIDEBAR */}
+      <aside className="hidden md:block bg-white rounded-lg h-fit sticky top-[180px]
+                       shadow-sm border border-[#E9F0FC] max-h-[600px] overflow-y-auto hide-scrollbar">
+
         <h3 className="text-sm font-semibold text-[#242424] px-4 py-4 border-b border-[#E9F0FC]">
           {title}
         </h3>
+
         <ul className="flex flex-col">
           {memoizedSections.map((section, index) => {
             const isActive = activeIndex === index;
+
             return (
               <li key={index}>
                 <button
@@ -113,12 +89,12 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
                   <span className="text-left truncate">
                     {index + 1}. {section.title}
                   </span>
+
                   <ChevronRight
                     size={16}
                     className={`transition-transform duration-200 ${
-                      isActive ? " text-[#266DDF]" : "text-gray-400 rotate-90"
+                      isActive ? "text-[#266DDF]" : "text-gray-400 rotate-90"
                     }`}
-                    aria-label={isActive ? "Expanded" : "Collapsed"}
                   />
                 </button>
               </li>
@@ -127,42 +103,69 @@ const TwoColumnInfoLayout = ({ sections, title = "Contents" }) => {
         </ul>
       </aside>
 
+      {/* RIGHT SIDE */}
       <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="max-h-[600px] md:h-auto h-[300px] overflow-y-auto pr-2 md:pr-4 space-y-8 scroll-smooth hide-scrollbar"
-          onScroll={() => {}}
+          className="h-auto md:h-[600px] md:max-h-[600px] overflow-y-auto pr-2 md:pr-4 space-y-3 scroll-smooth hide-scrollbar"
         >
           {memoizedSections.map((section, index) => {
             const isActive = activeIndex === index;
+
             return (
               <div
                 key={index}
                 ref={(el) => (contentRefs.current[index] = el)}
                 data-index={index}
-                className=""
               >
-                <div
-                  className={`rounded-lg p-6 bg-white border transition-colors ${
-                    isActive
-                      ? "border-[#266DDF]"
-                      : "border-transparent hover:border-[#266DDF]"
-                  }`}
+                {/* MOBILE ACCORDION HEADER */}
+                <button
+                  className="md:hidden w-full flex items-center justify-between bg-white p-3 border rounded-lg shadow-sm"
+                  onClick={() =>
+                    setActiveIndex(activeIndex === index ? -1 : index)
+                  }
                 >
-                  <h4 className="text-lg md:text-xl font-semibold text-[#242424] mb-3">
+                  <span className="text-left font-medium text-[#242424]">
+                    {index + 1}. {section.title}
+                  </span>
+
+                  <ChevronRight
+                    size={18}
+                    className={`transition-transform ${
+                      isActive ? "rotate-90 text-[#266DDF]" : "text-gray-400"
+                    }`}
+                  />
+                </button>
+
+                {/* CONTENT BOX */}
+                <div
+                  className={`rounded-lg p-2 md:p-6 bg-white border border-[#266DDF] transition-all duration-300 overflow-hidden ${
+                    isActive
+                      ? "md:border-[#266DDF] border-[#E9F0FC]"
+                      : "md:border-transparent border-[#F0F0F0] md:hover:border-[#266DDF]"
+                  } ${
+                    isActive
+                      ? "max-h-[1500px] md:max-h-fit opacity-100"
+                      : "max-h-0 md:max-h-fit opacity-0 md:opacity-100"
+                  } md:opacity-100`}
+                >
+                  <h4 className="text-lg md:text-xl font-semibold text-[#242424]">
                     {index + 1}. {section.title}
                   </h4>
-                  <div className="text-sm text-gray-700 leading-relaxed space-y-3">
+
+                  <div className="text-sm text-gray-700 leading-relaxed space-y-3 text-justify">
                     {section.content.map((para, i) => (
                       <p key={i}>{para}</p>
                     ))}
                   </div>
                 </div>
+
               </div>
             );
           })}
         </div>
       </div>
+
     </div>
   );
 };

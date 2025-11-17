@@ -1,8 +1,11 @@
 import React , {useEffect} from "react";
 import Button from "../components/Button";
 import failureIcon from "../assets/failedpurchase.png";
+import { useNavigate } from "react-router-dom";
 
 const FailedPurchase = ({ onClose, reason , error, errorCode, errorReason}) => {
+
+  const navigate = useNavigate()
   
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -11,6 +14,20 @@ const FailedPurchase = ({ onClose, reason , error, errorCode, errorReason}) => {
       document.body.style.overflow = prev;
     };
   }, []);
+
+  useEffect(() => {
+      const handlePopState = (event) => {
+        event.preventDefault();
+        navigate('/vehicle-amc-filter', { replace: true });
+      };
+  
+      window.history.pushState(null, '', window.location.pathname);
+      window.addEventListener('popstate', handlePopState);
+  
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+      };
+  }, [navigate]);
 
   return (
     <div className="flex flex-col items-center justify-center py-10">

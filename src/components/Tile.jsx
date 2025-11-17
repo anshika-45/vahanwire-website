@@ -46,7 +46,7 @@ const Tile = React.memo(function Tile({
           <h3 className="text-[17px] sm:text-start text-center sm:text-base md:text-lg font-medium text-[#242424]">
             {title}
           </h3>
-          <p className="sm:text-[15px] xl:text-[16px] sm:text-start text-center text-[#5C5C5C]">
+          <p className="text-[15px] xl:text-[16px] sm:text-start text-center text-[#5C5C5C]">
             {desc}
           </p>
 

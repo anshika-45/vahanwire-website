@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 import { addUserVehicleWithoutAMC, searchUserVehicle } from "../api/vehicleApi";
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
 
+const DEFAULT_VEHICLE_TYPE = "car";
 const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
   const [ formData, setFormData ] = useState({
      vehicleNumber: "",
@@ -159,6 +160,9 @@ const handleSearch = async () => {
         vehicleNumber: data.vehicle.vehicleNumber,
         brand: data.vehicle.brand,
         model: data.vehicle.model,
+        year: data.vehicle.year,
+        fuelType: data.vehicle.fuelType,
+        vehicleType: data.vehicle.vehicleType || DEFAULT_VEHICLE_TYPE,
       });
       setShowSelectVehicle(true);
     }
@@ -195,13 +199,14 @@ const handleAddVehicle = async () => {
     }
 
     const response = await addUserVehicleWithoutAMC(payload);
-    
+
     setIsLoading(false);
 
     const data = response?.data || response;
 
     if (response.status === 201 || data.statusCode === 201) {
-      setVehicleData(data.data);
+      setVehicleData({...data.data,
+        vehicleType: data.data.vehicleType || DEFAULT_VEHICLE_TYPE});
       setShowSelectVehicle(true);
     }else {
       setErrors((prev) => ({
@@ -272,7 +277,7 @@ const handleAddVehicle = async () => {
                   onChange={handleChange}
                   className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
                   hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
-                  maxLength={10}
+                  maxLength={30}
                 />
                 {error.brand && (
                   <div className="text-[#CB0200] text-xs mb-2 w-full">
@@ -291,7 +296,7 @@ const handleAddVehicle = async () => {
                   onChange={handleChange}
                   className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
                   hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
-                  maxLength={10}
+                  maxLength={50}
                 />
                 {error.model && (
                   <div className="text-[#CB0200] text-xs mb-3 w-full">
@@ -367,6 +372,7 @@ const handleAddVehicle = async () => {
             addedVehicleModel={vehicleData.model}
             addedVehicleYear={vehicleData.year}
             addedVehicleFuelType={vehicleData.fuelType}
+            addedVehicleType={vehicleData.vehicleType}
             plan={plan}
           />
         </Suspense>

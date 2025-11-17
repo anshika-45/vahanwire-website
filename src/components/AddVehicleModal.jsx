@@ -196,7 +196,8 @@ const handleSubmit = async (e) => {
     console.log("Add Vehicle Response:", data);
 
     if (response.status === 201 || data.statusCode === 201) {
-      onSubmit?.(data.data);
+      const vehicleWithType = {...data.data, vehicleType};
+      onSubmit?.(vehicleWithType);
       onClose();
       return;
     }
