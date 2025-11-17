@@ -1,66 +1,57 @@
 import axiosInstance from "./axiosInstance";
 
 export const getUserVehicles = async () => {
-  const res = await axiosInstance.get("/vehicle/user-vehicles");
-  return res.data?.data?.vehicles || [];
+  const response = await axiosInstance.get("/vehicle/user-vehicles");
+  return response.data?.data?.vehicles || [];
 };
 
 export const updateUserVehicle = async (vehicleId, updateData) => {
-  const res = await axiosInstance.put(`/vehicle/user-vehicles/${vehicleId}`, updateData);
-  return res.data;
+  const response = await axiosInstance.put(`/vehicle/user-vehicles/${vehicleId}`, updateData);
+  return response.data;
 };
 
 export const deleteUserVehicle = async (vehicleId) => {
-  const res = await axiosInstance.delete(`/vehicle/delete-without-amc/${vehicleId}`);
-  return res.data;
+  const response = await axiosInstance.delete(`/vehicle/delete-without-amc/${vehicleId}`);
+  return response.data;
 };
 
 export const getVehicleData = async () => {
-  const res = await axiosInstance.get("/users/services");
-  return res.data;
+  const response = await axiosInstance.get("/users/services");
+  return response.data;
 };
 
 export const addUserVehicle = async (vehicleData) => {
-  const res = await axiosInstance.post("/vehicle/add-user-vehicles", vehicleData);
-  return res;
+  const response = await axiosInstance.post("/vehicle/add-user-vehicles", vehicleData);
+  return response;
 };
 
 export const searchUserVehicle = async (vehicleNumber) => {
-  console.log("jkkwcnkjbejec",vehicleNumber);
-    const res = await axiosInstance.get(`/vehicle/search?vehicleNumber=${vehicleNumber}`);
-    return res.data;
+  const response = await axiosInstance.get(`/vehicle/search?vehicleNumber=${vehicleNumber}`);
+  return response.data;
 };
 
 export const getUserVehicleWithoutAMC = async () => {
-  console.log("kjwcdbjkbjk")
-  const res = await axiosInstance.get("/vehicle/without-amc");
-  console.log("kjejcjbjkbjb",res.data.data.vehicles);
-  return res.data?.data?.vehicles || [];
+  const response = await axiosInstance.get("/vehicle/without-amc");
+  return response.data?.data?.vehicles || [];
 };
 
 export const updateAMCPurchaseVehicle = async (purchaseId, vehicleData) => {
-  console.log("lkengwkjnjknjnjknjknknkn");
-  console
   const response = await axiosInstance.post("/amc-purchase/update-amc-vehicle", {
     purchaseId,
     ...vehicleData
   });
-  console.log("PPPP",response);
-  console.log("kjksacbjkbjkassscs",res);
-  return res.data;
+  return response.data;
 };
 
 export const addUserVehicleWithoutAMC = async (vehicleData) => {
-  console.log("ekjqbjkbjqbhjbhj");
-  const res = await axiosInstance.post("/vehicle/add-vehicle-without-amc", vehicleData);
-  console.log("jkkdwnckjn",res);
-  console.log("ejcbjbehjbew",res);
-  return res;
+  const response = await axiosInstance.post("/vehicle/add-vehicle-without-amc", vehicleData);
+  return response;
 };
 
 export const updateAMCVehicle = async (vehicleId, vehicleData) => {
-  console.log("lkengwk");
-  const res = await axiosInstance.put(`/vehicle/update-without-amc/${vehicleId}`,vehicleData);
-  console.log("kjksacbjkbjkassscs",res);
-  return res.data;
+  const response = await axiosInstance.put(`/vehicle/update-without-amc/${vehicleId}`,vehicleData);
+  console.log(
+  "kjjwfivjesiovjs", response.data
+  )
+  return response.data;
 };

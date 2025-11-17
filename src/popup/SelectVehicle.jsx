@@ -322,6 +322,16 @@ const handleProceed = async () => {
           return;
         }
 
+        const vehicleDataToStore = {
+          vehicle: vehicle,
+          vehicleType: vehicleType,
+          plans: plans,
+          timestamp: Date.now()
+        };
+          
+        console.log("vehicleDataToStore",vehicleDataToStore);
+        localStorage.setItem('selectedVehicleData', JSON.stringify(vehicleDataToStore));
+
         const filterData = { plans, vehicle, selectedPlan: plan };
         activateFilter(filterData);
         navigate("/vehicle-amc-filter", { state: filterData });

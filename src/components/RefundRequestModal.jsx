@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
-import { createRefundRequest } from "../api/amcApi";
+import { createRefundRequest } from "../api/amcRefund";
 
 export default function RefundRequestModal({
   open,

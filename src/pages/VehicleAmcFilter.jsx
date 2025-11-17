@@ -2,15 +2,12 @@ import React, { useState, useEffect, Suspense } from "react";
 const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
 const AmcCard = React.lazy(() => import("../components/AmcCard"));
 const CompareTable = React.lazy(() => import("../components/CompareTable"));
-const LatestOffer = React.lazy(() => import("../components/LatestOffer"));
-const AmcBanner = React.lazy(() => import("../components/AmcBanner"));
-const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PlanSummaryPage = React.lazy(() => import("../popup/PlanSummaryPage"));
 const SuccessPurchase = React.lazy(() => import("../popup/SuccessPurchase"));
 const FailedPurchase = React.lazy(() => import("../popup/FailedPurchase"));
 import { useAuth } from "../context/AuthContext";
 import { createAMCPurchase } from "../api/amcApi";
-import {getPaymentStatus } from "../api/paymentApi";
+import { getPaymentStatus } from "../api/paymentApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import AMC from "../components/AMC";
 import useAmcData from "../hooks/useAmcData";
@@ -20,9 +17,6 @@ const CardLoader = () => (
 );
 const TableLoader = () => (
   <div className="h-96 bg-gray-200 animate-pulse rounded-lg"></div>
-);
-const BannerLoader = () => (
-  <div className="h-48 bg-gray-200 animate-pulse rounded-lg"></div>
 );
 const ComponentLoader = () => (
   <div className="flex justify-center items-center py-8">
@@ -35,10 +29,10 @@ const VehicleAmcFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
-   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
+  const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
   const {
-    plans,
+    plans: locationPlans,
     vehicle: locationVehicle,
     selectedPlan: initialSelectedPlan,
   } = location.state || {};
@@ -53,29 +47,85 @@ const VehicleAmcFilter = () => {
     features,
   } = useAmcData();
 
-  const [vehicle, setVehicle] = useState(() => {
-    const stored = sessionStorage.getItem('failedPaymentData');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      return parsed.vehicle || locationVehicle;
-    }
-    return locationVehicle;
-  });
+  const txnid = searchParams.get("txnid");
+  const status = searchParams.get("status");
 
-  const [selectedPlanState, setSelectedPlanState] = useState(() => {
-    const stored = sessionStorage.getItem('failedPaymentData');
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      return parsed.selectedPlan || null;
+  const [vehicle, setVehicle] = useState(() => {
+    if (locationVehicle) {
+      return locationVehicle;
     }
+    
+    const saved = localStorage.getItem('selectedVehicleData');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+          return parsed.vehicle;
+        } else {
+          localStorage.removeItem('selectedVehicleData');
+        }
+      } catch (e) {
+        console.error('Error parsing saved vehicle data:', e);
+        localStorage.removeItem('selectedVehicleData');
+      }
+    }
+    
     return null;
   });
 
+  const [plans, setPlans] = useState(() => {
+    if (locationPlans) {
+      return locationPlans;
+    }
+    
+    const saved = localStorage.getItem('selectedVehicleData');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+          return parsed.plans || [];
+        }
+      } catch (e) {
+        console.error('Error parsing saved plans:', e);
+      }
+    }
+    
+    return [];
+  });
+
+  const [selectedPlanState, setSelectedPlanState] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
 
-  const status = searchParams.get("status");
-  const txnid = searchParams.get("txnid");
+  useEffect(() => {
+    if (locationVehicle && locationPlans) {
+      const newVehicleData = {
+        vehicle: locationVehicle,
+        vehicleType: vehicleType,
+        plans: locationPlans,
+        timestamp: Date.now()
+      };
+      
+      localStorage.setItem('selectedVehicleData', JSON.stringify(newVehicleData));
+      
+      setVehicle(locationVehicle);
+      setPlans(locationPlans);
+    }
+  }, [locationVehicle, locationPlans]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('selectedVehicleData');
+    if (saved && !vehicleType) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.vehicleType) {
+          setVehicleType(parsed.vehicleType);
+        }
+      } catch (e) {
+        console.error('Error parsing vehicle type:', e);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -83,42 +133,26 @@ const VehicleAmcFilter = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  
-  // useEffect(() => {
-  //   document.body.style.overflow = "auto";
-  //   document.documentElement.style.overflow = "auto";
-  //   return () => {
-  //     document.body.style.overflow = "auto";
-  //     document.documentElement.style.overflow = "auto";
-  //   };
-  // }, []);
-
-
-    useEffect(() => {
+  useEffect(() => {
     const checkPaymentStatus = async () => {
-      const txnid = searchParams.get("txnid");
-      const status = searchParams.get("status");
-
       if (txnid && !status) {
         setIsCheckingStatus(true);
         try {
           const result = await getPaymentStatus(txnid);
-          
+
           if (result.success) {
             const paymentStatus = result.data.status;
-            
+
             if (paymentStatus === "success") {
-              setShowPopup("success");
               searchParams.set("status", "success");
+              setSearchParams(searchParams, { replace: true });
             } else if (paymentStatus === "failed") {
-              setShowPopup("failed");
               searchParams.set("status", "failed");
+              setSearchParams(searchParams, { replace: true });
             } else if (paymentStatus === "pending") {
               setTimeout(() => checkPaymentStatus(), 3000);
               return;
             }
-            
-            setSearchParams(searchParams, { replace: true });
           }
         } catch (error) {
           console.error("Status check failed:", error);
@@ -129,32 +163,13 @@ const VehicleAmcFilter = () => {
     };
 
     checkPaymentStatus();
-  }, [searchParams.get("txnid")]);
-
-   useEffect(() => {
-    if (status === "success" || status === "failed") {
-      setShowPopup(status);
-      
-      if (status === "failed") {
-        const stored = sessionStorage.getItem('failedPaymentData');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          setVehicle(parsed.vehicle);
-          setSelectedPlanState(parsed.selectedPlan);
-        }
-      } else if (status === "success") {
-        sessionStorage.removeItem('failedPaymentData');
-      }
-    }
-  }, [status]);
+  }, [txnid]);
 
   useEffect(() => {
-    // Restore vehicleType from sessionStorage on page load
-    const stored = sessionStorage.getItem('selectedVehicleType');
-    if (stored && stored !== vehicleType) {
-      setVehicleType(stored);
+    if (status === "success" || status === "failed") {
+      setShowPopup(status);
     }
-  }, []);
+  }, [status]);
 
   const handleBuyNow = async (plan) => {
     if (!vehicle?.vehicleNumber) {
@@ -179,11 +194,6 @@ const VehicleAmcFilter = () => {
       vehicleNumber: vehicle.vehicleNumber,
     };
 
-    sessionStorage.setItem('failedPaymentData', JSON.stringify({
-      selectedPlan: planData,
-      vehicle: vehicle
-    }));
-
     setSelectedPlanState(planData);
     setIsPopupOpen(true);
   };
@@ -194,17 +204,18 @@ const VehicleAmcFilter = () => {
   };
 
   const handleClosePaymentPopup = () => {
-    sessionStorage.removeItem('failedPaymentData');
     setShowPopup(null);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
-    navigate('/vehicle-amc-filter', { replace: true });
   };
 
   const handleSuccessClose = () => {
-    sessionStorage.removeItem('failedPaymentData');
+    localStorage.removeItem('selectedVehicleData');
+    
     setShowPopup(null);
+    setVehicle(null);
+    setPlans([]);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
@@ -257,15 +268,6 @@ const VehicleAmcFilter = () => {
           vehicle={vehicle}
         />
       </Suspense>
-      {/* <Suspense fallback={<BannerLoader />}>
-        <LatestOffer />
-      </Suspense> */}
-
-      {/* <div className="flex flex-col space-y-10">
-        <Suspense fallback={<BannerLoader />}>
-          <AmcBanner onBuy={handleBuyNow} onBuyNow={handleBuyNow} plan={plans?.[0]}/>
-        </Suspense>
-      </div> */}
 
       {isPopupOpen && (
         <Suspense fallback={null}>
@@ -295,7 +297,6 @@ const VehicleAmcFilter = () => {
             <FailedPurchase
               reason="Your UPI payment was not completed or cancelled."
               onClose={handleClosePaymentPopup}
-              purchaseData={selectedPlanState}
             />
           </Suspense>
         </div>

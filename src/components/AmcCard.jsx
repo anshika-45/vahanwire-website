@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAmcData } from "../context/AmcDataContext";
-import { getAMCPlansByCategory } from "../api/amcApi";
+import { useAMCPlans } from "../context/AmcPlanContext";
 import { Check } from "lucide-react";
 import VerifyNumberPopup from "../popup/VerifyNumberPopup";
 import essentialPlanImg from "../assets/Essentialplan.svg";
@@ -11,7 +11,9 @@ const mapPlansToCards = (plans = [], vehicle = {}) => {
     _id: plan?._id,
     title: plan?.planName,
     vehicleNumber: vehicle?.vehicleNumber || "00-00",
-    validFor: plan?.planDurationInMonth ? `${plan.planDurationInMonth} Months` : "N/A",
+    validFor: plan?.planDurationInMonth
+      ? `${plan.planDurationInMonth} Months`
+      : "N/A",
     price: plan?.planTotalAmount || 0,
     originalPrice: plan?.planTotalAmount || 0,
     discount: plan?.planBookingAmount || 0,
@@ -37,9 +39,23 @@ const mapPlansToCards = (plans = [], vehicle = {}) => {
   }));
 };
 
-const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discount, periodLabel, features, bgColor, hoverBgColor, isEssential = false, onBuy, vehicleType = "car" }) => {
+const AMCCard = ({
+  title,
+  vehicleNumber,
+  validFor,
+  price,
+  originalPrice,
+  discount,
+  periodLabel,
+  features,
+  bgColor,
+  hoverBgColor,
+  isEssential = false,
+  onBuy,
+  vehicleType = "car",
+}) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   return (
     <div className="relative overflow-visible flex justify-center flex-shrink-0">
       <div
@@ -53,12 +69,33 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
         }}
       >
         <div className="absolute left-0 top-4 bg-white rounded-r-full w-20 h-13 flex items-center justify-end pr-5 shadow-md z-10">
-          <img loading="lazy" src="/src/assets/Logo-AMC.svg" alt="VahanWire Logo" className="w-9 h-9 object-contain" />
+          <img
+            loading="lazy"
+            src="/src/assets/Logo-AMC.svg"
+            alt="VahanWire Logo"
+            className="w-9 h-9 object-contain"
+          />
         </div>
         <div className="flex justify-end items-start mb-4 relative">
-          <img loading="lazy" src="/src/assets/back-logo.webp" alt="Background decorative logo" className="absolute right-8 -top-10 w-34 h-32 object-contain opacity-60" />
+          <img
+            loading="lazy"
+            src="/src/assets/back-logo.webp"
+            alt="Background decorative logo"
+            className="absolute right-8 -top-10 w-34 h-32 object-contain opacity-60"
+          />
           <div>
-            <img loading="lazy" src={vehicleType === "bike" ? "/src/assets/Bike-AMC.svg" : "/src/assets/Car-AMC.svg"} alt={vehicleType === "bike" ? "Motorcycle AMC plan" : "Car AMC plan"} className="w-20 h-16 object-contain relative z-10" />
+            <img
+              loading="lazy"
+              src={
+                vehicleType === "bike"
+                  ? "/src/assets/Bike-AMC.svg"
+                  : "/src/assets/Car-AMC.svg"
+              }
+              alt={
+                vehicleType === "bike" ? "Motorcycle AMC plan" : "Car AMC plan"
+              }
+              className="w-20 h-16 object-contain relative z-10"
+            />
           </div>
         </div>
         <h3 className="text-2xl font-semibold mb-3">{title}</h3>
@@ -74,10 +111,16 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
         </div>
         <div className="mb-3">
           <div className="flex items-baseline gap-2 mb-0.5">
-            <span className="text-2xl font-semibold">₹ {price.toLocaleString()}</span>
+            <span className="text-2xl font-semibold">
+              ₹ {price.toLocaleString()}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-xs">
-            {originalPrice && <span className="line-through text-white/70">₹{originalPrice.toLocaleString()}</span>}
+            {originalPrice && (
+              <span className="line-through text-white/70">
+                ₹{originalPrice.toLocaleString()}
+              </span>
+            )}
             {discount && <span className="text-white/90">{discount}</span>}
             <span className="text-white/80">{periodLabel}</span>
           </div>
@@ -90,39 +133,37 @@ const AMCCard = ({ title, vehicleNumber, validFor, price, originalPrice, discoun
                 <div className="bg-[#32AB15] rounded-full p-0.5 mt-0.5 flex-shrink-0">
                   <Check size={10} strokeWidth={3} />
                 </div>
-               <span className="text-[13px] md:text-[15px] leading-tight">{feature}</span>
+                <span className="text-[13px] md:text-[15px] leading-tight">
+                  {feature}
+                </span>
               </div>
             ))}
           </div>
         </div>
-        <button onClick={onBuy} className="w-full bg-white text-[#266DDF] font-semibold py-3 text-sm rounded-lg hover:bg-gray-50 transition-colors">
+        <button
+          onClick={onBuy}
+          className="w-full bg-white text-[#266DDF] font-semibold py-3 text-sm rounded-lg hover:bg-gray-50 transition-colors"
+        >
           Buy Now
         </button>
       </div>
-      {isEssential && <img loading="lazy" src={essentialPlanImg} alt="Essential Plan" className="absolute top-52 -right-2 h-7 w-auto z-20" />}
+      {isEssential && (
+        <img
+          loading="lazy"
+          src={essentialPlanImg}
+          alt="Essential Plan"
+          className="absolute top-52 -right-2 h-7 w-auto z-20"
+        />
+      )}
     </div>
   );
 };
 
-const fetchAMCPlansData = async (vehicleType, amcType, setCards, setLoading) => {
-  setLoading(true);
-  const res = await getAMCPlansByCategory(vehicleType, amcType);
-  console.log("AMC Plans Response:", res);
-  if (res?.success && Array.isArray(res.data)) {
-    const mappedPlans = mapPlansToCards(res.data);
-    setCards(mappedPlans);
-  } else {
-    setCards([]);
-  }
-  setLoading(false);
-};
-
-
 const AMCCards = ({ onBuy, plans, vehicle }) => {
   const { vehicleType, amcType } = useAmcData();
+  const { fetchPlans, loading } = useAMCPlans();
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const handleBuy = (card) => {
     if (onBuy) {
@@ -133,23 +174,37 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
   };
 
   useEffect(() => {
-    if (plans && Array.isArray(plans)) {
-      const mappedCards = mapPlansToCards(plans, vehicle);
-      const order = { premium: 1, standard: 2, basic: 3 };
-      mappedCards.sort((a, b) => (order[a.planSubCategory] || 4) - (order[b.planSubCategory] || 4));
-      setCards(mappedCards);
-      setLoading(false);
-    } else {
-      fetchAMCPlansData(vehicleType, amcType, setCards, setLoading);
-    }
-  }, [plans, vehicle, vehicleType, amcType]);
+    const loadPlans = async () => {
+      if (plans && Array.isArray(plans) && plans.length > 0) {
+        const mapped = mapPlansToCards(plans, vehicle);
+        mapped.sort((a, b) => (a.planSubCategory > b.planSubCategory ? 1 : -1));
+        setCards(mapped);
+        return;
+      }
+
+      if (!vehicleType || !amcType) {
+        return;
+      }
+
+      const fetched = await fetchPlans(vehicleType, amcType);
+      const mapped = mapPlansToCards(fetched, vehicle);
+      mapped.sort((a, b) => (a.planSubCategory > b.planSubCategory ? 1 : -1));
+      setCards(mapped);
+    };
+
+    loadPlans();
+  }, [plans, vehicle, vehicleType, amcType, fetchPlans]);
 
   if (loading) {
-    return <div className="text-center py-10 text-gray-500">Loading plans...</div>;
+    return (
+      <div className="text-center py-10 text-gray-500">Loading plans...</div>
+    );
   }
 
   if (!cards || cards.length === 0) {
-    return <div className="text-center py-10 text-gray-500">No plans available</div>;
+    return (
+      <div className="text-center py-10 text-gray-500">No plans available</div>
+    );
   }
 
   return (
@@ -157,11 +212,21 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
       <div className="max-w-[1180px] mx-auto px-4 sm:px-6 md:px-8">
         <div className="flex overflow-x-auto scroll-smooth gap-4 sm:gap-6 pb-4 max-w-[1180px] justify-around">
           {cards.map((card, index) => (
-            <AMCCard key={card._id || index} {...card} onBuy={() => handleBuy(card)} vehicleType={vehicleType} />
+            <AMCCard
+              key={card._id || index}
+              {...card}
+              onBuy={() => handleBuy(card)}
+              vehicleType={vehicleType}
+            />
           ))}
         </div>
       </div>
-      {!onBuy && <VerifyNumberPopup isOpen={isVerifyOpen} onClose={() => setIsVerifyOpen(false)} />}
+      {!onBuy && (
+        <VerifyNumberPopup
+          isOpen={isVerifyOpen}
+          onClose={() => setIsVerifyOpen(false)}
+        />
+      )}
       <style>
         {`
           .flex::-webkit-scrollbar {
