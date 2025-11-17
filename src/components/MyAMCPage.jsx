@@ -469,7 +469,7 @@ export default function MyAMCPage() {
                           <span className="text-xs md:text-sm text-[#000000] font-bold">{item.orderId}</span>
                         </div>
 
-                        {remainingTime && item.refundStatus === "none" && (
+                        {remainingTime && (
                           <span className="text-[#FF3B30] inline-block bg-red-50 px-2 md:px-3 py-2 rounded-lg text-xs">
                             This edit expires in {remainingTime}. Service usage won't reflect afterward.
                           </span>
