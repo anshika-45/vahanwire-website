@@ -9,16 +9,15 @@ function Navbar() {
     { name: "Vehicle AMC", path: "/vehicle-amc" },
     { name: "Mechanic", path: "/mechanic" },
     { name: "Tow Truck", path: "/tow-truck" },
-    { name: "E-Commerce", path: "/e-commerce"},
-    { name: "Petrol Pump", path: "/petrol-pump"},
-    { name: "Service Center", path: "/service-center"},
-  ];  
+    { name: "E-Commerce", path: "/e-commerce" },
+    { name: "Petrol Pump", path: "/petrol-pump" },
+    { name: "Service Center", path: "/service-center" },
+  ];
   const handleLinkClick = () => {
     setIsOpen(false);
   };
   const navItemRef = useRef(null);
   const badgeRef = useRef(null);
-
   useEffect(() => {
     const handleResize = () => {
       const element = navItemRef.current;
@@ -33,14 +32,12 @@ function Navbar() {
         }
       }
     };
-
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
   return (
     <>
       <nav
@@ -48,7 +45,7 @@ function Navbar() {
         role="navigation"
         aria-label="Main navigation"
       >
-        <ul className="flex container justify-center gap-15 text-[17px] text-[#242424]">
+        <ul className="flex container justify-center gap-15 text-[17px] text-[#000000]">
           {menuItems.map((item, index) => (
             <li ref={navItemRef} key={index} className="relative group">
               {item.comingSoon && (
@@ -79,51 +76,6 @@ function Navbar() {
                 {item.name}
               </Link>
             </li>
-            // <li
-            //   key={index}
-            //   ref={(el) => (parentRefs.current[index] = el)}
-            //   className="relative group"
-            //   onMouseEnter={() => {
-            //     const badge = badgeRefs.current[index];
-            //     if (badge) badge.style.opacity = 1;
-            //   }}
-            //   onMouseLeave={() => {
-            //     const badge = badgeRefs.current[index];
-            //     if (badge) badge.style.opacity = 0;
-            //   }}
-            // >
-            //   {item.comingSoon && (
-            //     <span
-            //       ref={(el) => (badgeRefs.current[index] = el)}
-            //       className="absolute bg-gradient-to-r from-[#fb0200] to-[#4184ed]
-            //      text-white text-xs px-2 py-1 rounded
-            //      transition-opacity duration-300 opacity-0 pointer-events-none
-            //      whitespace-nowrap z-50"
-            //     >
-            //       Coming Soon
-            //     </span>
-            //   )}
-
-            //   <Link
-            //     to={item.path}
-            //     aria-current={
-            //       location.pathname === item.path ||
-            //       (item.path === "/vehicle-amc" &&
-            //         location.pathname === "/vehicle-amc-filter")
-            //         ? "page"
-            //         : undefined
-            //     }
-            //     className={`cursor-pointer transition-colors text-extrabold text-xs sm:text-sm md:text-base ${
-            //       location.pathname === item.path ||
-            //       (item.path === "/vehicle-amc" &&
-            //         location.pathname === "/vehicle-amc-filter")
-            //         ? "text-[#266DDF] font-bold"
-            //         : "hover:text-[#266DDF]"
-            //     }`}
-            //   >
-            //     {item.name}
-            //   </Link>
-            // </li>
           ))}
         </ul>
       </nav>
@@ -137,57 +89,68 @@ function Navbar() {
           <button
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "Close menu" : "Open menu"}
-            className="flex items-center justify-center p-4 self-start"
+            className="flex items-center justify-center py-3 px-5 self-start"
           >
             {isOpen ? (
-              <X size={24} className="text-[#242424]" />
+              <X size={24} className="text-[#000000]" />
             ) : (
-              <Menu size={24} className="text-[#242424]" />
+              <Menu size={24} className="text-[#000000]" />
             )}
           </button>
         </header>
-        <main className="w-full">
-          {isOpen && (
-            <ul className="flex flex-col gap-0 w-full text-[#242424] bg-white rounded-lg mt-2 shadow-lg border border-gray-200">
-              {menuItems.map((item, index) => (
-                <li
-                  key={index}
-                  className="border-b border-gray-100 last:border-b-0"
-                >
-                  <Link
-                    to={item.path}
-                    onClick={handleLinkClick}
-                    aria-current={
-                      location.pathname === item.path ||
-                      (item.path === "/vehicle-amc" &&
-                        location.pathname === "/vehicle-amc-filter")
-                        ? "page"
-                        : undefined
-                    }
-                    className={`block px-4 py-3 cursor-pointer transition-colors ${
-                      location.pathname === item.path ||
-                      (item.path === "/vehicle-amc" &&
-                        location.pathname === "/vehicle-amc-filter")
-                        ? "text-[#266DDF] font-bold bg-blue-50"
-                        : "hover:bg-gray-100"
-                    }`}
-                  >
-                    {item.name}
-                    {item.comingSoon && (
-                      <span
-                        className="text-xs text-gray-500 ml-1"
-                        title="Coming Soon"
-                      >
-                        (Coming Soon)
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </main>
       </nav>
+      <main
+        className={`w-[70vw] max-w-[500px] transition-all duration-300 ease fixed right-0 top-0 bottom-0 min-h-screen flex flex-col gap-7 bg-white z-30 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="py-8  relative">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            className="flex items-center justify-center p-4 self-start absolute top-1/2 -translate-y-1/2 right-3"
+          >
+            <X size={24} className="text-[#000000]" />
+          </button>
+        </div>
+        <ul className="flex flex-col gap-7 w-full overflow-y-scroll hide-scrollbar text-black">
+          {menuItems.map((item, index) => (
+            <li
+              key={index}
+              className=" border-b-[0.1px] border-gray-400 last:border-b-0 text-[16px]"
+            >
+              <Link
+                to={item.path}
+                onClick={handleLinkClick}
+                aria-current={
+                  location.pathname === item.path ||
+                  (item.path === "/vehicle-amc" &&
+                    location.pathname === "/vehicle-amc-filter")
+                    ? "page"
+                    : undefined
+                }
+                className={`block px-4 py-3 cursor-pointer transition-colors ${
+                  location.pathname === item.path ||
+                  (item.path === "/vehicle-amc" &&
+                    location.pathname === "/vehicle-amc-filter")
+                    ? "text-[#266DDF] font-bold"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                {item.name}
+                {item.comingSoon && (
+                  <span
+                    className="text-xs text-gray-500 ml-1"
+                    title="Coming Soon"
+                  >
+                    (Coming Soon)
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </main>
     </>
   );
 }

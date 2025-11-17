@@ -1,16 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "../index.css"; 
+import "../index.css";
 
 const PageBanner = ({
   title = "Coming Soon",
   image,
   useGradientTitle = true,
   useDarkOverlay = true,
-  height = null, 
+  height = null,
   showTicker = true,
 }) => {
-  
   const responsiveHeightClasses = "h-[40vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
 
   return (
@@ -19,10 +18,9 @@ const PageBanner = ({
       aria-label={title + " banner"}
       style={height ? { minHeight: height } : undefined}
     >
-
       <img
         src={image}
-        alt="decorative image" 
+        alt="decorative image"
         aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
         loading="lazy"
@@ -32,21 +30,28 @@ const PageBanner = ({
       <div
         className={`absolute inset-0 pointer-events-none ${
           useDarkOverlay ? "bg-black/70" : "bg-transparent"
-        }`}                                                                                                               
+        }`}
       />
 
       {showTicker && (
         <div className="relative z-10">
           <div className="ticker-container">
-            <div className="ticker ">
+            <div className="ticker">
               <div className="ticker__move">
                 {Array.from({ length: 7 }).map((_, i) => (
-                  <span key={i} className="ticker-item">
+                  <span
+                    key={i}
+                    className="ticker-item text-xs sm:text-sm md:text-base font-normal"
+                  >
                     Coming Soon&nbsp;&nbsp;|&nbsp;&nbsp;
                   </span>
                 ))}
+
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <span key={`d${i}`} className="ticker-item">
+                  <span
+                    key={`d${i}`}
+                    className="ticker-item text-xs sm:text-sm md:text-base font-normal"
+                  >
                     Coming Soon&nbsp;&nbsp;|&nbsp;&nbsp;
                   </span>
                 ))}
@@ -63,8 +68,8 @@ const PageBanner = ({
         <h1
           className={`text-center leading-tight banner-title ${
             useGradientTitle
-              ? "gradient-text text-4xl sm:text-5xl md:text-6xl font-extrabold sm:font-normal"
-              : "text-white text-3xl sm:text-4xl md:text-5xl font-bold"
+              ? "gradient-text text-4xl sm:text-5xl md:text-6xl md:font-semibold sm:font-normal font-semibold"
+              : "text-white text-3xl sm:text-4xl md:text-5xl font-semibold"
           }`}
         >
           {title}

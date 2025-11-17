@@ -436,7 +436,7 @@ return (
                 placeholder="Enter Brand"
                 value={formData.brand}
                 onChange={handleChange}
-                maxLength={10}
+                maxLength={15}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-base mb-2"
               />
               {error.brand && (
@@ -450,7 +450,7 @@ return (
                 placeholder="Enter Model"
                 value={formData.model}
                 onChange={handleChange}
-                maxLength={10}
+                maxLength={30}
                 className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-base mb-3"
               />
               {error.model && (

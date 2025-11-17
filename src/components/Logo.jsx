@@ -3,12 +3,16 @@ import { Link } from "react-router-dom";
 import logoImg from "../assets/Logo.svg";
 const Logo = React.memo(() => {
   return (
-    <Link to="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex">
+    <Link
+      to="/"
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      className="flex"
+    >
       <img
         src={logoImg}
         loading="eager"
         alt="VahanWire Logo"
-        className="w-[270px] object-contain"
+        className="md:w-[270px] w-[250px] object-contain"
         width="270"
         height="40"
         decoding="async"
@@ -19,3 +23,4 @@ const Logo = React.memo(() => {
 });
 Logo.displayName = "Logo";
 export default Logo;
+

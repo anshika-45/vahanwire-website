@@ -157,14 +157,14 @@ const LocationDropdown = ({ onLocationSelect }) => {
         >
           {selected === "Select Location" ? (
             <img
-              className="w-5 h-5 object-cover shrink-0"
+              className="w-6 h-6 object-cover shrink-0"
               src={locationIcon}
               alt="location"
             />
           ) : (
             <span className="text-[12px] px-1 leading-4 border-b-2 border-black flex items-center gap-1 font-medium max-w-[120px] truncate">
               <img
-                className="w-5 h-5 object-cover shrink-0"
+                className="w-full h-full object-cover shrink-0"
                 src={locationIcon}
                 alt=""
               />

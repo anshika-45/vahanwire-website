@@ -40,7 +40,7 @@ const ContactUs = () => {
   // Email Validation
   if (!formData.email.trim()) {
     newErrors.email = "Email is required.";
-  } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+  } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
     newErrors.email = "Enter a valid email.";
   }
 
@@ -108,7 +108,7 @@ const ContactUs = () => {
         />
       </Suspense>
 
-      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-12 md:py-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 items-stretch">
+      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-10 md:py-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 items-stretch">
 
         {/* LEFT SIDE CARD */}
         <div className="relative rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] overflow-hidden">
@@ -117,7 +117,7 @@ const ContactUs = () => {
             style={{ backgroundImage: `url(${contactImage})` }}
           ></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-          <div className="relative top-26 z-10 p-8 md:p-10 flex flex-col justify-end h-[360px] md:h-[420px]">
+          <div className="relative md:top-26 z-10 p-8 md:p-10 flex flex-col justify-end h-[360px] md:h-[420px]">
             <h2 className="text-3xl md:text-4xl sm:text-lg font-medium text-white mb-4">
               Contact Us
             </h2>

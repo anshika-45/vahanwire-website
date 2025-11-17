@@ -31,27 +31,41 @@ const AnimatedCounter = ({ targetValue, isPercentage, isRating, isSuffix }) => {
 
 const YellowCards = () => {
   const cardData = [
-    { image: Card1Img, title: 98, description: "Customer Satisfaction", isPercentage: true },
+    {
+      image: Card1Img,
+      title: 98,
+      description: "Customer Satisfaction",
+      isPercentage: true,
+    },
     {
       image: Card2Img,
       title: 5000,
       description: "Active Service Providers",
       isSuffix: true,
     },
-    { image: Card3Img, title: 48, description: "Average App Rating", isRating: true },
-    { image: Card4Img, title: 100000, description: "Services Completed", isSuffix: true },
+    {
+      image: Card3Img,
+      title: 48,
+      description: "Average App Rating",
+      isRating: true,
+    },
+    {
+      image: Card4Img,
+      title: 100000,
+      description: "Services Completed",
+      isSuffix: true,
+    },
   ];
   return (
     <div
       className="
-                 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 
-                 gap-3"
+                 grid grid-cols-2 lg:grid-cols-4 gap-5"
     >
       {cardData.map((card, index) => (
         <div
           key={index}
           className="bg-white rounded-lg flex flex-col items-center text-center shadow-md 
-                     py-8 px-4  h-auto relative 
+                     py-8 md:px-3 px-2 h-auto relative 
                      "
         >
           <div
@@ -69,17 +83,17 @@ const YellowCards = () => {
             />
           </div>
           <h3
-            className="md:text-3xl text-lg text-[#242424] font-bold 
-                         mb-1 sm:mb-1.5 md:mb-2 max-sm:text-base max-sm:mb-0.5"
+            className="md:text-3xl text-2xl text-[#242424] font-bold 
+                         mb-1 sm:mb-1.5 md:mb-2 max-sm:mb-0.5"
           >
-            <AnimatedCounter 
-              targetValue={card.title} 
+            <AnimatedCounter
+              targetValue={card.title}
               isPercentage={card.isPercentage}
               isRating={card.isRating}
               isSuffix={card.isSuffix}
             />
           </h3>
-          <p className="text-[#242424] text-xs sm:text-sm md:text-base max-sm:text-[10px]">
+          <p className="text-[#242424] text-[14px]  md:text-lg">
             {card.description}
           </p>
         </div>

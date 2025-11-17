@@ -12,6 +12,19 @@ const SuccessPurchase = ({ onClose, selectedPlan }) => {
     };
   }, []);
 
+  useEffect(() => {
+      const handlePopState = (event) => {
+        event.preventDefault();
+        navigate('/vehicle-amc', { replace: true });
+      };
+  
+      window.history.pushState(null, '', window.location.pathname);
+      window.addEventListener('popstate', handlePopState);
+  
+      return () => {
+        window.removeEventListener('popstate', handlePopState);
+      };
+  }, [navigate]);
 
   const handleClose = () => {
     if (onClose) {

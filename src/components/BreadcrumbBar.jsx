@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, Link } from "react-router-dom";
+
 function BreadcrumbBar() {
   const location = useLocation();
   const pathname = location.pathname;
@@ -14,7 +15,7 @@ function BreadcrumbBar() {
     pathnames.push(displayView);
   }
   return (
-    <div className="bg-[#FAFAFA] text-gray-600 text-sm px-4 md:px-8 lg:px-16 xl:px-[100px] py-2 md:py-2 border-t border-gray-300 w-full overflow-x-auto">
+    <div className="hidden md:block bg-[#FAFAFA] text-gray-600 text-sm px-4 md:px-8 lg:px-16 xl:px-[100px] py-2 md:py-2 border-t border-gray-300 w-full overflow-x-auto">
       <nav className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 whitespace-nowrap">
         <Link to="/" className="hover:text-[#266DDF] flex-shrink-0 text-[16px]">
           Home

@@ -100,6 +100,20 @@ const VehicleAmcFilter = () => {
   const [showPopup, setShowPopup] = useState(null);
 
   useEffect(() => {
+    const handlePopState = (event) => {
+      event.preventDefault();
+      navigate('/vehicle-amc', { replace: true });
+    };
+
+    window.history.pushState(null, '', window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [navigate]);
+
+  useEffect(() => {
     if (locationVehicle && locationPlans) {
       const newVehicleData = {
         vehicle: locationVehicle,

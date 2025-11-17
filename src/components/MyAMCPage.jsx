@@ -520,7 +520,7 @@ export default function MyAMCPage() {
                     </div>
                   </div>
 
-                  {shouldShowTimeline(item) && (
+                  {/* {shouldShowTimeline(item) && (
                     <div className="mt-3 md:mt-4 border-t border-gray-300 pt-4 md:pt-6">
                       <h3 className="text-lg md:text-xl font-bold text-gray-900 text-center mb-1 md:mb-2">
                         Refund Request Status
@@ -640,7 +640,126 @@ export default function MyAMCPage() {
                         )}
                       </div>
                     </div>
-                  )}
+                  )} */}
+                  {shouldShowTimeline(item) && (
+  <div className="mt-3 md:mt-4 border-t border-gray-300 pt-4 md:pt-6">
+    <h3 className="text-lg md:text-xl font-bold text-gray-900 text-center mb-1 md:mb-2">
+      Refund Request Status
+    </h3>
+
+    {item.refundStatus === "submitted" && (
+      <p className="text-center text-orange-600 font-medium mb-2 text-xs md:text-sm">
+        Awaiting admin approval
+      </p>
+    )}
+
+    {item.refundStatus === "under_process" && (
+      <p className="text-center text-blue-600 font-medium mb-2 text-xs md:text-sm">
+        It will take 5 to 7 Working Days
+      </p>
+    )}
+
+    {item.refundStatus === "approved" && (
+      <p className="text-center text-green-600 font-medium mb-2 text-xs md:text-sm">
+        Your refund has been approved successfully
+      </p>
+    )}
+
+    {item.refundStatus === "rejected" && (
+      <p className="text-center text-red-600 font-medium mb-2 text-xs md:text-sm">
+        Your refund request has been rejected
+      </p>
+    )}
+
+    <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
+      <div className="flex flex-col items-center flex-shrink-0">
+        <div className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
+          timelineStatus.submitted ? "bg-green-600" : "bg-gray-300"
+        }`}>
+          {timelineStatus.submitted && (
+            <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          )}
+        </div>
+        <p className="font-semibold text-xs md:text-sm text-[#1C1C28] text-center">Refund Submitted</p>
+        <p className="text-xs text-gray-500 mt-1">
+          {timelineDates.submitted
+            ? new Date(timelineDates.submitted).toLocaleString("en-GB", {
+                day: "2-digit", month: "short", year: "numeric", 
+                hour: "2-digit", minute: "2-digit", hour12: true
+              })
+            : "Pending"}
+        </p>
+      </div>
+
+      <div className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
+        timelineStatus.under_process || timelineStatus.completed ? "bg-green-600" : "bg-gray-300"
+      }`} />
+
+      <div className="flex flex-col items-center flex-shrink-0">
+        <div className={`w-6 md:w-7 h-6 md:h-7 rounded-full border-[3px] flex items-center justify-center mb-2 md:mb-3 ${
+          timelineStatus.completed ? "bg-green-600 border-green-600" :
+          timelineStatus.under_process ? "border-green-600 bg-white" :
+          timelineStatus.submitted ? "border-green-600 bg-white" : "border-gray-300 bg-white"
+        }`}>
+          {timelineStatus.completed ? (
+            <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : timelineStatus.under_process ? (
+            <div className="w-4 md:w-5 h-4 md:h-5 rounded-full bg-green-600" />
+          ) : null}
+        </div>
+        <p className="font-semibold text-xs md:text-sm text-center text-[#1C1C28]">Under Process</p>
+        <p className="text-xs text-gray-500 mt-1">
+          {timelineDates.under_process
+            ? new Date(timelineDates.under_process).toLocaleString("en-GB", {
+                day: "2-digit", month: "short", year: "numeric",
+                hour: "2-digit", minute: "2-digit", hour12: true
+              })
+            : "Pending"}
+        </p>
+      </div>
+
+      <div className={`w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
+        timelineStatus.isRejected ? "bg-red-400" :
+        timelineStatus.completed ? "bg-green-600" : "bg-gray-300"
+      }`} />
+
+      <div className="flex flex-col items-center flex-shrink-0">
+        <div className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
+          timelineStatus.isRejected ? "bg-red-600" :
+          timelineStatus.completed ? "bg-green-600" : "border-[3px] border-gray-300 bg-white"
+        }`}>
+          {timelineStatus.isRejected ? (
+            <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : timelineStatus.completed && !timelineStatus.isRejected ? (
+            <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : null}
+        </div>
+        <p className={`font-semibold text-xs md:text-sm text-center ${
+          timelineStatus.isRejected ? "text-red-600" :
+          timelineStatus.completed ? "text-[#1C1C28]" : "text-gray-400"
+        }`}>
+          {timelineStatus.isRejected ? "Rejected" : "Approved"}
+        </p>
+        <p className="text-xs text-gray-500 mt-1">
+          {timelineDates.completed
+            ? new Date(timelineDates.completed).toLocaleString("en-GB", {
+                day: "2-digit", month: "short", year: "numeric",
+                hour: "2-digit", minute: "2-digit", hour12: true
+              })
+            : "Pending"}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
                 </div>
               );
             })
