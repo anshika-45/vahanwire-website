@@ -195,7 +195,7 @@ const handleAddVehicle = async () => {
     }
 
     const response = await addUserVehicleWithoutAMC(payload);
-    console.log("kwcenjbwej",response);
+    
     setIsLoading(false);
 
     const data = response?.data || response;

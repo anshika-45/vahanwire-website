@@ -7,7 +7,7 @@ const SuccessPurchase = React.lazy(() => import("../popup/SuccessPurchase"));
 const FailedPurchase = React.lazy(() => import("../popup/FailedPurchase"));
 import { useAuth } from "../context/AuthContext";
 import { createAMCPurchase } from "../api/amcApi";
-import { getPaymentStatus } from "../api/paymentApi";
+import { getPaymentError, getPaymentStatus } from "../api/paymentApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import AMC from "../components/AMC";
 import useAmcData from "../hooks/useAmcData";
@@ -30,7 +30,9 @@ const VehicleAmcFilter = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
-
+  const [error, setError] = useState(null);
+  const [errorCode, setErrorCode] = useState(null);
+  const [errorReason, setErrorReason] = useState(null);
   const {
     plans: locationPlans,
     vehicle: locationVehicle,
@@ -166,10 +168,28 @@ const VehicleAmcFilter = () => {
   }, [txnid]);
 
   useEffect(() => {
-    if (status === "success" || status === "failed") {
-      setShowPopup(status);
-    }
-  }, [status]);
+    const fetchErrorData = async () => {
+      if (status === "failed" && txnid) {
+        try {
+          const errorData = await getPaymentError(txnid);
+          if (errorData.success) {
+            setError(errorData.data.errorMessage);
+            setErrorCode(errorData.data.errorCode);
+            setErrorReason(errorData.data.errorReason);
+          }
+        } catch (error) {
+          console.error("Error fetching payment error:", error);
+        }
+      }
+      
+      if (status === "success" || status === "failed") {
+        setShowPopup(status);
+      }
+    };
+
+    fetchErrorData();
+  }, [status, txnid]);
+
 
   const handleBuyNow = async (plan) => {
     if (!vehicle?.vehicleNumber) {
@@ -297,6 +317,9 @@ const VehicleAmcFilter = () => {
             <FailedPurchase
               reason="Your UPI payment was not completed or cancelled."
               onClose={handleClosePaymentPopup}
+              error = {error}
+              errorCode = {errorCode}
+              errorReason = {errorReason}
             />
           </Suspense>
         </div>

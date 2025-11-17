@@ -16,7 +16,6 @@ const TowTruck = () => {
           <PageBanner title="Coming Soon" image={TowTruckBanner} />
         </Suspense>
 
-        {/* page content spacing — adjusted responsive margins */}
         <div className="mt-6 md:mt-12 lg:mt-12 xl:mt-0" />
       </div>
     </>

@@ -13,17 +13,14 @@ import {checkRefundStatus, cancelRefundRequest} from "../api/amcRefund";
 const STATUS_CONFIG = {
   ACTIVE: { label: "Active AMC", color: "bg-[#E0F2DC] text-[#32AB15]" },
   PENDING_ACTIVATION: { label: "AMC Activation: Pending", color: "bg-[#FEEAB0] text-[#6C6F73]" },
-  // Remove all refund-related statuses from the main status config
 };
 
-// Simplified function to only show plan status, ignore refund status
 const getStatusBadge = (planStatus, refundStatus) => {
   if (planStatus === "pending") return STATUS_CONFIG.PENDING_ACTIVATION;
   if (planStatus === "active") return STATUS_CONFIG.ACTIVE;
   return STATUS_CONFIG.ACTIVE;
 };
 
-// Keep refund messages for the status message area, but not for the badge
 const getStatusMessage = (planStatus, refundStatus) => {
   if (refundStatus === "approved") {
     return "Your refund has been approved. Amount will be credited within 5-7 business days.";
@@ -59,8 +56,6 @@ const mapApiDataToAMC = (apiData) => {
   return apiData.map((item) => {
     const canEditVehicle = item.vehicleEditableUntil ? new Date() < new Date(item.vehicleEditableUntil) : false;
     const canRequestRefund = canEditVehicle && item.refundStatus === "none" && !item.refundCancelledByUser;
-    
-    // Only show plan status in the badge, ignore refund status
     const statusBadge = getStatusBadge(item.planStatus, item.refundStatus);
     const statusMessage = getStatusMessage(item.planStatus, item.refundStatus);
 
@@ -216,7 +211,6 @@ export default function MyAMCPage() {
         const refundData = refundStatusData[amc.id];
         if (!refundData) return amc;
 
-        // Only use plan status for badge, keep refund status for messages and logic
         const statusBadge = getStatusBadge(amc.planStatus, refundData.status);
         const statusMessage = getStatusMessage(amc.planStatus, refundData.status);
         const canEditVehicle = amc.vehicleEditableUntil ? new Date() < new Date(amc.vehicleEditableUntil) : false;

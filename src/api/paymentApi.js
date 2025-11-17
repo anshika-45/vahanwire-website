@@ -9,3 +9,9 @@ export const getPaymentStatus = async (txnid) => {
     const response = await axiosInstance.get(`/amc-pay/payment-status/${txnid}`);
     return response.data;
 };
+
+
+export const getPaymentError = async (paymentId) => {
+    const response = await axiosInstance.get(`/amc-pay/error/${paymentId}`);
+    return response.data;
+};

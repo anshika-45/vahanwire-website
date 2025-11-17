@@ -37,8 +37,7 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
   const [addedVehicles, setAddedVehicles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isProceeding, setIsProceeding] = useState(false);
-  console.log(addedVehicleYear);
-  console.log(addedVehicleFuelType);
+
   const initialized = useRef(false);
 
   const getVehicleImage = (vehicleType) => { return vehicleType?.toLowerCase() === "bike" ? bikeImg : carImg };
@@ -293,7 +292,7 @@ const handleProceed = async () => {
   }
 
   const vehicleData = addedVehicles.find((v) => v.number === selectedVehicle);
-  console.log("kcjehwuckh",vehicleData);
+
   if (!vehicleData) {
     alert("Vehicle not found");
     return;
@@ -311,7 +310,6 @@ const handleProceed = async () => {
     amcPlanCategory: amcType,
   })
     .then((response) => {
-      console.log("response", response);
 
       if (response?.success) {
         const { hasActiveAMC, plans, vehicle } = response.data;
@@ -329,7 +327,6 @@ const handleProceed = async () => {
           timestamp: Date.now()
         };
           
-        console.log("vehicleDataToStore",vehicleDataToStore);
         localStorage.setItem('selectedVehicleData', JSON.stringify(vehicleDataToStore));
 
         const filterData = { plans, vehicle, selectedPlan: plan };
