@@ -7,7 +7,7 @@ import vehicleImage2 from "../assets/acar-1.svg";
 import deleteIcon from "../assets/DeleteIcon.svg";
 import editIcon from "../assets/EditIcon.svg";
 import checkIcon from "../assets/check2.svg";
-import { getUserVehicles, deleteUserVehicle } from "../api/vehicleApi";
+import { getUserVehiclesAMC, deleteUserVehicle } from "../api/vehicleApi";
 
 const VehicleCard = ({
   title,
@@ -102,7 +102,7 @@ const CarCards = () => {
   const fetchUserVehicles = async () => {
     setLoading(true);
     try {
-      const vehicles = await getUserVehicles();
+      const vehicles = await getUserVehiclesAMC();
      
       const formatted = vehicles.map((v, index) => ({
         _id: v._id,

@@ -37,6 +37,7 @@ const VehicleAmcFilter = () => {
     plans: locationPlans,
     vehicle: locationVehicle,
     selectedPlan: initialSelectedPlan,
+    vehicleType: locationVehicleType,
   } = location.state || {};
 
   const {
@@ -117,7 +118,7 @@ const VehicleAmcFilter = () => {
     if (locationVehicle && locationPlans) {
       const newVehicleData = {
         vehicle: locationVehicle,
-        vehicleType: vehicleType,
+        vehicleType: locationVehicleType || vehicleType,
         plans: locationPlans,
         timestamp: Date.now()
       };
@@ -126,8 +127,12 @@ const VehicleAmcFilter = () => {
       
       setVehicle(locationVehicle);
       setPlans(locationPlans);
+
+      if(locationVehicleType){
+        setVehicleType(locationVehicleType);
+      }
     }
-  }, [locationVehicle, locationPlans]);
+  }, [locationVehicle, locationPlans, locationVehicleType]);
 
   useEffect(() => {
     const saved = localStorage.getItem('selectedVehicleData');

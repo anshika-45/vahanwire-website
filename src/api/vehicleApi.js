@@ -52,3 +52,8 @@ export const updateAMCVehicle = async (vehicleId, vehicleData) => {
   const response = await axiosInstance.put(`/vehicle/update-without-amc/${vehicleId}`,vehicleData);
   return response.data;
 };
+
+export const getUserVehiclesAMC = async () => {
+  const response = await axiosInstance.get("/vehicle/user-vehicles-amc");
+  return response.data?.data?.vehicles || [];
+};

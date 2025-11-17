@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 import { addUserVehicleWithoutAMC, searchUserVehicle } from "../api/vehicleApi";
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
 
+const DEFAULT_VEHICLE_TYPE = "car";
 const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
   const [ formData, setFormData ] = useState({
      vehicleNumber: "",
@@ -159,6 +160,9 @@ const handleSearch = async () => {
         vehicleNumber: data.vehicle.vehicleNumber,
         brand: data.vehicle.brand,
         model: data.vehicle.model,
+        year: data.vehicle.year,
+        fuelType: data.vehicle.fuelType,
+        vehicleType: data.vehicle.vehicleType || DEFAULT_VEHICLE_TYPE,
       });
       setShowSelectVehicle(true);
     }
@@ -201,7 +205,8 @@ const handleAddVehicle = async () => {
     const data = response?.data || response;
 
     if (response.status === 201 || data.statusCode === 201) {
-      setVehicleData(data.data);
+      setVehicleData({...data.data,
+        vehicleType: data.data.vehicleType || DEFAULT_VEHICLE_TYPE});
       setShowSelectVehicle(true);
     }else {
       setErrors((prev) => ({
@@ -367,6 +372,7 @@ const handleAddVehicle = async () => {
             addedVehicleModel={vehicleData.model}
             addedVehicleYear={vehicleData.year}
             addedVehicleFuelType={vehicleData.fuelType}
+            addedVehicleType={vehicleData.vehicleType}
             plan={plan}
           />
         </Suspense>

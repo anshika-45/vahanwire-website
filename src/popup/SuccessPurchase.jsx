@@ -1,4 +1,4 @@
-import React , {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
 const SuccessPurchase = ({ onClose, selectedPlan }) => {
@@ -13,17 +13,17 @@ const SuccessPurchase = ({ onClose, selectedPlan }) => {
   }, []);
 
   useEffect(() => {
-      const handlePopState = (event) => {
-        event.preventDefault();
-        navigate('/vehicle-amc', { replace: true });
-      };
-  
-      window.history.pushState(null, '', window.location.pathname);
-      window.addEventListener('popstate', handlePopState);
-  
-      return () => {
-        window.removeEventListener('popstate', handlePopState);
-      };
+    const handlePopState = (event) => {
+      event.preventDefault();
+      navigate("/vehicle-amc", { replace: true });
+    };
+
+    window.history.pushState(null, "", window.location.pathname);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
   }, [navigate]);
 
   const handleClose = () => {
@@ -51,7 +51,6 @@ const SuccessPurchase = ({ onClose, selectedPlan }) => {
           soon.
         </p>
 
-       
         <button
           onClick={handleClose}
           className="px-20 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-lg active:scale-95 transition-transform"
