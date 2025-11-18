@@ -138,7 +138,8 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
     if (name === "vehicleNumber")
       clean = clean.toUpperCase().replace(/\s/g, "");
     if (name === "year") clean = clean.replace(/[^0-9]/g, "").slice(0, 4);
-    if (name === "brand") clean = clean.replace(/[^A-Za-z\s]/g, "").slice(0, 20);
+    if (name === "brand")
+      clean = clean.replace(/[^A-Za-z\s]/g, "").slice(0, 20);
     if (name === "model") clean = clean.replace(/\s+/g, " ").slice(0, 25);
 
     setFormData((prev) => ({ ...prev, [name]: clean }));
@@ -153,41 +154,65 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
     validateOnBlur(name, value);
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setSubmitError("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError("");
 
-  const allTouched = Object.keys(formData).reduce(
-    (acc, k) => ({ ...acc, [k]: true }),
-    {}
-  );
-  setTouched(allTouched);
+    const allTouched = Object.keys(formData).reduce(
+      (acc, k) => ({ ...acc, [k]: true }),
+      {}
+    );
+    setTouched(allTouched);
 
-  if (!validateForm()) {
-    setSubmitError("Please correct highlighted fields");
-    return;
-  }
+    if (!validateForm()) {
+      setSubmitError("Please correct highlighted fields");
+      return;
+    }
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const payload = {
-      vehicleNumber: formData.vehicleNumber.toUpperCase(),
-      vehicleType,
-      brandName: formData.brand.trim(),
-      modelName: formData.model.trim(),
-      fuelType: formData.fuelType.trim(),
-      year: formData.year,
-    };
+    try {
+      const payload = {
+        vehicleNumber: formData.vehicleNumber.toUpperCase(),
+        vehicleType,
+        brandName: formData.brand.trim(),
+        modelName: formData.model.trim(),
+        fuelType: formData.fuelType.trim(),
+        year: formData.year,
+      };
 
-    const res = await updateAMCVehicle(initial._id, payload);
+      const res = await updateAMCVehicle(initial._id, payload);
 
-    if (!res?.success) {
-      setSubmitError(res.message || "Failed to update vehicle");
-      if (Array.isArray(res.errors)) {
+      if (!res?.success) {
+        setSubmitError(res.message || "Failed to update vehicle");
+        if (Array.isArray(res.errors)) {
+          const newErrors = { ...error };
+
+          res.errors.forEach((err) => {
+            if (err.field) {
+              newErrors[err.field] = err.message;
+            }
+          });
+
+          setErrors(newErrors);
+        }
+
+        return;
+      }
+
+      alert("Vehicle updated successfully!");
+      onSubmit?.();
+      onClose();
+    } catch (error) {
+      const msg =
+        error?.response?.data?.message ||
+        "Unable to update vehicle. Try again.";
+      setSubmitError(msg);
+
+      if (Array.isArray(error?.response?.data?.errors)) {
         const newErrors = { ...error };
 
-        res.errors.forEach((err) => {
+        error.response.data.errors.forEach((err) => {
           if (err.field) {
             newErrors[err.field] = err.message;
           }
@@ -195,36 +220,10 @@ const handleSubmit = async (e) => {
 
         setErrors(newErrors);
       }
-
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    alert("Vehicle updated successfully!");
-    onSubmit?.();
-    onClose();
-
-  } catch (error) {
-    const msg =
-      error?.response?.data?.message || "Unable to update vehicle. Try again.";
-    setSubmitError(msg);
-
-    if (Array.isArray(error?.response?.data?.errors)) {
-      const newErrors = { ...error };
-
-      error.response.data.errors.forEach((err) => {
-        if (err.field) {
-          newErrors[err.field] = err.message;
-        }
-      });
-
-      setErrors(newErrors);
-    }
-
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   if (!open) return null;
 
@@ -246,7 +245,6 @@ const handleSubmit = async (e) => {
             onSubmit={handleSubmit}
             className="p-4 sm:p-6 space-y-3 text-sm"
           >
-
             <div className="flex justify-center gap-4">
               {["car", "bike"].map((type) => (
                 <button
@@ -313,7 +311,7 @@ const handleSubmit = async (e) => {
                 </div>
               )
             )}
-              {submitError && (
+            {submitError && (
               <div className="text-red-600 text-sm text-center bg-red-50 py-2.5 px-3 rounded-lg border border-red-200">
                 {submitError}
               </div>

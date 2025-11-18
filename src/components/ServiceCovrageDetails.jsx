@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
 const features = [
   { label: "Flat Tyre (Tube)", qty: "10", left: "8" },
@@ -26,7 +26,6 @@ export default function ServiceCoverageDetails({ isOpen, onClose, plan }) {
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-3 md:p-4 bg-black/40 ">
       <div className="w-full max-w-sm md:max-w-3xl bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden max-h-[90vh] overflow-y-auto hide-scrollbar">
-        
         {/* Header */}
         <div className="flex items-center justify-between px-4 md:px-6 py-3 bg-[#E9F0FC] relative">
           <h2 className="absolute left-1/2 -translate-x-1/2 text-sm md:text-base font-semibold text-[#333]">
@@ -41,31 +40,32 @@ export default function ServiceCoverageDetails({ isOpen, onClose, plan }) {
           </button>
         </div>
 
-        {/* Description */}
         <div className="px-4 md:px-6 pt-4 md:pt-6 mb-3 md:mb-4">
           <h3 className="text-xs md:text-sm font-semibold">
             Vahanwire Premium Care
           </h3>
           <p className="text-xs text-[#333] mt-1 leading-snug">
-            Experience essential car care with unmatched value through the Gold Member Card.
-            Designed for everyday peace of mind, it includes key services like puncture repairs,
-            car washes, jump-start support...
+            Experience essential car care with unmatched value through the Gold
+            Member Card. Designed for everyday peace of mind, it includes key
+            services like puncture repairs, car washes, jump-start support...
           </p>
         </div>
 
-        {/* Plan Info */}
         <div className="grid grid-cols-2 gap-2 md:gap-3 mb-4 px-4 md:px-6">
           <div className="p-2 md:p-3 border border-[#BCD2F5] rounded-md bg-white text-xs">
             <div className="text-gray-500">Service</div>
-            <div className="font-medium text-sm">{plan?.service || "Unlimited"}</div>
+            <div className="font-medium text-sm">
+              {plan?.service || "Unlimited"}
+            </div>
           </div>
           <div className="p-2 md:p-3 border border-[#BCD2F5] rounded-md bg-white text-xs">
             <div className="text-gray-500">Validity</div>
-            <div className="font-medium text-sm">{plan?.validity || "207 Days"}</div>
+            <div className="font-medium text-sm">
+              {plan?.validity || "207 Days"}
+            </div>
           </div>
         </div>
 
-       
         <div className="mx-4 md:mx-6 mb-5 border border-[#E9F0FC] rounded-lg overflow-hidden">
           <div className="grid grid-cols-3 bg-[#F8F8F8] text-[#242424] text-xs md:text-sm border-b border-[#E9F0FC] font-semibold">
             <div className="px-3 py-3 text-left">Service Package</div>
@@ -91,7 +91,6 @@ export default function ServiceCoverageDetails({ isOpen, onClose, plan }) {
               </div>
             </div>
           ))}
-
 
           <div className="grid grid-cols-3 font-semibold bg-[#E9F0FC] text-[#242424] text-xs md:text-sm border-t border-[#E9F0FC] ">
             <div className="px-3 py-2 text-left">Total Services</div>

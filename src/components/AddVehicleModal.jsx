@@ -73,7 +73,6 @@ const validateVehicleNumber = (num) => {
     return "Invalid number (e.g. MH12AB1234)";
   return "";
 };
-  
 
 const validateBrand = (v) => {
   if (!v.trim()) return "Brand is required";
@@ -189,11 +188,9 @@ const handleSubmit = async (e) => {
     };
 
     const response = await addUserVehicleWithoutAMC(payload);
-    console.log("kjdbwcejchbe",response);
     const data = response?.data || response;
 
     setLoading(false);
-    console.log("Add Vehicle Response:", data);
 
     if (response.status === 201 || data.statusCode === 201) {
       const vehicleWithType = {...data.data, vehicleType};

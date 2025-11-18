@@ -1,5 +1,4 @@
 import React, { useState, Suspense, useEffect } from "react";
-import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import verifyIcon from "../assets/verify.webp";
 import Modal from "../components/Modal";
@@ -7,6 +6,7 @@ import { addUserVehicleWithoutAMC, searchUserVehicle } from "../api/vehicleApi";
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
 
 const DEFAULT_VEHICLE_TYPE = "car";
+
 const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
   const [ formData, setFormData ] = useState({
      vehicleNumber: "",

@@ -21,7 +21,6 @@ export const AmcDataProvider = ({ children }) => {
   const [filterActive, setFilterActive] = useState(false);
   const [filterData, setFilterData] = useState(null);
 
-  // Persist vehicleType to sessionStorage
   const handleSetVehicleType = (type) => {
     setVehicleType(type);
     sessionStorage.setItem('selectedVehicleType', type);

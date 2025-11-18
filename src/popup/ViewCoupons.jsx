@@ -66,10 +66,9 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
     }
   }, [coupon]);
 
-  // --- Filter coupons based on regex match ---
   const filteredCoupons = coupons.filter((c) => {
-    if (!searchQuery.trim()) return true; // no search -> show all
-    const regex = new RegExp(searchQuery.trim(), "i"); // case-insensitive match
+    if (!searchQuery.trim()) return true;
+    const regex = new RegExp(searchQuery.trim(), "i");
     return regex.test(c.title) || regex.test(c.code);
   });
 
@@ -85,7 +84,6 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
         </span>
       </h2>
 
-      {/* --- Search Input --- */}
       <div className="w-full p-3 rounded-2xl mt-3 bg-white flex">
         <input
           placeholder="Have a Coupon code? Type here"
@@ -99,7 +97,6 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
         </button>
       </div>
 
-      {/* --- Filtered Coupon List --- */}
       {filteredCoupons.length > 0 ? (
         filteredCoupons.map((c) => (
           <div

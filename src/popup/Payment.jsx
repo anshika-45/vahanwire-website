@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Payment = ({ onBack, onPaymentSuccess, paymentData, plan }) => {
+const Payment = ({ onBack, paymentData }) => {
 
   const navigate = useNavigate()
 

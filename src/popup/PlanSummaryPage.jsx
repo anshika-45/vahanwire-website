@@ -8,7 +8,7 @@ import couponImg from "../assets/coupon.png";
 import ViewCoupons from "./ViewCoupons";
 const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
-const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, user, vehicle }) => {
+const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
   const [currentView, setCurrentView] = useState("summary");
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);

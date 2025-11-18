@@ -48,16 +48,21 @@ const ProfileForm = () => {
       } else if (trimmedName.length > 100) {
         error = "Name cannot exceed 100 characters";
       } else if (!/^[a-zA-Z\s'-]+$/.test(trimmedName)) {
-        error = "Name can only contain letters, spaces, hyphens, and apostrophes";
+        error =
+          "Name can only contain letters, spaces, hyphens, and apostrophes";
       }
     }
 
     if (name === "email") {
       const trimmedEmail = value.trim().toLowerCase();
+
       if (!trimmedEmail) {
         error = "Email is required";
-      } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(trimmedEmail))
-{
+      } else if (
+        !/^(?!.*\.\.)(?!\.)(?!.*\.$)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(
+          trimmedEmail
+        )
+      ) {
         error = "Please enter a valid email address";
       } else if (trimmedEmail.length > 100) {
         error = "Email cannot exceed 100 characters";
@@ -67,7 +72,8 @@ const ProfileForm = () => {
     if (name === "phone") {
       const trimmedPhone = value.trim();
       if (trimmedPhone && !/^[0-9\s\-+()]+$/.test(trimmedPhone)) {
-        error = "Phone can only contain numbers, spaces, hyphens, parentheses, and plus sign";
+        error =
+          "Phone can only contain numbers, spaces, hyphens, parentheses, and plus sign";
       }
     }
 

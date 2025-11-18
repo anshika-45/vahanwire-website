@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -11,7 +11,7 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
     this.setState({
       error,
       errorInfo,
@@ -27,7 +27,8 @@ class ErrorBoundary extends React.Component {
               Oops! Something went wrong
             </h2>
             <p className="text-red-600 mb-4">
-              We're sorry, but something unexpected happened. Please try refreshing the page.
+              We're sorry, but something unexpected happened. Please try
+              refreshing the page.
             </p>
             <button
               onClick={() => window.location.reload()}
@@ -36,15 +37,16 @@ class ErrorBoundary extends React.Component {
               Refresh Page
             </button>
 
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === "development" && (
               <details className="mt-4 text-left">
                 <summary className="cursor-pointer text-red-700 hover:text-red-800">
                   Error Details (Development Only)
                 </summary>
                 <pre className="mt-2 text-xs text-red-600 bg-red-100 p-2 rounded overflow-auto">
-                  {this.state.error?.toString() || 'Unknown error'}
+                  {this.state.error?.toString() || "Unknown error"}
                   <br />
-                  {this.state.errorInfo?.componentStack || 'No stack trace available'}
+                  {this.state.errorInfo?.componentStack ||
+                    "No stack trace available"}
                 </pre>
               </details>
             )}
