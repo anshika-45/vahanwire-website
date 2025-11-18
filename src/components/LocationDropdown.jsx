@@ -11,6 +11,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
   const [cities, setCities] = useState([]);
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const checkToken = () => {
@@ -19,7 +20,6 @@ const LocationDropdown = ({ onLocationSelect }) => {
     };
 
     const interval = setInterval(checkToken, 1000);
-
     window.addEventListener("storage", checkToken);
 
     return () => {
@@ -29,13 +29,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
   }, []);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      initializeLocation();
-    } else {
-      setSelected("Select Location");
-      setSelectedCityId(null);
-      setCities([]);
-    }
+    initializeLocation();
   }, [isLoggedIn]);
 
   const initializeLocation = useCallback(async () => {
@@ -43,24 +37,35 @@ const LocationDropdown = ({ onLocationSelect }) => {
       setLoading(true);
       setError(null);
 
-      const [citiesResponse, profileResponse] = await Promise.all([
-        getActiveCities(),
-        getMyProfile(),
-      ]);
+      const citiesResponse = await getActiveCities();
 
       if (citiesResponse.data.success) {
         const cityList = citiesResponse.data.data || [];
         setCities(cityList);
 
-        const userData = profileResponse.data;
-        const userCity = cityList.find((c) => c._id === userData?.selectedCity);
+        if (isLoggedIn) {
+          const profileResponse = await getMyProfile();
+          const userData = profileResponse.data;
+          const userCity = cityList.find((c) => c._id === userData?.selectedCity);
 
-        if (userCity) {
-          setSelected(userCity.displayName);
-          setSelectedCityId(userCity._id);
-          if (onLocationSelect) onLocationSelect(userCity);
-        } else if (cityList.length > 0) {
-          await setDefaultCity(cityList);
+          if (userCity) {
+            setSelected(userCity.displayName);
+            setSelectedCityId(userCity._id);
+            if (onLocationSelect) onLocationSelect(userCity);
+          } else if (cityList.length > 0) {
+            await setDefaultCity(cityList);
+          }
+        } else {
+          const savedCity = localStorage.getItem("guestCity");
+          if (savedCity) {
+            const cityData = JSON.parse(savedCity);
+            const city = cityList.find((c) => c._id === cityData._id);
+            if (city) {
+              setSelected(city.displayName);
+              setSelectedCityId(city._id);
+              if (onLocationSelect) onLocationSelect(city);
+            }
+          }
         }
       } else {
         setError("Failed to load active cities");
@@ -71,7 +76,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
     } finally {
       setLoading(false);
     }
-  }, [onLocationSelect]);
+  }, [onLocationSelect, isLoggedIn]);
 
   const setDefaultCity = async (cityList) => {
     const firstCity = cityList[0];
@@ -90,20 +95,28 @@ const LocationDropdown = ({ onLocationSelect }) => {
     if (onLocationSelect) onLocationSelect(firstCity);
   };
 
-  const handleClick = () => setOpen((prev) => !prev);
+  const handleClick = () => {
+    setOpen((prev) => !prev);
+    setSearchTerm("");
+  };
 
   const handleLocationClick = async (city) => {
     setSelected(city.displayName);
     setSelectedCityId(city._id);
     setOpen(false);
+    setSearchTerm("");
 
-    try {
-      const response = await updateCity({ cityId: city._id });
-      if (response.success) {
-        console.log("City updated successfully:", city.displayName);
+    if (isLoggedIn) {
+      try {
+        const response = await updateCity({ cityId: city._id });
+        if (response.success) {
+          console.log("City updated successfully:", city.displayName);
+        }
+      } catch (error) {
+        console.error("Error updating user city:", error);
       }
-    } catch (error) {
-      console.error("Error updating user city:", error);
+    } else {
+      localStorage.setItem("guestCity", JSON.stringify(city));
     }
 
     if (onLocationSelect) onLocationSelect(city);
@@ -113,18 +126,23 @@ const LocationDropdown = ({ onLocationSelect }) => {
     const handleClickOutside = (event) => {
       if (open && !event.target.closest("#locationDropdown")) {
         setOpen(false);
+        setSearchTerm("");
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
+  const filteredCities = cities.filter((city) =>
+    city.displayName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div id="locationDropdown" className="relative">
       <div
         id="webScreen"
         className="hidden md:flex items-center border text-sm min-w-[200px] max-w-[250px] py-3 px-3 rounded-[6px] border-[#E3EDFC] bg-white cursor-pointer transition-colors"
-        onClick={isLoggedIn ? handleClick : undefined}
+        onClick={handleClick}
       >
         <div className="flex-shrink-0 mr-2">
           <img
@@ -136,22 +154,20 @@ const LocationDropdown = ({ onLocationSelect }) => {
         <span className="flex-1 truncate text-sm font-medium">
           {loading ? "Loading..." : selected}
         </span>
-        {isLoggedIn && (
-          <div className="flex-shrink-0 ml-2">
-            <img
-              className={`w-4 h-4 transition-transform ${
-                open ? "rotate-180" : ""
-              }`}
-              src={dropdownIcon}
-              alt="dropdown"
-            />
-          </div>
-        )}
+        <div className="flex-shrink-0 ml-2">
+          <img
+            className={`w-4 h-4 transition-transform ${
+              open ? "rotate-180" : ""
+            }`}
+            src={dropdownIcon}
+            alt="dropdown"
+          />
+        </div>
       </div>
 
       <div id="mobileScreen" className="md:hidden block">
         <div
-          onClick={isLoggedIn ? handleClick : undefined}
+          onClick={handleClick}
           role="button"
           className="flex items-center"
         >
@@ -168,15 +184,25 @@ const LocationDropdown = ({ onLocationSelect }) => {
                 src={locationIcon}
                 alt=""
               />
-
               {loading ? "Loading..." : selected}
             </span>
           )}
         </div>
       </div>
 
-      {open && isLoggedIn && (
-        <div className="absolute md:top-[calc(100%+4px)] top-[calc(100%+10px)] md:right-1/2 md:translate-x-1/2 right-0  min-w-[250px] z-50 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-fadeIn">
+      {open && (
+        <div className="absolute md:top-[calc(100%+4px)] top-[calc(100%+10px)] md:right-1/2 md:translate-x-1/2 right-0 min-w-[250px] z-50 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden animate-fadeIn">
+          <div className="p-2 border-b border-gray-200">
+            <input
+              type="text"
+              placeholder="Search location..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoFocus
+            />
+          </div>
+
           {error && (
             <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border-b border-red-100">
               <span>{error}</span>
@@ -187,13 +213,13 @@ const LocationDropdown = ({ onLocationSelect }) => {
             <div className="px-3 py-4 text-center text-sm text-gray-500">
               Loading cities...
             </div>
-          ) : cities.length === 0 ? (
+          ) : filteredCities.length === 0 ? (
             <div className="px-3 py-4 text-center text-sm text-gray-500">
-              No cities available
+              No cities found
             </div>
           ) : (
             <ul className="max-h-[280px] overflow-y-auto">
-              {cities.map((city) => (
+              {filteredCities.map((city) => (
                 <li
                   key={city._id}
                   onClick={() => handleLocationClick(city)}
