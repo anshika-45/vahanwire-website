@@ -16,15 +16,23 @@ const STATUS_CONFIG = {
     label: "AMC Activation: Pending",
     color: "bg-[#FEEAB0] text-[#6C6F73]",
   },
+  CANCELLED: {
+    label: "AMC Cancelled",
+    color: "bg-[#FFE5E5] text-[#DC2626]",
+  },
 };
 
 const getStatusBadge = (planStatus, refundStatus) => {
+  if (planStatus === "cancelled") return STATUS_CONFIG.CANCELLED;
   if (planStatus === "pending") return STATUS_CONFIG.PENDING_ACTIVATION;
   if (planStatus === "active") return STATUS_CONFIG.ACTIVE;
   return STATUS_CONFIG.ACTIVE;
 };
 
 const getStatusMessage = (planStatus, refundStatus) => {
+  if (planStatus === "cancelled") {
+    return "Your AMC plan has been cancelled.";
+  }
   if (refundStatus === "approved") {
     return "Your refund has been approved. Amount will be credited within 5-7 business days.";
   }
@@ -65,7 +73,7 @@ const mapApiDataToAMC = (apiData) => {
       canEditVehicle &&
       item.refundStatus === "none" &&
       !item.refundCancelledByUser;
-
+    
     const statusBadge = getStatusBadge(item.planStatus, item.refundStatus);
     const statusMessage = getStatusMessage(item.planStatus, item.refundStatus);
 
@@ -246,7 +254,6 @@ export default function MyAMCPage() {
           ? new Date() < new Date(amc.vehicleEditableUntil)
           : false;
 
-        // CHANGE: Keep refundCancelledByUser check - once cancelled, user cannot request refund again
         const canRequestRefund =
           canEditVehicle &&
           refundData.status === "none" &&
