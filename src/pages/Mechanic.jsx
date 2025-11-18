@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import comingSoon from "../assets/comingSoonBidding.svg";
 import appStore from "../assets/Apple.svg";
 import playStore from "../assets/Playstore.svg";
@@ -12,7 +12,43 @@ const PageBanner = React.lazy(() => import("../components/PageBanner"));
 const blankImg =
   "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1' height='1'></svg>";
 
+const preloadImages = (imageUrls) => {
+  imageUrls.forEach((url) => {
+    const img = new Image();
+    img.src = url;
+  });
+};
+
 export default function Mechanic() {
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+
+  useEffect(() => {
+    const images = [
+      comingSoon,
+      appStore,
+      playStore,
+      mobileCentered,
+      mobileAside,
+      threef,
+      fouref,
+      sixef,
+    ];
+    
+    preloadImages(images);
+    
+    const loadPromises = images.map(
+      (src) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = resolve;
+          img.onerror = resolve;
+          img.src = src;
+        })
+    );
+
+    Promise.all(loadPromises).then(() => setImagesLoaded(true));
+  }, []);
+
   return (
     <div className="duration-300 ease-in transition-all lg:pb-7 pb-10 xl:mb-0 mb-10">
       <PageBanner
@@ -26,7 +62,7 @@ export default function Mechanic() {
         <div className="grid xl:grid-cols-2 grid-cols-1 gap-x-5 gap-y-20 px-2 lg:pt-30 pt-10 items-center">
           <div className="relative xl:text-start text-center">
             <div className="absolute -top-[60px] translate-y-[30px] xl:right-5 lg:right-20 md:right-40 right-10 translate-x-5 lg:w-[150px] md:w-[100px] w-[60px]">
-              <img className="w-full h-full" src={comingSoon} alt="" />
+              <img className="w-full h-full" src={comingSoon} alt="" loading="eager" />
             </div>
             <h2 className="font-bold lg:text-5xl md:text-3xl text-xl py-1 md:mb-3">
               We're Coming With
@@ -50,6 +86,7 @@ export default function Mechanic() {
                     className="w-full h-full object-cover"
                     src={appStore}
                     alt=""
+                    loading="eager"
                   />
                 </a>
               </div>
@@ -59,6 +96,7 @@ export default function Mechanic() {
                     className="w-full h-full object-cover"
                     src={playStore}
                     alt=""
+                    loading="eager"
                   />
                 </a>
               </div>
@@ -70,21 +108,25 @@ export default function Mechanic() {
               className="h-full p-2 w-full md:object-cover"
               src={mobileAside}
               alt=""
+              loading="eager"
+              style={{ opacity: imagesLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
             />
             <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 ">
               <div className="mech-img-animation3 absolute lg:block  top-1/2 z-10">
-                <img className="h-full w-full" src={threef} alt="" />
+                <img className="h-full w-full" src={threef} alt="" loading="eager" />
               </div>
               <div className="mech-img-animation4 absolute lg:block  z-10">
-                <img className="h-full w-full" src={fouref} alt="" />
+                <img className="h-full w-full" src={fouref} alt="" loading="eager" />
               </div>
               <div className="mech-img-animation6 absolute lg:block  bottom-10 z-10">
-                <img className="h-full w-full" src={sixef} alt="" />
+                <img className="h-full w-full" src={sixef} alt="" loading="eager" />
               </div>
               <img
                 className="xl:h-full w-full lg:scale-110 xl:scale-100 object-cover"
                 src={mobileCentered}
                 alt=""
+                loading="eager"
+                style={{ opacity: imagesLoaded ? 1 : 0, transition: 'opacity 0.3s' }}
               />
             </div>
           </div>
