@@ -1,11 +1,13 @@
 import React, { Suspense, lazy, useLayoutEffect, useRef, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-const Announcementbanner = lazy(() => import("../components/Announcementbanner"));
-const Header = lazy(() => import("../components/Header"));
-const Navvar = lazy(() => import("../components/Navvar"));
-const Footer = lazy(() => import("../components/Footer"));
+
+import Announcementbanner from "../components/Announcementbanner";
+import Header from "../components/Header";
+import Navvar from "../components/Navvar";
+import Footer from "../components/Footer";
+
 const BreadcrumbBar = lazy(() => import("../components/BreadcrumbBar"));
-const AddBanner = lazy(() => import("../components/AddBanner")); 
+const AddBanner = lazy(() => import("../components/AddBanner"));
 
 const ComponentFallback = () => (
   <div className="flex items-center justify-center py-4">
@@ -17,6 +19,7 @@ export default function MainLayout() {
   const { pathname } = useLocation();
   const isHome = pathname === "/";
   const stackRef = useRef(null);
+
   const [topOffset, setTopOffset] = useState(0);
 
   useLayoutEffect(() => {
@@ -36,15 +39,13 @@ export default function MainLayout() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="">
-              <Suspense fallback={<ComponentFallback />}><Announcementbanner /></Suspense>
-      </div>
 
+      {/* These render instantly (no loader) */}
+      <Announcementbanner />
 
-      <div ref={stackRef} className="sticky top-0 w-full left-0 right-0 z-40"
->
-        <Suspense fallback={<ComponentFallback />}><Header /></Suspense>
-        <Suspense fallback={<ComponentFallback />}><Navvar /></Suspense>
+      <div ref={stackRef} className="sticky top-0 w-full left-0 right-0 z-40">
+        <Header />
+        <Navvar />
       </div>
 
       {!isHome && (
@@ -53,21 +54,16 @@ export default function MainLayout() {
         </Suspense>
       )}
 
-      <main id="main-content" className="flex-1">
+      <main className="flex-1">
         <Outlet />
       </main>
-     
+
       <div className="relative">
         <Suspense fallback={<ComponentFallback />}>
           <AddBanner />
         </Suspense>
 
-        
-        <div> 
-          <Suspense fallback={<ComponentFallback />}>
-            <Footer />
-          </Suspense>
-        </div>
+        <Footer />
       </div>
     </div>
   );
