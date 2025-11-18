@@ -1,8 +1,6 @@
-import React, { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import mechanic from "../assets/oMechanic-Service.webp";
 import amc from "../assets/oAMC.webp";
-import towtruck from "../assets/oTow-Truck-Service.webp";
 import mechanicNewImage from "../assets/mechanic.jpg";
 import post2 from "../assets/Post2.jpg";
 import post3 from "../assets/Post3.jpg";

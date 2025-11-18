@@ -36,19 +36,15 @@ export default function ConfirmCancelRefundModal({ open, onClose, onConfirm }) {
       aria-labelledby="cancel-refund-title"
       aria-describedby="cancel-refund-desc"
     >
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50"
         onClick={onClose}
         aria-hidden="true"
       />
-
-      {/* Dialog */}
       <div
         ref={dialogRef}
         className="relative mx-4 w-[92%] max-w-[440px] rounded-[18px] bg-white shadow-xl px-8 pt-8 pb-8 animate-[fadeIn_.18s_ease-out]"
       >
-        {/* Title */}
         <h2
           id="cancel-refund-title"
           className="text-center text-[22px] sm:text-[24px] font-semibold text-gray-900 leading-tight"
@@ -58,7 +54,6 @@ export default function ConfirmCancelRefundModal({ open, onClose, onConfirm }) {
           your refund request?
         </h2>
 
-        {/* Subtitle */}
         <p
           id="cancel-refund-desc"
           className="mt-3 text-center text-[14px] sm:text-[15px] text-gray-500"
@@ -66,7 +61,6 @@ export default function ConfirmCancelRefundModal({ open, onClose, onConfirm }) {
           This action cannot be undone.
         </p>
 
-        {/* Buttons (stacked vertically) */}
         <div className="mt-8 space-y-3">
           <button
             type="button"

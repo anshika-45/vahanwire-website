@@ -55,7 +55,10 @@ const mapApiDataToAMC = (apiData) => {
 
   return apiData.map((item) => {
     const canEditVehicle = item.vehicleEditableUntil ? new Date() < new Date(item.vehicleEditableUntil) : false;
+    
+    // CHANGE: canRequestRefund checks 24-hour window AND ensures user hasn't cancelled before
     const canRequestRefund = canEditVehicle && item.refundStatus === "none" && !item.refundCancelledByUser;
+    
     const statusBadge = getStatusBadge(item.planStatus, item.refundStatus);
     const statusMessage = getStatusMessage(item.planStatus, item.refundStatus);
 
@@ -214,6 +217,8 @@ export default function MyAMCPage() {
         const statusBadge = getStatusBadge(amc.planStatus, refundData.status);
         const statusMessage = getStatusMessage(amc.planStatus, refundData.status);
         const canEditVehicle = amc.vehicleEditableUntil ? new Date() < new Date(amc.vehicleEditableUntil) : false;
+        
+        // CHANGE: Keep refundCancelledByUser check - once cancelled, user cannot request refund again
         const canRequestRefund = canEditVehicle && refundData.status === "none" && !amc.refundCancelledByUser;
 
         return {
@@ -329,11 +334,18 @@ export default function MyAMCPage() {
             const statusBadge = getStatusBadge(amc.planStatus, "cancelled");
             const statusMessage = getStatusMessage(amc.planStatus, "cancelled");
             
+            // CHANGE: After cancelling, edit button still shows but refund button will NOT show
+            // canEditVehicle is based on 24-hour window
+            // canRequestRefund is false because refundCancelledByUser becomes true
+            const canEditVehicle = amc.vehicleEditableUntil ? new Date() < new Date(amc.vehicleEditableUntil) : false;
+            const canRequestRefund = false;
+            
             return {
               ...amc,
               refundStatus: "cancelled",
               refundCancelledByUser: true,
-              canRequestRefund: false,
+              canRequestRefund,
+              canEditVehicle,
               statusBadge: statusBadge.label,
               statusColor: statusBadge.color,
               statusMessage,
@@ -362,21 +374,23 @@ export default function MyAMCPage() {
     setSelectedCancelAMC(null);
   };
 
-  const shouldShowCancelRefund = (item) => {
-    return item.refundStatus === "submitted" && 
-           (item.planStatus === "active" || item.planStatus === "pending");
-  };
-
+ const shouldShowCancelRefund = (item) => {
+  // CHANGE: Show cancel button for both submitted and under_process status
+  return ["submitted", "under_process"].includes(item.refundStatus) && 
+         (item.planStatus === "active" || item.planStatus === "pending");
+};
   const shouldShowTimeline = (item) => {
     return item.refundStatus !== "none" && item.refundStatus !== "cancelled";
   };
 
+  // CHANGE: Edit button shows for 24 hours even after cancellation (if refund not submitted/under_process/approved)
+  // Request Refund button does NOT show after cancellation
   const shouldShowActionButtons = (item) => {
     const canShowEditVehicle = item.canEditVehicle && 
-      (item.refundStatus === "none" || item.refundStatus === "cancelled");
+      !["approved"].includes(item.refundStatus);
 
     const canShowRequestRefund = item.canRequestRefund && 
-      item.refundStatus === "none" && 
+      item.refundStatus === "none" &&
       !item.refundCancelledByUser;
 
     return canShowEditVehicle || canShowRequestRefund;
@@ -463,11 +477,12 @@ export default function MyAMCPage() {
                           <span className="text-xs md:text-sm text-[#000000] font-bold">{item.orderId}</span>
                         </div>
 
-                        {remainingTime && (
-                          <span className="text-[#FF3B30] inline-block bg-red-50 px-2 md:px-3 py-2 rounded-lg text-xs">
-                            This edit expires in {remainingTime}. Service usage won't reflect afterward.
-                          </span>
-                        )}
+                       {remainingTime && 
+ !["approved"].includes(item.refundStatus) && (
+  <span className="text-[#FF3B30] inline-block bg-red-50 px-2 md:px-3 py-2 rounded-lg text-xs">
+    This edit expires in {remainingTime}. Service usage won't reflect afterward.
+  </span>
+)}
                       </div>
 
                       <div className="flex flex-col md:flex-row gap-2 md:gap-4 p-2 md:p-3 mt-2 flex-wrap">
@@ -479,35 +494,36 @@ export default function MyAMCPage() {
                           View Coverage
                         </button>
 
-                        {shouldShowActionButtons(item) && (
-                          <>
-                            {item.canEditVehicle && 
-                             (item.refundStatus === "none" || item.refundStatus === "cancelled") && (
-                              <button
-                                onClick={() => handleEditVehicle(item)}
-                                className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium"
-                              >
-                                <Edit size={16} className="md:w-[18px] md:h-[18px]" />
-                                Edit Vehicle
-                              </button>
-                            )}
-                            
-                            {item.canRequestRefund && 
-                             item.refundStatus === "none" &&
-                             !item.refundCancelledByUser && (
-                              <button
-                                onClick={() => handleRequestRefund(item)}
-                                className="px-4 md:px-6 py-2 bg-[#266DDF] text-white rounded-lg hover:bg-[#1d5bc7] transition font-medium text-xs md:text-sm whitespace-nowrap"
-                              >
-                                Request Refund
-                              </button>
-                            )}
-                          </>
-                        )}
-
+                       {shouldShowActionButtons(item) && (
+  <>
+    {/* CHANGE: Edit button shows for 24 hours - only hidden during approved */}
+    {item.canEditVehicle && 
+     !["approved"].includes(item.refundStatus) && (
+      <button
+        onClick={() => handleEditVehicle(item)}
+        className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium"
+      >
+        <Edit size={16} className="md:w-[18px] md:h-[18px]" />
+        Edit Vehicle
+      </button>
+    )}
+    
+    {/* CHANGE: Request Refund button DOES NOT show if user has cancelled before (refundCancelledByUser) */}
+    {item.canRequestRefund && 
+     item.refundStatus === "none" &&
+     !item.refundCancelledByUser && (
+      <button
+        onClick={() => handleRequestRefund(item)}
+        className="px-4 md:px-6 py-2 bg-[#266DDF] text-white rounded-lg hover:bg-[#1d5bc7] transition font-medium text-xs md:text-sm whitespace-nowrap"
+      >
+        Request Refund
+      </button>
+    )}
+  </>
+)}
                         {shouldShowCancelRefund(item) && (
                           <button
-                            className="px-4 md:px-6 py-2 bg-[#266DDF] text-white rounded-lg hover:bg-[#1d5bc7] transition font-medium text-xs md:text-sm whitespace-nowrap"
+                          className="px-3 md:px-4 py-2 bg-[#266DDF] text-white rounded-lg hover:bg-[#1d5bc7] transition font-medium text-xs whitespace-nowrap"
                             onClick={() => {
                               setSelectedCancelAMC(item);
                               setShowCancel(true);
@@ -520,127 +536,141 @@ export default function MyAMCPage() {
                     </div>
                   </div>
 
-                  {shouldShowTimeline(item) && (
-                    <div className="mt-3 md:mt-4 border-t border-gray-300 pt-4 md:pt-6">
-                      <h3 className="text-lg md:text-xl font-bold text-gray-900 text-center mb-1 md:mb-2">
-                        Refund Request Status
-                      </h3>
+            {shouldShowTimeline(item) && (
+  <div className="mt-3 md:mt-4 border-t border-gray-300 pt-4 md:pt-6">
+    <h3 className="text-lg md:text-xl font-bold text-gray-900 text-center mb-1 md:mb-2">
+      Refund Request Status
+    </h3>
 
-                      {item.refundStatus === "submitted" && (
-                        <p className="text-center text-orange-600 font-medium mb-2 text-xs md:text-sm">
-                          Awaiting admin approval
-                        </p>
-                      )}
+    {item.refundStatus === "submitted" && (
+      <p className="text-center text-orange-600 font-medium mb-2 text-xs md:text-sm">
+        Awaiting admin approval
+      </p>
+    )}
 
-                      {item.refundStatus === "under_process" && (
-                        <p className="text-center text-blue-600 font-medium mb-2 text-xs md:text-sm">
-                          It will take 5 to 7 Working Days
-                        </p>
-                      )}
+    {item.refundStatus === "under_process" && (
+      <p className="text-center text-blue-600 font-medium mb-2 text-xs md:text-sm">
+        It will take 5 to 7 Working Days
+      </p>
+    )}
 
-                      {item.refundStatus === "approved" && (
-                        <p className="text-center text-green-600 font-medium mb-2 text-xs md:text-sm">
-                          Your refund has been approved successfully
-                        </p>
-                      )}
+    {item.refundStatus === "approved" && (
+      <p className="text-center text-green-600 font-medium mb-2 text-xs md:text-sm">
+        Your refund has been approved successfully
+      </p>
+    )}
 
-                      {item.refundStatus === "rejected" && (
-                        <p className="text-center text-red-600 font-medium mb-2 text-xs md:text-sm">
-                          Your refund request has been rejected
-                        </p>
-                      )}
+    {item.refundStatus === "rejected" && (
+      <p className="text-center text-red-600 font-medium mb-2 text-xs md:text-sm">
+        Your refund request has been rejected
+      </p>
+    )}
 
-                      <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
-                        <div className="flex flex-col items-center flex-shrink-0">
-                          <div
-                            className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
-                              timelineStatus.submitted ? "bg-green-600" : "bg-gray-300"
-                            }`}
-                          >
-                            {timelineStatus.submitted && (
-                              <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                              </svg>
-                            )}
-                          </div>
-                          <p className="font-semibold text-xs md:text-sm text-[#1C1C28] text-center">Refund Submitted</p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {timelineDates.submitted
-                              ? new Date(timelineDates.submitted).toLocaleString("en-GB", {
-                                  day: "2-digit", month: "short", year: "numeric", 
-                                  hour: "2-digit", minute: "2-digit", hour12: true
-                                })
-                              : "Pending"}
-                          </p>
-                        </div>
+    <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
+      {/* Step 1: Refund Submitted */}
+      <div className="flex flex-col items-center flex-shrink-0">
+        <div
+          className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
+            timelineStatus.submitted ? "bg-green-600" : "bg-gray-300"
+          }`}
+        >
+          {timelineStatus.submitted && (
+            <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          )}
+        </div>
+        <p className="font-semibold text-xs md:text-sm text-[#1C1C28] text-center">Refund Submitted</p>
+        <p className="text-xs text-gray-500 mt-1">
+          {timelineDates.submitted
+            ? new Date(timelineDates.submitted).toLocaleString("en-GB", {
+                day: "2-digit", month: "short", year: "numeric", 
+                hour: "2-digit", minute: "2-digit", hour12: true
+              })
+            : "Pending"}
+        </p>
+      </div>
 
-                        <div className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
-                          timelineStatus.isRejected ? "bg-red-400" : 
-                          timelineStatus.under_process ? "bg-green-600" : "bg-gray-300"
-                        }`} />
+      {/* CHANGE: Line is always green between submitted and under_process */}
+      <div className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
+        timelineStatus.under_process || timelineStatus.isRejected ? "bg-green-600" : "bg-gray-300"
+      }`} />
 
-                        <div className="flex flex-col items-center flex-shrink-0">
-                          <div className={`w-6 md:w-7 h-6 md:h-7 rounded-full border-[3px] flex items-center justify-center mb-2 md:mb-3 ${
-                            timelineStatus.isRejected ? "border-red-600 bg-red-600" :
-                            timelineStatus.under_process ? "border-green-600 bg-white" :
-                            timelineStatus.submitted ? "border-green-600 bg-white" : "border-gray-300 bg-white"
-                          }`}>
-                            {timelineStatus.isRejected ? (
-                              <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
-                              </svg>
-                            ) : timelineStatus.under_process ? (
-                              <div className="w-4 md:w-5 h-4 md:h-5 rounded-full bg-green-600" />
-                            ) : null}
-                          </div>
-                          <p className={`font-semibold text-xs md:text-sm text-center ${
-                            timelineStatus.isRejected ? "text-red-600" : "text-[#1C1C28]"
-                          }`}>
-                            {timelineStatus.isRejected ? "Rejected" : "Under Process"}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {timelineDates.under_process || timelineDates.completed
-                              ? new Date(timelineDates.under_process || timelineDates.completed).toLocaleString("en-GB", {
-                                  day: "2-digit", month: "short", year: "numeric",
-                                  hour: "2-digit", minute: "2-digit", hour12: true
-                                })
-                              : "Pending"}
-                          </p>
-                        </div>
+      {/* Step 2: Under Process */}
+      <div className="flex flex-col items-center flex-shrink-0">
+        {/* CHANGE: Under Process is always green with checkmark when completed (rejected or approved) or green dot when under_process */}
+        <div className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
+          timelineStatus.completed ? "bg-green-600" :
+          timelineStatus.under_process ? "border-[3px] border-green-600 bg-white" :
+          timelineStatus.submitted ? "border-[3px] border-green-600 bg-white" : "border-[3px] border-gray-300 bg-white"
+        }`}>
+          {timelineStatus.completed ? (
+            <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : timelineStatus.under_process ? (
+            <div className="w-4 md:w-5 h-4 md:h-5 rounded-full bg-green-600" />
+          ) : null}
+        </div>
+        <p className="font-semibold text-xs md:text-sm text-center text-[#1C1C28]">
+          Under Process
+        </p>
+        <p className="text-xs text-gray-500 mt-1">
+          {timelineDates.under_process
+            ? new Date(timelineDates.under_process).toLocaleString("en-GB", {
+                day: "2-digit", month: "short", year: "numeric",
+                hour: "2-digit", minute: "2-digit", hour12: true
+              })
+            : timelineStatus.isRejected && timelineDates.submitted
+            ? new Date(timelineDates.submitted).toLocaleString("en-GB", {
+                day: "2-digit", month: "short", year: "numeric",
+                hour: "2-digit", minute: "2-digit", hour12: true
+              })
+            : "Pending"}
+        </p>
+      </div>
 
-                        {!timelineStatus.isRejected && (
-                          <>
-                            <div className="w-16 md:w-40 h-px bg-gray-300 -mt-12 md:-mt-16 flex-shrink-0" />
+      {/* CHANGE: Line between step 2 and 3 - RED if rejected, GREEN if approved */}
+      <div className={`w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
+        timelineStatus.isRejected ? "bg-red-400" : 
+        item.refundStatus === "approved" ? "bg-green-600" : "bg-gray-300"
+      }`} />
 
-                            <div className="flex flex-col items-center flex-shrink-0">
-                              <div className={`w-6 md:w-7 h-6 md:h-7 rounded-full border-[3px] flex items-center justify-center mb-2 md:mb-3 ${
-                                timelineStatus.completed ? "border-green-600 bg-green-600" : "border-gray-300 bg-white"
-                              }`}>
-                                {timelineStatus.completed && (
-                                  <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                  </svg>
-                                )}
-                              </div>
-                              <p className={`font-semibold text-xs md:text-sm text-center ${
-                                timelineStatus.completed ? "text-[#1C1C28]" : "text-gray-400"
-                              }`}>
-                                {item.refundStatus === "approved" ? "Approved" : "Approved/Rejected"}
-                              </p>
-                              <p className="text-xs text-gray-500 mt-1">
-                                {timelineDates.completed
-                                  ? new Date(timelineDates.completed).toLocaleString("en-GB", {
-                                      day: "2-digit", month: "short", year: "numeric",
-                                      hour: "2-digit", minute: "2-digit", hour12: true
-                                    })
-                                  : "Pending"}
-                              </p>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  )}
+      {/* Step 3: Approved/Rejected */}
+      <div className="flex flex-col items-center flex-shrink-0">
+        {/* CHANGE: Red circle with X for rejected, green circle with checkmark for approved */}
+        <div className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
+          timelineStatus.isRejected ? "bg-red-600" :
+          item.refundStatus === "approved" ? "bg-green-600" : "border-[3px] border-gray-300 bg-white"
+        }`}>
+          {timelineStatus.isRejected ? (
+            <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : item.refundStatus === "approved" ? (
+            <svg className="w-4 md:w-5 h-4 md:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : null}
+        </div>
+        <p className={`font-semibold text-xs md:text-sm text-center ${
+          timelineStatus.isRejected ? "text-red-600" :
+          item.refundStatus === "approved" ? "text-[#1C1C28]" : "text-gray-400"
+        }`}>
+          {timelineStatus.isRejected ? "Rejected" : item.refundStatus === "approved" ? "Approved" : "Approved/Rejected"}
+        </p>
+        <p className="text-xs text-gray-500 mt-1">
+          {timelineDates.completed
+            ? new Date(timelineDates.completed).toLocaleString("en-GB", {
+                day: "2-digit", month: "short", year: "numeric",
+                hour: "2-digit", minute: "2-digit", hour12: true
+              })
+            : "Pending"}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
                 </div>
               );
             })

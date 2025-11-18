@@ -4,7 +4,7 @@ import userIcon from "../assets/user.svg";
 import vehicleIcon from "../assets/Carr.svg";
 import moneyIcon from "../assets/Money.svg";
 import { LogOut } from "lucide-react";
-import { getUserVehicles } from "../api/vehicleApi";
+import { getUserVehiclesAMC } from "../api/vehicleApi";
 import { logoutUser } from "../api/authApi";
 
 const AccountSidebar = ({ activeView, setActiveView }) => {
@@ -15,7 +15,7 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
   useEffect(() => {
     const fetchVehicleCount = async () => {
       try {
-        const vehicles = await getUserVehicles();
+        const vehicles = await getUserVehiclesAMC();
         setVehicleCount(vehicles.length);
       } catch (error) {
         setVehicleCount(0);

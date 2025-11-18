@@ -3,7 +3,7 @@ import Button from "../components/Button";
 import failureIcon from "../assets/failedpurchase.png";
 import { useNavigate } from "react-router-dom";
 
-const FailedPurchase = ({ onClose, reason , error, errorCode, errorReason}) => {
+const FailedPurchase = ({ onClose, error, errorCode, errorReason}) => {
 
   const navigate = useNavigate()
   

@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 
 export default function AnimatedTextTicker({
   texts = [],
-  interval = 1600, // how long to show each text
-  outMs = 360,     // fade out duration
-  inMs = 560,      // fade in duration
-  className = "",  // extra classes
+  interval = 1600,
+  outMs = 360,   
+  inMs = 560,     
+  className = "", 
 }) {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState("idle");
@@ -14,7 +14,6 @@ export default function AnimatedTextTicker({
 
   if (!texts || texts.length === 0) return null;
 
-  // If there's only one text, just render it statically
   if (texts.length === 1) {
     return (
       <div
@@ -32,7 +31,6 @@ export default function AnimatedTextTicker({
     );
   }
 
-  // manage animation phases
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
     if (phase === "idle") {
