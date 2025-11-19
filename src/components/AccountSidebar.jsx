@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import userIcon from "../assets/user.svg";
-import vehicleIcon from "../assets/Carr.svg";
-import moneyIcon from "../assets/Money.svg";
+import { S3_IMAGES } from "../constants/images";
 import { LogOut } from "lucide-react";
 import { getUserVehiclesAMC } from "../api/vehicleApi";
 import { logoutUser } from "../api/authApi";
@@ -49,15 +47,15 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
   };
 
   const sidebarItems = [
-    { id: "profile", label: "My Profile", img: userIcon, alt: "profileIcon" },
+    { id: "profile", label: "My Profile", img: S3_IMAGES.USER_ICON, alt: "profileIcon" },
     {
       id: "vehicles",
       label: "My Vehicle",
-      img: vehicleIcon,
+      img: S3_IMAGES.VEHICLE_ICON,
       alt: "vehicleIcon",
       badge: vehicleCount > 0 ? vehicleCount : null,
     },
-    { id: "amc", label: "My AMC", img: moneyIcon, alt: "moneyIcon" },
+    { id: "amc", label: "My AMC", img: S3_IMAGES.MONEY_ICON, alt: "moneyIcon" },
   ];
 
   return (

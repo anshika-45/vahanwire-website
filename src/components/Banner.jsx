@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import bannerImg from "../assets/HomeBanner.webp";
+import { S3_IMAGES } from "../constants/images";
 import { useNavigate } from "react-router-dom";
 const AnimatedText = lazy(() => import("./AnimatedText"));
 
@@ -17,7 +17,7 @@ const Banner = React.memo(() => {
         <div
           className="relative w-full h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] bg-center bg-cover overflow-hidden bg-gray-100"
           style={{
-            backgroundImage: `url(${bannerImg})`,
+            backgroundImage: `url(${S3_IMAGES.HOME_BANNER})`,
             willChange: "background-image",
             contentVisibility: "auto",
           }}
