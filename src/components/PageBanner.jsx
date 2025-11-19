@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import "../index.css";
 
@@ -10,49 +10,27 @@ const PageBanner = ({
   height = null,
   showTicker = true,
 }) => {
-  const [loaded, setLoaded] = useState(false);
-
   const responsiveHeight = "h-[40vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
-
-  const blurImage = `${image}?w=20&format=webp&q=5`;
 
   return (
     <section
-      className={`relative w-full overflow-hidden ${
+      className={`relative w-full overflow-hidden bg-gray-900 ${
         height ? "" : responsiveHeight
       }`}
       aria-label={`${title} banner`}
-      style={height ? { minHeight: height } : undefined}
+      style={{
+        ...(height ? { minHeight: height } : {}),
+        backgroundImage: `url(${image})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        willChange: 'background-image',
+        contentVisibility: 'auto',
+      }}
     >
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center blur-xl scale-110"
-        style={{ backgroundImage: `url(${blurImage})` }}
-      />
-
-      <img
-        src={`${image}?w=1600&format=webp&q=70`}
-        alt={title}
-        loading="eager"
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        className={`absolute inset-0 w-full h-full object-cover object-center pointer-events-none transition-opacity duration-300 ${
-          loaded ? "opacity-100" : "opacity-0"
-        }`}
-        width="1600"
-        height="800"
-        srcSet={`
-          ${image}?w=400&format=webp&q=50 400w,
-          ${image}?w=800&format=webp&q=60 800w,
-          ${image}?w=1200&format=webp&q=65 1200w,
-          ${image}?w=1600&format=webp&q=70 1600w
-        `}
-        sizes="100vw"
-      />
-
       {useDarkOverlay && (
         <div className="absolute inset-0 bg-black/60 pointer-events-none" />
       )}
-
+    
       {showTicker && (
         <div className="relative z-10">
           <div className="ticker-container">
@@ -71,8 +49,7 @@ const PageBanner = ({
           </div>
         </div>
       )}
-
-      {/* Title */}
+    
       <div
         className={`relative z-10 flex items-center justify-center ${
           height ? "" : responsiveHeight
