@@ -1,30 +1,20 @@
-import React, { Suspense, useEffect, useState } from "react";
-import PetrolPumpBanner from "../assets/PetrolPump.svg";
+import React, { Suspense } from "react";
+import { S3_IMAGES } from "../constants/images";
+
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 
 const PetrolPump = () => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => setImageLoaded(true);
-    img.onerror = () => setImageLoaded(true);
-    img.src = PetrolPumpBanner;
-  }, []);
-
   return (
-    <>
-      <div>
-          <PageBanner 
-            title="Coming Soon" 
-            image={PetrolPumpBanner} 
-            useGradientTitle={true}
-            useDarkOverlay={true}
-            imageLoaded={imageLoaded}
-          />
-        <div className="mt-6 md:mt-12 lg:mt-12 xl:mt-0" />
-      </div>
-    </>
+    <div>
+        <PageBanner
+          title="Coming Soon"
+          image={S3_IMAGES.PETROL_PUMP_BANNER}
+          useGradientTitle={true}
+          useDarkOverlay={true}
+        />
+
+      <div className="mt-6 md:mt-12 lg:mt-12 xl:mt-0" />
+    </div>
   );
 };
 

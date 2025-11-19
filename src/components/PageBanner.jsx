@@ -10,46 +10,46 @@ const PageBanner = ({
   height = null,
   showTicker = true,
 }) => {
-  const responsiveHeightClasses = "h-[40vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
+  const responsiveHeight =
+    "h-[40vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
 
   return (
     <section
-      className={`relative w-full overflow-hidden ${height ? "" : responsiveHeightClasses}`}
-      aria-label={title + " banner"}
+      className={`relative w-full overflow-hidden ${
+        height ? "" : responsiveHeight
+      }`}
+      aria-label={`${title} banner`}
       style={height ? { minHeight: height } : undefined}
     >
       <img
         src={image}
-        alt="decorative image"
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+        alt={title}
         loading="lazy"
         decoding="async"
+        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+        width="1600"
+        height="800"
+        srcSet={`
+          ${image}?w=400 400w,
+          ${image}?w=800 800w,
+          ${image}?w=1200 1200w,
+          ${image}?w=1600 1600w
+        `}
+        sizes="100vw"
       />
 
-      <div
-        className={`absolute inset-0 pointer-events-none ${
-          useDarkOverlay ? "bg-black/70" : "bg-transparent"
-        }`}
-      />
+      {useDarkOverlay && (
+        <div className="absolute inset-0 bg-black/70 pointer-events-none" />
+      )}
 
       {showTicker && (
         <div className="relative z-10">
           <div className="ticker-container">
             <div className="ticker">
               <div className="ticker__move">
-                {Array.from({ length: 7 }).map((_, i) => (
+                {[...Array(15)].map((_, i) => (
                   <span
                     key={i}
-                    className="ticker-item text-xs sm:text-sm md:text-base font-normal"
-                  >
-                    Coming Soon&nbsp;&nbsp;|&nbsp;&nbsp;
-                  </span>
-                ))}
-
-                {Array.from({ length: 8 }).map((_, i) => (
-                  <span
-                    key={`d${i}`}
                     className="ticker-item text-xs sm:text-sm md:text-base font-normal"
                   >
                     Coming Soon&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -62,13 +62,15 @@ const PageBanner = ({
       )}
 
       <div
-        className={`relative z-10 flex items-center justify-center ${height ? "" : responsiveHeightClasses}`}
+        className={`relative z-10 flex items-center justify-center ${
+          height ? "" : responsiveHeight
+        }`}
         style={height ? { minHeight: height } : undefined}
       >
         <h1
           className={`text-center leading-tight banner-title ${
             useGradientTitle
-              ? "gradient-text text-4xl sm:text-5xl md:text-6xl md:font-semibold sm:font-normal font-semibold"
+              ? "gradient-text text-4xl sm:text-5xl md:text-6xl font-semibold"
               : "text-white text-3xl sm:text-4xl md:text-5xl font-semibold"
           }`}
         >
@@ -87,4 +89,5 @@ PageBanner.propTypes = {
   height: PropTypes.string,
   showTicker: PropTypes.bool,
 };
+
 export default PageBanner;
