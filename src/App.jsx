@@ -7,7 +7,9 @@ import MainLayout from "./layouts/MainLayout";
 import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./context/ProtectedRoute.jsx";
+import UploadFile from "./components/UploadFile.jsx";
 import "./api/axiosInstance.js";
+
 
 const Homepage = React.lazy(() => import("./pages/Homepage"));
 const VehicleAmc = React.lazy(() => import("./pages/VehicleAmc"));
@@ -61,6 +63,7 @@ function App() {
                     } 
                   />
                 </Route>
+                <Route path="/upload" element={<UploadFile/>}/>
                
                 
               </Routes>

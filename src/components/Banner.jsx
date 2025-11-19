@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from "react";
 import { S3_IMAGES } from "../constants/images";
 import { useNavigate } from "react-router-dom";
-const AnimatedText = lazy(() => import("./AnimatedText"));
+import AnimatedText from "./AnimatedText";
 
 const bannerTexts = [
   "Car Service",

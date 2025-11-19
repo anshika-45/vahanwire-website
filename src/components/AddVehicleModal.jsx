@@ -161,7 +161,10 @@ const handleBlur = (e) => {
 
 
 const handleSubmit = async (e) => {
+  console.log("ugdwugcudgsugcudsguycgds");
   e.preventDefault();
+  e.stopPropagation();
+  console.log("Form submitted - handleSubmit called");
   setSubmitError("");
 
   const allTouched = Object.keys(formData).reduce(
@@ -187,7 +190,10 @@ const handleSubmit = async (e) => {
       fuelType: formData.fuelType.trim().toLowerCase(),
     };
 
+    console.log("Payload:", payload);
+
     const response = await addUserVehicleWithoutAMC(payload);
+
     const data = response?.data || response;
 
     setLoading(false);
@@ -227,7 +233,7 @@ return (
             <h2 className="font-semibold text-center flex-1 text-sm sm:text-base">
               Add New Vehicle
             </h2>
-            <button onClick={onClose} className="text-slate-600 text-lg">
+            <button type="button" onClick={onClose} className="text-slate-600 text-lg">
               ✕
             </button>
           </div>
@@ -285,6 +291,7 @@ return (
                       : field}
                   </label>
                   <input
+                    type="text"
                     name={field}
                     value={formData[field]}
                     onChange={handleChange}
