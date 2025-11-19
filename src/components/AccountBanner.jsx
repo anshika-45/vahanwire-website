@@ -1,5 +1,5 @@
 import React from "react";
-import accountBannerImg from "../assets/AccountBanner.svg";
+import { S3_IMAGES } from "../constants/images";
 
 const AccountBanner = () => {
   return (
@@ -13,7 +13,7 @@ const AccountBanner = () => {
     >
       <img
         loading="eager"
-        src={accountBannerImg}
+        src={S3_IMAGES.ACCOUNT_BANNER}
         alt="Account Banner"
         fetchPriority="high"
         decoding="async"

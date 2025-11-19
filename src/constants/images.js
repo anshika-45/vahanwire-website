@@ -13,6 +13,11 @@ export const S3_IMAGES = {
   PLAYSTORE: `${S3_BASE_URL}/uploads/1763531807305_vqb06i.svg`,
   ECOMMERCE_BANNER: `${S3_BASE_URL}/uploads/1763532048927_h9pgza.svg`,
   ADD_BANNER: `${S3_BASE_URL}/uploads/1763532829891_gquxig.webp`,  
-  // CARD685: `${S3_BASE_URL}/uploads/1763531579570_zf2bor.svg`,
-  // SERVICE_BANNER: `${S3_BASE_URL}/uploads/service.jpg`,
+  ACCOUNT_BANNER: `${S3_BASE_URL}/uploads/1763533301958_tewj7d.svg`,
+  USER_ICON: `${S3_BASE_URL}/uploads/1763533457863_cyhvf.svg`,
+  VEHICLE_ICON: `${S3_BASE_URL}/uploads/1763533616654_pfsawr.svg`,
+  MONEY_ICON: `${S3_BASE_URL}/uploads/1763533509735_jxar33.svg`,
+  BLUR_LOGO: `${S3_BASE_URL}/uploads/1763533728507_vh00q.webp`,
+  DRIVE_BANNER: `${S3_BASE_URL}/uploads/1763533967079_bbscq7.png`,
+  HOME_BANNER: `${S3_BASE_URL}/uploads/1763534136372_agjorn.webp`,
 };

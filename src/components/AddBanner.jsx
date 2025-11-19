@@ -1,6 +1,6 @@
 import React from "react";
 import { S3_IMAGES } from "../constants/images";
-import { SwatchBook } from "lucide-react";
+
 const AddBanner = () => {
   return (
     <>

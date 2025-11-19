@@ -1,6 +1,5 @@
 import React from "react";
-import amcImage from "../assets/Drive.svg";
-import logo from "../assets/blurlogo.webp";
+import { S3_IMAGES } from "../constants/images";
 import Button from "./Button";
 const AmcBanner = ({ onBuy }) => {
 
@@ -9,7 +8,7 @@ const AmcBanner = ({ onBuy }) => {
       <div className="container">
         <div className="relative rounded-3xl overflow-hidden shadow-lg">
           <img
-            src={amcImage}
+            src={S3_IMAGES.DRIVE_BANNER}
             alt="Drive worry-free with Vahanwire AMC. Get annual maintenance, priority support, and on-road assistance. Buy Now."
             loading="eager"
             className="w-full h-[200px] sm:h-[280px] md:h-[380px] object-cover"
@@ -37,7 +36,7 @@ const AmcBanner = ({ onBuy }) => {
           </div>
           <img
             loading="lazy"
-            src={logo}
+            src={S3_IMAGES.BLUR_LOGO}
             alt=""
             className="absolute right-0 transform top-1/2 translate-y-15 w-20 sm:w-28 md:w-36 h-auto opacity-90 flex-shrink-0"
           />
