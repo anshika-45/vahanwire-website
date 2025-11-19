@@ -12,10 +12,14 @@ function SearchBar({ placeholder = "Search..." }) {
     home: "/",
     about: "/about-us",
     amc: "/my-account?view=amc",
+    mechanic: "/mechanic",
+    Ecommerce: "/service-center",
+    petrol: "/petrol-pump",
+    tow: "tow-truck",
+    service: "service-center",
     profile: "/my-account?view=profile",
     vehicle: "/my-account?view=vehicles",
     contact: "/contact-us",
-    mechanic: "/mechanic",
   };
 
   const handleChange = (e) => {

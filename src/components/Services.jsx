@@ -61,7 +61,7 @@ const Services = React.memo(() => {
           Explore a full range of essential vehicle and home services —<br />
           from mechanic support to doorstep repairs, towing, payments, and more.
         </p>
-        <div className="mt-7 sm:mt-8 md:mt-12 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
+        <div className="mt-7 sm:mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
           {servicesData.map((service, index) => (
             <Tile key={index} {...service} />
           ))}
