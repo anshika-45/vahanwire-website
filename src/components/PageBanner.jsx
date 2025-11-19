@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import "../index.css";
 
@@ -10,8 +10,20 @@ const PageBanner = ({
   height = null,
   showTicker = true,
 }) => {
-  const responsiveHeight =
-    "h-[40vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
+  const responsiveHeight = "h-[40vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
+
+  useEffect(() => {
+    const imgs = document.querySelectorAll("img.lazy-banner");
+
+    imgs.forEach((img) => {
+      const full = img.getAttribute("data-src");
+      const loader = new Image();
+      loader.src = full;
+      loader.onload = () => {
+        img.src = full;
+      };
+    });
+  }, []);
 
   return (
     <section
@@ -22,18 +34,19 @@ const PageBanner = ({
       style={height ? { minHeight: height } : undefined}
     >
       <img
-        src={image}
+        src={`${image}?w=40&blur=50&format=webp&q=20`}  
+        data-src={`${image}?format=webp&q=70`}          
         alt={title}
-        loading="lazy"
+        loading="eager"
         decoding="async"
-        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none lazy-banner"
         width="1600"
         height="800"
         srcSet={`
-          ${image}?w=400 400w,
-          ${image}?w=800 800w,
-          ${image}?w=1200 1200w,
-          ${image}?w=1600 1600w
+          ${image}?w=400&format=webp&q=40 400w,
+          ${image}?w=800&format=webp&q=50 800w,
+          ${image}?w=1200&format=webp&q=60 1200w,
+          ${image}?w=1600&format=webp&q=70 1600w
         `}
         sizes="100vw"
       />
