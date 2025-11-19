@@ -1,7 +1,6 @@
 import React from "react";
-import AddImage from "../assets/addbanner.webp";
-import AppStore from "../assets/Apple.svg";
-import GooglePlay from "../assets/Playstore.svg";
+import { S3_IMAGES } from "../constants/images";
+import { SwatchBook } from "lucide-react";
 const AddBanner = () => {
   return (
     <>
@@ -12,11 +11,11 @@ const AddBanner = () => {
           className="w-[95%] sm:w-[90%] md:w-full max-w-screen-xl rounded-3xl overflow-hidden shadow-lg absolute lg:-bottom-52 sm:-bottom-61 -bottom-100 z-10 bg-center mt-20 sm:mt-28 md:mt-40
           max-sm:static max-sm:mt-10 p-1"
           style={{
-            backgroundImage: `url(${AddImage})`,
+            backgroundImage: `url(${S3_IMAGES.ADD_BANNER})`,
           }}
         >
           <img
-            src={AddImage}
+            src={S3_IMAGES.ADD_BANNER}
             alt="Add Banner Background"
             loading="eager"
             fetchPriority="high"
@@ -55,7 +54,7 @@ const AddBanner = () => {
                   >
                     <img
                       loading="lazy"
-                      src={AppStore}
+                      src={S3_IMAGES.APPSTORE}
                       alt="App Store"
                       role="img"
                       width="108"
@@ -72,7 +71,7 @@ const AddBanner = () => {
                   >
                     <img
                       loading="lazy"
-                      src={GooglePlay}
+                      src={S3_IMAGES.PLAYSTORE}
                       alt="Google Play"
                       role="img"
                       width="108"
@@ -109,7 +108,7 @@ const AddBanner = () => {
                     className="inline-block hover:opacity-80 transition"
                   >
                     <img
-                      src={AppStore}
+                      src={S3_IMAGES.APPSTORE}
                       alt="App Store"
                       role="img"
                       loading="lazy"
@@ -126,7 +125,7 @@ const AddBanner = () => {
                     className="inline-block hover:opacity-80 transition"
                   >
                     <img
-                      src={GooglePlay}
+                      src={S3_IMAGES.PLAYSTORE}
                       alt="Google Play"
                       role="img"
                       loading="lazy"

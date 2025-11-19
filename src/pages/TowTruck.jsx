@@ -1,26 +1,17 @@
-import React, { Suspense, useEffect, useState } from "react";
-import TowTruckBanner from "../assets/TowTruck.svg";
+import React from "react";
+import { S3_IMAGES } from "../constants/images";
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 
 const TowTruck = () => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => setImageLoaded(true);
-    img.onerror = () => setImageLoaded(true);
-    img.src = TowTruckBanner;
-  }, []);
-
   return (
     <>
       <div>
-          <PageBanner 
-            title="Coming Soon" 
-            image={TowTruckBanner}
-            imageLoaded={imageLoaded}
+          <PageBanner
+            title="Coming Soon"
+            image={S3_IMAGES.TOW_TRUCK_BANNER}
+            useGradientTitle={true}
+            useDarkOverlay={true}
           />
-
         <div className="mt-6 md:mt-12 lg:mt-12 xl:mt-0" />
       </div>
     </>
