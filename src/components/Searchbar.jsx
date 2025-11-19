@@ -11,17 +11,21 @@ function SearchBar({ placeholder = "Search..." }) {
   const pages = {
     home: "/",
     about: "/about-us",
+    "vehicle amc": "/my-account?view=amc",
     amc: "/my-account?view=amc",
     mechanic: "/mechanic",
-    Ecommerce: "/service-center",
+    ecommerce: "/e-commerce",
+    "petrol pump": "/petrol-pump",
     petrol: "/petrol-pump",
-    tow: "tow-truck",
-    service: "service-center",
+    "tow truck": "/tow-truck",
+    tow: "/tow-truck",
+    "service center": "/service-center",
+    service: "/service-center",
     profile: "/my-account?view=profile",
     vehicle: "/my-account?view=vehicles",
     contact: "/contact-us",
   };
-
+  
   const handleChange = (e) => {
     const value = e.target.value;
     setQuery(value);

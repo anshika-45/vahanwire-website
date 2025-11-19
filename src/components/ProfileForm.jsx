@@ -9,8 +9,15 @@ import {
 
 const ProfileForm = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({ name: "", phone: "", email: "" });
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [formData, setFormData] = useState(() => {
+    const cached = localStorage.getItem("userProfile");
+    return cached
+      ? JSON.parse(cached)
+      : { name: "", phone: "", email: "" };
+  });
+  const [selectedFile, setSelectedFile] = useState(() => {
+    return localStorage.getItem("userProfileImage") || null;
+  });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -19,12 +26,18 @@ const ProfileForm = () => {
       const res = await getMyProfile();
       const data = res?.data;
       if (data) {
-        setFormData({
+        const profileData = {
           name: data.name || "",
           phone: data.phone || "",
           email: data.email || "",
-        });
-        if (data.profileUrl) setSelectedFile(data.profileUrl);
+        };
+        setFormData(profileData);
+        localStorage.setItem("userProfile", JSON.stringify(profileData));
+        
+        if (data.profileUrl) {
+          setSelectedFile(data.profileUrl);
+          localStorage.setItem("userProfileImage", data.profileUrl);
+        }
         setIsEditing(!data.name && !data.email);
       }
     } catch (err) {
@@ -68,9 +81,6 @@ const ProfileForm = () => {
         error = "Email cannot exceed 100 characters";
       }
     }
-    
-    
-    
 
     if (name === "phone") {
       const trimmedPhone = value.trim();
@@ -105,13 +115,23 @@ const ProfileForm = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSelectedFile(reader.result);
+    };
+    reader.readAsDataURL(file);
+
     setLoading(true);
     try {
       const res = await uploadProfileImage(file);
       const imageUrl = res?.data?.profileUrl;
-      if (imageUrl) setSelectedFile(imageUrl);
+      if (imageUrl) {
+        setSelectedFile(imageUrl);
+        localStorage.setItem("userProfileImage", imageUrl);
+      }
     } catch (err) {
       console.error("Image upload failed:", err);
+      setSelectedFile(localStorage.getItem("userProfileImage") || null);
     } finally {
       setLoading(false);
     }
@@ -124,6 +144,7 @@ const ProfileForm = () => {
     setLoading(true);
     try {
       await updateMyProfile({ name: formData.name, email: formData.email });
+      localStorage.setItem("userProfile", JSON.stringify(formData));
       setIsEditing(false);
     } catch (err) {
       console.error("Update failed:", err);
