@@ -31,7 +31,7 @@ const PageBanner = ({
         <div className="absolute inset-0 bg-black/60 pointer-events-none" />
       )}
     
-      {showTicker && (
+      {/* {showTicker && (
         <div className="relative z-10">
           <div className="ticker-container">
             <div className="ticker">
@@ -48,7 +48,7 @@ const PageBanner = ({
             </div>
           </div>
         </div>
-      )}
+      )} */}
     
       <div
         className={`relative z-10 flex items-center justify-center ${
