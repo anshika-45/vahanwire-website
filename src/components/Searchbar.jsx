@@ -11,8 +11,8 @@ function SearchBar({ placeholder = "Search..." }) {
   const pages = {
     home: "/",
     about: "/about-us",
-    "vehicle amc": "/my-account?view=amc",
-    amc: "/my-account?view=amc",
+    "vehicle amc": "/vehicle-amc",
+    amc: "/vehicle-amc",
     mechanic: "/mechanic",
     ecommerce: "/e-commerce",
     "petrol pump": "/petrol-pump",
