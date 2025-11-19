@@ -8,7 +8,6 @@ const ServiceCenter = () => {
       <div>
        
           <PageBanner title="Coming Soon" image={ServiceCenterBanner} useGradientTitle={true}
-  useDarkOverlay={true}
  />
         
         <div className="mt-6 md:mt-12 lg:mt-12 xl:mt-0" />
