@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AMCCards from "../components/AmcCard";
 import BreadcrumbBar from "../components/BreadcrumbBar";
-import { getUserVehicles } from "../api/vehicleApi";
+import { getUserVehicleWithoutAMC  } from "../api/vehicleApi";
 const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
 const AmcCard = React.lazy(() => import("../components/AmcCard"));
 const CompareTable = React.lazy(() => import("../components/CompareTable"));
@@ -48,7 +48,7 @@ const VehicleAmc = () => {
     const checkFilterValidity = async () => {
       if (filterActive && filterData) {
         // Check if the selected vehicle still exists
-        const vehicles = await getUserVehicles();
+        const vehicles = await getUserVehicleWithoutAMC();
         const vehicleExists = vehicles.some(
           v => v.vehicleNumber === filterData.vehicle?.vehicleNumber
         );
@@ -71,7 +71,8 @@ const VehicleAmc = () => {
 
   const checkUserVehicles = async () => {
     try {
-      const vehicles = await getUserVehicles();
+      const vehicles = await getUserVehicleWithoutAMC();
+      console.log("lkdlnkwj",vehicles);
       return vehicles && vehicles.length > 0;
     } catch (error) {
       console.error("Error checking vehicles:", error);
@@ -105,6 +106,7 @@ const VehicleAmc = () => {
     
     if (isLoggedIn) {
       const hasVehicles = await checkUserVehicles();
+      console.log("lkkkkkkkkkk");
       if (hasVehicles) {
         setIsVehicleOpen(false);
         setIsSelectVehicleOpen(true);
