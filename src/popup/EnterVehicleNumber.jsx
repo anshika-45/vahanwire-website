@@ -4,10 +4,11 @@ import verifyIcon from "../assets/verify.webp";
 import Modal from "../components/Modal";
 import { addUserVehicleWithoutAMC, searchUserVehicle } from "../api/vehicleApi";
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
-
+import { useAmcData } from "../context/AmcDataContext";
 const DEFAULT_VEHICLE_TYPE = "car";
 
 const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
+   const { vehicleType } = useAmcData();
   const [ formData, setFormData ] = useState({
      vehicleNumber: "",
      brand: "",
@@ -207,7 +208,8 @@ const handleAddVehicle = async () => {
       brand: formData.brand,
       model: formData.model,
       year: formData.year,
-      fuelType: formData.fuelType
+      fuelType: formData.fuelType,
+      vehicleType
     }
 
     const response = await addUserVehicleWithoutAMC(payload);

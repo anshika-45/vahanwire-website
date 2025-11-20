@@ -1,5 +1,5 @@
 import React from "react";
-import ServiceCenterBanner from "../assets/ServiceCenter.svg";
+import { S3_IMAGES } from "../constants/images";
 import PageBanner from "../components/PageBanner";
 
 const ServiceCenter = () => {
@@ -8,7 +8,7 @@ const ServiceCenter = () => {
       <div>
         <PageBanner
           title="Coming Soon"
-          image={ServiceCenterBanner}
+          image={S3_IMAGES.SERVICE_BANNER}
           useGradientTitle={true}
         />
         <div className="mt-6 md:mt-12 lg:mt-12 xl:mt-0" />

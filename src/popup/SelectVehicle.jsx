@@ -14,7 +14,6 @@ import {
 import { selectAMCVehicle } from "../api/amcApi";
 
 const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehicleBrand, addedVehicleModel, addedVehicleYear , addedVehicleFuelType, plan, addedVehicleType }) => {
-  console.log("jb xhjwbscjxhbshwb",plan);
   const navigate = useNavigate();
   const { vehicleType, amcType, activateFilter } = useAmcData();
   const [formData, setFormData] = useState({
@@ -38,8 +37,6 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
   const [isLoading, setIsLoading] = useState(false);
   const [isProceeding, setIsProceeding] = useState(false);
   
-  console.log("kjkcewbjhcb",selectedVehicle);
-  console.log("Adeed Vehikce",addedVehicles);
   const initialized = useRef(false);
 
   const getVehicleImage = (vehicleType) => { return vehicleType?.toLowerCase() === "bike" ? bikeImg : carImg };
@@ -125,9 +122,11 @@ const validateFuelType = (v) => {
   if (hasValid(v)) return "Fuel type cannot contain special characters";
   return "";
 };
-console.log("bdwhcbhjdbwhsbcsd",vehicleType);
+
 useEffect(() => {
-  if (!initialized.current) {
+  if (!initialized.current && isOpen) {
+    initialized.current = true;
+    
     if (addedVehicleNumber && addedVehicleModel) {
       const preAddedVehicle = {
           number: addedVehicleNumber.toUpperCase(),
@@ -137,14 +136,12 @@ useEffect(() => {
           fuelType: addedVehicleFuelType,
           vehicleType: addedVehicleType
         };
-        console.log("preAddeddVejhilceeeee",preAddedVehicle);
         setAddedVehicles([preAddedVehicle]);
         setSelectedVehicle(preAddedVehicle.number);
     } else {
       (async()=>{
         try{
           const vehicles = await getUserVehicleWithoutAMC();
-          console.log("ewcvhcvehwvscgxv ghw",getUserVehicleWithoutAMC);
           if(vehicles?.length>0){
             const formatted = vehicles.map((v)=>({
               number: v.vehicleNumber.toUpperCase(),
@@ -155,7 +152,10 @@ useEffect(() => {
               vehicleType: v.vehicleType || "car"
             }));
             setAddedVehicles(formatted);
-            setSelectedVehicle(formatted[0].number);
+            const matchingVehicle = formatted.find(v => v.vehicleType === vehicleType);
+            if (matchingVehicle) {
+              setSelectedVehicle(matchingVehicle.number);
+            }
           }
         }catch(err){
           console.error("Failed to load vehicles:", err);
@@ -163,7 +163,7 @@ useEffect(() => {
       })();
     }
   }
-},[addedVehicleNumber]);
+},[isOpen, addedVehicleNumber, addedVehicleModel, addedVehicleBrand, addedVehicleYear, addedVehicleFuelType, addedVehicleType, vehicleType]);
 
 useEffect(() => {
   if (!isOpen) {
@@ -176,6 +176,7 @@ useEffect(() => {
     });
     setErrors({});
     setShowModel(false);
+    initialized.current = false;
     }
 }, [isOpen]);
 
@@ -269,7 +270,6 @@ const handleAddVehicle = async () => {
       year: formData.year,
       fuelType: formData.fuelType,
     });
-    console.log("jhsjkhcujhsahjchjshhjsjahjsasaaasa");
     setIsLoading(false);
     const msg = res?.data?.message;
 
@@ -313,9 +313,9 @@ const handleProceed = async () => {
     setErrors({ proceed: "Please select a vehicle to continue" });
     return;
   }
-  console.log("heyyyy",selectedVehicle);
-  const vehicleData = addedVehicles.find((v) => v.number === selectedVehicle);
 
+  const vehicleData = addedVehicles.find((v) => v.number === selectedVehicle);
+  
   if (!vehicleData) {
     alert("Vehicle not found");
     return;
@@ -379,10 +379,10 @@ const handleCancelAdd = () => {
     })
     setErrors({});
   };
-console.log(
-  "kejbjfbcjhdsbhjvc",addedVehicles
-);
-console.log("vehicleType",vehicleType);
+
+const filteredVehicles = addedVehicles.filter(v => v.vehicleType === vehicleType);
+const hasMatchingVehicles = filteredVehicles.length > 0;
+
 return (
   <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
     <div className="w-full max-w-[550px] flex flex-col items-center p-2 relative">
@@ -397,8 +397,8 @@ return (
           Select a Vehicle to Subscribe
         </h2>
        
-    {addedVehicles.filter(v => v.vehicleType === vehicleType).length > 0 ? (
-    addedVehicles.filter(v => v.vehicleType === vehicleType).map((vehicle, i) =>  (
+    {hasMatchingVehicles ? (
+    filteredVehicles.map((vehicle, i) =>  (
               <div
                 key={vehicle.number}
                 className={`flex items-center gap-4 rounded-xl border p-4 shadow-sm cursor-pointer transition-all ${
@@ -431,7 +431,7 @@ return (
             ))
           ) : (
             <div className="text-center py-6 text-gray-500">
-              No vehicles added yet. Please add below.
+              No {vehicleType}s added yet. Please add below.
             </div>
           )}
         </div>
@@ -539,12 +539,12 @@ return (
         <Button
           text={isProceeding ? "Processing..." : "Proceed to AMC"}
           className={`w-full py-3 rounded-lg font-semibold ${
-            selectedVehicle
+            hasMatchingVehicles && selectedVehicle
               ? "bg-[#266DDF] text-white hover:bg-blue-700"
               : "bg-gray-300 text-gray-700 cursor-not-allowed"
           }`}
           onClick={handleProceed}
-          disabled={!selectedVehicle || isProceeding}
+          disabled={!hasMatchingVehicles || !selectedVehicle || isProceeding}
         />
       </div>
     </Modal>
