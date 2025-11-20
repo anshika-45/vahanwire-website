@@ -13,23 +13,19 @@ import {
 } from "../api/vehicleApi";
 import { selectAMCVehicle } from "../api/amcApi";
 
-const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehicleBrand, addedVehicleModel, addedVehicleYear , addedVehicleFuelType, plan, addedVehicleType }) => {
+const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehicleBrand, addedVehicleModel, addedVehicleType, plan }) => {
   const navigate = useNavigate();
   const { vehicleType, amcType, activateFilter } = useAmcData();
   const [formData, setFormData] = useState({
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   })
 
   const [error,setErrors] = useState({
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   })
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [showModel, setShowModel] = useState(false);
@@ -55,8 +51,6 @@ const handleChange = (e) => {
   if (name === "vehicleNumber") val = val.toUpperCase().replace(/\s/g, "");
   if (name === "brand") val = val.replace(/[^A-Za-z\s\-]/g, "");
   if (name === "model") val = val.replace(/[^A-Za-z0-9\s\-]/g, "");
-  if (name === "fuelType") val = val.toLowerCase().replace(/[^A-Za-z]/g, "");
-  if (name === "year") val = val.replace(/[^0-9]/g, "").slice(0, 4);
 
   setFormData((p) => ({ ...p, [name]: val }));
   setErrors((p) => ({ ...p, [name]: "" }));
@@ -105,23 +99,6 @@ const validateModel = (v) => {
 
   return "";
 };
-  
-const validateYear = (y) => {
-  if (!y) return "Year is required";
-  if (y.length !== 4) return "Year must be 4 digits";
-  const yr = Number(y);
-  if (yr < 1990 || yr > new Date().getFullYear())
-    return "Invalid year";
-  return "";
-};
-  
-const validateFuelType = (v) => {
-  if (!v.trim()) return "Fuel type is required";
-  const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
-  if (!valid.includes(v.toLowerCase())) return "Invalid fuel type (try Petrol, Diesel, Electric)";
-  if (hasValid(v)) return "Fuel type cannot contain special characters";
-  return "";
-};
 
 useEffect(() => {
   if (!initialized.current && isOpen) {
@@ -132,8 +109,6 @@ useEffect(() => {
           number: addedVehicleNumber.toUpperCase(),
           model: addedVehicleModel,
           brand: addedVehicleBrand,
-          year: addedVehicleYear,
-          fuelType: addedVehicleFuelType,
           vehicleType: addedVehicleType
         };
         setAddedVehicles([preAddedVehicle]);
@@ -147,8 +122,6 @@ useEffect(() => {
               number: v.vehicleNumber.toUpperCase(),
               model: v.model,
               brand: v.brand,
-              year: v.year,
-              fuelType: v.fuelType,
               vehicleType: v.vehicleType || "car"
             }));
             setAddedVehicles(formatted);
@@ -163,7 +136,7 @@ useEffect(() => {
       })();
     }
   }
-},[isOpen, addedVehicleNumber, addedVehicleModel, addedVehicleBrand, addedVehicleYear, addedVehicleFuelType, addedVehicleType, vehicleType]);
+},[isOpen, addedVehicleNumber, addedVehicleModel, addedVehicleBrand, addedVehicleType, vehicleType]);
 
 useEffect(() => {
   if (!isOpen) {
@@ -171,8 +144,6 @@ useEffect(() => {
       vehicleNumber: "",
       brand: "",
       model: "",
-      year: "",
-      fuelType: ""
     });
     setErrors({});
     setShowModel(false);
@@ -222,15 +193,13 @@ const handleSearch = async () => {
         number: data.vehicle.vehicleNumber.toUpperCase(),
         brand: data.vehicle.brand,
         model: data.vehicle.model,
-        year: data.vehicle.year,
-        fuelType: data.vehicle.fuelType,
         vehicleType: data.vehicle.vehicleType
       };
 
       setAddedVehicles((p) => [...p, newVehicle]);
       setSelectedVehicle(newVehicle.number);
       setErrors({});
-      setFormData({ vehicleNumber: "", brand: "", model: "", year: "", fuelType: "" });
+      setFormData({ vehicleNumber: "", brand: "", model: "" });
       return;
     }
     setShowModel(true)
@@ -245,8 +214,6 @@ const handleAddVehicle = async () => {
     vehicleNumber: validateVehicleNumber(formData.vehicleNumber),
     brand: validateBrand(formData.brand),
     model: validateModel(formData.model),
-    year: validateYear(formData.year),
-    fuelType: validateFuelType(formData.fuelType),
   };
 
   setErrors(e);
@@ -267,8 +234,6 @@ const handleAddVehicle = async () => {
       vehicleNumber: normalized,
       brand: formData.brand,
       model: formData.model,
-      year: formData.year,
-      fuelType: formData.fuelType,
     });
     setIsLoading(false);
     const msg = res?.data?.message;
@@ -283,8 +248,6 @@ const handleAddVehicle = async () => {
         number: normalized,
         brand: formData.brand,
         model: formData.model,
-        year: formData.year,
-        fuelType: formData.fuelType,
         vehicleType: vehicleType
       };
       setAddedVehicles((p) => [...p, newVehicle]);
@@ -294,8 +257,6 @@ const handleAddVehicle = async () => {
         vehicleNumber: "",
         brand: "",
         model: "",
-        year: "",
-        fuelType: "",
       });
       setErrors({});
       return;
@@ -328,8 +289,6 @@ const handleProceed = async () => {
     brand: vehicleData.brand,
     model: vehicleData.model,
     vehicleType: vehicleData.vehicleType,
-    year: vehicleData.year,
-    fuelType: vehicleData.fuelType,
     amcPlanCategory: amcType,
   })
     .then((response) => {
@@ -374,8 +333,6 @@ const handleCancelAdd = () => {
       vehicleNumber:"",
       brand:"",
       model:"",
-      year:"",
-      fuelType:"",
     })
     setErrors({});
   };
@@ -483,34 +440,6 @@ return (
                 <p className="text-[#CB0200] text-xs mb-2">{error.model}</p>
               )}
 
-             <label className="text-base text-gray-700 mb-1">Year</label>
-              <input
-                type="text"
-                name="year"
-                placeholder="Enter Year"
-                value={formData.year}
-                onChange={handleChange}
-                maxLength={10}
-                className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-base mb-3"
-              />
-              {error.year && (
-                <p className="text-[#CB0200] text-xs mb-2">{error.year}</p>
-              )} 
-              
-              <label className="text-base text-gray-700 mb-1">Fuel Type</label>
-              <input
-                type="text"
-                name="fuelType"
-                placeholder="Enter Fuel Type"
-                value={formData.fuelType}
-                onChange={handleChange}
-                maxLength={10}
-                className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 text-base mb-3"
-              />
-              {error.fuelType && (
-                <p className="text-[#CB0200] text-xs mb-2">{error.fuelType}</p>
-              )} 
-              
               <div className="flex gap-3">
                 <Button
                   text="Cancel"

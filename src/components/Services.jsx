@@ -10,7 +10,7 @@ const servicesData = [
   {
     icon: amcIcon,
     title: "AMC",
-    desc: "Locate verified mechanics near you for instant repairs at home or on-road.",
+    desc: "Your vehicle's yearly care plan - simple, affordable, dependable.",
     linkText: "Buy AMC",
     linkHref: "/vehicle-amc",
   },
