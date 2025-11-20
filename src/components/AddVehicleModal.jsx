@@ -19,15 +19,11 @@ const AddVehicleModal = ({ open, onClose, onSubmit }) => {
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   });
   const [errors, setErrors] = useState({
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   });
   const [touched, setTouched] = useState({});
   const [loading, setLoading] = useState(false);
@@ -39,8 +35,6 @@ useEffect(() => {
       vehicleNumber: "",
       brand: "",
       model: "",
-      year: "",
-      fuelType: "",
   });
     setErrors({});
     setTouched({});
@@ -88,30 +82,11 @@ const validateModel = (v) => {
   return "";
 };
 
-const validateYear = (y) => {
-  if (!y) return "Year is required";
-  if (y.length !== 4) return "Year must be 4 digits";
-  const yr = Number(y);
-  if (yr < 1990 || yr > new Date().getFullYear())
-    return "Invalid year";
-  return "";
-};
-
-const validateFuelType = (v) => {
-  if (!v.trim()) return "Fuel type is required";
-  const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
-  if (!valid.includes(v.toLowerCase())) return "Invalid fuel type (try Petrol, Diesel, Electric)";
-  if (hasValid(v)) return "Fuel type cannot contain special characters";
-  return "";
-};
-
 const validateOnBlur = (name, value) => {
   let msg = "";
   if (name === "vehicleNumber") msg = validateVehicleNumber(value);
   if (name === "brand") msg = validateBrand(value);
   if (name === "model") msg = validateModel(value);
-  if (name === "year") msg = validateYear(value);
-  if (name === "fuelType") msg = validateFuelType(value);
 
   setErrors((prev) => ({ ...prev, [name]: msg }));
 };
@@ -121,8 +96,6 @@ const validateForm = () => {
     vehicleNumber: validateVehicleNumber(formData.vehicleNumber),
     brand: validateBrand(formData.brand),
     model: validateModel(formData.model),
-    year: validateYear(formData.year),
-    fuelType: validateFuelType(formData.fuelType),
   };
 
   setErrors(newErrors);
@@ -136,17 +109,11 @@ const handleChange = (e) => {
   if (name === "vehicleNumber")
     clean = clean.toUpperCase().replace(/\s+/g, "");
 
-  if (name === "year")
-    clean = clean.replace(/[^0-9]/g, "").slice(0, 4);
-
   if (name === "brand")
     clean = clean.replace(/[^a-zA-Z\s]/g, "").slice(0, 20);
 
   if (name === "model")
     clean = clean.replace(/\s+/g, " ").slice(0, 25);
-
-  if (name === "fuelType")
-    clean = clean.replace(/[^a-zA-Z]/g, "");
 
   setFormData((prev) => ({ ...prev, [name]: clean }));
 
@@ -186,8 +153,6 @@ const handleSubmit = async (e) => {
       vehicleType,
       brand: formData.brand.trim(),
       model: formData.model.trim(),
-      year: formData.year.trim(),
-      fuelType: formData.fuelType.trim().toLowerCase(),
     };
 
     console.log("Payload:", payload);
@@ -280,14 +245,12 @@ return (
               ))}
             </div>
 
-            {["vehicleNumber", "year", "fuelType", "brand", "model"].map(
+            {["vehicleNumber", "brand", "model"].map(
               (field) => (
                 <div key={field}>
                   <label className="block text-slate-700 mb-1 capitalize">
                     {field === "vehicleNumber"
                       ? "Vehicle Number"
-                      : field === "fuelType"
-                      ? "Fuel Type"
                       : field}
                   </label>
                   <input

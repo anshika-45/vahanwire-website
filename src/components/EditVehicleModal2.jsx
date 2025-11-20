@@ -18,15 +18,11 @@ const EditVehicleModal2 = ({
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   });
   const [errors, setErrors] = useState({
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   });
   const [touched, setTouched] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,16 +64,12 @@ const EditVehicleModal2 = ({
         vehicleNumber: initial.vehicleNumber || initial.vehicle || "",
         brand: initial.brand || initial.vehicleBrand || "",
         model: initial.model || initial.vehicleModel || "",
-        year: initial.year || "",
-        fuelType: initial.fuelType || "",
       });
     } else {
       setFormData({
         vehicleNumber: "",
         brand: "",
         model: "",
-        year: "",
-        fuelType: "",
       });
     }
 
@@ -118,31 +110,12 @@ const EditVehicleModal2 = ({
     return "";
   };
 
-  const validateYear = (y) => {
-    if (!y) return "Year is required";
-    if (y.length !== 4) return "Year must be 4 digits";
-    const yr = Number(y);
-    if (yr < 1990 || yr > new Date().getFullYear()) return "Invalid year";
-    return "";
-  };
-
-  const validateFuelType = (v) => {
-    if (!v.trim()) return "Fuel type is required";
-    const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
-    if (!valid.includes(v.toLowerCase()))
-      return "Invalid fuel type (try Petrol, Diesel, Electric)";
-    if (hasValid(v)) return "Fuel type cannot contain special characters";
-    return "";
-  };
-
   const validateOnBlur = (name, value) => {
     let msg = "";
 
     if (name === "vehicleNumber") msg = validateVehicleNumber(value);
     if (name === "brand") msg = validateBrand(value);
     if (name === "model") msg = validateModel(value);
-    if (name === "year") msg = validateYear(value);
-    if (name === "fuelType") msg = validateFuelType(value);
 
     setErrors((prev) => ({ ...prev, [name]: msg }));
   };
@@ -152,8 +125,6 @@ const EditVehicleModal2 = ({
       vehicleNumber: validateVehicleNumber(formData.vehicleNumber),
       brand: validateBrand(formData.brand),
       model: validateModel(formData.model),
-      year: validateYear(formData.year),
-      fuelType: validateFuelType(formData.fuelType),
     };
 
     setErrors(newErrors);
@@ -168,11 +139,9 @@ const EditVehicleModal2 = ({
 
     if (name === "vehicleNumber")
       clean = clean.toUpperCase().replace(/\s+/g, "");
-    if (name === "year") clean = clean.replace(/[^0-9]/g, "").slice(0, 4);
     if (name === "brand")
       clean = clean.replace(/[^A-Za-z\s]/g, "").slice(0, 20);
     if (name === "model") clean = clean.replace(/\s+/g, " ").slice(0, 25);
-    if (name === "fuelType") clean = clean.replace(/[^a-zA-Z]/g, "");
 
     setFormData((prev) => ({ ...prev, [name]: clean }));
 
@@ -205,8 +174,6 @@ const EditVehicleModal2 = ({
         vehicleType,
         brand: formData.brand.trim(),
         model: formData.model.trim(),
-        year: formData.year.trim(),
-        fuelType: formData.fuelType.trim(),
       };
 
       const actualPurchaseId = purchaseId || initial?.purchaseId;
@@ -363,47 +330,6 @@ const EditVehicleModal2 = ({
                 />
                 {errors.model && touched.model && (
                   <p className="text-red-600 text-xs mt-1">{errors.model}</p>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Year
-                </label>
-                <input
-                  name="year"
-                  value={formData.year}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`w-full h-8 sm:h-9 border rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
-                    errors.year && touched.year
-                      ? "border-red-500 bg-red-50"
-                      : "border-slate-300"
-                  }`}
-                  placeholder="Enter Year"
-                />
-                {errors.year && touched.year && (
-                  <p className="text-red-600 text-xs mt-1">{errors.year}</p>
-                )}
-              </div>
-              <div>
-                <label className="block text-slate-700 mb-1 text-xs sm:text-sm">
-                  Fuel Type
-                </label>
-                <input
-                  name="fuelType"
-                  value={formData.fuelType}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={`w-full h-8 sm:h-9 border rounded-lg px-3 text-xs sm:text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
-                    errors.fuelType && touched.fuelType
-                      ? "border-red-500 bg-red-50"
-                      : "border-slate-300"
-                  }`}
-                  placeholder="Enter Fuel Type"
-                />
-                {errors.fuelType && touched.fuelType && (
-                  <p className="text-red-600 text-xs mt-1">{errors.fuelType}</p>
                 )}
               </div>
 
