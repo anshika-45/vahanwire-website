@@ -19,15 +19,11 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   });
   const [error, setErrors] = useState({
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   });
   const [touched, setTouched] = useState({});
   const [loading, setLoading] = useState(false);
@@ -51,8 +47,6 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
         vehicleNumber: initial.vehicleNumber || "",
         brand: initial.brand || "",
         model: initial.model || "",
-        year: initial.year || "",
-        fuelType: initial.fuelType || "",
       });
       setErrors({});
       setTouched({});
@@ -88,30 +82,11 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
     return "";
   };
 
-  const validateYear = (y) => {
-    if (!y) return "Year is required";
-    if (y.length !== 4) return "Year must be 4 digits";
-    const yr = Number(y);
-    if (yr < 1990 || yr > new Date().getFullYear()) return "Invalid year";
-    return "";
-  };
-
-  const validateFuelType = (v) => {
-    if (!v.trim()) return "Fuel type is required";
-    const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
-    if (!valid.includes(v.toLowerCase()))
-      return "Invalid fuel type (try Petrol, Diesel, Electric)";
-    if (hasValid(v)) return "Fuel type cannot contain special characters";
-    return "";
-  };
-
   const validateForm = () => {
     const newErrors = {
       vehicleNumber: validateVehicleNumber(formData.vehicleNumber),
       brand: validateBrand(formData.brand),
       model: validateModel(formData.model),
-      year: validateYear(formData.year),
-      fuelType: validateFuelType(formData.fuelType),
     };
 
     setErrors(newErrors);
@@ -125,8 +100,6 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
     if (name === "vehicleNumber") msg = validateVehicleNumber(value);
     if (name === "brand") msg = validateBrand(value);
     if (name === "model") msg = validateModel(value);
-    if (name === "year") msg = validateYear(value);
-    if (name === "fuelType") msg = validateFuelType(value);
 
     setErrors((prev) => ({ ...prev, [name]: msg }));
   };
@@ -137,7 +110,6 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
 
     if (name === "vehicleNumber")
       clean = clean.toUpperCase().replace(/\s/g, "");
-    if (name === "year") clean = clean.replace(/[^0-9]/g, "").slice(0, 4);
     if (name === "brand")
       clean = clean.replace(/[^A-Za-z\s]/g, "").slice(0, 20);
     if (name === "model") clean = clean.replace(/\s+/g, " ").slice(0, 25);
@@ -177,8 +149,6 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
         vehicleType,
         brandName: formData.brand.trim(),
         modelName: formData.model.trim(),
-        fuelType: formData.fuelType.trim(),
-        year: formData.year,
       };
 
       const res = await updateAMCVehicle(initial._id, payload);
@@ -283,34 +253,28 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
               ))}
             </div>
 
-            {["vehicleNumber", "year", "fuelType", "brand", "model"].map(
-              (field) => (
-                <div key={field}>
-                  <label className="block text-slate-700 mb-1 capitalize">
-                    {field === "vehicleNumber"
-                      ? "Vehicle Number"
-                      : field === "fuelType"
-                      ? "Fuel Type"
-                      : field}
-                  </label>
-                  <input
-                    name={field}
-                    value={formData[field]}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={`w-full border rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
-                      error[field] && touched[field]
-                        ? "border-red-500 bg-red-50"
-                        : "border-slate-300"
-                    }`}
-                    placeholder={`Enter ${field}`}
-                  />
-                  {error[field] && touched[field] && (
-                    <p className="text-red-600 text-xs mt-1">{error[field]}</p>
-                  )}
-                </div>
-              )
-            )}
+            {["vehicleNumber", "brand", "model"].map((field) => (
+              <div key={field}>
+                <label className="block text-slate-700 mb-1 capitalize">
+                  {field === "vehicleNumber" ? "Vehicle Number" : field}
+                </label>
+                <input
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={`w-full border rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-[#D9E7FE] outline-none ${
+                    error[field] && touched[field]
+                      ? "border-red-500 bg-red-50"
+                      : "border-slate-300"
+                  }`}
+                  placeholder={`Enter ${field}`}
+                />
+                {error[field] && touched[field] && (
+                  <p className="text-red-600 text-xs mt-1">{error[field]}</p>
+                )}
+              </div>
+            ))}
             {submitError && (
               <div className="text-red-600 text-sm text-center bg-red-50 py-2.5 px-3 rounded-lg border border-red-200">
                 {submitError}
