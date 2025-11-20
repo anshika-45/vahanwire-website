@@ -13,15 +13,11 @@ const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
      vehicleNumber: "",
      brand: "",
      model: "",
-     year: "",
-     fuelType: "",
   });
   const [error, setErrors] = useState({
     vehicleNumber: "",
     brand: "",
     model: "",
-    year: "",
-    fuelType: "",
   })
 
   const [showSelectVehicle, setShowSelectVehicle] = useState(false);
@@ -35,15 +31,11 @@ useEffect(()=> {
      vehicleNumber: "",
      brand: "",
      model: "",
-     year: "",
-     fuelType: "",
     });
     setErrors({
       vehicleNumber: "",
       brand: "",
       model: "",
-      year: "",
-      fuelType: "",
     })
     setShowModel(false);
     setVehicleData(null);
@@ -61,10 +53,6 @@ const handleChange = (e) => {
     val = value.toUpperCase().replace(/\s/g, "");
   if (name === "brand")
     val = value.replace(/[0-9]/g, "").slice(0, 15);
-  if (name === "fuelType")
-    val = value.toLowerCase().replace(/[0-9]/g, "");
-  if (name === "year")
-    val = value.replace(/[^0-9]/g, "").slice(0, 4);
 
   setFormData((prev) => ({ ...prev, [name]: val }));
   setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -112,24 +100,6 @@ const validateModel = (v) => {
 };
 
 
-const validateYear = (y) => {
-  if (!y) return "Year is required";
-  if (y.length !== 4) return "Year must be 4 digits";
-  const yr = Number(y);
-  if (yr < 1990 || yr > new Date().getFullYear())
-    return "Invalid year";
-  return "";
-};
-
-const validateFuelType = (v) => {
-  if (!v.trim()) return "Fuel type is required";
-  const valid = ["petrol", "diesel", "electric", "cng", "hybrid", "lpg"];
-  if (!valid.includes(v.toLowerCase())) return "Invalid fuel type (try Petrol, Diesel, Electric)";
-  if (hasValid(v)) return "Fuel type cannot contain special characters";
-  return "";
-};
-
-
 const handleSearch = async () => {
   const err = validateVehicleNumber(formData.vehicleNumber);
 
@@ -173,8 +143,6 @@ const handleSearch = async () => {
         vehicleNumber: data.vehicle.vehicleNumber,
         brand: data.vehicle.brand,
         model: data.vehicle.model,
-        year: data.vehicle.year,
-        fuelType: data.vehicle.fuelType,
         vehicleType: data.vehicle.vehicleType || DEFAULT_VEHICLE_TYPE,
       });
       setShowSelectVehicle(true);
@@ -191,8 +159,6 @@ const handleAddVehicle = async () => {
     vehicleNumber: validateVehicleNumber(formData.vehicleNumber),
     brand: validateBrand(formData.brand),
     model: validateModel(formData.model),
-    year: validateYear(formData.year),
-    fuelType: validateFuelType(formData.fuelType)
   }
 
   setErrors((prev) => ({...prev, ...e}));
@@ -207,8 +173,6 @@ const handleAddVehicle = async () => {
       vehicleNumber: formData.vehicleNumber,
       brand: formData.brand,
       model: formData.model,
-      year: formData.year,
-      fuelType: formData.fuelType,
       vehicleType
     }
 
@@ -315,45 +279,6 @@ const handleAddVehicle = async () => {
                     {error.model}
                   </div>
                 )}
-
-                <label className="w-full text-xs text-[#333333] mb-1">
-                  Year
-                </label>
-                <input
-                  type="text"
-                  name="year"
-                  placeholder="Enter Year"
-                  value={formData.year}
-                  onChange={handleChange}
-                  className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
-                  hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
-                  maxLength={10}
-                />
-                {error.year && (
-                  <div className="text-[#CB0200] text-xs mb-3 w-full">
-                    {error.year}
-                  </div>
-                )}
-
-
-                <label className="w-full text-xs text-[#333333] mb-1">
-                  FuelType
-                </label>
-                <input
-                  type="text"
-                  name="fuelType"
-                  placeholder="Enter Fuel Type"
-                  value={formData.fuelType}
-                  onChange={handleChange}
-                  className="w-full border border-[#BCD2F5] rounded-lg px-3 py-3 mb-3 text-xs bg-[#F8F8F8]
-                  hover:border-[#BCD2F5] focus:outline-none focus:border-[#BCD2F5] focus:ring-2 focus:ring-[#BCD2F5]"
-                  maxLength={10}
-                />
-                {error.fuelType && (
-                  <div className="text-[#CB0200] text-xs mb-3 w-full">
-                    {error.fuelType}
-                  </div>
-                )}  
               </>
             )}
 
@@ -382,8 +307,6 @@ const handleAddVehicle = async () => {
             addedVehicleNumber={vehicleData.vehicleNumber}
             addedVehicleBrand={vehicleData.brand}
             addedVehicleModel={vehicleData.model}
-            addedVehicleYear={vehicleData.year}
-            addedVehicleFuelType={vehicleData.fuelType}
             addedVehicleType={vehicleData.vehicleType}
             plan={plan}
           />
