@@ -22,6 +22,34 @@ const STATUS_CONFIG = {
   },
 };
 
+const AMCCardShimmer = () => (
+  <div className="flex flex-col gap-3 md:gap-4 bg-white rounded-xl p-3 md:p-6">
+    <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+      <div className="w-full md:w-[340px] h-[200px] bg-gray-200 rounded-xl animate-pulse"></div>
+      
+      <div className="flex-1 flex flex-col justify-between">
+        <div>
+          <div className="flex flex-col md:flex-row justify-between items-start gap-2 md:gap-0 md:items-start mb-2">
+            <div className="h-6 bg-gray-200 rounded animate-pulse w-48"></div>
+            <div className="h-10 bg-gray-200 rounded-full animate-pulse w-32"></div>
+          </div>
+
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-full mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-40 mb-2"></div>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-2 md:gap-4 p-2 md:p-3 mt-2 flex-wrap">
+          <div className="h-10 bg-gray-200 rounded-lg animate-pulse w-32"></div>
+          <div className="h-10 bg-gray-200 rounded-lg animate-pulse w-32"></div>
+          <div className="h-10 bg-gray-200 rounded-lg animate-pulse w-32"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const getStatusBadge = (planStatus, refundStatus) => {
   if (planStatus === "cancelled") return STATUS_CONFIG.CANCELLED;
   if (planStatus === "pending") return STATUS_CONFIG.PENDING_ACTIVATION;
@@ -438,10 +466,20 @@ export default function MyAMCPage() {
 
   if (loading) {
     return (
-      <div className="w-full flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#266DDF] mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading AMC plans...</p>
+      <div className="w-full">
+        <div className="space-y-2 md:space-y-3 bg-[#F4F4F4] p-3 md:p-4 rounded-xl">
+          <div className="rounded-xl p-2 md:p-3 m-2 md:m-3 mt-0 overflow-x-auto">
+            <nav className="flex gap-x-4 md:gap-8 border-b border-[#D9D9D9] min-w-max md:min-w-full">
+              {tabs.map((tab) => (
+                <div
+                  key={tab}
+                  className="pb-2 md:pb-3 h-8 w-16 bg-gray-200 rounded animate-pulse"
+                ></div>
+              ))}
+            </nav>
+          </div>
+          <AMCCardShimmer />
+          <AMCCardShimmer />
         </div>
       </div>
     );
@@ -625,7 +663,6 @@ export default function MyAMCPage() {
                       )}
 
                       <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
-                        {/* Step 1: Refund Submitted */}
                         <div className="flex flex-col items-center flex-shrink-0">
                           <div
                             className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
