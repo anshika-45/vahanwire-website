@@ -7,6 +7,39 @@ import {
   uploadProfileImage,
 } from "../api/authApi";
 
+const ProfileFormShimmer = () => (
+  <section className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 md:p-2 lg:p-10 md:mb-10 mb-5">
+    <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+      <div className="flex flex-col items-center md:w-1/3 gap-4 w-full mt-4 md:mt-6">
+        <div className="relative">
+          <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-30 md:h-30 lg:w-36 lg:h-36 rounded-full bg-gray-200 animate-pulse border-4 border-white shadow"></div>
+        </div>
+      </div>
+
+      <div className="md:w-2/3 w-full">
+        <div className="flex flex-col gap-4 sm:gap-5">
+          <div>
+            <div className="h-4 bg-gray-200 rounded animate-pulse w-16 mb-2"></div>
+            <div className="h-5 bg-gray-200 rounded animate-pulse w-48"></div>
+          </div>
+
+          <div>
+            <div className="h-4 bg-gray-200 rounded animate-pulse w-16 mb-2"></div>
+            <div className="h-5 bg-gray-200 rounded animate-pulse w-36"></div>
+          </div>
+
+          <div>
+            <div className="h-4 bg-gray-200 rounded animate-pulse w-16 mb-2"></div>
+            <div className="h-5 bg-gray-200 rounded animate-pulse w-56"></div>
+          </div>
+
+          <div className="h-11 bg-gray-200 rounded-lg animate-pulse w-full sm:w-[200px]"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 const ProfileForm = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(() => {
@@ -18,10 +51,11 @@ const ProfileForm = () => {
   const [selectedFile, setSelectedFile] = useState(() => {
     return localStorage.getItem("userProfileImage") || null;
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
 
   const fetchUserProfile = async () => {
+    setLoading(true);
     try {
       const res = await getMyProfile();
       const data = res?.data;
@@ -42,6 +76,8 @@ const ProfileForm = () => {
       }
     } catch (err) {
       console.error("Error fetching profile:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,6 +188,10 @@ const ProfileForm = () => {
       setLoading(false);
     }
   };
+
+  if (loading) {
+    return <ProfileFormShimmer />;
+  }
 
   return (
     <section className="flex-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-6 md:p-2 lg:p-10 md:mb-10 mb-5">

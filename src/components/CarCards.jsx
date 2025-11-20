@@ -91,6 +91,21 @@ const VehicleCard = ({
   );
 };
 
+const VehicleCardShimmer = () => (
+  <div className="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm">
+    <div className="bg-gray-200 p-3 sm:p-4 md:p-6 flex items-center justify-center h-24 sm:h-32 md:h-40 animate-pulse"></div>
+    <div className="p-3 sm:p-4 md:p-5 space-y-1.5 sm:space-y-2">
+      <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+      <div className="h-3 bg-gray-200 rounded animate-pulse w-1/2"></div>
+      <div className="h-3 bg-gray-200 rounded animate-pulse w-2/3"></div>
+      <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+        <div className="h-9 sm:h-10 bg-gray-200 rounded-lg animate-pulse"></div>
+        <div className="h-9 sm:h-10 bg-gray-200 rounded-lg animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+);
+
 const CarCards = () => {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState(null);
@@ -187,9 +202,10 @@ const CarCards = () => {
       />
 
       {loading ? (
-        <p className="text-center text-sm text-gray-500 py-6">
-          Loading vehicles...
-        </p>
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+          <VehicleCardShimmer />
+          <VehicleCardShimmer />
+        </div>
       ) : cars.length === 0 ? (
         <p className="text-center text-sm text-gray-500 py-6">
           No vehicles found.
