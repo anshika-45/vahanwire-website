@@ -20,4 +20,5 @@ export const S3_IMAGES = {
   BLUR_LOGO: `${S3_BASE_URL}/uploads/1763533728507_vh00q.webp`,
   DRIVE_BANNER: `${S3_BASE_URL}/uploads/1763533967079_bbscq7.png`,
   HOME_BANNER: `${S3_BASE_URL}/uploads/1763534136372_agjorn.webp`,
+  SERVICE_BANNER: `${S3_BASE_URL}/uploads/1763562049150_gqvn6f.png`,
 };
