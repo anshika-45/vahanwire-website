@@ -1,5 +1,6 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAmcData } from "../context/AmcDataContext";
 
 const Faq = React.lazy(() => import("../components/Faq"));
 const Banner = React.lazy(() => import("../components/Banner"));
@@ -19,10 +20,16 @@ const ComponentFallback = () => (
 );
 const Homepage = () => {
   const navigate = useNavigate();
-  const classStyle = "duration-300 transition-all ease-in";
+
+  const { clearFilter } = useAmcData();
+
+  useEffect(() => {
+    clearFilter();
+  }, []);
+
 
   const handleBuyAmc = () => {
-    navigate("/vehicle-amc");
+    navigate("/vehicle-amc?vehicleType=car&amcType=luxury");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -63,8 +70,6 @@ const Homepage = () => {
       <Suspense fallback={<ComponentFallback />}>
         <Faq />
       </Suspense>
-
-
     </div>
   );
 };

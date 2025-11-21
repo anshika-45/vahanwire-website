@@ -54,7 +54,7 @@ const VehicleAmc = () => {
         
         if (vehicleExists) {
           navigate("/vehicle-amc-filter", {
-            state: {...filterData, vehicleType},
+            state: {...filterData, vehicleType, amcType: filterData.amcType},
             replace: true,
           });
         } else {
@@ -64,7 +64,7 @@ const VehicleAmc = () => {
     };
     
     checkFilterValidity();
-  }, [filterActive, filterData, navigate]);
+  }, [filterActive, filterData, navigate, vehicleType]);
 
   const checkUserVehicles = async () => {
     try {
