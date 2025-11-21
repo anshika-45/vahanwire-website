@@ -59,7 +59,7 @@ const AMCCard = ({
   vehicleType = "car",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-
+  
   return (
     <div className="relative overflow-visible flex justify-center flex-shrink-0">
       <div
@@ -245,3 +245,5 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
 };
 
 export default AMCCards;
+
+

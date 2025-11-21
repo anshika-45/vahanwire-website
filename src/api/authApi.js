@@ -51,8 +51,8 @@ export const getActiveZones = async () => {
   return response;
 };
 
-export const updateCity = async (cityData) => {
-  const response = await axiosInstance.put(`/users/update-city`, cityData);
+export const updateCity = async (zoneData) => {
+  const response = await axiosInstance.put(`/users/update-city`, zoneData);
   return response.data;
 };
 

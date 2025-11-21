@@ -15,20 +15,6 @@ const FailedPurchase = ({ onClose, error, errorCode, errorReason}) => {
     };
   }, []);
 
-  useEffect(() => {
-      const handlePopState = (event) => {
-        event.preventDefault();
-        navigate('/vehicle-amc-filter', { replace: true });
-      };
-  
-      window.history.pushState(null, '', window.location.pathname);
-      window.addEventListener('popstate', handlePopState);
-  
-      return () => {
-        window.removeEventListener('popstate', handlePopState);
-      };
-  }, [navigate]);
-
   return (
     <div className="flex flex-col items-center justify-center py-10">
       <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
