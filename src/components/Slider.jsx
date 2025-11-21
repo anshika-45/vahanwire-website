@@ -193,10 +193,10 @@ export default function Slider() {
               </SwiperSlide>
             );
           })}
-          <div class="swiper-button-prev">
+          <div class="swiper-button-prev hidden lg:block">
             <img src={leftIcon} alt="Prev" />
           </div>
-          <div class="swiper-button-next">
+          <div class="swiper-button-next hidden lg:block">
             <img src={rightIcon} alt="Next" />
           </div>
         </Swiper>

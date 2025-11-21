@@ -25,15 +25,17 @@ const Header = () => {
 
   const pages = {
     home: "/",
-    about: "/about-us",
-    amc: "/my-account?view=amc",
+    "about us": "/about-us",
+    "vehicle amc": "/vehicle-amc",
+    "my amc": "/my-account?view=amc",
     mechanic: "/mechanic",
-    Ecommerce: "/service-center",
-    petrol: "/petrol-pump",
-    service: "service-center",
-    profile: "/my-account?view=profile",
-    vehicle: "/my-account?view=vehicles",
-    contact: "/contact-us",
+    ecommerce: "/e-commerce",
+    "petrol pump": "/petrol-pump",
+    "tow truck": "/tow-truck",
+    "service center": "/service-center",
+    "my profile": "/my-account?view=profile",
+    "my vehicle": "/my-account?view=vehicles",
+    "contact us": "/contact-us",
   };
 
   const handleChange = (e) => {
