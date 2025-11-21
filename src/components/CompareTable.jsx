@@ -179,7 +179,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
               <tr className="h-[120px]">
                 <th
                   ref={firstColumnRef}
-                  className="py-10 px-4 sm:px-6 text-center text-[#242424] text-2xl sm:text-3xl border-2 border-[#E0EDFF] bg-[#F9FBFF] relative"
+                  className="py-10 px-4 sm:px-6 text-center text-[#242424] text-2xl sm:text-3xl border-2 border-[#BCD2F5] bg-[#F9FBFF] relative"
                   style={{ width: "20%" }}
                   onMouseEnter={handleFirstColumnMouseEnter}
                   onMouseLeave={handleMouseLeave}

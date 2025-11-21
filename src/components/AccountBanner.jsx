@@ -17,7 +17,7 @@ const AccountBanner = () => {
         alt="Account Banner"
         fetchPriority="high"
         decoding="async"
-        className="w-full h-full object-cover object-center opacity-95"
+        className="w-full h-full lg:object-cover object-center opacity-95"
       />
       <div className="absolute inset-0 bg-black/25 flex items-center justify-center px-3 sm:px-4">
         <h1
