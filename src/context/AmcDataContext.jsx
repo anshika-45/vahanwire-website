@@ -13,17 +13,27 @@ export const useAmcData = () => {
 
 export const AmcDataProvider = ({ children }) => {
   const [vehicleType, setVehicleType] = useState(() => {
-    const stored = sessionStorage.getItem('selectedVehicleType');
+    const stored = sessionStorage.getItem("selectedVehicleType");
     return stored || "car";
   });
-  const [amcType, setAmcType] = useState("luxury");
+  
+  const [amcType, setAmcType] = useState(() => {
+    const stored = sessionStorage.getItem("selectedAmcType");
+    return stored || "luxury";
+  });
+  
   const [purchasedCards, setPurchasedCards] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
   const [filterData, setFilterData] = useState(null);
 
   const handleSetVehicleType = (type) => {
     setVehicleType(type);
-    sessionStorage.setItem('selectedVehicleType', type);
+    sessionStorage.setItem("selectedVehicleType", type);
+  };
+
+  const handleSetAmcType = (type) => {
+    setAmcType(type);
+    sessionStorage.setItem("selectedAmcType", type);
   };
 
   const getAmcTabs = useMemo(() => {
@@ -63,7 +73,7 @@ export const AmcDataProvider = ({ children }) => {
         vehicleType,
         setVehicleType: handleSetVehicleType,
         amcType,
-        setAmcType,
+        setAmcType: handleSetAmcType,
         getAmcTabs,
         features: getFeatures,
         purchasedCards,

@@ -479,7 +479,6 @@ export default function MyAMCPage() {
             </nav>
           </div>
           <AMCCardShimmer />
-          <AMCCardShimmer />
         </div>
       </div>
     );
