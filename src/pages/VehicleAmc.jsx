@@ -47,20 +47,17 @@ const VehicleAmc = () => {
   useEffect(() => {
     const checkFilterValidity = async () => {
       if (filterActive && filterData) {
-        // Check if the selected vehicle still exists
         const vehicles = await getUserVehicleWithoutAMC();
         const vehicleExists = vehicles.some(
           v => v.vehicleNumber === filterData.vehicle?.vehicleNumber
         );
         
         if (vehicleExists) {
-          // Vehicle exists, navigate to filter page
           navigate("/vehicle-amc-filter", {
             state: {...filterData, vehicleType},
             replace: true,
           });
         } else {
-          // Vehicle was deleted, clear the filter
           clearFilter();
         }
       }
@@ -72,7 +69,6 @@ const VehicleAmc = () => {
   const checkUserVehicles = async () => {
     try {
       const vehicles = await getUserVehicleWithoutAMC();
-      console.log("lkdlnkwj",vehicles);
       return vehicles && vehicles.length > 0;
     } catch (error) {
       console.error("Error checking vehicles:", error);
@@ -106,7 +102,6 @@ const VehicleAmc = () => {
     
     if (isLoggedIn) {
       const hasVehicles = await checkUserVehicles();
-      console.log("lkkkkkkkkkk");
       if (hasVehicles) {
         setIsVehicleOpen(false);
         setIsSelectVehicleOpen(true);

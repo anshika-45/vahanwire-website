@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import locationIcon from "../assets/LocationIcon.svg";
 import dropdownIcon from "../assets/down-arrow.svg";
-import { getActiveCities, getMyProfile, updateCity } from "../api/authApi";
+import { getActiveZones, getMyProfile, updateCity } from "../api/authApi";
 
 const LocationDropdown = ({ onLocationSelect }) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("Select Location");
   const [selectedCityId, setSelectedCityId] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [cities, setCities] = useState([]);
+  const [zones, setZones] = useState([]); 
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,62 +37,62 @@ const LocationDropdown = ({ onLocationSelect }) => {
       setLoading(true);
       setError(null);
 
-      const citiesResponse = await getActiveCities();
+      const zoneResponse = await getActiveZones();
 
-      if (citiesResponse.data.success) {
-        const cityList = citiesResponse.data.data || [];
-        setCities(cityList);
+      if (zoneResponse.data.success) {
+        const zoneList = zoneResponse.data.data || [];
+        setZones(zoneList); 
 
         if (isLoggedIn) {
           const profileResponse = await getMyProfile();
           const userData = profileResponse.data;
-          const userCity = cityList.find((c) => c._id === userData?.selectedCity);
+          const userZone = zoneList.find((z) => z._id === userData?.selectedCity);
 
-          if (userCity) {
-            setSelected(userCity.displayName);
-            setSelectedCityId(userCity._id);
-            if (onLocationSelect) onLocationSelect(userCity);
-          } else if (cityList.length > 0) {
-            await setDefaultCity(cityList);
+          if (userZone) {
+            setSelected(userZone.zoneName);
+            setSelectedCityId(userZone._id);
+            if (onLocationSelect) onLocationSelect(userZone); 
+          } else if (zoneList.length > 0) {
+            await setDefaultZone(zoneList); 
           }
         } else {
-          const savedCity = localStorage.getItem("guestCity");
-          if (savedCity) {
-            const cityData = JSON.parse(savedCity);
-            const city = cityList.find((c) => c._id === cityData._id);
-            if (city) {
-              setSelected(city.displayName);
-              setSelectedCityId(city._id);
-              if (onLocationSelect) onLocationSelect(city);
+          const savedZone = localStorage.getItem("guestZone"); 
+          if (savedZone) {
+            const zoneData = JSON.parse(savedZone);
+            const zone = zoneList.find((z) => z._id === zoneData._id);
+            if (zone) {
+              setSelected(zone.zoneName);
+              setSelectedCityId(zone._id);
+              if (onLocationSelect) onLocationSelect(zone); 
             }
           }
         }
       } else {
-        setError("Failed to load active cities");
+        setError("Failed to load active zones"); 
       }
     } catch (error) {
       console.error("Error initializing location:", error);
-      setError("Failed to load cities");
+      setError("Failed to load zones");
     } finally {
       setLoading(false);
     }
   }, [onLocationSelect, isLoggedIn]);
 
-  const setDefaultCity = async (cityList) => {
-    const firstCity = cityList[0];
-    if (!firstCity) return;
+  const setDefaultZone = async (zoneList) => {
+    const firstZone = zoneList[0];
+    if (!firstZone) return;
 
-    setSelected(firstCity.displayName);
-    setSelectedCityId(firstCity._id);
+    setSelected(firstZone.zoneName);
+    setSelectedCityId(firstZone._id);
 
     try {
-      await updateCity({ cityId: firstCity._id });
-      console.log("Default city saved:", firstCity.displayName);
+      await updateCity({ zoneId: firstZone._id }); 
+      console.log("Default zone saved:", firstZone.zoneName);
     } catch (error) {
-      console.error("Error saving default city:", error);
+      console.error("Error saving default zone:", error);
     }
 
-    if (onLocationSelect) onLocationSelect(firstCity);
+    if (onLocationSelect) onLocationSelect(firstZone);
   };
 
   const handleClick = () => {
@@ -100,26 +100,26 @@ const LocationDropdown = ({ onLocationSelect }) => {
     setSearchTerm("");
   };
 
-  const handleLocationClick = async (city) => {
-    setSelected(city.displayName);
-    setSelectedCityId(city._id);
+  const handleLocationClick = async (zone) => {
+    setSelected(zone.zoneName);
+    setSelectedCityId(zone._id);
     setOpen(false);
     setSearchTerm("");
 
     if (isLoggedIn) {
       try {
-        const response = await updateCity({ cityId: city._id });
+        const response = await updateCity({ zoneId: zone._id }); 
         if (response.success) {
-          console.log("City updated successfully:", city.displayName);
+          console.log("Zone updated successfully:", zone.zoneName);
         }
       } catch (error) {
-        console.error("Error updating user city:", error);
+        console.error("Error updating user zone:", error);
       }
     } else {
-      localStorage.setItem("guestCity", JSON.stringify(city));
+      localStorage.setItem("guestZone", JSON.stringify(zone)); 
     }
 
-    if (onLocationSelect) onLocationSelect(city);
+    if (onLocationSelect) onLocationSelect(zone);
   };
 
   useEffect(() => {
@@ -133,8 +133,8 @@ const LocationDropdown = ({ onLocationSelect }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  const filteredCities = cities.filter((city) =>
-    city.displayName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredZones = zones.filter((zone) =>
+    zone.zoneName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -166,11 +166,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
       </div>
 
       <div id="mobileScreen" className="md:hidden block">
-        <div
-          onClick={handleClick}
-          role="button"
-          className="flex items-center"
-        >
+        <div onClick={handleClick} role="button" className="flex items-center">
           {selected === "Select Location" ? (
             <img
               className="w-6 h-6 object-cover shrink-0"
@@ -211,25 +207,25 @@ const LocationDropdown = ({ onLocationSelect }) => {
 
           {loading ? (
             <div className="px-3 py-4 text-center text-sm text-gray-500">
-              Loading cities...
+              Loading zones...
             </div>
-          ) : filteredCities.length === 0 ? (
+          ) : filteredZones.length === 0 ? ( 
             <div className="px-3 py-4 text-center text-sm text-gray-500">
-              No cities found
+              No zones found
             </div>
           ) : (
             <ul className="max-h-[280px] overflow-y-auto">
-              {filteredCities.map((city) => (
+              {filteredZones.map((zone) => (
                 <li
-                  key={city._id}
-                  onClick={() => handleLocationClick(city)}
+                  key={zone._id}
+                  onClick={() => handleLocationClick(zone)}
                   className={`px-3 py-2.5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer text-sm font-medium transition-colors last:border-b-0 ${
-                    selectedCityId === city._id
+                    selectedCityId === zone._id
                       ? "bg-blue-50 text-blue-700"
                       : "text-gray-800"
                   }`}
                 >
-                  {city.displayName}
+                  {zone.zoneName} 
                 </li>
               ))}
             </ul>

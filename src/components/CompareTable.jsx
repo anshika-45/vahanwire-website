@@ -72,19 +72,30 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
 
   const mapPlansData = (plans = []) => {
     if (!Array.isArray(plans) || plans.length === 0) return [];
-
-    return plans.map((plan) => ({
-      _id: plan?._id,
-      key: plan?.planSubCategory?.toLowerCase(),
-      name: plan?.planName,
-      price: plan?.planTotalAmount || 0,
-    }));
+  
+    const keyMapping = {
+      'premiuim care': 'premium',
+      'standard care': 'standard',
+      'basic care': 'basic',
+    };
+  
+    return plans.map((plan) => {
+      const normalizedKey = plan?.planName?.toLowerCase();
+      return {
+        _id: plan?._id,
+        key: keyMapping[normalizedKey] || normalizedKey.replace(/\s+/g, ''),
+        name: plan?.planName,
+        price: plan?.planTotalAmount || 0,
+        sorting: plan?.sorting ?? 999,
+      };
+    });
   };
 
   useEffect(() => {
     const loadPlans = async () => {
       if (Array.isArray(plansAre) && plansAre.length > 0) {
         const mappedPlans = mapPlansData(plansAre);
+        mappedPlans.sort((a, b) => a.sorting - b.sorting);
         setPlans(mappedPlans);
         return;
       }
@@ -95,6 +106,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
 
       const data = await fetchPlans(vehicleType, amcType);
       const mappedPlans = mapPlansData(data);
+      mappedPlans.sort((a, b) => a.sorting - b.sorting);
       setPlans(mappedPlans);
     };
 

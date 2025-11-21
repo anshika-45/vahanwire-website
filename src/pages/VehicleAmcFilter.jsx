@@ -10,7 +10,7 @@ import { createAMCPurchase } from "../api/amcApi";
 import { getPaymentError, getPaymentStatus } from "../api/paymentApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import AMC from "../components/AMC";
-import useAmcData from "../hooks/useAmcData";
+import { useAmcData } from "../context/AmcDataContext";
 
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -101,18 +101,22 @@ const VehicleAmcFilter = () => {
   const [showPopup, setShowPopup] = useState(null);
 
   useEffect(() => {
-    const handlePopState = (event) => {
-      event.preventDefault();
-      navigate("/vehicle-amc", { replace: true });
-    };
-
-    window.history.pushState(null, "", window.location.pathname);
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [navigate]);
+    if (locationVehicleType) {
+      setVehicleType(locationVehicleType);
+    } else {
+      const saved = localStorage.getItem("selectedVehicleData");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.vehicleType && Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+            setVehicleType(parsed.vehicleType);
+          }
+        } catch (e) {
+          console.error("Error parsing vehicle type:", e);
+        }
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (locationVehicle && locationPlans) {

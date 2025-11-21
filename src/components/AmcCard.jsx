@@ -15,27 +15,31 @@ const mapPlansToCards = (plans = [], vehicle = {}) => {
       ? `${plan.planDurationInMonth} Months`
       : "N/A",
     price: plan?.planTotalAmount || 0,
-    originalPrice: plan?.planTotalAmount || 0,
-    discount: plan?.planBookingAmount || 0,
+    discountPercent: plan?.discountPercent || 0,
+    discount: plan?.planDiscountPrice || 0,
     periodLabel: "/per year",
+    sorting: plan?.sorting ?? 999,
     features: Array.isArray(plan?.planFeatures)
-      ? typeof plan.planFeatures[0] === "string"
-        ? plan.planFeatures[0].split(",").map((f) => f.trim())
-        : plan.planFeatures
-      : [],
+  ? plan.planFeatures.flatMap((item) =>
+      typeof item === "string"
+        ? item.split(",").map((f) => f.trim())
+        : []
+    )
+  : typeof plan?.planFeatures === "string"
+  ? plan.planFeatures.split(",").map((f) => f.trim())
+  : [],
     bgColor:
-      plan?.planSubCategory === "premium"
+      plan?.planName === "Premiuim Care"
         ? "linear-gradient(to bottom right, #8F6521, #A3762D)"
-        : plan?.planSubCategory === "standard"
+        : plan?.planName === "Standard Care"
         ? "linear-gradient(to bottom right, #252525, #404040)"
         : "linear-gradient(to bottom right, #3A5353, #4E7777)",
     hoverBgColor:
-      plan?.planSubCategory === "premium"
+      plan?.planName === "Premiuim Care"
         ? "linear-gradient(to bottom right, #A3762D, #8F6521)"
-        : plan?.planSubCategory === "standard"
+        : plan?.planName === "Standard Care"
         ? "linear-gradient(to bottom right, #404040, #252525)"
         : "linear-gradient(to bottom right, #4E7777, #3A5353)",
-    planSubCategory: plan?.planSubCategory?.toLowerCase(),
   }));
 };
 
@@ -44,9 +48,9 @@ const AMCCard = ({
   vehicleNumber,
   validFor,
   price,
-  originalPrice,
   discount,
   periodLabel,
+  discountPercent,
   features,
   bgColor,
   hoverBgColor,
@@ -55,7 +59,7 @@ const AMCCard = ({
   vehicleType = "car",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-
+  
   return (
     <div className="relative overflow-visible flex justify-center flex-shrink-0">
       <div
@@ -115,13 +119,11 @@ const AMCCard = ({
               ₹ {price.toLocaleString()}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-xs">
-            {originalPrice && (
-              <span className="line-through text-white/70">
-                ₹{originalPrice.toLocaleString()}
-              </span>
+          <div className="flex items-center gap-1 text-xs -ml-1">
+            <span className="text-white/80">{discountPercent}% Discount</span>
+            {discount && (
+              <span className="ml-3 text-white/90">₹ {discount}</span>
             )}
-            {discount && <span className="text-white/90">{discount}</span>}
             <span className="text-white/80">{periodLabel}</span>
           </div>
         </div>
@@ -177,7 +179,7 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
     const loadPlans = async () => {
       if (plans && Array.isArray(plans) && plans.length > 0) {
         const mapped = mapPlansToCards(plans, vehicle);
-        mapped.sort((a, b) => (a.planSubCategory > b.planSubCategory ? 1 : -1));
+        mapped.sort((a, b) => a.sorting - b.sorting);
         setCards(mapped);
         return;
       }
@@ -188,7 +190,7 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
 
       const fetched = await fetchPlans(vehicleType, amcType);
       const mapped = mapPlansToCards(fetched, vehicle);
-      mapped.sort((a, b) => (a.planSubCategory > b.planSubCategory ? 1 : -1));
+      mapped.sort((a, b) => a.sorting - b.sorting);
       setCards(mapped);
     };
 
@@ -243,3 +245,5 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
 };
 
 export default AMCCards;
+
+
