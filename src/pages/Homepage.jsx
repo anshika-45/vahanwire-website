@@ -29,7 +29,7 @@ const Homepage = () => {
 
 
   const handleBuyAmc = () => {
-    navigate("/vehicle-amc?vehicleType=car&amcType=luxury");
+    navigate("/vehicle-amc");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
