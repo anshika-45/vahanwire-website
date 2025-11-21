@@ -23,9 +23,9 @@ const Banner = React.memo(() => {
           }}
         >
           <div className="container">
-            <div className="absolute md:left-0 left-3.5 top-1/2 -translate-y-1/2 text-white w-full">
+            <div className="absolute md:left-0 left-3.5 top-[40%] -translate-y-1/2 text-white w-full">
               <div className="container">
-                <h1 className="text-3xl sm:text-5xl md:text-5xl leading-tight drop-shadow-lg py-2 md:my-6 font-semibold">
+                <h1 className="text-3xl sm:text-5xl md:text-5xl leading-tight drop-shadow-lg py-2 md:my-4 font-semibold">
                   Your One-Stop <br /> Solution for
                 </h1>
 
@@ -43,11 +43,11 @@ const Banner = React.memo(() => {
                   </Suspense>
                 </div>
 
-                <p className="md:my-4 lg:py-4 sm:mt-0 mt-3  py-2 text-sm sm:text-lg md:text-xl max-w-2xl drop-shadow-md leading-relaxed">
+                {/* <p className="md:my-4 lg:py-4 sm:mt-0 mt-3  py-2 text-sm sm:text-lg md:text-xl max-w-2xl drop-shadow-md leading-relaxed">
                   Book trusted professionals near you for on-time, affordable,
                   <br />
                   and hassle-free vehicle & home services — anytime, anywhere.
-                </p>
+                </p> */}
               </div>
             </div>
           </div>

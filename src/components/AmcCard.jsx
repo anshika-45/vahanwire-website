@@ -15,9 +15,10 @@ const mapPlansToCards = (plans = [], vehicle = {}) => {
       ? `${plan.planDurationInMonth} Months`
       : "N/A",
     price: plan?.planTotalAmount || 0,
+    originalPrice: plan?.planBasePrice || 0,
     discountPercent: plan?.discountPercent || 0,
     discount: plan?.planDiscountPrice || 0,
-    periodLabel: "/per year",
+    periodLabel: "Off /per year",
     sorting: plan?.sorting ?? 999,
     features: Array.isArray(plan?.planFeatures)
   ? plan.planFeatures.flatMap((item) =>
@@ -50,6 +51,7 @@ const AMCCard = ({
   price,
   discount,
   periodLabel,
+  originalPrice,
   discountPercent,
   features,
   bgColor,
@@ -119,11 +121,13 @@ const AMCCard = ({
               ₹ {price.toLocaleString()}
             </span>
           </div>
-          <div className="flex items-center gap-1 text-xs -ml-1">
-            <span className="text-white/80">{discountPercent}% Discount</span>
-            {discount && (
-              <span className="ml-3 text-white/90">₹ {discount}</span>
-            )}
+
+          <div className="flex items-center gap-2 text-xs">
+            {originalPrice && (
+              <span className="line-through text-white/70">
+                ₹{originalPrice.toLocaleString()}
+              </span> )}
+            {discountPercent && <span className="text-white/90">{discountPercent}%</span>}
             <span className="text-white/80">{periodLabel}</span>
           </div>
         </div>

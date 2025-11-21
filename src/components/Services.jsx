@@ -31,7 +31,7 @@ const servicesData = [
   {
     icon: ecommerceIcon,
     title: "E-Commerce",
-    desc: "Book appointments with trusted car & bike service centers in your city.",
+    desc: "One-stop shop for all your vehicle accessories, parts & maintenance products.",
     linkText: "View Details",
     linkHref: "/e-commerce",
   },
