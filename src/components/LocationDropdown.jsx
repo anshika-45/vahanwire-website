@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import locationIcon from "../assets/LocationIcon.svg";
 import dropdownIcon from "../assets/down-arrow.svg";
-import { getActiveCities, getMyProfile, updateCity } from "../api/authApi";
+import { getActiveZones, getMyProfile, updateCity } from "../api/authApi";
 
 const LocationDropdown = ({ onLocationSelect }) => {
   const [open, setOpen] = useState(false);
@@ -37,32 +37,32 @@ const LocationDropdown = ({ onLocationSelect }) => {
       setLoading(true);
       setError(null);
 
-      const citiesResponse = await getActiveCities();
+      const zoneResponse = await getActiveZones();
 
-      if (citiesResponse.data.success) {
-        const cityList = citiesResponse.data.data || [];
-        setCities(cityList);
+      if (zoneResponse.data.success) {
+        const  zoneList = zoneResponse.data.data || [];
+        setCities(zoneList);
 
         if (isLoggedIn) {
           const profileResponse = await getMyProfile();
           const userData = profileResponse.data;
-          const userCity = cityList.find((c) => c._id === userData?.selectedCity);
+          const userZone =  zoneList.find((z) => z._id === userData?.selectedCity);
 
-          if (userCity) {
-            setSelected(userCity.displayName);
-            setSelectedCityId(userCity._id);
+          if (userZone) {
+            setSelected(userZone.zoneName);
+            setSelectedCityId(userZone._id);
             if (onLocationSelect) onLocationSelect(userCity);
-          } else if (cityList.length > 0) {
-            await setDefaultCity(cityList);
+          } else if (zoneList.length > 0) {
+            await setDefaultCity(zoneList);
           }
         } else {
           const savedCity = localStorage.getItem("guestCity");
           if (savedCity) {
             const cityData = JSON.parse(savedCity);
-            const city = cityList.find((c) => c._id === cityData._id);
-            if (city) {
-              setSelected(city.displayName);
-              setSelectedCityId(city._id);
+            const zone = zoneList.find((z) => z._id === cityData._id);
+            if (zone) {
+              setSelected(zone.displayName);
+              setSelectedCityId(zone._id);
               if (onLocationSelect) onLocationSelect(city);
             }
           }
@@ -78,16 +78,16 @@ const LocationDropdown = ({ onLocationSelect }) => {
     }
   }, [onLocationSelect, isLoggedIn]);
 
-  const setDefaultCity = async (cityList) => {
-    const firstCity = cityList[0];
+  const setDefaultCity = async (zoneList) => {
+    const firstCity = zoneList[0];
     if (!firstCity) return;
 
-    setSelected(firstCity.displayName);
+    setSelected(firstCity.zoneName);
     setSelectedCityId(firstCity._id);
 
     try {
       await updateCity({ cityId: firstCity._id });
-      console.log("Default city saved:", firstCity.displayName);
+      console.log("Default city saved:", firstCity.zoneName);
     } catch (error) {
       console.error("Error saving default city:", error);
     }
@@ -100,26 +100,26 @@ const LocationDropdown = ({ onLocationSelect }) => {
     setSearchTerm("");
   };
 
-  const handleLocationClick = async (city) => {
-    setSelected(city.displayName);
-    setSelectedCityId(city._id);
+  const handleLocationClick = async (zone) => {
+    setSelected(zone.zoneName);
+    setSelectedCityId(zone._id);
     setOpen(false);
     setSearchTerm("");
 
     if (isLoggedIn) {
       try {
-        const response = await updateCity({ cityId: city._id });
+        const response = await updateCity({ cityId: zone._id });
         if (response.success) {
-          console.log("City updated successfully:", city.displayName);
+          console.log("City updated successfully:", zone.zoneName);
         }
       } catch (error) {
         console.error("Error updating user city:", error);
       }
     } else {
-      localStorage.setItem("guestCity", JSON.stringify(city));
+      localStorage.setItem("guestCity", JSON.stringify(zone));
     }
 
-    if (onLocationSelect) onLocationSelect(city);
+    if (onLocationSelect) onLocationSelect(zone);
   };
 
   useEffect(() => {
@@ -219,17 +219,17 @@ const LocationDropdown = ({ onLocationSelect }) => {
             </div>
           ) : (
             <ul className="max-h-[280px] overflow-y-auto">
-              {filteredCities.map((city) => (
+              {filteredCities.map((zone) => (
                 <li
-                  key={city._id}
-                  onClick={() => handleLocationClick(city)}
+                  key={zone._id}
+                  onClick={() => handleLocationClick(zone)}
                   className={`px-3 py-2.5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer text-sm font-medium transition-colors last:border-b-0 ${
-                    selectedCityId === city._id
+                    selectedCityId === zone._id
                       ? "bg-blue-50 text-blue-700"
                       : "text-gray-800"
                   }`}
                 >
-                  {city.displayName}
+                  {city.zoneName}
                 </li>
               ))}
             </ul>

@@ -75,9 +75,10 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
 
     return plans.map((plan) => ({
       _id: plan?._id,
-      key: plan?.planSubCategory?.toLowerCase(),
+      key: plan?.planName?.toLowerCase(),
       name: plan?.planName,
       price: plan?.planTotalAmount || 0,
+      sorting: plan?.sorting ?? 999,
     }));
   };
 
@@ -85,6 +86,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
     const loadPlans = async () => {
       if (Array.isArray(plansAre) && plansAre.length > 0) {
         const mappedPlans = mapPlansData(plansAre);
+        mappedPlans.sort((a, b) => a.sorting - b.sorting);
         setPlans(mappedPlans);
         return;
       }
@@ -95,6 +97,7 @@ const CompareTable = ({ plansAre, features, onBuy, vehicle }) => {
 
       const data = await fetchPlans(vehicleType, amcType);
       const mappedPlans = mapPlansData(data);
+      mappedPlans.sort((a, b) => a.sorting - b.sorting);
       setPlans(mappedPlans);
     };
 

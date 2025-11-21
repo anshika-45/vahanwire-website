@@ -45,8 +45,9 @@ export const logoutUser = async () => {
   return response.data;
 };
 
-export const getActiveCities = async () => {
-  const response = await axiosInstance.get(`/amc-admin-city/active`);
+export const getActiveZones = async () => {
+  const response = await axiosInstance.get(`/zone-map/active`);
+  console.log("response here",response);
   return response;
 };
 
