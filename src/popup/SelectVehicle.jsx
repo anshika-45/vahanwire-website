@@ -292,7 +292,6 @@ const handleProceed = async () => {
     amcPlanCategory: amcType,
   })
     .then((response) => {
-
       if (response?.success) {
         const { hasActiveAMC, plans, vehicle } = response.data;
 
@@ -305,13 +304,20 @@ const handleProceed = async () => {
         const vehicleDataToStore = {
           vehicle: vehicle,
           vehicleType: vehicleType,
+          amcType: amcType,
           plans: plans,
           timestamp: Date.now()
         };
           
         localStorage.setItem('selectedVehicleData', JSON.stringify(vehicleDataToStore));
 
-        const filterData = { plans, vehicle, selectedPlan: plan };
+        const filterData = { 
+          plans, 
+          vehicle, 
+          selectedPlan: plan,
+          vehicleType: vehicleType,
+          amcType: amcType
+        };
         activateFilter(filterData);
         navigate("/vehicle-amc-filter", { state: filterData });
       } else {

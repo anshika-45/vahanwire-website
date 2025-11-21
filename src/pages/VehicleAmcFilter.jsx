@@ -38,6 +38,7 @@ const VehicleAmcFilter = () => {
     vehicle: locationVehicle,
     selectedPlan: initialSelectedPlan,
     vehicleType: locationVehicleType,
+    amcType: locationAmcType,
   } = location.state || {};
 
   const {
@@ -103,26 +104,37 @@ const VehicleAmcFilter = () => {
   useEffect(() => {
     if (locationVehicleType) {
       setVehicleType(locationVehicleType);
-    } else {
+    }
+    if (locationAmcType) {
+      setAmcType(locationAmcType);
+    }
+    
+    if (!locationVehicleType || !locationAmcType) {
       const saved = localStorage.getItem("selectedVehicleData");
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (parsed.vehicleType && Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
-            setVehicleType(parsed.vehicleType);
+          if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+            if (!locationVehicleType && parsed.vehicleType) {
+              setVehicleType(parsed.vehicleType);
+            }
+            if (!locationAmcType && parsed.amcType) {
+              setAmcType(parsed.amcType);
+            }
           }
         } catch (e) {
-          console.error("Error parsing vehicle type:", e);
+          console.error("Error parsing saved data:", e);
         }
       }
     }
-  }, []);
+  }, [locationVehicleType, locationAmcType, setVehicleType, setAmcType]);
 
   useEffect(() => {
     if (locationVehicle && locationPlans) {
       const newVehicleData = {
         vehicle: locationVehicle,
         vehicleType: locationVehicleType || vehicleType,
+        amcType: locationAmcType || amcType,
         plans: locationPlans,
         timestamp: Date.now(),
       };
@@ -138,8 +150,11 @@ const VehicleAmcFilter = () => {
       if (locationVehicleType) {
         setVehicleType(locationVehicleType);
       }
+      if (locationAmcType) {
+        setAmcType(locationAmcType);
+      }
     }
-  }, [locationVehicle, locationPlans, locationVehicleType]);
+  }, [locationVehicle, locationPlans, locationVehicleType, locationAmcType]);
 
   useEffect(() => {
     const saved = localStorage.getItem("selectedVehicleData");

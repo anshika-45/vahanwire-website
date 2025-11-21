@@ -59,7 +59,10 @@ export const AmcDataProvider = ({ children }) => {
 
   const activateFilter = (data) => {
     setFilterActive(true);
-    setFilterData(data);
+    setFilterData({
+      ...data,
+      amcType: amcType,
+    });
   };
 
   const clearFilter = () => {
