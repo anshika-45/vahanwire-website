@@ -19,13 +19,10 @@ const EditVehicleModal2 = ({
     brand: "",
     model: "",
   });
-  const [errors, setErrors] = useState({
-    vehicleNumber: "",
-    brand: "",
-    model: "",
-  });
+  const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [generalError, setGeneralError] = useState("");
 
   useEffect(() => {
     if (!open) return;
@@ -76,12 +73,12 @@ const EditVehicleModal2 = ({
     setErrors({});
     setTouched({});
     setIsSubmitting(false);
+    setGeneralError("");
   }, [initial, initialVehicleType, open]);
 
   const isEditMode = !!(initial || initialVehicleType);
 
   const hasValidBrand = (value) => /[^a-zA-Z\s]/.test(value);
-
   const hasValid = (value) => /[^a-zA-Z0-9\s]/.test(value);
 
   const validateVehicleNumber = (num) => {
@@ -106,17 +103,15 @@ const EditVehicleModal2 = ({
   const validateModel = (v) => {
     if (!v.trim()) return "Model is required";
     if (hasValid(v)) return "Model cannot contain special characters";
-    if (v.length < 2) return "Brand must be at least 2 characters";
+    if (v.length < 2) return "Model must be at least 2 characters";
     return "";
   };
 
   const validateOnBlur = (name, value) => {
     let msg = "";
-
     if (name === "vehicleNumber") msg = validateVehicleNumber(value);
     if (name === "brand") msg = validateBrand(value);
     if (name === "model") msg = validateModel(value);
-
     setErrors((prev) => ({ ...prev, [name]: msg }));
   };
 
@@ -126,15 +121,12 @@ const EditVehicleModal2 = ({
       brand: validateBrand(formData.brand),
       model: validateModel(formData.model),
     };
-
     setErrors(newErrors);
-
     return !Object.values(newErrors).some((e) => e);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     let clean = value;
 
     if (name === "vehicleNumber")
@@ -144,19 +136,20 @@ const EditVehicleModal2 = ({
     if (name === "model") clean = clean.replace(/\s+/g, " ").slice(0, 25);
 
     setFormData((prev) => ({ ...prev, [name]: clean }));
+    setGeneralError("");
 
     if (touched[name]) validateOnBlur(name, clean);
   };
 
   const handleBlur = (e) => {
     const { name, value } = e.target;
-
     setTouched((prev) => ({ ...prev, [name]: true }));
     validateOnBlur(name, value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setGeneralError("");
 
     const allTouched = Object.keys(formData).reduce(
       (acc, k) => ({ ...acc, [k]: true }),
@@ -192,20 +185,39 @@ const EditVehicleModal2 = ({
         error?.message ||
         "Failed to update vehicle";
 
-      if (
-        message.toLowerCase().includes("duplicate") ||
-        message.toLowerCase().includes("already exists")
-      ) {
-        setErrors((prev) => ({ ...prev, vehicleNumber: message }));
-        setTouched((prev) => ({ ...prev, vehicleNumber: true }));
-        return;
-      }
+        const lowerMsg = message.toLowerCase();
 
-      setErrors((prev) => ({
-        ...prev,
-        vehicleNumber: message || "Failed to update vehicle",
-      }));
-      setTouched((prev) => ({ ...prev, vehicleNumber: true }));
+        if (lowerMsg.includes("allowed models")) {
+          setErrors((prev) => ({ ...prev, model: message }));
+          setTouched((prev) => ({ ...prev, model: true }));
+          return;
+        }
+        
+        if (lowerMsg.includes("not supported by this plan") || lowerMsg.includes("allowed brands")) {
+          setErrors((prev) => ({ ...prev, brand: message }));
+          setTouched((prev) => ({ ...prev, brand: true }));
+          return;
+        }
+        
+        if (lowerMsg.includes("only supports")) {
+          setGeneralError(message);
+          return;
+        }
+        
+        if (lowerMsg.includes("duplicate") || lowerMsg.includes("already exists")) {
+          setErrors((prev) => ({ ...prev, vehicleNumber: message }));
+          setTouched((prev) => ({ ...prev, vehicleNumber: true }));
+          return;
+        }
+        
+        if (lowerMsg.includes("edit window") || lowerMsg.includes("expired") || lowerMsg.includes("cannot edit")) {
+          setGeneralError(message);
+          return;
+        }
+        
+        
+
+      setGeneralError(message);
     }
   };
 
@@ -237,6 +249,12 @@ const EditVehicleModal2 = ({
           </div>
 
           <div className="p-4 sm:p-6">
+            {generalError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-xs sm:text-sm">
+                {generalError}
+              </div>
+            )}
+
             <div
               className="relative w-36 sm:w-35 md:w-40 mx-auto rounded-lg overflow-hidden border border-blue-300"
               style={{ backgroundColor: "#E8F4FF", marginBottom: "1rem" }}
@@ -357,4 +375,5 @@ const EditVehicleModal2 = ({
     </>
   );
 };
+
 export default EditVehicleModal2;
