@@ -289,14 +289,19 @@ const handleProceed = async () => {
     brand: vehicleData.brand,
     model: vehicleData.model,
     vehicleType: vehicleData.vehicleType,
-    amcPlanCategory: amcType,
   })
     .then((response) => {
       if (response?.success) {
-        const { hasActiveAMC, plans, vehicle } = response.data;
-
+        const { hasActiveAMC, plans, vehicle, planCategory } = response.data;
+        
         if (hasActiveAMC) {
           alert("This vehicle already has an active AMC plan.");
+          setIsProceeding(false);
+          return;
+        }
+
+        if (!plans || plans.length === 0) {
+          alert("No AMC plans available for your vehicle Brand.");
           setIsProceeding(false);
           return;
         }
@@ -304,7 +309,7 @@ const handleProceed = async () => {
         const vehicleDataToStore = {
           vehicle: vehicle,
           vehicleType: vehicleType,
-          amcType: amcType,
+          amcType: planCategory,
           plans: plans,
           timestamp: Date.now()
         };
@@ -316,7 +321,7 @@ const handleProceed = async () => {
           vehicle, 
           selectedPlan: plan,
           vehicleType: vehicleType,
-          amcType: amcType
+          amcType: planCategory
         };
         activateFilter(filterData);
         navigate("/vehicle-amc-filter", { state: filterData });
