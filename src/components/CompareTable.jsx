@@ -134,7 +134,7 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
       _id: plan?._id,
       key: getPlanKey(plan?.planName),
       name: plan?.planName,
-      price: plan?.planTotalAmount || 0,
+      price: plan?.planPriceAfterDiscount || 0,
       sorting: plan?.sorting ?? 999,
     }));
   };
