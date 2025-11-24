@@ -382,8 +382,8 @@ return (
                     className="font-medium text-[18px] text-gray-900"
                     title={`${vehicle.brand} ${vehicle.model}`}
                   >
-                    {truncateText(vehicle.brand, 9)}{" "}
-                    {truncateText(vehicle.model, 9)}
+                    {truncateText(vehicle.brand, 60)}{" "}
+                    {truncateText(vehicle.model, 60)}
                   </div>
                   <div className="text-xs md:text-[17px] text-gray-500">
                     {vehicle.number}
