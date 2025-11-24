@@ -135,6 +135,24 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
       key: getPlanKey(plan?.planName),
       name: plan?.planName,
       price: plan?.planPriceAfterDiscount || 0,
+      originalPrice: plan?.planBasePrice || 0,
+      discountPercent: plan?.discountPercent || 0,
+      discount: plan?.planDiscountAmount|| 0,
+      totalAmount: plan?.planTotalAmount,
+      gstPercent: plan?.planGSTPercent,
+      gstAmount:plan?.planGSTAmount,
+      planStart: plan?.planStart,
+      periodLabel: "Off /per year",
+      sorting: plan?.sorting ?? 999,
+      servicesIncluded: Array.isArray(plan?.planServicesIncluded)
+        ? plan.planServicesIncluded.map((s) => ({
+            serviceName: s.serviceName,
+            serviceType: s.serviceType,
+            value: s.value,
+            info: s.info
+          }))
+        : [],
+      features: Array.isArray(plan?.planFeatures),
       sorting: plan?.sorting ?? 999,
     }));
   };
