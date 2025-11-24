@@ -103,17 +103,13 @@ const ProfileForm = () => {
     }
 
     if (name === "email") {
-      const trimmedEmail = value.trim();
-    
+      const trimmedEmail = value.trim().toLowerCase();
+      
       if (!trimmedEmail) {
         error = "Email is required";
-      } else if (
-        !/^(?!.*\.\.)(?!\.)(?!.*\.$)[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(
-          trimmedEmail
-        )
-      ) {
-        error = "Please enter a valid email address (lowercase only)";
-      } else if (trimmedEmail.length > 100) {
+      } else if (!/^[a-z0-9]+([._-][a-z0-9]+)*@[a-z0-9]+([.-][a-z0-9]+)*\.[a-z]{2,}$/.test(trimmedEmail)) {
+        error = "Please enter a valid email address";
+      } else if (trimmedEmail.length > 30) {
         error = "Email cannot exceed 100 characters";
       }
     }
