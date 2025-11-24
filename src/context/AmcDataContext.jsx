@@ -58,7 +58,6 @@ export const AmcDataProvider = ({ children }) => {
   };
 
   const activateFilter = (data) => {
-    console.log(data);
     setFilterActive(true);
     setFilterData(data);
   };

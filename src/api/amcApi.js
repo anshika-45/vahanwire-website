@@ -1,9 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
 export const getAMCPlansByCategory = async (vehicleType, category) => {
-  console.log("heyyyyyy");
   const response = await axiosInstance.get(`/amc-plans/${vehicleType}/${category}`);
-  console.log("heyyy",response);
   return response.data;
 };
 

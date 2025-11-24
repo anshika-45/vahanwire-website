@@ -253,7 +253,6 @@ const VehicleAmcFilter = () => {
       purchaseId: purchaseData._id,
       vehicleNumber: vehicle.vehicleNumber,
     };
-
     setSelectedPlanState(planData);
     setIsPopupOpen(true);
   };

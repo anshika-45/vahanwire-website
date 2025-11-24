@@ -18,9 +18,11 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
   const handleViewCoupon = () => {
     setViewCouponOpen(!viewCouponOpen);
   };
+  
   const handleRemoveCoupon = () => {
     setCoupon(null);
   };
+  
   const couponDetails = (details = {}) => {
     setCoupon(details);
   };
@@ -48,36 +50,33 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
     note: `*Your plan is valid for ${plan?.validFor || "N/A"}.`,
   };
 
+  const validityService = plan?.servicesIncluded?.find(s => s.serviceName === "Validity");
+  const servicePerYear = plan?.servicesIncluded?.find(s => s.serviceName === "Number of Service Per Year");
+  const planStart = plan?.planStart;
+
   const stats = [
-    { label: "Service", value: "Unlimited" },
-    { label: "Validity", value: "365 Days" },
-    { label: "Plan Start After", value: "48 Hours" },
+    { label: "Service", value: servicePerYear?.value || "Unlimited" },
+    { label: "Validity", value: validityService ? `${validityService.value} Days` : "365 Days" },
+    { label: "Plan Start After", value: planStart ? `${planStart} Hours` : "24 Hours" }
   ];
 
-  const features = [
-    { label: "Flat Tyre (Tube)" },
-    { label: "Flat Tyre (Tubeless)" },
-    { label: "Battery Jumpstart" },
-    { label: "Custody Service" },
-    { label: "Key Unlock Assistance" },
-    { label: "Fuel Delivery" },
-    { label: "Starting Problem" },
-  ];
+  const features = plan?.servicesIncluded?.filter(s => s.serviceType === "bool").map(s => ({
+    label: s.serviceName,
+    value: s.value
+  })) || [];
 
-  const amount = plan?.price || 0;
-  const discount = 100;
-  // const couponAmount = coupon ? coupon.discountAmount : 0;
-  const subtotal = amount - discount;
-  const gstRate = 0.18;
-  const gstAmount = subtotal * gstRate;
-  const total = Math.round(subtotal + gstAmount);
+  const originalPrice = plan?.originalPrice || 0;
+  const discount = plan?.discount || 0;
+  const discountPercent = plan?.discountPercent || 0;
+  const gstPercent = plan?.gstPercent || 18;
+  const gstAmount = plan?.gstAmount || 0;
+  const totalAmount = plan?.totalAmount || 0;
 
   const billing = [
     { label: "Items", value: "1" },
-    { label: "Amount", value: `₹${amount.toLocaleString()}` },
-    { label: "Discount", value: `-₹${discount}` },
-    // { label: "Coupon", value: `-₹${coupon ? coupon.discountAmount : "0"}` },
-    { label: "GST (18%)", value: `₹${Math.round(gstAmount).toLocaleString()}` },
+    { label: "Amount", value: `₹${originalPrice.toLocaleString()}` },
+    { label: `Discount (${discountPercent}%)`, value: `-₹${discount.toLocaleString()}` },
+    { label: `GST (${gstPercent}%)`, value: `₹${Math.round(gstAmount).toLocaleString()}` },
   ];
 
   const handleProceedToPayment = async () => {
@@ -96,6 +95,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
       const paymentResponse = await initiatePayment({
         planId: plan._id,
         vehicleNumber: vehicle.vehicleNumber,
+        couponCode: coupon?.code || null,
       });
 
       if (paymentResponse.success) {
@@ -152,7 +152,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3 ">
+        <div className="flex flex-wrap justify-center gap-3">
           {stats.map((item, i) => (
             <div
               key={i}
@@ -169,7 +169,9 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
         <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
           <div className="flex justify-between items-center px-8 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
             <span>Number of Service Per Year</span>
-            <span className="mr-12">Unlimited</span>
+            <div className="w-5 h-5 flex items-center justify-center mr-20">
+              <span>{servicePerYear?.value || "Unlimited"}</span>
+            </div>
           </div>
 
           {features.map((feature, i) => (
@@ -182,9 +184,15 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
               <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
                 <span>{feature.label}</span>
               </div>
-              <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center mr-20">
-                <Check size={13} className="text-white" />
-              </div>
+              {feature.value === 1 ? (
+                <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center mr-20">
+                  <Check size={13} className="text-white" />
+                </div>
+              ) : (
+                <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center mr-20">
+                  <X size={13} className="text-white" />
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -193,11 +201,9 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
           <h3 className="font-semibold text-gray-800 mb-3 text-2xl">
             Have a Discount Coupon?
           </h3>
-
           <p className="text-sm text-[#242424] mb-2">Enter Code</p>
-
           <div className="bg-[#F8F8F8] rounded-lg px-4 py-3 flex justify-between items-center border border-[#94b6ed]">
-            <div className="flex flex-col gap-[2px] justify-center items-center ">
+            <div className="flex flex-col gap-[2px] justify-center items-center">
               <p className="flex items-center gap-2 text-[#242424] text-md font-bold">
                 <img
                   src={couponImg}
@@ -210,7 +216,6 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
                   <>Get a CashBack with...</>
                 )}
               </p>
-
               <button
                 onClick={handleViewCoupon}
                 className="text-[#266DDF] cursor-pointer text-center grow-0"
@@ -227,47 +232,20 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
                 </div>
               )}
             </div>
-
             {coupon ? (
-              <>
-                <button
-                  onClick={handleRemoveCoupon}
-                  className="
-                text-red-600
-                border border-red-500
-                px-6 py-2
-                rounded-lg
-                font-medium
-                text-sm
-                bg-transparent
-                hover:bg-red-600
-                hover:text-white
-                transition
-              "
-                >
-                  Remove
-                </button>
-              </>
+              <button
+                onClick={handleRemoveCoupon}
+                className="text-red-600 border border-red-500 px-6 py-2 rounded-lg font-medium text-sm bg-transparent hover:bg-red-600 hover:text-white transition"
+              >
+                Remove
+              </button>
             ) : (
-              <>
-                <button
-                  onClick={handleViewCoupon}
-                  className="
-                text-[#266DDF]
-                border border-[#266DDF]
-                px-6 py-2
-                rounded-lg
-                font-medium
-                text-sm
-                bg-transparent
-                hover:bg-[#266DDF]
-                hover:text-white
-                transition
-              "
-                >
-                  Apply
-                </button>
-              </>
+              <button
+                onClick={handleViewCoupon}
+                className="text-[#266DDF] border border-[#266DDF] px-6 py-2 rounded-lg font-medium text-sm bg-transparent hover:bg-[#266DDF] hover:text-white transition"
+              >
+                Apply
+              </button>
             )}
           </div>
         </div>
@@ -289,7 +267,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
           </div>
           <div className="flex justify-between items-center py-4 px-6 bg-[#E9F0FC] text-black">
             <span className="text-xl">Total Payable</span>
-            <span className="text-xl">₹{total.toLocaleString()}</span>
+            <span className="text-xl">₹{Math.round(totalAmount).toLocaleString()}</span>
           </div>
         </div>
       </div>

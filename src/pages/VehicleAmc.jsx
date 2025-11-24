@@ -97,6 +97,7 @@ const VehicleAmc = () => {
 
   const handlePlanBuy = async (plan) => {
     setSelectedPlan(plan);
+
     setIsVehicleOpen(false);
     setIsSelectVehicleOpen(false);
     
