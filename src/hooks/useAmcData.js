@@ -9,8 +9,6 @@ import {
 const useAmcData = () => {
   const [vehicleType, setVehicleType] = useState("car");
   const [amcType, setAmcType] = useState("luxury");
-  console.log("vehicleeType",vehicleType);
-  console.log("amcTypeeeee",amcType);
   
   const getAmcTabs = useMemo(() => {
     if (vehicleType === "bike") {

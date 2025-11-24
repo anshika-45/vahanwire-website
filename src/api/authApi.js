@@ -47,7 +47,6 @@ export const logoutUser = async () => {
 
 export const getActiveZones = async () => {
   const response = await axiosInstance.get(`/zone-map/active`);
-  console.log("response here",response);
   return response;
 };
 
