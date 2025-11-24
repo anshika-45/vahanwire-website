@@ -311,16 +311,17 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
                                 className="w-4 h-4"
                               />
                             </button>
+
                             {hoveredIcon === rowIndex && (
                               <div
-                                className={`absolute left-8 bg-[#F7FAFF] border border-[#c9dcfd] text-black text-xs px-3 py-3 rounded-lg z-50 w-70 sm:w-72 shadow-md ${
-                                  rowIndex > 7 ? "top-[-10rem]" : "top-0"
+                                className={`absolute left-full ml-2 bg-white border border-[#BCD2F5] text-black px-4 py-3 rounded-xl z-50 shadow-lg min-w-[280px] max-w-[320px] ${
+                                  rowIndex >= features.length - 3 ? "bottom-0" : "top-0"
                                 }`}
                               >
-                                <h5 className="text-center font-bold text-xl mb-3">
+                                <h5 className="text-center font-bold text-base mb-2 text-[#242424]">
                                   {feature.label}
                                 </h5>
-                                <p className="text-center text-base">
+                                <p className="text-center text-sm text-[#242424] leading-relaxed">
                                   {feature.details}
                                 </p>
                               </div>

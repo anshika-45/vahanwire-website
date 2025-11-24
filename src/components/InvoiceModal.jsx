@@ -19,7 +19,6 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
 
   useEffect(() => {
      if (!isOpen || !invoiceId) return;
-
      const fetchInvoice = async () => {
       setLoading(true);
       setError("");
@@ -41,8 +40,12 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
             amcPlanType: data.plan.name,
             status: data.payment.paymentStatus,
             payment: data.payment.paymentId,
-            serviceCharge: data.plan.price || 0,
-            total:  data.plan.price 
+            baseAmount: data.plan.basePrice || 0,
+            discountAmount: data.plan.discountAmount|| 0,
+            gstAmount: data.plan.gstAmount || 0,
+            gstPercent: data.plan?.planGSTPercent || 18,
+            discountPercent: data.plan?.discountPercent || 0,
+            total:  data.plan.totalAmount 
           });
         } else {
           setError("Failed to fetch invoice");
@@ -102,7 +105,10 @@ export default function InvoiceModal({ isOpen, onClose, invoiceId }) {
               </Section>
 
               <Section title="Charges">
-                <Item label="Service Charge" value={`₹${invoice.serviceCharge}`} />
+                 <Item label="Items" value="1" />
+                 <Item label="Amount" value={`₹${invoice.baseAmount}`} />
+                 <Item label={`Discount (${invoice.discountPercent}%)`} value={`- ₹${invoice.discountAmount}`} />
+                 <Item label={`GST (${invoice.gstPercent}%)`} value={`₹${invoice.gstAmount}`} />
               </Section>
             </>
           )}
