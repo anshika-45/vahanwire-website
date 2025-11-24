@@ -26,6 +26,7 @@ const ComponentLoader = () => (
 
 const VehicleAmcFilter = () => {
   const { isLoggedIn } = useAuth();
+  const {clearFilter} = useAmcData();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -100,6 +101,31 @@ const VehicleAmcFilter = () => {
   const [selectedPlanState, setSelectedPlanState] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
+
+useEffect(() => {
+  const saved = localStorage.getItem("selectedVehicleData");
+  
+  if (!saved) {
+    clearFilter(); 
+    navigate("/vehicle-amc", { replace: true });
+    return;
+  }
+  
+  try {
+    const parsed = JSON.parse(saved);
+    const isExpired = Date.now() - parsed.timestamp >= 24 * 60 * 60 * 1000;
+    const hasInvalidData = !parsed.vehicle || !parsed.plans || parsed.plans.length === 0;
+    
+    if (isExpired || hasInvalidData) {
+      clearFilter();
+      navigate("/vehicle-amc", { replace: true });
+    }
+  } catch (e) {
+    console.error("Error parsing saved data:", e);
+    clearFilter(); 
+    navigate("/vehicle-amc", { replace: true });
+  }
+}, []);
 
   useEffect(() => {
     if (locationVehicleType) {
@@ -271,7 +297,7 @@ const VehicleAmcFilter = () => {
 
   const handleSuccessClose = () => {
     localStorage.removeItem("selectedVehicleData");
-
+    clearFilter(); 
     setShowPopup(null);
     setVehicle(null);
     setPlans([]);
