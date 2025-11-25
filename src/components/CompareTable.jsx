@@ -152,8 +152,7 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
             info: s.info
           }))
         : [],
-      features: Array.isArray(plan?.planFeatures),
-      sorting: plan?.sorting ?? 999,
+      features: Array.isArray(plan?.planFeatures)
     }));
   };
 
