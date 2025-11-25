@@ -465,7 +465,7 @@ export default function MyAMCPage() {
 
   const shouldShowCancelRefund = (item) => {
     return (
-      ["submitted", "under_process"].includes(item.refundStatus) &&
+      item.refundStatus === "submitted" &&
       (item.planStatus === "active" || item.planStatus === "pending")
     );
   };
