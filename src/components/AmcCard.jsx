@@ -134,14 +134,17 @@ const AMCCard = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 text-xs">
-            {originalPrice && (
-              <span className="line-through text-white/70">
-                ₹{originalPrice.toLocaleString()}
-              </span> )}
-            {discountPercent && <span className="text-white/90">{discountPercent}%</span>}
-            <span className="text-white/80">{periodLabel}</span>
-          </div>
+          {(discount > 0 || discountPercent > 0 || originalPrice > price) && (
+  <div className="flex items-center gap-2 text-xs">
+    {originalPrice && originalPrice > price && (
+      <span className="line-through text-white/70">
+        ₹{originalPrice.toLocaleString()}
+      </span>
+    )}
+    {discountPercent > 0 && <span className="text-white/90">{discountPercent}%</span>}
+    <span className="text-white/80">{periodLabel}</span>
+  </div>
+)}
         </div>
         <div className="mb-3 flex-grow">
           <div className="font-normal mb-2 text-md">Plan Features</div>
@@ -195,6 +198,7 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
     const loadPlans = async () => {
       if (plans && Array.isArray(plans) && plans.length > 0) {
         const mapped = mapPlansToCards(plans, vehicle);
+        console.log("kjdnjsdbch",mapped);
         mapped.sort((a, b) => a.sorting - b.sorting);
         setCards(mapped);
         return;
@@ -206,6 +210,7 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
 
       const fetched = await fetchPlans(vehicleType, amcType);
       const mapped = mapPlansToCards(fetched, vehicle);
+      console.log("kjdnjsdbchjbdsh",mapped);
       mapped.sort((a, b) => a.sorting - b.sorting);
       setCards(mapped);
     };
