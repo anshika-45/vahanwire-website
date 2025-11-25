@@ -26,7 +26,7 @@ const AMCCardShimmer = () => (
   <div className="flex flex-col gap-3 md:gap-4 bg-white rounded-xl p-3 md:p-6">
     <div className="flex flex-col md:flex-row gap-3 md:gap-4">
       <div className="w-full md:w-[340px] h-[200px] bg-gray-200 rounded-xl animate-pulse"></div>
-      
+
       <div className="flex-1 flex flex-col justify-between">
         <div>
           <div className="flex flex-col md:flex-row justify-between items-start gap-2 md:gap-0 md:items-start mb-2">
@@ -64,8 +64,11 @@ const getStatusMessage = (planStatus, refundStatus) => {
   if (refundStatus === "approved") {
     return "Your refund has been approved. Amount will be credited within 5-7 business days.";
   }
-  if (refundStatus === "rejected") {
-    return "Your refund request has been rejected. Please contact support for more details.";
+  if (refundStatus === "rejected_admin") {
+    return "Your refund request has been rejected by vahanwire. Please contact support for more details.";
+  }
+  if (refundStatus === "rejected_payu") {
+    return "Your refund request has been rejected by payment gateway. Please contact support for more details.";
   }
   if (refundStatus === "cancelled") {
     return "Your refund request has been cancelled.";
@@ -74,10 +77,10 @@ const getStatusMessage = (planStatus, refundStatus) => {
     return "Your refund request is under process. It will take 5 to 7 working days.";
   }
   if (refundStatus === "submitted") {
-    return "Your refund request has been submitted and is awaiting admin approval.";
+    return "Your refund request has been submitted and is awaiting vahanwire approval.";
   }
   if (planStatus === "pending") {
-    return "Your AMC payment is successful. Waiting for admin approval to activate.";
+    return "Your AMC payment is successful. Waiting for vahanwire approval to activate.";
   }
   if (planStatus === "active") {
     return "Your AMC is active. You can raise service requests.";
@@ -101,7 +104,7 @@ const mapApiDataToAMC = (apiData) => {
       canEditVehicle &&
       item.refundStatus === "none" &&
       !item.refundCancelledByUser;
-    
+
     const statusBadge = getStatusBadge(item.planStatus, item.refundStatus);
     const statusMessage = getStatusMessage(item.planStatus, item.refundStatus);
 
@@ -143,23 +146,33 @@ const mapApiDataToAMC = (apiData) => {
   });
 };
 
-const getTimelineStatus = (refundStatus) => {
-  const statusOrder = [
-    "submitted",
-    "under_process",
-    "approved",
-    "rejected",
-    "cancelled",
-  ];
-  const currentIndex = statusOrder.indexOf(refundStatus);
+const hasUnderProcessInTimeline = (timeline = []) => {
+  return timeline.some((entry) => entry.status === "under_process");
+};
+
+const getTimelineStatus = (refundStatus, timeline) => {
+  const hasUnderProcess = hasUnderProcessInTimeline(timeline);
 
   return {
-    submitted: currentIndex >= 0,
-    under_process:
-      currentIndex >= 1 && !["rejected", "cancelled"].includes(refundStatus),
-    completed: ["approved", "rejected", "cancelled"].includes(refundStatus),
+    submitted: [
+      "submitted",
+      "under_process",
+      "approved",
+      "rejected_admin",
+      "rejected_payu",
+    ].includes(refundStatus),
+    under_process: hasUnderProcess,
+    completed: [
+      "approved",
+      "rejected_admin",
+      "rejected_payu",
+      "cancelled",
+    ].includes(refundStatus),
     isCancelled: refundStatus === "cancelled",
-    isRejected: refundStatus === "rejected",
+    isRejectedAdmin: refundStatus === "rejected_admin",
+    isRejectedPayu: refundStatus === "rejected_payu",
+    isAdminRejectionFlow: refundStatus === "rejected_admin" && !hasUnderProcess,
+    isPayuRejectionFlow: refundStatus === "rejected_payu" && hasUnderProcess,
   };
 };
 
@@ -169,7 +182,11 @@ const getTimelineDates = (timeline = []) => {
   timeline.forEach((entry) => {
     if (entry.status === "submitted") dates.submitted = entry.timestamp;
     if (entry.status === "under_process") dates.under_process = entry.timestamp;
-    if (["approved", "rejected", "cancelled"].includes(entry.status))
+    if (
+      ["approved", "rejected_admin", "rejected_payu", "cancelled"].includes(
+        entry.status
+      )
+    )
       dates.completed = entry.timestamp;
   });
 
@@ -304,7 +321,11 @@ export default function MyAMCPage() {
   const tabs = ["All", "Active", "Pending", "Rejected"];
 
   const getTabStatus = (item) => {
-    if (item.refundStatus === "rejected") return "Rejected";
+    if (
+      item.refundStatus === "rejected_admin" ||
+      item.refundStatus === "rejected_payu"
+    )
+      return "Rejected";
     if (["submitted", "under_process"].includes(item.refundStatus))
       return "Pending";
     if (item.planStatus === "pending") return "Pending";
@@ -448,6 +469,7 @@ export default function MyAMCPage() {
       (item.planStatus === "active" || item.planStatus === "pending")
     );
   };
+
   const shouldShowTimeline = (item) => {
     return item.refundStatus !== "none" && item.refundStatus !== "cancelled";
   };
@@ -512,7 +534,10 @@ export default function MyAMCPage() {
             </div>
           ) : (
             filtered.map((item) => {
-              const timelineStatus = getTimelineStatus(item.refundStatus);
+              const timelineStatus = getTimelineStatus(
+                item.refundStatus,
+                item.refundTimeline
+              );
               const timelineDates = getTimelineDates(item.refundTimeline);
               const remainingTime = getRemainingTime(
                 item.vehicleEditableUntil,
@@ -639,7 +664,7 @@ export default function MyAMCPage() {
 
                       {item.refundStatus === "submitted" && (
                         <p className="text-center text-orange-600 font-medium mb-2 text-xs md:text-sm">
-                          Awaiting admin approval
+                          Awaiting Approval for Refund
                         </p>
                       )}
 
@@ -655,22 +680,23 @@ export default function MyAMCPage() {
                         </p>
                       )}
 
-                      {item.refundStatus === "rejected" && (
+                      {item.refundStatus === "rejected_admin" && (
                         <p className="text-center text-red-600 font-medium mb-2 text-xs md:text-sm">
-                          Your refund request has been rejected
+                          Your refund request has been rejected by vahanwire
                         </p>
                       )}
 
-                      <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
-                        <div className="flex flex-col items-center flex-shrink-0">
-                          <div
-                            className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
-                              timelineStatus.submitted
-                                ? "bg-green-600"
-                                : "bg-gray-300"
-                            }`}
-                          >
-                            {timelineStatus.submitted && (
+                      {item.refundStatus === "rejected_payu" && (
+                        <p className="text-center text-red-600 font-medium mb-2 text-xs md:text-sm">
+                          Your refund request has been rejected by payment
+                          gateway
+                        </p>
+                      )}
+
+                      {timelineStatus.isAdminRejectionFlow ? (
+                        <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
+                          <div className="flex flex-col items-center flex-shrink-0">
+                            <div className="w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 bg-green-600">
                               <svg
                                 className="w-4 md:w-5 h-4 md:h-5 text-white"
                                 fill="none"
@@ -684,118 +710,30 @@ export default function MyAMCPage() {
                                   d="M5 13l4 4L19 7"
                                 />
                               </svg>
-                            )}
+                            </div>
+                            <p className="font-semibold text-xs md:text-sm text-[#1C1C28] text-center">
+                              Refund Submitted
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {timelineDates.submitted
+                                ? new Date(
+                                    timelineDates.submitted
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                  })
+                                : "Pending"}
+                            </p>
                           </div>
-                          <p className="font-semibold text-xs md:text-sm text-[#1C1C28] text-center">
-                            Refund Submitted
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {timelineDates.submitted
-                              ? new Date(
-                                  timelineDates.submitted
-                                ).toLocaleString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true,
-                                })
-                              : "Pending"}
-                          </p>
-                        </div>
 
-                        <div
-                          className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
-                            timelineStatus.under_process ||
-                            timelineStatus.isRejected
-                              ? "bg-green-600"
-                              : "bg-gray-300"
-                          }`}
-                        />
+                          <div className="w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 bg-red-400" />
 
-                        <div className="flex flex-col items-center flex-shrink-0">
-                          <div
-                            className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
-                              timelineStatus.completed
-                                ? "bg-green-600"
-                                : timelineStatus.under_process
-                                ? "border-[3px] border-green-600 bg-white"
-                                : timelineStatus.submitted
-                                ? "border-[3px] border-green-600 bg-white"
-                                : "border-[3px] border-gray-300 bg-white"
-                            }`}
-                          >
-                            {timelineStatus.completed ? (
-                              <svg
-                                className="w-4 md:w-5 h-4 md:h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={3}
-                                  d="M5 13l4 4L19 7"
-                                />
-                              </svg>
-                            ) : timelineStatus.under_process ? (
-                              <div className="w-4 md:w-5 h-4 md:h-5 rounded-full bg-green-600" />
-                            ) : null}
-                          </div>
-                          <p className="font-semibold text-xs md:text-sm text-center text-[#1C1C28]">
-                            Under Process
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {timelineDates.under_process
-                              ? new Date(
-                                  timelineDates.under_process
-                                ).toLocaleString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true,
-                                })
-                              : timelineStatus.isRejected &&
-                                timelineDates.submitted
-                              ? new Date(
-                                  timelineDates.submitted
-                                ).toLocaleString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true,
-                                })
-                              : "Pending"}
-                          </p>
-                        </div>
-
-                        <div
-                          className={`w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
-                            timelineStatus.isRejected
-                              ? "bg-red-400"
-                              : item.refundStatus === "approved"
-                              ? "bg-green-600"
-                              : "bg-gray-300"
-                          }`}
-                        />
-
-                        <div className="flex flex-col items-center flex-shrink-0">
-                          <div
-                            className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
-                              timelineStatus.isRejected
-                                ? "bg-red-600"
-                                : item.refundStatus === "approved"
-                                ? "bg-green-600"
-                                : "border-[3px] border-gray-300 bg-white"
-                            }`}
-                          >
-                            {timelineStatus.isRejected ? (
+                          <div className="flex flex-col items-center flex-shrink-0">
+                            <div className="w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 bg-red-600">
                               <svg
                                 className="w-4 md:w-5 h-4 md:h-5 text-white"
                                 fill="none"
@@ -809,53 +747,212 @@ export default function MyAMCPage() {
                                   d="M6 18L18 6M6 6l12 12"
                                 />
                               </svg>
-                            ) : item.refundStatus === "approved" ? (
-                              <svg
-                                className="w-4 md:w-5 h-4 md:h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={3}
-                                  d="M5 13l4 4L19 7"
-                                />
-                              </svg>
-                            ) : null}
+                            </div>
+                            <p className="font-semibold text-xs md:text-sm text-center text-red-600">
+                              Rejected by Vahanwire
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {timelineDates.completed
+                                ? new Date(
+                                    timelineDates.completed
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                  })
+                                : "Pending"}
+                            </p>
                           </div>
-                          <p
-                            className={`font-semibold text-xs md:text-sm text-center ${
-                              timelineStatus.isRejected
-                                ? "text-red-600"
-                                : item.refundStatus === "approved"
-                                ? "text-[#1C1C28]"
-                                : "text-gray-400"
-                            }`}
-                          >
-                            {timelineStatus.isRejected
-                              ? "Rejected"
-                              : item.refundStatus === "approved"
-                              ? "Approved"
-                              : "Approved/Rejected"}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {timelineDates.completed
-                              ? new Date(
-                                  timelineDates.completed
-                                ).toLocaleString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true,
-                                })
-                              : "Pending"}
-                          </p>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
+                          <div className="flex flex-col items-center flex-shrink-0">
+                            <div
+                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
+                                timelineStatus.submitted
+                                  ? "bg-green-600"
+                                  : "bg-gray-300"
+                              }`}
+                            >
+                              {timelineStatus.submitted && (
+                                <svg
+                                  className="w-4 md:w-5 h-4 md:h-5 text-white"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={3}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              )}
+                            </div>
+                            <p className="font-semibold text-xs md:text-sm text-[#1C1C28] text-center">
+                              Refund Submitted
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {timelineDates.submitted
+                                ? new Date(
+                                    timelineDates.submitted
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                  })
+                                : "Pending"}
+                            </p>
+                          </div>
+
+                          <div
+                            className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
+                              timelineStatus.under_process
+                                ? "bg-green-600"
+                                : "bg-gray-300"
+                            }`}
+                          />
+
+                          <div className="flex flex-col items-center flex-shrink-0">
+                            <div
+                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
+                                timelineStatus.completed
+                                  ? "bg-green-600"
+                                  : timelineStatus.under_process
+                                  ? item.refundStatus === "under_process"
+                                    ? "border-[3px] border-green-600 bg-white"
+                                    : "bg-green-600"
+                                  : "border-[3px] border-gray-300 bg-white"
+                              }`}
+                            >
+                              {timelineStatus.completed ||
+                              (timelineStatus.under_process &&
+                                item.refundStatus !== "under_process") ? (
+                                <svg
+                                  className="w-4 md:w-5 h-4 md:h-5 text-white"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={3}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              ) : item.refundStatus === "under_process" ? (
+                                <div className="w-4 md:w-5 h-4 md:h-5 rounded-full bg-green-600" />
+                              ) : null}
+                            </div>
+                            <p className="font-semibold text-xs md:text-sm text-center text-[#1C1C28]">
+                              Under Process
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {timelineDates.under_process
+                                ? new Date(
+                                    timelineDates.under_process
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                  })
+                                : "Pending"}
+                            </p>
+                          </div>
+
+                          <div
+                            className={`w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
+                              timelineStatus.isRejectedPayu
+                                ? "bg-red-400"
+                                : item.refundStatus === "approved"
+                                ? "bg-green-600"
+                                : "bg-gray-300"
+                            }`}
+                          />
+
+                          <div className="flex flex-col items-center flex-shrink-0">
+                            <div
+                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
+                                timelineStatus.isRejectedPayu
+                                  ? "bg-red-600"
+                                  : item.refundStatus === "approved"
+                                  ? "bg-green-600"
+                                  : "border-[3px] border-gray-300 bg-white"
+                              }`}
+                            >
+                              {timelineStatus.isRejectedPayu ? (
+                                <svg
+                                  className="w-4 md:w-5 h-4 md:h-5 text-white"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={3}
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
+                              ) : item.refundStatus === "approved" ? (
+                                <svg
+                                  className="w-4 md:w-5 h-4 md:h-5 text-white"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={3}
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              ) : null}
+                            </div>
+                            <p
+                              className={`font-semibold text-xs md:text-sm text-center ${
+                                timelineStatus.isRejectedPayu
+                                  ? "text-red-600"
+                                  : item.refundStatus === "approved"
+                                  ? "text-[#1C1C28]"
+                                  : "text-gray-400"
+                              }`}
+                            >
+                              {timelineStatus.isRejectedPayu
+                                ? "Rejected by PayU"
+                                : item.refundStatus === "approved"
+                                ? "Approved"
+                                : "Approved/Rejected"}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {timelineDates.completed
+                                ? new Date(
+                                    timelineDates.completed
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                  })
+                                : "Pending"}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

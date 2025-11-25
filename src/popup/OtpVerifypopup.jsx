@@ -6,6 +6,7 @@ import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { verifyOtp, sendOtp } from "../api/authApi";
 import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
+import { useNavigate } from "react-router-dom";
 
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
@@ -29,6 +30,13 @@ const OtpVerifypopup = ({
   const [resendLoading, setResendLoading] = useState(false);
   const [error, setError] = useState("");
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const navigate = useNavigate()
+  const isUserLoggedIn = localStorage.getItem("token") ?? "";
+
+  useEffect(()=>{
+    if(isUserLoggedIn)
+    setShowVehiclePopup(true);
+  })
 
 useEffect(() => {
   if (!isOpen) {
@@ -220,7 +228,7 @@ return (
         <EnterVehicleNumber
           isOpen={showVehiclePopup}
           onClose={onClose}
-          onBack={() => setShowVehiclePopup(false)}
+          onBack={() => onClose()}
         />
       )}
 
