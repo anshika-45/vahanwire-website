@@ -7,7 +7,7 @@ import { useAMCPlans } from "../context/AmcPlanContext";
 import { createAMCPurchase } from "../api/amcApi";
 import "../index.css";
 
-const CompareTable = ({ plansAre, onBuy, vehicle }) => {
+const CompareTable = ({ plansAre, onBuy, vehicle,showFallback }) => {
   const { vehicleType, amcType } = useAmcData();
   const { fetchPlans, loading } = useAMCPlans();
   const [hoveredCol, setHoveredCol] = useState(null);
@@ -17,7 +17,6 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState([]);
   const [rawPlans, setRawPlans] = useState([]);
-
   const tableRef = useRef(null);
   const firstColumnRef = useRef(null);
 
@@ -212,10 +211,14 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
     );
   }
 
+  if(showFallback){
+    return <></>
+  }
+
   if (!plans || plans.length === 0) {
     return (
       <div className="text-center py-10 text-gray-500">
-        No plans available for comparison
+       
       </div>
     );
   }
@@ -255,7 +258,8 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
                   onMouseEnter={handleFirstColumnMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 >
-                  Compare plans
+                 {plans && plans.length > 0 ? ' Compare plans':''}
+                 
                 </th>
                 {plans.map((plan, colIndex) => (
                   <th

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import AMCCards from "../components/AmcCard";
 import BreadcrumbBar from "../components/BreadcrumbBar";
 import { getUserVehicleWithoutAMC  } from "../api/vehicleApi";
+import NoPlansFallback from "../components/NoPlansFallback";
 const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
 const AmcCard = React.lazy(() => import("../components/AmcCard"));
 const CompareTable = React.lazy(() => import("../components/CompareTable"));
@@ -43,6 +44,7 @@ const VehicleAmc = () => {
   const [isVehicleOpen, setIsVehicleOpen] = useState(false);
   const [isSelectVehicleOpen, setIsSelectVehicleOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [showFallback,setShowFallback] = useState(false);
 
   useEffect(() => {
     const checkFilterValidity = async () => {
@@ -114,6 +116,9 @@ const VehicleAmc = () => {
       setIsVerifyOpen(true);
     }
   };
+  const handleFallback = (value)=>{
+    setShowFallback(value);
+  }
 
   return (
     <section className="w-full">
@@ -125,12 +130,16 @@ const VehicleAmc = () => {
         </Suspense>
       </div>
 
+      
+      
       <Suspense fallback={<CardLoader />}>
-        <AMCCards onBuy={handlePlanBuy} />
+        <AMCCards setShowFallback={handleFallback} onBuy={handlePlanBuy} />
       </Suspense>
       <Suspense fallback={<TableLoader />}>
-        <CompareTable features={features} onBuy={handlePlanBuy} />
+        <CompareTable showFallback={showFallback} features={features} onBuy={handlePlanBuy} />
       </Suspense>
+      
+      
       {/* <Suspense fallback={<BannerLoader />}>
         <LatestOffer />
       </Suspense> */}
