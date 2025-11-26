@@ -7,7 +7,7 @@ import { useAMCPlans } from "../context/AmcPlanContext";
 import { createAMCPurchase } from "../api/amcApi";
 import "../index.css";
 
-const CompareTable = ({ plansAre, onBuy, vehicle }) => {
+const CompareTable = ({ plansAre, onBuy, vehicle , selectedCityName}) => {
   const { vehicleType, amcType } = useAmcData();
   const { fetchPlans, loading } = useAMCPlans();
   const [hoveredCol, setHoveredCol] = useState(null);
@@ -159,21 +159,27 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
   useEffect(() => {
     const loadPlans = async () => {
       let data = [];
-
+  
       if (Array.isArray(plansAre) && plansAre.length > 0) {
         data = plansAre;
       } else if (vehicleType && amcType) {
-        data = await fetchPlans(vehicleType, amcType);
+        data = await fetchPlans(vehicleType, amcType, selectedCityName);
       }
-
+     
+      if (!data || data.length === 0) {
+        setRawPlans([]);
+        setPlans([]);
+        return;
+      }
+  
       setRawPlans(data);
       const mappedPlans = mapPlansData(data);
       mappedPlans.sort((a, b) => a.sorting - b.sorting);
       setPlans(mappedPlans);
     };
-
+  
     loadPlans();
-  }, [plansAre, vehicleType, amcType, fetchPlans]);
+  }, [plansAre, vehicleType, amcType, fetchPlans, selectedCityName]);
 
   const handleBuyClick = async (plan) => {
     if (onBuy) {
@@ -215,7 +221,7 @@ const CompareTable = ({ plansAre, onBuy, vehicle }) => {
   if (!plans || plans.length === 0) {
     return (
       <div className="text-center py-10 text-gray-500">
-        No plans available for comparison
+        No Comaparable Plans
       </div>
     );
   }

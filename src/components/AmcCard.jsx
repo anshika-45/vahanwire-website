@@ -4,7 +4,7 @@ import { useAMCPlans } from "../context/AmcPlanContext";
 import { Check } from "lucide-react";
 import VerifyNumberPopup from "../popup/VerifyNumberPopup";
 import essentialPlanImg from "../assets/Essentialplan.svg";
-
+import NoPlansFound from "../components/NoPlanFound";
 const mapPlansToCards = (plans = [], vehicle = {}) => {
   if (!Array.isArray(plans) || plans.length === 0) return [];
   return plans.map((plan) => ({
@@ -17,10 +17,10 @@ const mapPlansToCards = (plans = [], vehicle = {}) => {
     price: plan?.planPriceAfterDiscount || 0,
     originalPrice: plan?.planBasePrice || 0,
     discountPercent: plan?.discountPercent || 0,
-    discount: plan?.planDiscountAmount|| 0,
+    discount: plan?.planDiscountAmount || 0,
     totalAmount: plan?.planTotalAmount,
     gstPercent: plan?.planGSTPercent,
-    gstAmount:plan?.planGSTAmount,
+    gstAmount: plan?.planGSTAmount,
     planStart: plan?.planStart,
     periodLabel: "Off /per year",
     sorting: plan?.sorting ?? 999,
@@ -29,18 +29,16 @@ const mapPlansToCards = (plans = [], vehicle = {}) => {
           serviceName: s.serviceName,
           serviceType: s.serviceType,
           value: s.value,
-          info: s.info
+          info: s.info,
         }))
       : [],
     features: Array.isArray(plan?.planFeatures)
-  ? plan.planFeatures.flatMap((item) =>
-      typeof item === "string"
-        ? item.split(",").map((f) => f.trim())
-        : []
-    )
-  : typeof plan?.planFeatures === "string"
-  ? plan.planFeatures.split(",").map((f) => f.trim())
-  : [],
+      ? plan.planFeatures.flatMap((item) =>
+          typeof item === "string" ? item.split(",").map((f) => f.trim()) : []
+        )
+      : typeof plan?.planFeatures === "string"
+      ? plan.planFeatures.split(",").map((f) => f.trim())
+      : [],
     bgColor:
       plan?.planName === "Premium Care"
         ? "linear-gradient(to bottom right, #8F6521, #A3762D)"
@@ -73,7 +71,7 @@ const AMCCard = ({
   vehicleType = "car",
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   return (
     <div className="relative overflow-visible flex justify-center flex-shrink-0">
       <div
@@ -135,16 +133,18 @@ const AMCCard = ({
           </div>
 
           {(discount > 0 || discountPercent > 0 || originalPrice > price) && (
-  <div className="flex items-center gap-2 text-xs">
-    {originalPrice && originalPrice > price && (
-      <span className="line-through text-white/70">
-        ₹{originalPrice.toLocaleString()}
-      </span>
-    )}
-    {discountPercent > 0 && <span className="text-white/90">{discountPercent}%</span>}
-    <span className="text-white/80">{periodLabel}</span>
-  </div>
-)}
+            <div className="flex items-center gap-2 text-xs">
+              {originalPrice && originalPrice > price && (
+                <span className="line-through text-white/70">
+                  ₹{originalPrice.toLocaleString()}
+                </span>
+              )}
+              {discountPercent > 0 && (
+                <span className="text-white/90">{discountPercent}%</span>
+              )}
+              <span className="text-white/80">{periodLabel}</span>
+            </div>
+          )}
         </div>
         <div className="mb-3 flex-grow">
           <div className="font-normal mb-2 text-md">Plan Features</div>
@@ -180,7 +180,7 @@ const AMCCard = ({
   );
 };
 
-const AMCCards = ({ onBuy, plans, vehicle }) => {
+const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
   const { vehicleType, amcType } = useAmcData();
   const { fetchPlans, loading } = useAMCPlans();
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
@@ -198,7 +198,6 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
     const loadPlans = async () => {
       if (plans && Array.isArray(plans) && plans.length > 0) {
         const mapped = mapPlansToCards(plans, vehicle);
-        console.log("kjdnjsdbch",mapped);
         mapped.sort((a, b) => a.sorting - b.sorting);
         setCards(mapped);
         return;
@@ -208,15 +207,19 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
         return;
       }
 
-      const fetched = await fetchPlans(vehicleType, amcType);
+      if (!selectedCityName) {
+        setCards([]);
+        return;
+      }
+
+      const fetched = await fetchPlans(vehicleType, amcType, selectedCityName);
       const mapped = mapPlansToCards(fetched, vehicle);
-      console.log("kjdnjsdbchjbdsh",mapped);
       mapped.sort((a, b) => a.sorting - b.sorting);
       setCards(mapped);
     };
 
     loadPlans();
-  }, [plans, vehicle, vehicleType, amcType, fetchPlans]);
+  }, [plans, vehicle, vehicleType, amcType, fetchPlans, selectedCityName]);
 
   if (loading) {
     return (
@@ -225,9 +228,7 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
   }
 
   if (!cards || cards.length === 0) {
-    return (
-      <div className="text-center py-10 text-gray-500">No plans available</div>
-    );
+    return <NoPlansFound cityName={selectedCityName} />;
   }
 
   return (
@@ -266,5 +267,3 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
 };
 
 export default AMCCards;
-
-

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { AmcDataProvider } from "./context/AmcDataContext.jsx";
 import { AMCPlansProvider } from './context/AmcPlanContext.jsx';
+import { CityProvider } from "./context/CityContext";
 import MainLayout from "./layouts/MainLayout";
 import ScrollToTop from "./components/ScrollToTop";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -34,6 +35,7 @@ const LoadingFallback = () => (
 function App() {
   return (
     <ErrorBoundary>
+      <CityProvider>
       <AuthProvider>
         <AmcDataProvider>
         <AMCPlansProvider>
@@ -72,6 +74,7 @@ function App() {
         </AMCPlansProvider>
         </AmcDataProvider>
       </AuthProvider>
+      </CityProvider>
     </ErrorBoundary>
   );
 }

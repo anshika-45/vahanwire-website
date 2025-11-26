@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import { getAMCPlansByCategory } from "../api/amcApi";
 
 const AMCPlansContext = createContext();
@@ -9,22 +15,30 @@ export const AMCPlansProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   const fetchPlans = useCallback(
-    async (vehicleType, amcType) => {
+    async (vehicleType, amcType, cityName) => {
       if (!vehicleType || !amcType) {
         return [];
       }
 
-      const cacheKey = `${vehicleType}-${amcType}`;
+      if (!cityName) {
+        return [];
+      }
+
+      const cacheKey = `${vehicleType}-${amcType}-${cityName}`;
       const cached = plansCache[cacheKey];
 
-      if (cached && cached.timestamp && Date.now() - cached.timestamp < CACHE_EXPIRY_TIME) {
+      if (
+        cached &&
+        cached.timestamp &&
+        Date.now() - cached.timestamp < CACHE_EXPIRY_TIME
+      ) {
         return cached.data;
       }
 
       setLoading(true);
 
       try {
-        const res = await getAMCPlansByCategory(vehicleType, amcType);
+        const res = await getAMCPlansByCategory(vehicleType, amcType, cityName);
         if (res?.success && Array.isArray(res.data)) {
           setPlansCache((prev) => ({
             ...prev,
@@ -55,7 +69,11 @@ export const AMCPlansProvider = ({ children }) => {
     [fetchPlans, loading, clearCache]
   );
 
-  return <AMCPlansContext.Provider value={value}>{children}</AMCPlansContext.Provider>;
+  return (
+    <AMCPlansContext.Provider value={value}>
+      {children}
+    </AMCPlansContext.Provider>
+  );
 };
 
 export const useAMCPlans = () => {
