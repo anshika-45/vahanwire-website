@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAmcData } from "../context/AmcDataContext";
+import { useCity } from "../context/CityContext";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import carImg from "../assets/vehicle.webp";
@@ -15,6 +16,7 @@ import { selectAMCVehicle } from "../api/amcApi";
 
 const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehicleBrand, addedVehicleModel, addedVehicleType, plan }) => {
   const navigate = useNavigate();
+  const { selectedCityName } = useCity(); 
   const { vehicleType, amcType, activateFilter } = useAmcData();
   const [formData, setFormData] = useState({
     vehicleNumber: "",
@@ -157,7 +159,7 @@ const handleSearch = async () => {
     setErrors({ vehicleNumber: errorMsg });
     return;
   }
-   
+
   const vehicleNumber = formData.vehicleNumber.toUpperCase();
     
   if (addedVehicles.find((v) => v.number === vehicleNumber)) {
@@ -289,6 +291,7 @@ const handleProceed = async () => {
     brand: vehicleData.brand,
     model: vehicleData.model,
     vehicleType: vehicleData.vehicleType,
+    cityName: selectedCityName, 
   })
     .then((response) => {
       if (response?.success) {
@@ -301,7 +304,7 @@ const handleProceed = async () => {
         }
 
         if (!plans || plans.length === 0) {
-          alert("No AMC plans available for your vehicle Brand.");
+          alert("No AMC plans available for your vehicle Brand or City.");
           setIsProceeding(false);
           return;
         }

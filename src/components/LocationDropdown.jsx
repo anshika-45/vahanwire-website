@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import locationIcon from "../assets/LocationIcon.svg";
 import dropdownIcon from "../assets/down-arrow.svg";
 import { getActiveZones, getMyProfile, updateCity } from "../api/authApi";
+import { useCity } from "../context/CityContext";
 
 const LocationDropdown = ({ onLocationSelect }) => {
   const [open, setOpen] = useState(false);
@@ -12,6 +13,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [searchTerm, setSearchTerm] = useState("");
+  const { updateCity: updateCityContext } = useCity();
 
   useEffect(() => {
     const checkToken = () => {
@@ -46,11 +48,13 @@ const LocationDropdown = ({ onLocationSelect }) => {
         if (isLoggedIn) {
           const profileResponse = await getMyProfile();
           const userData = profileResponse.data;
+    
           const userZone = zoneList.find((z) => z._id === userData?.selectedCity);
 
           if (userZone) {
             setSelected(userZone.zoneName);
             setSelectedCityId(userZone._id);
+            updateCityContext(userZone); 
             if (onLocationSelect) onLocationSelect(userZone); 
           } else if (zoneList.length > 0) {
             await setDefaultZone(zoneList); 
@@ -63,6 +67,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
             if (zone) {
               setSelected(zone.zoneName);
               setSelectedCityId(zone._id);
+              updateCityContext(zone);
               if (onLocationSelect) onLocationSelect(zone); 
             }
           }
@@ -76,7 +81,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
     } finally {
       setLoading(false);
     }
-  }, [onLocationSelect, isLoggedIn]);
+  }, [onLocationSelect, isLoggedIn, updateCityContext]);
 
   const setDefaultZone = async (zoneList) => {
     const firstZone = zoneList[0];
@@ -92,6 +97,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
       console.error("Error saving default zone:", error);
     }
 
+    updateCityContext(firstZone);
     if (onLocationSelect) onLocationSelect(firstZone);
   };
 
@@ -119,6 +125,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
       localStorage.setItem("guestZone", JSON.stringify(zone)); 
     }
 
+    updateCityContext(zone);
     if (onLocationSelect) onLocationSelect(zone);
   };
 

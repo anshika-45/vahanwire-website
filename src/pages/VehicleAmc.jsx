@@ -4,6 +4,7 @@ import { useAmcData } from "../context/AmcDataContext";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AMCCards from "../components/AmcCard";
+import { useCity } from "../context/CityContext"; 
 import BreadcrumbBar from "../components/BreadcrumbBar";
 import { getUserVehicleWithoutAMC  } from "../api/vehicleApi";
 const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
@@ -38,6 +39,7 @@ const VehicleAmc = () => {
   const { features, vehicleType, setVehicleType, filterActive, filterData, clearFilter } =
     useAmcData();
   const { isLoggedIn } = useAuth();
+  const { selectedCityName } = useCity();
   const navigate = useNavigate();
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isVehicleOpen, setIsVehicleOpen] = useState(false);
@@ -126,10 +128,10 @@ const VehicleAmc = () => {
       </div>
 
       <Suspense fallback={<CardLoader />}>
-        <AMCCards onBuy={handlePlanBuy} />
+        <AMCCards onBuy={handlePlanBuy}  selectedCityName={selectedCityName}  />
       </Suspense>
       <Suspense fallback={<TableLoader />}>
-        <CompareTable features={features} onBuy={handlePlanBuy} />
+        <CompareTable features={features} onBuy={handlePlanBuy} selectedCityName={selectedCityName}/>
       </Suspense>
       {/* <Suspense fallback={<BannerLoader />}>
         <LatestOffer />
