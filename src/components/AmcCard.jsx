@@ -4,6 +4,7 @@ import { useAMCPlans } from "../context/AmcPlanContext";
 import { Check } from "lucide-react";
 import VerifyNumberPopup from "../popup/VerifyNumberPopup";
 import essentialPlanImg from "../assets/Essentialplan.svg";
+import NoPlansFallback from "./NoPlansFallback";
 
 const mapPlansToCards = (plans = [], vehicle = {}) => {
   if (!Array.isArray(plans) || plans.length === 0) return [];
@@ -180,12 +181,12 @@ const AMCCard = ({
   );
 };
 
-const AMCCards = ({ onBuy, plans, vehicle }) => {
+const AMCCards = ({ onBuy, plans, vehicle,setShowFallback }) => {
   const { vehicleType, amcType } = useAmcData();
   const { fetchPlans, loading } = useAMCPlans();
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [cards, setCards] = useState([]);
-
+  
   const handleBuy = (card) => {
     if (onBuy) {
       onBuy(card);
@@ -198,6 +199,7 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
     const loadPlans = async () => {
       if (plans && Array.isArray(plans) && plans.length > 0) {
         const mapped = mapPlansToCards(plans, vehicle);
+        setShowFallback(false);
         console.log("kjdnjsdbch",mapped);
         mapped.sort((a, b) => a.sorting - b.sorting);
         setCards(mapped);
@@ -210,6 +212,12 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
 
       const fetched = await fetchPlans(vehicleType, amcType);
       const mapped = mapPlansToCards(fetched, vehicle);
+      // const mapped = [];
+      if(!mapped){
+        setShowFallback(true);
+      }else{
+        setShowFallback(false);
+      }
       console.log("kjdnjsdbchjbdsh",mapped);
       mapped.sort((a, b) => a.sorting - b.sorting);
       setCards(mapped);
@@ -225,10 +233,13 @@ const AMCCards = ({ onBuy, plans, vehicle }) => {
   }
 
   if (!cards || cards.length === 0) {
+    setShowFallback(true);
     return (
-      <div className="text-center py-10 text-gray-500">No plans available</div>
+      <div className="text-center py-10 text-gray-500"><NoPlansFallback/></div>
     );
   }
+
+  
 
   return (
     <div className="bg-gray-50 mt-0">
