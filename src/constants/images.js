@@ -7,7 +7,7 @@ export const S3_IMAGES = {
   CARD385: `${S3_BASE_URL}/uploads/1763531468806_ri6ptj.svg`,
   CARD485: `${S3_BASE_URL}/uploads/1763531540240_axljq.svg`,
   CARD685: `${S3_BASE_URL}/uploads/1763531579570_zf2bor.svg`,
-  MOBILE_CENTERED: `${S3_BASE_URL}/uploads/1763624623502_qnc8il.png`,
+  MOBILE_CENTERED: `${S3_BASE_URL}/uploads/1764237020024_af7gcp.svg`,
   MOBILE_ASIDE: `${S3_BASE_URL}/uploads/1763624648155_rywmj.png`,
   APPSTORE: `${S3_BASE_URL}/uploads/1763531785920_f12dzp.svg`,
   PLAYSTORE: `${S3_BASE_URL}/uploads/1763531807305_vqb06i.svg`,
