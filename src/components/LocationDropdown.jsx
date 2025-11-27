@@ -69,7 +69,11 @@ const LocationDropdown = ({ onLocationSelect }) => {
               setSelectedCityId(zone._id);
               updateCityContext(zone);
               if (onLocationSelect) onLocationSelect(zone); 
+            } else if (zoneList.length > 0) {
+              setDefaultZoneForGuest(zoneList);
             }
+          } else if (zoneList.length > 0) {
+            setDefaultZoneForGuest(zoneList);
           }
         }
       } else {
@@ -97,6 +101,17 @@ const LocationDropdown = ({ onLocationSelect }) => {
       console.error("Error saving default zone:", error);
     }
 
+    updateCityContext(firstZone);
+    if (onLocationSelect) onLocationSelect(firstZone);
+  };
+
+  const setDefaultZoneForGuest = (zoneList) => {
+    const firstZone = zoneList[0];
+    if (!firstZone) return;
+
+    setSelected(firstZone.zoneName);
+    setSelectedCityId(firstZone._id);
+    localStorage.setItem("guestZone", JSON.stringify(firstZone));
     updateCityContext(firstZone);
     if (onLocationSelect) onLocationSelect(firstZone);
   };
