@@ -44,7 +44,7 @@ const servicesData = [
   },
   {
     icon: serviceIcon,
-    title: "Service Centre",
+    title: "Service Center",
     desc: "Book appointments with trusted car & bike service centers in your city.",
     linkText: "View Details",
     linkHref: "/service-center",
