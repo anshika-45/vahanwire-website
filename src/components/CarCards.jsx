@@ -4,6 +4,7 @@ import AddVehicleModal from "./AddVehicleModal";
 import EditVehicle from "../popup/EditVehicle";
 import vehicleImage1 from "../assets/acar-2.svg";
 import vehicleImage2 from "../assets/acar-1.svg";
+import BikeImage from "../assets/Bike1.png";
 import deleteIcon from "../assets/DeleteIcon.svg";
 import editIcon from "../assets/EditIcon.svg";
 import checkIcon from "../assets/check2.svg";
@@ -119,20 +120,25 @@ const CarCards = () => {
     try {
       const vehicles = await getUserVehiclesAMC();
      
-      const formatted = vehicles.map((v, index) => ({
-        _id: v._id,
-        id: v._id,
-        title: `${v.brand} ${v.model}`,
-        vehicleNumber: v.vehicleNumber,
-        vehicleType: v.vehicleType,
-        brand: v.brand,
-        model: v.model,
-        fuelType: v.fuelType,
-        year: v.year,
-        amcLabel: "",
-        image: index % 2 === 0 ? vehicleImage1 : vehicleImage2,
-        tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
-      }));
+      const formatted = vehicles.map((v, index) => {
+        const isBike = v.vehicleType === "bike";
+        return {
+          _id: v._id,
+          id: v._id,
+          title: `${v.brand} ${v.model}`,
+          vehicleNumber: v.vehicleNumber,
+          vehicleType: v.vehicleType,
+          brand: v.brand,
+          model: v.model,
+          fuelType: v.fuelType,
+          year: v.year,
+          amcLabel: "",
+          image: isBike 
+            ? (index % 2 === 0 ? BikeImage : BikeImage)
+            : (index % 2 === 0 ? vehicleImage1 : vehicleImage2),
+          tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
+        };
+      });
     
       setCars(formatted);
     } catch (error) {
