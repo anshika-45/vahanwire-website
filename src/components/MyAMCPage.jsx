@@ -934,7 +934,7 @@ export default function MyAMCPage() {
                                 ? "Rejected by PayU"
                                 : item.refundStatus === "approved"
                                 ? "Approved"
-                                : "Approved/Rejected"}
+                                : "Refunded or Rejected"}
                             </p>
                             <p className="text-xs text-gray-500 mt-1">
                               {timelineDates.completed
