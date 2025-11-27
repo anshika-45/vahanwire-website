@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import Payment from "./Payment";
