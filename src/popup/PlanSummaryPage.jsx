@@ -18,11 +18,11 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
   const handleViewCoupon = () => {
     setViewCouponOpen(!viewCouponOpen);
   };
-  
+
   const handleRemoveCoupon = () => {
     setCoupon(null);
   };
-  
+
   const couponDetails = (details = {}) => {
     setCoupon(details);
   };
@@ -152,14 +152,14 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="grid md:grid-cols-3 grid-cols-2 gap-x-4 gap-y-4">
           {stats.map((item, i) => (
             <div
               key={i}
-              className="flex flex-col items-left justify-left w-[160px] border border-[#BCD2F5] rounded-xl py-3 px-3 bg-white"
+              className="flex flex-col items-left justify-left border border-[#BCD2F5] rounded-xl py-3 px-3 bg-white"
             >
-              <p className="text-[#242424] text-xs">{item.label}</p>
-              <p className="font-semibold text-md text-[#242424] mt-1">
+              <p className="text-[#242424] text-sm">{item.label}</p>
+              <p className="font-semibold text-lg text-[#242424] mt-1">
                 {item.value}
               </p>
             </div>
@@ -167,29 +167,30 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
         </div>
 
         <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
-          <div className="flex justify-between items-center px-8 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
-            <span>Number of Service Per Year</span>
+          <div className="flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
+            {/* <p className="">Number of Service Per Year</p>
             <div className="w-5 h-5 flex items-center justify-center mr-20">
               <span>{servicePerYear?.value || "Unlimited"}</span>
-            </div>
+            </div> */}
+            <p className="whitespace-normal">Number of Service Per Year</p>
+            <p className="">{servicePerYear?.value || "Unlimited"}</p>
           </div>
 
           {features.map((feature, i) => (
             <div
               key={i}
-              className={`flex justify-between items-center px-8 py-3 border-[#BCD2F5] border-t-1 ${
-                i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"
-              }`}
+              className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-t-1 ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"
+                }`}
             >
               <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
                 <span>{feature.label}</span>
               </div>
               {feature.value === 1 ? (
-                <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center mr-20">
+                <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
                   <Check size={13} className="text-white" />
                 </div>
               ) : (
-                <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center mr-20">
+                <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center ">
                   <X size={13} className="text-white" />
                 </div>
               )}
@@ -202,7 +203,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
             Have a Discount Coupon?
           </h3>
           <p className="text-sm text-[#242424] mb-2">Enter Code</p>
-          <div className="bg-[#F8F8F8] rounded-lg px-4 py-3 flex justify-between items-center border border-[#94b6ed]">
+          <div className="bg-[#F8F8F8] rounded-lg px-4 py-3 flex sm:flex-row flex-col gap-y-4 justify-between items-center border border-[#94b6ed]">
             <div className="flex flex-col gap-[2px] justify-center items-center">
               <p className="flex items-center gap-2 text-[#242424] text-md font-bold">
                 <img
@@ -211,14 +212,14 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
                   className="w-5 h-5 object-contain"
                 />
                 {coupon ? (
-                  <>{`You Saved ₹${coupon.discountAmount}`}</>
+                  <><p className="text-lg">{`You Saved ₹${coupon.discountAmount}`}</p></>
                 ) : (
-                  <>Get a CashBack with...</>
+                  <><p className="text-lg">Get a CashBack with...</p></>
                 )}
               </p>
               <button
                 onClick={handleViewCoupon}
-                className="text-[#266DDF] cursor-pointer text-center grow-0"
+                className="text-[#266DDF] text-[17px] cursor-pointer text-center grow-0"
               >
                 view all coupons &gt;
               </button>
