@@ -4,10 +4,10 @@ import closeIcon from "../assets/x.webp";
 const Modal = ({ isOpen, onClose, onBack, children, proceedButton }) => {
   useEffect(() => {
     if (isOpen) {
-      const prev = document.body.style.overflow;
+      // const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => {
-        document.body.style.overflow = prev;
+        document.body.style.overflow = "auto";
       };
     }
   }, [isOpen]);
