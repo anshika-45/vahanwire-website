@@ -205,9 +205,8 @@ const getRemainingTime = (vehicleEditableUntil, currentTime) => {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
   if (hours > 0) {
-    return `${hours} hour${hours !== 1 ? "s" : ""} ${minutes} minute${
-      minutes !== 1 ? "s" : ""
-    }`;
+    return `${hours} hour${hours !== 1 ? "s" : ""} ${minutes} minute${minutes !== 1 ? "s" : ""
+      }`;
   }
   return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
 };
@@ -491,7 +490,7 @@ export default function MyAMCPage() {
       <div className="w-full">
         <div className="space-y-2 md:space-y-3 bg-[#F4F4F4] p-3 md:p-4 rounded-xl">
           <div className="rounded-xl p-2 md:p-3 m-2 md:m-3 mt-0 overflow-x-auto">
-            <nav className="flex gap-x-4 md:gap-8 border-b border-[#D9D9D9] min-w-max md:min-w-full">
+            <nav className=" gap-x-6 md:gap-8 border-b border-[#D9D9D9] min-w-max md:min-w-full">
               {tabs.map((tab) => (
                 <div
                   key={tab}
@@ -516,11 +515,10 @@ export default function MyAMCPage() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`pb-2 md:pb-3 text-xs md:text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
-                    activeTab === tab
-                      ? "border-b-2 border-[#266DDF] text-[#266DDF]"
-                      : "text-[#5C5C5C] hover:text-[#266DDF]"
-                  }`}
+                  className={`pb-2 md:pb-3 text-xs md:text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab
+                    ? "border-b-2 border-[#266DDF] text-[#266DDF]"
+                    : "text-[#5C5C5C] hover:text-[#266DDF]"
+                    }`}
                 >
                   {tab}
                 </button>
@@ -717,23 +715,23 @@ export default function MyAMCPage() {
                             <p className="text-xs text-gray-500 mt-1">
                               {timelineDates.submitted
                                 ? new Date(
-                                    timelineDates.submitted
-                                  ).toLocaleString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                  })
+                                  timelineDates.submitted
+                                ).toLocaleString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })
                                 : "Pending"}
                             </p>
                           </div>
 
-                          <div className="w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 bg-red-400" />
+                          <div className="w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 bg-red-400 md:rotate-0 rotate-90 sm:translate-y-0 translate-y-6  " />
 
                           <div className="flex flex-col items-center flex-shrink-0">
-                            <div className="w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 bg-red-600">
+                            <div className="w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 bg-red-600 ">
                               <svg
                                 className="w-4 md:w-5 h-4 md:h-5 text-white"
                                 fill="none"
@@ -754,28 +752,27 @@ export default function MyAMCPage() {
                             <p className="text-xs text-gray-500 mt-1">
                               {timelineDates.completed
                                 ? new Date(
-                                    timelineDates.completed
-                                  ).toLocaleString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                  })
+                                  timelineDates.completed
+                                ).toLocaleString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })
                                 : "Pending"}
                             </p>
                           </div>
                         </div>
                       ) : (
-                        <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
+                        <div className="flex items-center md:flex-row flex-col gap-y-15  justify-center max-w-4xl mx-auto overflow-x-auto">
                           <div className="flex flex-col items-center flex-shrink-0">
                             <div
-                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
-                                timelineStatus.submitted
-                                  ? "bg-green-600"
-                                  : "bg-gray-300"
-                              }`}
+                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3  ${timelineStatus.submitted
+                                ? "bg-green-600"
+                                : "bg-gray-300"
+                                }`}
                             >
                               {timelineStatus.submitted && (
                                 <svg
@@ -799,42 +796,40 @@ export default function MyAMCPage() {
                             <p className="text-xs text-gray-500 mt-1">
                               {timelineDates.submitted
                                 ? new Date(
-                                    timelineDates.submitted
-                                  ).toLocaleString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                  })
+                                  timelineDates.submitted
+                                ).toLocaleString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })
                                 : "Pending"}
                             </p>
                           </div>
 
                           <div
-                            className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
-                              timelineStatus.under_process
-                                ? "bg-green-600"
-                                : "bg-gray-300"
-                            }`}
+                            className={`w-16 md:w-32 h-px -mt-12 md:-mt-16 flex-shrink-0 md:rotate-0 rotate-90 sm:translate-y-0 translate-y-6 ${timelineStatus.under_process
+                              ? "bg-green-600"
+                              : "bg-gray-300"
+                              }`}
                           />
 
                           <div className="flex flex-col items-center flex-shrink-0">
                             <div
-                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
-                                timelineStatus.completed
-                                  ? "bg-green-600"
-                                  : timelineStatus.under_process
+                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${timelineStatus.completed
+                                ? "bg-green-600"
+                                : timelineStatus.under_process
                                   ? item.refundStatus === "under_process"
                                     ? "border-[3px] border-green-600 bg-white"
                                     : "bg-green-600"
                                   : "border-[3px] border-gray-300 bg-white"
-                              }`}
+                                }`}
                             >
                               {timelineStatus.completed ||
-                              (timelineStatus.under_process &&
-                                item.refundStatus !== "under_process") ? (
+                                (timelineStatus.under_process &&
+                                  item.refundStatus !== "under_process") ? (
                                 <svg
                                   className="w-4 md:w-5 h-4 md:h-5 text-white"
                                   fill="none"
@@ -858,38 +853,36 @@ export default function MyAMCPage() {
                             <p className="text-xs text-gray-500 mt-1">
                               {timelineDates.under_process
                                 ? new Date(
-                                    timelineDates.under_process
-                                  ).toLocaleString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                  })
+                                  timelineDates.under_process
+                                ).toLocaleString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })
                                 : "Pending"}
                             </p>
                           </div>
 
                           <div
-                            className={`w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 ${
-                              timelineStatus.isRejectedPayu
-                                ? "bg-red-400"
-                                : item.refundStatus === "approved"
+                            className={`w-16 md:w-40 h-px -mt-12 md:-mt-16 flex-shrink-0 md:rotate-0 rotate-90 sm:translate-y-0 translate-y-6   ${timelineStatus.isRejectedPayu
+                              ? "bg-red-400"
+                              : item.refundStatus === "approved"
                                 ? "bg-green-600"
                                 : "bg-gray-300"
-                            }`}
+                              }`}
                           />
 
                           <div className="flex flex-col items-center flex-shrink-0">
                             <div
-                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${
-                                timelineStatus.isRejectedPayu
-                                  ? "bg-red-600"
-                                  : item.refundStatus === "approved"
+                              className={`w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 ${timelineStatus.isRejectedPayu
+                                ? "bg-red-600"
+                                : item.refundStatus === "approved"
                                   ? "bg-green-600"
                                   : "border-[3px] border-gray-300 bg-white"
-                              }`}
+                                }`}
                             >
                               {timelineStatus.isRejectedPayu ? (
                                 <svg
@@ -922,32 +915,31 @@ export default function MyAMCPage() {
                               ) : null}
                             </div>
                             <p
-                              className={`font-semibold text-xs md:text-sm text-center ${
-                                timelineStatus.isRejectedPayu
-                                  ? "text-red-600"
-                                  : item.refundStatus === "approved"
+                              className={`font-semibold text-xs md:text-sm text-center ${timelineStatus.isRejectedPayu
+                                ? "text-red-600"
+                                : item.refundStatus === "approved"
                                   ? "text-[#1C1C28]"
                                   : "text-gray-400"
-                              }`}
+                                }`}
                             >
                               {timelineStatus.isRejectedPayu
                                 ? "Rejected by PayU"
                                 : item.refundStatus === "approved"
-                                ? "Approved"
-                                : "Refunded or Rejected"}
+                                  ? "Approved"
+                                  : "Refunded or Rejected"}
                             </p>
                             <p className="text-xs text-gray-500 mt-1">
                               {timelineDates.completed
                                 ? new Date(
-                                    timelineDates.completed
-                                  ).toLocaleString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                  })
+                                  timelineDates.completed
+                                ).toLocaleString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                  hour12: true,
+                                })
                                 : "Pending"}
                             </p>
                           </div>

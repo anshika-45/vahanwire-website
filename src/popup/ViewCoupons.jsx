@@ -92,9 +92,9 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button className="text-blue-600" role="apply">
+        {/* <button className="text-blue-600" role="apply">
           Apply
-        </button>
+        </button> */}
       </div>
 
       {filteredCoupons.length > 0 ? (
