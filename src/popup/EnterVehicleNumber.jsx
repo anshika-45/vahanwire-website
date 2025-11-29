@@ -200,10 +200,12 @@ const handleAddVehicle = async () => {
 }
   const handleClose = () => {
     onClose();
+    setShowSelectVehicle(false);
   };
 
   const handleBack = () => {
     onBack();
+    setShowSelectVehicle(false);
   };
 
   return (
@@ -303,7 +305,7 @@ const handleAddVehicle = async () => {
           <SelectVehicle
             isOpen={showSelectVehicle}
             onClose={handleClose}
-            onBack={() => setShowSelectVehicle(false)}
+            onBack={handleBack}
             addedVehicleNumber={vehicleData.vehicleNumber}
             addedVehicleBrand={vehicleData.brand}
             addedVehicleModel={vehicleData.model}

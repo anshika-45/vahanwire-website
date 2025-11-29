@@ -351,11 +351,19 @@ const handleCancelAdd = () => {
     setErrors({});
   };
 
+   const handleClose = () => {
+    onClose();
+  };
+
+  const handleBack = () => {
+    onBack();
+  };
+
 const filteredVehicles = addedVehicles.filter(v => v.vehicleType === vehicleType);
 const hasMatchingVehicles = filteredVehicles.length > 0;
 
 return (
-  <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
+  <Modal isOpen={isOpen} onClose={handleClose} onBack={handleBack}>
     <div className="w-full max-w-[550px] flex flex-col items-center p-2 relative">
       <div className="w-full flex items-center gap-2 bg-green-50 border border-green-200 text-[#21830F] rounded-lg px-4 py-3 mb-4">
       <img src={verifyIcon} alt="verify" className="w-5 h-5" />

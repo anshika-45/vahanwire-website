@@ -160,6 +160,7 @@ const VehicleAmc = () => {
         <SelectVehicle
           isOpen={isSelectVehicleOpen}
           onClose={() => setIsSelectVehicleOpen(false)}
+          onBack={()=> setIsSelectVehicleOpen(false)}
           plan={selectedPlan}
         />
       </Suspense>
