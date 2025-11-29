@@ -164,7 +164,7 @@ return (
             <h1 className="text-xl font-semibold text-[#242424] text-center mb-2">
               Verify Your Number
             </h1>
-            <p className="text-base text-[#333333] mb-4">
+            <p className="text-base text-center text-[#333333] mb-4">
               Enter the OTP sent to {phoneNumber}
             </p>
 

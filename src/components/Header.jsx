@@ -126,10 +126,10 @@ const Header = () => {
               <button
                 onClick={handleClick}
                 aria-label="Toggle search"
-                className="md:hidden block mr-1 border-r border-gray-300 pr-2 bg-transparent cursor-pointer min-w-[25px]"
+                className="md:hidden block mr-2 pr-1 border-r border-gray-300 bg-transparent cursor-pointer min-w-[25px]"
               >
                 <img
-                  className="w-6.5 h-6.5 object-contain"
+                  className="w-full h-full object-contain"
                   src={searchIcon}
                   alt="search icon"
                 />
@@ -202,7 +202,7 @@ const Header = () => {
                 src={searchIcon}
                 loading="lazy"
                 alt="Search"
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6"
               />
               <input
                 id="search-input"
