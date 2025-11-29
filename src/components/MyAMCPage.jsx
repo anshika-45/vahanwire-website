@@ -692,7 +692,7 @@ export default function MyAMCPage() {
                       )}
 
                       {timelineStatus.isAdminRejectionFlow ? (
-                        <div className="flex items-center justify-center max-w-4xl mx-auto overflow-x-auto">
+                        <div className="flex md:flex-row flex-col gap-y-15 items-center justify-center max-w-4xl mx-auto overflow-x-auto">
                           <div className="flex flex-col items-center flex-shrink-0">
                             <div className="w-6 md:w-7 h-6 md:h-7 rounded-full flex items-center justify-center mb-2 md:mb-3 bg-green-600">
                               <svg
