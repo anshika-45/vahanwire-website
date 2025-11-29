@@ -236,6 +236,7 @@ const handleAddVehicle = async () => {
       vehicleNumber: normalized,
       brand: formData.brand,
       model: formData.model,
+      vehicleType
     });
     setIsLoading(false);
     const msg = res?.data?.message;
