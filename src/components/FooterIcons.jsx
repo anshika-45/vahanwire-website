@@ -5,7 +5,8 @@ import XIcon from "../assets/XIcon.svg";
 import LinkedInIcon from "../assets/LinkedInIcon.svg"
 const IconCircle = ({ src, alt, link }) => {
     return (
-        <a href={link}>
+        <a target="_blank"
+         href={link}>
             <div className="bg-white w-8 sm:w-10 h-8 sm:h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition">
                 <img loading="lazy" src={src} alt={alt} className="w-4 sm:w-5 h-4 sm:h-5 object-contain" />
             </div>

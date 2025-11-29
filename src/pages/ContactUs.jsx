@@ -160,7 +160,7 @@ const ContactUs = () => {
         {/* RIGHT SIDE FORM */}
         <div className="bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] rounded-2xl p-8">
           <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-            Welcome to VahanWire!
+            Welcome to Vahanwire!
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">

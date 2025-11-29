@@ -43,7 +43,7 @@ const Footer = () => {
               />
             </Link>
             <p className="text-gray-300 text-[15px] sm:text-base leading-tight mb-4 sm:mb-6 space-y-0.5">
-              VahanWire connects you to nearby
+              Vahanwire connects you to nearby
             
               mechanics, fuel, services, payments, and
              
