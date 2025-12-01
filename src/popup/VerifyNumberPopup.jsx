@@ -47,7 +47,10 @@ const handleVerify = async () => {
     }
 };
 
-const handleOtpBack = () => setShowOtp(false);
+const handleOtpBack = () => {
+  setShowOtp(false);
+  // onClose()
+}
 return (
     <>
     {!showOtp && (

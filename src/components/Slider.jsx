@@ -90,7 +90,7 @@ const slides = [
 
 export default function Slider() {
   return (
-    <div className="homeSlider max-w-screen relative pt-4 lg:mb-6">
+    <div className="homeSlider !overflow-hidden max-w-screen relative pt-4 lg:mb-6">
       <div>
         <Swiper
           spaceBetween={30}
@@ -148,11 +148,11 @@ export default function Slider() {
                 </div>
               </SwiperSlide>
             );
-          })}
-          <div class="swiper-button-prev hidden lg:block">
+          })} 
+          <div slot="container-start" className="swiper-button-prev hidden lg:block">
             <img src={leftIcon} alt="Prev" />
           </div>
-          <div class="swiper-button-next hidden lg:block">
+          <div slot="container-start" className="swiper-button-next hidden lg:block">
             <img src={rightIcon} alt="Next" />
           </div>
         </Swiper>

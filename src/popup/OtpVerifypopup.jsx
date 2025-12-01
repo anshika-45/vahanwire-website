@@ -145,13 +145,30 @@ const handleResend = async () => {
     setTimer(RESEND_SECONDS);
     } catch (err) {
     console.error("Resend OTP failed:", err);
-     setError(
+     setError(  
       err?.response?.data?.message || "Could not send OTP. Please try again."
      );
     } finally {
       setResendLoading(false);
     }
   };
+
+  const closeAll = () => {
+  setShowSelectVehicle(false);
+  setShowVehiclePopup(false);
+  onClose();
+};
+
+const handleBack = () => {
+  closeAll();
+};
+
+const handleClose = () => {
+  closeAll();
+};
+
+
+
 
 if (!isOpen && !showVehiclePopup && !showSelectVehicle) return null;
 
@@ -227,23 +244,23 @@ return (
       {showVehiclePopup && (
         <EnterVehicleNumber
           isOpen={showVehiclePopup}
-          onClose={onClose}
-          onBack={() => onClose()}
+          onClose={handleClose}
+          onBack={handleBack}
         />
       )}
 
       {showSelectVehicle && (
         <React.Suspense
-          fallback={
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="text-white">Loading vehicle selection...</div>
-            </div>
-          }
+          // fallback={
+          //   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          //     <div className="text-white">Loading vehicle selection...</div>
+          //   </div>
+          // }
         >
           <SelectVehicle
             isOpen={showSelectVehicle}
-            onClose={onClose}
-            onBack={() => setShowSelectVehicle(false)}
+            onClose={handleClose}
+            onBack={handleBack}
           />
         </React.Suspense>
       )}

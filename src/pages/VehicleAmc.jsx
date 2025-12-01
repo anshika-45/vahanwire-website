@@ -146,6 +146,7 @@ const VehicleAmc = () => {
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
+          onBack= {()=>setIsVerifyOpen(false)}
         />
       </Suspense>
       <Suspense fallback={null}>
