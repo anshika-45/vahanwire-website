@@ -7,7 +7,7 @@ const Modal = ({ isOpen, onClose, onBack, children, proceedButton }) => {
       // const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => {
-        document.body.style.overflow = "auto";
+        document.body.style.overflow = "";
       };
     }
   }, [isOpen]);
