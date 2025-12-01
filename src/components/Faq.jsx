@@ -29,25 +29,25 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const faqs = [
     {
-      question: "What is VahanWire and how does it work?",
-      answer: "VahanWire is an on-demand roadside assistance and mechanic service platform where users can instantly raise a service request for any vehicle-related issue. Whether it’s a jump start, towing, puncture repair, battery problem, or a general breakdown — VahanWire connects you with verified mechanics anytime, anywhere. VahanWire services are available 24/7, including weekends and holidays (based on mechanic availability in your area.",
+      question: "What is Vahanwire and how does it work?",
+      answer: "Vahanwire is an on-demand roadside assistance and mechanic service platform where users can instantly raise a service request for any vehicle-related issue. Whether it’s a jump start, towing, puncture repair, battery problem, or a general breakdown — Vahanwire connects you with verified mechanics anytime, anywhere. Vahanwire services are available 24/7, including weekends and holidays (based on mechanic availability in your area.",
     },
     {
       question: "Can I book emergency services like towing or on-road repairs?",
       answer:
-        "Yes, VahanWire provides 24/7 emergency roadside assistance, including towing, jump start, flat-tyre repair, battery issues, and on-spot mechanical help. Just select your service and share your location — a verified mechanic will reach you quickly.",
+        "Yes, Vahanwire provides 24/7 emergency roadside assistance, including towing, jump start, flat-tyre repair, battery issues, and on-spot mechanical help. Just select your service and share your location — a verified mechanic will reach you quickly.",
     },
     {
       question: "What is an AMC and why should I buy it?",
       answer: "An AMC (Annual Maintenance Contract) is a prepaid roadside assistance plan that covers essential vehicle services like jump start, towing, puncture repair, battery help, and minor mechanical issues throughout the year. Buying an AMC ensures zero service charges, priority support, and complete peace of mind during any breakdown — anytime, anywhere.",
     },
     {
-      question: "How do I pay for services on VahanWire?",
-      answer: "You can pay securely through VahanWire using UPI, debit/credit cards, net banking, or other digital payment options powered by our trusted payment gateway. Once the service is completed, you can make the payment directly in the app — fast, safe, and hassle-free.",
+      question: "How do I pay for services on Vahanwire?",
+      answer: "You can pay securely through Vahanwire using UPI, debit/credit cards, net banking, or other digital payment options powered by our trusted payment gateway. Once the service is completed, you can make the payment directly in the app — fast, safe, and hassle-free.",
     },
     {
       question: "Are the service providers verified?",
-      answer: "Yes. Every service provider on VahanWire is fully verified through a strict onboarding process that includes identity checks, KYC verification, skill assessment, and service-quality validation. Only trusted and experienced mechanics are allowed to serve users on the platform.",
+      answer: "Yes. Every service provider on Vahanwire is fully verified through a strict onboarding process that includes identity checks, KYC verification, skill assessment, and service-quality validation. Only trusted and experienced mechanics are allowed to serve users on the platform.",
     },
     {
       question: "Can I track the provider once I book a service?",
@@ -55,7 +55,7 @@ const FAQ = () => {
     },
     {
       question: "Do I need to install a separate app for different services?",
-      answer: "No. You don’t need multiple apps. All vehicle services on VahanWire — including towing, jump start, puncture repair, battery help, and on-spot mechanical repairs — are available inside one single app for your convenience.",
+      answer: "No. You don’t need multiple apps. All vehicle services on Vahanwire — including towing, jump start, puncture repair, battery help, and on-spot mechanical repairs — are available inside one single app for your convenience.",
     },
   ];
   return (

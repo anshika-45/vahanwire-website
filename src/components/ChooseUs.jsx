@@ -56,7 +56,7 @@ const ChooseUs = () => {
                   href="https://apps.apple.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Download VahanWire on App Store"
+                  aria-label="Download Vahanwire on App Store"
                   className="inline-block hover:opacity-80 transition"
                 >
                   <img
@@ -74,7 +74,7 @@ const ChooseUs = () => {
                   href="https://play.google.com/store/apps/details?id=com.vahanwireprovider"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Get VahanWire on Google Play"
+                  aria-label="Get Vahanwire on Google Play"
                   className="inline-block hover:opacity-80 transition cursor-pointer"
                 >
                   <img
@@ -131,7 +131,7 @@ const ChooseUs = () => {
             <div className="aspect-[2/3]">
               <img
                 src={mobile}
-                alt="VahanWire mobile app preview"
+                alt="Vahanwire mobile app preview"
                 loading="lazy"
                 decoding="async"
                 width="250"

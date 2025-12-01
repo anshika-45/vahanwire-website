@@ -9,7 +9,7 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
         <div className="absolute left-0 top-3 sm:top-4 bg-white rounded-r-full w-12 sm:w-14 md:w-16 h-10 sm:h-12 md:h-14 flex items-center justify-end pr-2 sm:pr-3 shadow-md z-10">
           <img
             src={logoSrc || "/src/assets/Logo-AMC.svg"}
-            alt="VahanWire Logo"
+            alt="Vahanwire Logo"
             loading="lazy"
             className="w-6 sm:w-7 md:w-8 h-6 sm:h-7 md:h-8 object-contain"
           />

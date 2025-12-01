@@ -8,7 +8,7 @@ const WhyChooseUs = () => {
           Why Choose Us?
         </h1>
         <p className="text-[14px] sm:text-lg text-[#5C5C5C] text-center pt-2 md:pt-4">
-          VahanWire began in 2019 to simplify access to mechanics, fuel, and
+          Vahanwire began in 2019 to simplify access to mechanics, fuel, and
           vehicle services. Today, we lead India's app-based <br /> automotive
           service market with a 70% share, helping the nation move smarter.
         </p>

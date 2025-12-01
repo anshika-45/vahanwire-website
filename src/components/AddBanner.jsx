@@ -88,11 +88,11 @@ const AddBanner = () => {
                   Grow Your Garage. Reach More Customers.
                 </h2>
                 <p className="text-[#5C5C5C] lg:block hidden mt-2 md:mt-4 lg:text-lg text-[14.5px]">
-                  Join VahanWire and start receiving service <br />
+                  Join Vahanwire and start receiving service <br />
                   requests instantly.
                 </p>
                 <p className="text-[#5C5C5C] lg:hidden block mt-2 md:mt-4 lg:text-lg text-[14.5px]">
-                  Join VahanWire and start receiving service requests instantly.
+                  Join Vahanwire and start receiving service requests instantly.
                 </p>
               </div>
               <div className="mt-2 lg:mt-8">

@@ -13,26 +13,6 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 const slides = [
   {
-    id: 1,
-    title: "Mechanic Service",
-    desc: "Instant roadside assistance.",
-    img: mechanic,
-  },
-  { id: 2, title: "AMC Plan", desc: "Annual Maintenance Contract.", img: amc },
-
-  {
-    id: 4,
-    title: "Battery Jumpstart",
-    desc: "Quick and safe power boost.",
-    img: post4,
-  },
-  {
-    id: 6,
-    title: "Mechanic Service",
-    desc: "Instant roadside assistance.",
-    img: amc,
-  },
-  {
     id: 7,
     title: "AMC Plan",
     desc: "Annual Maintenance Contract.",
@@ -71,24 +51,6 @@ const slides = [
     img: post4,
   },
   {
-    id: 14,
-    title: "Mechanic Service",
-    desc: "Instant roadside assistance.",
-    img: mechanic,
-  },
-  {
-    id: 15,
-    title: "AMC Plan",
-    desc: "Annual Maintenance Contract.",
-    img: amc,
-  },
-  {
-    id: 16,
-    title: "Battery Jumpstart",
-    desc: "Quick and safe power boost.",
-    img: post4,
-  },
-  {
     id: 17,
     title: "Mechanic Service",
     desc: "Instant roadside assistance.",
@@ -99,12 +61,6 @@ const slides = [
     title: "AMC Plan",
     desc: "Annual Maintenance Contract.",
     img: post3,
-  },
-  {
-    id: 19,
-    title: "Battery Jumpstart",
-    desc: "Quick and safe power boost.",
-    img: post2,
   },
   {
     id: 20,

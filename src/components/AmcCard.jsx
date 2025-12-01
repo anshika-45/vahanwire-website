@@ -88,7 +88,7 @@ const AMCCard = ({
           <img
             loading="lazy"
             src="/src/assets/Logo-AMC.svg"
-            alt="VahanWire Logo"
+            alt="Vahanwire Logo"
             className="w-9 h-9 object-contain"
           />
         </div>

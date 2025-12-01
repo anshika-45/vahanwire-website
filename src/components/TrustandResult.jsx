@@ -15,7 +15,7 @@ const TrustandResult = () => {
             Powered by Trust & Results
           </h1>
           <p className="text-[14px] sm:text-lg text-white text-center pt-2 md:pt-4 mb-4">
-            See why customers across India rely on VahanWire for fast, reliable,
+            See why customers across India rely on Vahanwire for fast, reliable,
             and <br />
             transparent vehicle services — anytime, anywhere.
           </p>
