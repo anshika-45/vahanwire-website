@@ -15,7 +15,7 @@ const Banner = React.memo(() => {
     <div className="relative w-full">
       <div>
         <div
-          className="relative w-full h-[400px] md:h-[500px]  bg-center bg-cover overflow-hidden bg-gray-100"
+          className="relative w-full h-[300px] md:h-[500px]  bg-center bg-cover overflow-hidden bg-gray-100"
           style={{
             backgroundImage: `url(${S3_IMAGES.HOME_BANNER})`,
             willChange: "background-image",

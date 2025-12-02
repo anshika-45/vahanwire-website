@@ -247,6 +247,7 @@ const Header = () => {
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
+          onBack={()=>setIsVerifyOpen(true)}
           isFromLogin={true}
         />
       </Suspense>

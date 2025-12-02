@@ -104,7 +104,7 @@ return (
             setShowOtp(false);
             onClose();
           }}
-          onBack={handleOtpBack}
+          onBack={()=>setShowOtp(false)}
           phoneNumber={number}
           isFromLogin={isFromLogin}
         />
