@@ -51,7 +51,7 @@ const Tile = React.memo(function Tile({
           </p>
 
           {linkText && (
-            <span className="text-sm mt-2 sm:mt-3 font-semibold flex sm:justify-start justify-center items-center gap-1 py-3 text-[#266DDF] hover:text-blue-700">
+            <span className="text-sm mt-2 sm:mt-3 font-semibold flex sm:justify-start justify-center items-center gap-1 pb-3 text-[#266DDF] hover:text-blue-700">
               {linkText}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
