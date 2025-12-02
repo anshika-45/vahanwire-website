@@ -40,15 +40,15 @@ const mapPlansToCards = (plans = [], vehicle = {}) => {
       ? plan.planFeatures.split(",").map((f) => f.trim())
       : [],
     bgColor:
-      plan?.planName === "Premium Care"
+      plan?.sorting == 1
         ? "linear-gradient(to bottom right, #8F6521, #A3762D)"
-        : plan?.planName === "Standard Care"
+        : plan?.sorting == 2
         ? "linear-gradient(to bottom right, #252525, #404040)"
         : "linear-gradient(to bottom right, #3A5353, #4E7777)",
     hoverBgColor:
-      plan?.planName === "Premium Care"
+      plan?.sorting == 1
         ? "linear-gradient(to bottom right, #A3762D, #8F6521)"
-        : plan?.planName === "Standard Care"
+        : plan?.sorting == 2
         ? "linear-gradient(to bottom right, #404040, #252525)"
         : "linear-gradient(to bottom right, #4E7777, #3A5353)",
   }));
