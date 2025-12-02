@@ -317,7 +317,7 @@ export default function MyAMCPage() {
     );
   }, [refundStatusData]);
 
-  const tabs = ["All", "Active", "Pending", "Rejected"];
+  const tabs = ["All", "Active", "Pending", "Rejected", "Cancelled"];
 
   const getTabStatus = (item) => {
     if (
@@ -328,6 +328,7 @@ export default function MyAMCPage() {
     if (["submitted", "under_process"].includes(item.refundStatus))
       return "Pending";
     if (item.planStatus === "pending") return "Pending";
+    if (item.planStatus === "cancelled") return "Cancelled";
     return "Active";
   };
 
