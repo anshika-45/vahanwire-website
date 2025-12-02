@@ -1,5 +1,5 @@
 import React from "react";
-import { Download } from "lucide-react";
+import { Eye } from "lucide-react";
 const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onDownloadInvoice }) => {
   return (
     <div className="flex flex-col items-center w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px] mx-auto">
@@ -48,8 +48,8 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
           onClick={onDownloadInvoice}
           className="w-full flex items-center justify-center gap-2 text-[#266DDF] font-semibold transition text-xs sm:text-sm md:text-base hover:opacity-80"
         >
-          <Download size={16} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]"/>
-          Download Invoice
+          <Eye size={16} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]"/>
+          View Invoice
         </button>
       </div>
     </div>
