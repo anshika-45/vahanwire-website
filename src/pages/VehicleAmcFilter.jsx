@@ -360,6 +360,7 @@ useEffect(() => {
             isOpen={isPopupOpen}
             plan={selectedPlanState}
             onClose={handleClosePopup}
+            onBack={handleClosePopup}
             vehicle={vehicle}
           />
         </Suspense>

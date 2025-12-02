@@ -59,12 +59,12 @@ const YellowCards = () => {
   return (
     <div
       className="
-                 grid grid-cols-2 lg:grid-cols-4 gap-5"
+                 grid grid-cols-2 lg:grid-cols-4 gap-5 mt-7"
     >
       {cardData.map((card, index) => (
         <div
           key={index}
-          className="bg-white rounded-lg flex flex-col items-center text-center shadow-md 
+          className="bg-white rounded-lg flex flex-col items-center md:gap-0 gap-2 text-center shadow-md 
                      py-8 md:px-3 px-2 h-auto relative 
                      "
         >

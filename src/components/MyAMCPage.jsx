@@ -510,13 +510,13 @@ export default function MyAMCPage() {
     <>
       <div className="w-full">
         <div className="space-y-2 md:space-y-3 bg-[#F4F4F4] p-3 md:p-4 rounded-xl">
-          <div className="rounded-xl p-2 md:p-3 m-2 md:m-3 mt-0 overflow-x-auto">
+          <div className="rounded-xl px-3 overflow-x-auto">
             <nav className="flex gap-x-4 md:gap-8 border-b border-[#D9D9D9] min-w-max md:min-w-full">
               {tabs.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`pb-2 md:pb-3 text-xs md:text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab
+                  className={`pb-2 md:pb-3 text-sm md:text-[16px] font-medium transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab
                     ? "border-b-2 border-[#266DDF] text-[#266DDF]"
                     : "text-[#5C5C5C] hover:text-[#266DDF]"
                     }`}

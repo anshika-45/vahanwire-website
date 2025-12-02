@@ -3,22 +3,24 @@ import bgImage from "../assets/result.webp";
 import Card from "./Card";
 const TrustandResult = () => {
   return (
-    <div className="relative w-full h-auto mt-4 sm:mt-6 md:mt-4  md:pt-8 pt-5 md:pb-14 pb-10">
+    <div className="relative w-full h-auto mt-4 sm:mt-6 md:mt-4  md:pt-10 pt-5 md:pb-14 pb-10">
       <div className="absolute inset-0 bg-[#183f7f]"></div>
       <div
         className="absolute inset-0 bg-cover bg-center opacity-80"
         style={{ backgroundImage: `url(${bgImage})` }}
       ></div>
-      <div className="relative z-10 justify-items-center py-4 md:py-[50px]">
+      <div className="relative z-10 justify-items-center pt-1">
         <div className="container   ">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium text-center text-white mb-1">
             Powered by Trust & Results
           </h1>
-          <p className="text-[14px] sm:text-lg text-white text-center pt-2 md:pt-4 mb-4">
+          <div className="flex justify-center items-center">
+            <p className="text-[14px] sm:text-lg text-white text-center pt-2 md:pt-4 lg:w-[50%] md:w-[60%] w-[90%]">
             See why customers across India rely on Vahanwire for fast, reliable,
-            and <br />
+            and
             transparent vehicle services — anytime, anywhere.
           </p>
+          </div>
         </div>
       </div>
       <div className="container relative z-10">
