@@ -14,16 +14,26 @@ const AmcBanner = ({ onBuy }) => {
             className="w-full h-[200px] sm:h-[280px] md:h-[380px] object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#AD0100]/40 via-[#000000]/10 to-transparent"></div>
-          <div className="absolute inset-0 flex flex-col text-justify justify-center px-3 sm:px-8 md:px-10 lg:px-16 text-white">
+          <div className="absolute inset-0 flex flex-col  justify-center px-3 sm:px-8 md:px-10 lg:px-16 text-white">
             <h2
-              style={{ textAlign: "justify" }}
-              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 leading-tight text-justify "
+
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 leading-tight md:block hidden text-justify "
             >
               DRIVE WORRY-FREE <br /> WITH VAHANWIRE AMC
             </h2>
-            <p className="text-xs sm:text-sm md:text-[15px] text-justify max-w-xs sm:max-w-lg mb-3 sm:mb-4">
+            <h2
+
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 leading-tight  md:hidden block "
+            >
+              DRIVE WORRY-FREE WITH VAHANWIRE AMC
+            </h2>
+            <p className="text-xs sm:text-sm md:text-[15px] text-justify max-w-xs sm:max-w-lg mb-3 sm:mb-4 md:block hidden">
               Get Annual Maintenance, Priority Support, And On-Road Assistance
               <br></br> — All Under One Affordable Plan Designed For Your
+              Vehicle.
+            </p>
+            <p className="text-xs sm:text-sm md:text-[15px] text-justify max-w-xs sm:max-w-lg mb-3 sm:mb-4 md:hidden block">
+              Get Annual Maintenance, Priority Support, And On-Road Assistance — All Under One Affordable Plan Designed For Your
               Vehicle.
             </p>
             <div className="w-fit">

@@ -243,7 +243,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
             ) : (
               <button
                 onClick={handleViewCoupon}
-                className="text-[#266DDF] border border-[#266DDF] px-6 py-2 rounded-lg font-medium text-sm bg-transparent hover:bg-[#266DDF] hover:text-white transition"
+                className="text-[#266DDF] border border-[#266DDF] px-6 py-2 rounded-lg font-medium text-sm bg-transparent hover:bg-blue-600 hover:text-white transition"
               >
                 Apply
               </button>

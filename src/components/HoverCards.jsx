@@ -22,11 +22,11 @@ const steps = [
 const HoverCards = () => {
   return (
     <section
-      className="relative w-full lg:bg-cover bg-contain lg:bg-center bg-no-repeat py-20 lg:mb-32"
+      className="relative w-full lg:bg-cover bg-contain lg:bg-center bg-no-repeat pt-25 md:pb-10  lg:mb-32"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="container relative z-10 flex flex-col items-center justify-center md:min-h-[80vh] px-4 py-16">
-        <div className="grid lg:grid-cols-3 grid-cols-1 md:gap-6 gap-6 px-1 lg:-mb-120">
+      <div className="container relative z-10 flex flex-col items-center justify-center md:min-h-[400px] px-4 py-16">
+        <div className="grid lg:grid-cols-3 grid-cols-1 md:gap-6 gap-6 px-1 lg:-mb-130">
           {steps.map((step, index) => (
             <div
               key={index}

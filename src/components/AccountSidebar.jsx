@@ -98,7 +98,7 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
             </button>
           );
         })}
-        <div className="border-t border-gray-200 mt-1 sm:mt-2"></div>
+        <div className="border-t border-gray-200 mt-0.5"></div>
         <button
           onClick={handleLogout}
           disabled={isLoggingOut}

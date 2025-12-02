@@ -29,7 +29,7 @@ const Footer = () => {
       ></div>
 
       <div className="relative container flex flex-col justify-between">
-        <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-0.5 md:pt-40 md:mt-30 pt-10">
+        <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 grid-cols-1 gap-x-4 gap-y-4 md:pt-40 md:mt-30 pt-10">
           <div className="h-auto mb-6 sm:mb-6 md:mb-0">
             <Link
               to="/"
@@ -42,23 +42,23 @@ const Footer = () => {
                 className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6 cursor-pointer"
               />
             </Link>
-            <p className="text-gray-300 text-[15px] sm:text-base leading-tight mb-4 sm:mb-6 space-y-0.5">
+            <p className="text-gray-300 text-[15px] sm:text-base leading-tight mb-4 space-y-0.5">
               Vahanwire connects you to nearby
             
               mechanics, fuel, services, payments, and
              
               auto parts — in one Platform.
             </p>
-            <h2 className="text-lg sm:text-xl font-bold text-white sm:mb-6 ">
+            <h2 className="text-lg sm:text-xl font-bold text-white sm:mb-3 py-2">
               Follow Us
             </h2>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 my-1">
               <FooterIcons />
             </div>
           </div>
 
          
-          <div className="mb-4 md:mb-0">
+          <div className="mb-4 md:mb-0 lg:pl-4">
             <button
               onClick={() => toggleSection("quickLinks")}
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
@@ -83,7 +83,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/"
-                  className="hover:text-white transition"
+                  className="hover:text-white transition py-1 block "
                   onClick={() =>
                     window.scrollTo({ top: 0, behavior: "smooth" })
                   }
@@ -92,19 +92,19 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/about-us" className="hover:text-white transition">
+                <Link to="/about-us" className="hover:text-white transition py-1 block">
                   About
                 </Link>
               </li>
               <li>
-                <Link to="/contact-us" className="hover:text-white transition">
+                <Link to="/contact-us" className="hover:text-white transition py-1 block">
                   Contact Us
                 </Link>
               </li>
               <li>
                 <Link
                   to="/privacy-policy"
-                  className="hover:text-white transition"
+                  className="hover:text-white transition py-1 block"
                 >
                   Privacy Policy
                 </Link>
@@ -112,7 +112,7 @@ const Footer = () => {
               <li>
                 <Link
                   to="/terms-condition"
-                  className="hover:text-white transition"
+                  className="hover:text-white transition py-1 block"
                 >
                   Terms & Conditions
                 </Link>
@@ -142,22 +142,22 @@ const Footer = () => {
               }`}
             >
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/" className="hover:text-white transition py-1 block">
                   Book A Service
                 </Link>
               </li>
               <li>
-                <Link to="/petrol-pump" className="hover:text-white transition">
+                <Link to="/petrol-pump" className="hover:text-white transition py-1 block">
                   Find Petrol Pumps
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/" className="hover:text-white transition py-1 block">
                   Find Nearby Service Station
                 </Link>
               </li>
               <li>
-                <Link to="/" className="hover:text-white transition">
+                <Link to="/" className="hover:text-white transition py-1 block">
                   Buy Vehicle Parts
                 </Link>
               </li>
@@ -184,22 +184,22 @@ const Footer = () => {
               }`}
             >
               <li>
-                <Link to="/mechanic" className="hover:text-white transition">
+                <Link to="/mechanic" className="hover:text-white transition py-1 block">
                   Register As A Mechanic
                 </Link>
               </li>
               <li>
-                <Link to="/tow-truck" className="hover:text-white transition">
+                <Link to="/tow-truck" className="hover:text-white transition py-1 block">
                   Register As A Tow
                 </Link>
               </li>
               <li>
-                <Link to="/service-center" className="hover:text-white transition">
+                <Link to="/service-center" className="hover:text-white transition py-1 block">
                   Register Your Service Station
                 </Link>
               </li>
               <li>
-                <Link to="/petrol-pump" className="hover:text-white transition">
+                <Link to="/petrol-pump" className="hover:text-white transition py-1 block">
                   Register Petrol Pump
                 </Link>
               </li>

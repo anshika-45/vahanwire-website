@@ -23,15 +23,15 @@ const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
   ];
  
   return (
-    <div className="flex justify-center gap-2 md:gap-6 mt-4 md:mt-6 flex-wrap">
+    <div className="flex justify-center gap-3 md:gap-6 mt-4 md:mt-6 flex-wrap">
       {options.map((option) => {
         const isSelected = vehicleType === option.id;
         return (
           <label
             key={option.id}
-            className={`flex items-center justify-between border-[1.5px] rounded-[10px] px-2 md:px-4 py-1.5 md:py-[10px] ${
+            className={`flex items-center justify-between gap-4 border-[1.5px] rounded-[10px] px-2 md:px-4 py-4 md:py-[10px] ${
               disabled ? "cursor-not-allowed" : "cursor-pointer"
-            } w-[140px] md:w-[230px] transition-all
+            } w-[150px] md:w-[230px] transition-all
           ${
             isSelected
               ? "border-[#007bff] bg-[#FFFFFF] shadow-[0px_4px_24px_0px_rgba(0,0,0,0.10)]"
@@ -47,7 +47,7 @@ const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
               className="hidden"
             />
             <div className="flex items-center gap-1 md:gap-2">
-              <span className="w-5 md:w-[35px] h-5 md:h-[35px] relative flex-shrink-0">
+              <span className="w-5 md:w-[35px] h-6 md:h-[35px] relative flex-shrink-0">
                 <img
                   src={vector}
                   alt="Radio outer"
@@ -75,7 +75,7 @@ const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
               src={isSelected ? option.imgColor : option.imgGrey}
               alt={option.label}
               loading="lazy"
-              className="w-13 md:w-[75px] h-6 md:h-[40px] object-contain flex-shrink-0"
+              className="w-18 md:w-[75px] h-7 md:h-[40px] object-contain flex-shrink-0"
             />
           </label>
         );

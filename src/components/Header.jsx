@@ -126,7 +126,7 @@ const Header = () => {
               <button
                 onClick={handleClick}
                 aria-label="Toggle search"
-                className="md:hidden block mr-2 pr-1 border-r border-gray-300 bg-transparent cursor-pointer min-w-[25px]"
+                className="md:hidden block mr-2.5 pr-1 border-r border-gray-300 bg-transparent cursor-pointer min-w-[25px]"
               >
                 <img
                   className="w-full h-full object-contain"
@@ -158,7 +158,7 @@ const Header = () => {
                   aria-label="Open profile menu"
                   onKeyDown={(e) => e.key === "Enter" && handleProfileClick()}
                 >
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-7 rounded-full flex items-center justify-center">
                     <User
                       size={16}
                       className="w-full h-full object-contain text-gray-800"
