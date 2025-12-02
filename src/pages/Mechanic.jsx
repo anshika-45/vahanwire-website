@@ -29,8 +29,8 @@ export default function Mechanic() {
                   <h3 className="font-bold lg:text-8xl md:text-6xl text-4xl text-transparent bg-clip-text bg-[linear-gradient(to_right,#dc2626_0%,#ca8a04_20%,#16a34a_40%,#2563eb_100%)]">
                     BIDDING
                   </h3>
-                  <span className="h-2 lg:w-20 w-32 bg-black lg:block hidden"></span>
-                  <span className="h-2 lg:w-0 w-32 bg-black block lg:hidden"></span>
+                  {/* <span className="h-2 lg:w-20 w-32 bg-black lg:block hidden"></span>
+                  <span className="h-2 lg:w-0 w-32 bg-black block lg:hidden"></span> */}
                 </div>
                 <p className="lg:text-2xl md:text-xl text-[17px] mb-6">
                   Choose Your Mechanic, Your Price, Your Way!
