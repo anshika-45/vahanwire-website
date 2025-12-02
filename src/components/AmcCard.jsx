@@ -234,7 +234,7 @@ const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
   return (
     <div className="mt-0">
       <div className="max-w-[1180px] mx-auto px-4 sm:px-6 md:px-8">
-        <div className="flex overflow-x-auto scroll-smooth gap-4 sm:gap-6 max-w-[1180px] xl:justify-center justify-around">
+        <div className="flex overflow-x-auto scroll-smooth gap-4 sm:gap-6 max-w-[1180px]  justify-around">
           {cards.map((card, index) => (
             <AMCCard
               key={card._id || index}
