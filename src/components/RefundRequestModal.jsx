@@ -133,14 +133,14 @@ export default function RefundRequestModal({
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-3 top-3 rounded-full p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+          className="absolute right-1 top-1 border  rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
         >
-          <X size={18} />
+          <X size={20} />
         </button>
 
         <h2
           id="refund-title"
-          className="mb-4 mt-1 w-full text-center text-[18px] font-semibold text-gray-900"
+          className="mb-4 mt-1 w-full pt-2 text-center text-[18px] font-semibold text-gray-900"
         >
           Request Refund for Your AMC Plan
         </h2>
