@@ -167,6 +167,10 @@ const handleClose = () => {
   closeAll();
 };
 
+const handleChangeNumber =()=>{
+  onBack();
+}
+
 
 
 
@@ -186,13 +190,13 @@ return (
             </p>
 
             <Button
-              onClick={onBack}
+              onClick={handleChangeNumber}
               className="flex items-center gap-1 px-1 py-0 bg-[#EFEFEF] text-[#333333] text-xs rounded-full border border-gray-200 hover:bg-gray-200 transition-all mb-4"
             >
               <span className="flex items-center justify-center">
                 <Edit size={12} className="text-[#242424]" />
               </span>
-              <span className="text-xs text-[#333333] ">Change Number</span>
+              <span onClick={handleChangeNumber} className="text-xs text-[#333333] ">Change Number</span>
             </Button>
 
             <div id="otp-inputs" className="flex gap-2 mb-3" role="group">
