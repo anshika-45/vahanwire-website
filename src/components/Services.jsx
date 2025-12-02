@@ -38,7 +38,7 @@ const servicesData = [
   {
     icon: patrolIcon,
     title: "Petrol Pump",
-    desc: "Find nearby fuel stations and get fuel delivery in select areas.",
+    desc: "Find nearby fuel stations and get fuel delivery in selected areas.",
     linkText: "View Details",
     linkHref: "/petrol-pump",
   },
