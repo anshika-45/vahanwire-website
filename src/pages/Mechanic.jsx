@@ -18,9 +18,9 @@ export default function Mechanic() {
       />
 
       <div className="container">
-        <div className="flex flex-col items-center justify-center px-2 lg:pt-30 pt-10">
+        <div className="flex flex-col items-center justify-center px-2 pt-5">
           <div className="relative w-full max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 grid-cols-1 gap-10 lg:gap-20 items-center">
+            <div className="lg:grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center flex flex-col-reverse">
               <div className="relative text-center lg:text-left">
                 <h2 className="font-bold lg:text-5xl md:text-3xl text-xl py-1 mb-3">
                   We're Coming With
@@ -38,7 +38,7 @@ export default function Mechanic() {
                 <p className="lg:mt-6 mt-4 text-lg mb-8">
                   Coming Soon on App Store & Play Store
                 </p>
-                <div className="flex gap-5 flex-wrap items-center justify-center lg:justify-start">
+                <div className="flex gap-5 items-center justify-center lg:justify-start">
                   <div className="w-[170px] md:w-[180px]">
                     <a href="https://www.apple.com/in/app-store/" target="_blank" rel="noopener noreferrer">
                       <img className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src={S3_IMAGES.APPSTORE} alt="Download on App Store" />
@@ -61,6 +61,9 @@ export default function Mechanic() {
                 </div>
               </div>
             </div>
+
+      
+
           </div>
         </div>
       </div>

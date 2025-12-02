@@ -90,7 +90,7 @@ const slides = [
 
 export default function Slider() {
   return (
-    <div className="homeSlider max-w-screen relative pt-4 lg:mb-6">
+    <div className="homeSlider max-w-screen relative lg:mb-6">
       <div>
         <Swiper
           spaceBetween={30}

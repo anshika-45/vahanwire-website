@@ -27,8 +27,8 @@ const Tile = React.memo(function Tile({
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleTileClick}
     >
-      <div className="flex sm:flex-row flex-col justify-center gap-3 sm:gap-4 ">
-        <div className="sm:mx-0 mx-auto w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 flex-shrink-0">
+      <div className="flex sm:flex-row flex-col justify-center gap-2 sm:gap-4 ">
+        <div className="sm:mx-0 mx-auto  w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 flex-shrink-0">
           {icon && (
             <img
               loading="lazy"
@@ -42,7 +42,7 @@ const Tile = React.memo(function Tile({
           )}
         </div>
 
-        <div className="flex flex-col justify-between min-h-37">
+        <div className="flex flex-col md:justify-between gap-1 md:min-h-37">
           <h3 className="text-[17px] sm:text-start text-center sm:text-base md:text-lg font-medium text-[#242424]">
             {title}
           </h3>
@@ -51,7 +51,7 @@ const Tile = React.memo(function Tile({
           </p>
 
           {linkText && (
-            <span className="text-sm mt-2 sm:mt-3 font-semibold flex sm:justify-start justify-center items-center gap-1 text-[#266DDF] hover:text-blue-700">
+            <span className="text-sm mt-2 sm:mt-3 font-semibold flex sm:justify-start justify-center items-center gap-1 py-3 text-[#266DDF] hover:text-blue-700">
               {linkText}
               <svg
                 xmlns="http://www.w3.org/2000/svg"

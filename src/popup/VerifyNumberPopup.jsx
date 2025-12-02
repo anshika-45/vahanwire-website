@@ -49,12 +49,12 @@ const handleVerify = async () => {
 
 const handleOtpBack = () => {
   setShowOtp(false);
-  // onClose()
+  onClose()
 }
 return (
     <>
     {!showOtp && (
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onBack={handleOtpBack} onClose={onClose}>
         <div className="bg-white rounded-xl p-8 sm:p-8 md:p-10 flex flex-col items-center m-4 my-10">
           <div className="flex justify-center mb-5 sm:mb-7">
             <img
