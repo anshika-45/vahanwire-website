@@ -262,10 +262,18 @@ const VehicleAmcFilter = () => {
   };
 
   const handleClosePaymentPopup = () => {
+
+    const isPlanValid = JSON.parse(localStorage.getItem('isPlanValid'))
+
     setShowPopup(null);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
+
+    if(isPlanValid?.isPlanValid){
+       navigate("/vehicle-amc");
+    }
+
   };
 
   const handleSuccessClose = () => {

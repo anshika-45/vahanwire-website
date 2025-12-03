@@ -400,6 +400,8 @@ localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
 
         const isPlanValid = plans.some((p)=>p._id === plan._id)
 
+        localStorage.setItem("isPlanValid",JSON.stringify({isPlanValid}))
+
         if (isPlanValid) {
           await handleProceedToPayment(plan, vehicle);
         } else {
