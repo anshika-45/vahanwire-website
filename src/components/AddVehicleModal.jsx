@@ -128,10 +128,8 @@ const handleBlur = (e) => {
 
 
 const handleSubmit = async (e) => {
-  console.log("ugdwugcudgsugcudsguycgds");
   e.preventDefault();
   e.stopPropagation();
-  console.log("Form submitted - handleSubmit called");
   setSubmitError("");
 
   const allTouched = Object.keys(formData).reduce(
@@ -154,8 +152,6 @@ const handleSubmit = async (e) => {
       brand: formData.brand.trim(),
       model: formData.model.trim(),
     };
-
-    console.log("Payload:", payload);
 
     const response = await addUserVehicleWithoutAMC(payload);
 

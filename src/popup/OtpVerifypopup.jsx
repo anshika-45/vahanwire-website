@@ -6,6 +6,7 @@ import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { verifyOtp, sendOtp } from "../api/authApi";
 import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
+import { useNavigate } from "react-router-dom";
 
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
@@ -29,6 +30,13 @@ const OtpVerifypopup = ({
   const [resendLoading, setResendLoading] = useState(false);
   const [error, setError] = useState("");
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
+  const navigate = useNavigate()
+  const isUserLoggedIn = localStorage.getItem("token") ?? "";
+
+  useEffect(()=>{
+    if(isUserLoggedIn)
+    setShowVehiclePopup(true);
+  })
 
 useEffect(() => {
   if (!isOpen) {
@@ -137,13 +145,34 @@ const handleResend = async () => {
     setTimer(RESEND_SECONDS);
     } catch (err) {
     console.error("Resend OTP failed:", err);
-     setError(
+     setError(  
       err?.response?.data?.message || "Could not send OTP. Please try again."
      );
     } finally {
       setResendLoading(false);
     }
   };
+
+  const closeAll = () => {
+  setShowSelectVehicle(false);
+  setShowVehiclePopup(false);
+  onClose();
+};
+
+const handleBack = () => {
+  closeAll();
+};
+
+const handleClose = () => {
+  closeAll();
+};
+
+const handleChangeNumber =()=>{
+  onBack();
+}
+
+
+
 
 if (!isOpen && !showVehiclePopup && !showSelectVehicle) return null;
 
@@ -156,18 +185,18 @@ return (
             <h1 className="text-xl font-semibold text-[#242424] text-center mb-2">
               Verify Your Number
             </h1>
-            <p className="text-base text-[#333333] mb-4">
+            <p className="text-base text-center text-[#333333] mb-4">
               Enter the OTP sent to {phoneNumber}
             </p>
 
             <Button
-              onClick={onBack}
+              onClick={handleChangeNumber}
               className="flex items-center gap-1 px-1 py-0 bg-[#EFEFEF] text-[#333333] text-xs rounded-full border border-gray-200 hover:bg-gray-200 transition-all mb-4"
             >
               <span className="flex items-center justify-center">
                 <Edit size={12} className="text-[#242424]" />
               </span>
-              <span className="text-xs text-[#333333] ">Change Number</span>
+              <span onClick={handleChangeNumber} className="text-xs text-[#333333] ">Change Number</span>
             </Button>
 
             <div id="otp-inputs" className="flex gap-2 mb-3" role="group">
@@ -219,23 +248,23 @@ return (
       {showVehiclePopup && (
         <EnterVehicleNumber
           isOpen={showVehiclePopup}
-          onClose={onClose}
-          onBack={() => setShowVehiclePopup(false)}
+          onClose={handleClose}
+          onBack={handleBack}
         />
       )}
 
       {showSelectVehicle && (
         <React.Suspense
-          fallback={
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="text-white">Loading vehicle selection...</div>
-            </div>
-          }
+          // fallback={
+          //   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          //     <div className="text-white">Loading vehicle selection...</div>
+          //   </div>
+          // }
         >
           <SelectVehicle
             isOpen={showSelectVehicle}
-            onClose={onClose}
-            onBack={() => setShowSelectVehicle(false)}
+            onClose={handleClose}
+            onBack={handleBack}
           />
         </React.Suspense>
       )}

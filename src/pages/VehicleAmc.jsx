@@ -4,6 +4,7 @@ import { useAmcData } from "../context/AmcDataContext";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AMCCards from "../components/AmcCard";
+import { useCity } from "../context/CityContext"; 
 import BreadcrumbBar from "../components/BreadcrumbBar";
 import { getUserVehicleWithoutAMC  } from "../api/vehicleApi";
 const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
@@ -38,6 +39,7 @@ const VehicleAmc = () => {
   const { features, vehicleType, setVehicleType, filterActive, filterData, clearFilter } =
     useAmcData();
   const { isLoggedIn } = useAuth();
+  const { selectedCityName } = useCity();
   const navigate = useNavigate();
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isVehicleOpen, setIsVehicleOpen] = useState(false);
@@ -47,32 +49,28 @@ const VehicleAmc = () => {
   useEffect(() => {
     const checkFilterValidity = async () => {
       if (filterActive && filterData) {
-        // Check if the selected vehicle still exists
         const vehicles = await getUserVehicleWithoutAMC();
         const vehicleExists = vehicles.some(
           v => v.vehicleNumber === filterData.vehicle?.vehicleNumber
         );
         
         if (vehicleExists) {
-          // Vehicle exists, navigate to filter page
           navigate("/vehicle-amc-filter", {
-            state: {...filterData, vehicleType},
+            state: {...filterData, vehicleType, amcType: filterData.amcType},
             replace: true,
           });
         } else {
-          // Vehicle was deleted, clear the filter
           clearFilter();
         }
       }
     };
     
     checkFilterValidity();
-  }, [filterActive, filterData, navigate]);
+  }, [filterActive, filterData, navigate, vehicleType]);
 
   const checkUserVehicles = async () => {
     try {
       const vehicles = await getUserVehicleWithoutAMC();
-      console.log("lkdlnkwj",vehicles);
       return vehicles && vehicles.length > 0;
     } catch (error) {
       console.error("Error checking vehicles:", error);
@@ -101,12 +99,12 @@ const VehicleAmc = () => {
 
   const handlePlanBuy = async (plan) => {
     setSelectedPlan(plan);
+
     setIsVehicleOpen(false);
     setIsSelectVehicleOpen(false);
     
     if (isLoggedIn) {
       const hasVehicles = await checkUserVehicles();
-      console.log("lkkkkkkkkkk");
       if (hasVehicles) {
         setIsVehicleOpen(false);
         setIsSelectVehicleOpen(true);
@@ -130,10 +128,10 @@ const VehicleAmc = () => {
       </div>
 
       <Suspense fallback={<CardLoader />}>
-        <AMCCards onBuy={handlePlanBuy} />
+        <AMCCards onBuy={handlePlanBuy}  selectedCityName={selectedCityName}  />
       </Suspense>
       <Suspense fallback={<TableLoader />}>
-        <CompareTable features={features} onBuy={handlePlanBuy} />
+        <CompareTable features={features} onBuy={handlePlanBuy} selectedCityName={selectedCityName}/>
       </Suspense>
       {/* <Suspense fallback={<BannerLoader />}>
         <LatestOffer />
@@ -148,6 +146,7 @@ const VehicleAmc = () => {
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
+          onBack= {()=>setIsVerifyOpen(false)}
         />
       </Suspense>
       <Suspense fallback={null}>
@@ -162,6 +161,7 @@ const VehicleAmc = () => {
         <SelectVehicle
           isOpen={isSelectVehicleOpen}
           onClose={() => setIsSelectVehicleOpen(false)}
+          onBack={()=> setIsSelectVehicleOpen(false)}
           plan={selectedPlan}
         />
       </Suspense>

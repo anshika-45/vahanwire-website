@@ -4,6 +4,7 @@ import AddVehicleModal from "./AddVehicleModal";
 import EditVehicle from "../popup/EditVehicle";
 import vehicleImage1 from "../assets/acar-2.svg";
 import vehicleImage2 from "../assets/acar-1.svg";
+import BikeImage from "../assets/Bike1.png";
 import deleteIcon from "../assets/DeleteIcon.svg";
 import editIcon from "../assets/EditIcon.svg";
 import checkIcon from "../assets/check2.svg";
@@ -119,20 +120,25 @@ const CarCards = () => {
     try {
       const vehicles = await getUserVehiclesAMC();
      
-      const formatted = vehicles.map((v, index) => ({
-        _id: v._id,
-        id: v._id,
-        title: `${v.brand} ${v.model}`,
-        vehicleNumber: v.vehicleNumber,
-        vehicleType: v.vehicleType,
-        brand: v.brand,
-        model: v.model,
-        fuelType: v.fuelType,
-        year: v.year,
-        amcLabel: "",
-        image: index % 2 === 0 ? vehicleImage1 : vehicleImage2,
-        tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
-      }));
+      const formatted = vehicles.map((v, index) => {
+        const isBike = v.vehicleType === "bike";
+        return {
+          _id: v._id,
+          id: v._id,
+          title: `${v.brand} ${v.model}`,
+          vehicleNumber: v.vehicleNumber,
+          vehicleType: v.vehicleType,
+          brand: v.brand,
+          model: v.model,
+          fuelType: v.fuelType,
+          year: v.year,
+          amcLabel: "",
+          image: isBike 
+            ? (index % 2 === 0 ? BikeImage : BikeImage)
+            : (index % 2 === 0 ? vehicleImage1 : vehicleImage2),
+          tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
+        };
+      });
     
       setCars(formatted);
     } catch (error) {
@@ -207,39 +213,50 @@ const CarCards = () => {
           <VehicleCardShimmer />
         </div>
       ) : cars.length === 0 ? (
-        <p className="text-center text-sm text-gray-500 py-6">
-          No vehicles found.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
-          {cars.map((car) => (
-            <VehicleCard
-              key={car.id}
-              title={car.title}
-              vehicleNumber={car.vehicleNumber}
-              fuelType={car.fuelType}
-              year={car.year}
-              image={car.image}
-              tone={car.tone}
-              onEdit={() => {
-                setCurrent(car);
-                setOpen(true);
-              }}
-              onDelete={() => handleDelete(car.id)}
-            />
-          ))}
+        <div className="flex flex-col items-center justify-center py-12">
+          <p className="text-sm text-gray-500 mb-6">
+            No vehicles found.
+          </p>
+          <button
+            onClick={() => setAddModalOpen(true)}
+            aria-label="Add new vehicle"
+            className="inline-flex items-center justify-center h-10 sm:h-10 px-4 sm:px-6 rounded-lg bg-[#266DDF] text-white hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[#cfe0ff]"
+          >
+            Add New Vehicle
+          </button>
         </div>
-      )}
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+            {cars.map((car) => (
+              <VehicleCard
+                key={car.id}
+                title={car.title}
+                vehicleNumber={car.vehicleNumber}
+                fuelType={car.fuelType}
+                year={car.year}
+                image={car.image}
+                tone={car.tone}
+                onEdit={() => {
+                  setCurrent(car);
+                  setOpen(true);
+                }}
+                onDelete={() => handleDelete(car.id)}
+              />
+            ))}
+          </div>
 
-      <div className="flex items-center justify-between mt-4 sm:mt-6 md:mt-6 px-3 sm:px-4 md:px-0 md:mb-10 mb-5">
-        <button
-          onClick={() => setAddModalOpen(true)}
-          aria-label="Add new vehicle"
-          className="inline-flex items-center justify-center h-10 sm:h-10 px-4 sm:px-6 rounded-lg bg-[#266DDF] text-white hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[#cfe0ff]"
-        >
-          Add New Vehicle
-        </button>
-      </div>
+          <div className="flex items-center justify-between mt-4 sm:mt-6 md:mt-6 px-3 sm:px-4 md:px-0 md:mb-10 mb-5">
+            <button
+              onClick={() => setAddModalOpen(true)}
+              aria-label="Add new vehicle"
+              className="inline-flex items-center justify-center h-10 sm:h-10 px-4 sm:px-6 rounded-lg bg-[#266DDF] text-white hover:bg-blue-700 text-xs sm:text-sm whitespace-nowrap w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-offset-0 focus:ring-[#cfe0ff]"
+            >
+              Add New Vehicle
+            </button>
+          </div>
+        </>
+      )}
     </section>
   );
 };

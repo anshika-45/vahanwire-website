@@ -215,42 +215,17 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
             onSubmit={handleSubmit}
             className="p-4 sm:p-6 space-y-3 text-sm"
           >
-            <div className="flex justify-center gap-4">
-              {["car", "bike"].map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  onClick={() => setVehicleType(type)}
-                  className={`relative flex flex-col items-center w-28 h-18 rounded-xl ${
-                    vehicleType === type
-                      ? "border-[#266DDF] bg-[#ECF3FD]"
-                      : "border border-transparent hover:bg-[#ECF3FD]"
-                  }`}
-                >
-                  <span
-                    className={`absolute top-0 px-3 py-0.5 rounded-b-md text-[11px] font-semibold ${
-                      vehicleType === type
-                        ? "bg-[#E2A701] text-white"
-                        : "bg-[#FFF8E6] text-black"
-                    }`}
-                  >
-                    {type === "car" ? "Car" : "Bike"}
-                  </span>
-                  <img
-                    src={
-                      type === "car"
-                        ? vehicleType === "car"
-                          ? carColor
-                          : carOutline
-                        : vehicleType === "bike"
-                        ? bikeColor
-                        : bikeOutline
-                    }
-                    alt={type}
-                    className="h-8 mt-8"
-                  />
-                </button>
-              ))}
+            <div className="flex justify-center">
+              <div className="relative flex flex-col items-center w-32 h-20 rounded-xl border-2 border-[#266DDF] bg-[#ECF3FD]">
+                <span className="absolute top-0 px-3 py-0.5 rounded-b-md text-[11px] font-semibold bg-[#E2A701] text-white">
+                  {vehicleType === "car" ? "Car" : "Bike"}
+                </span>
+                <img
+                  src={vehicleType === "car" ? carColor : bikeColor}
+                  alt={vehicleType}
+                  className="h-10 mt-8"
+                />
+              </div>
             </div>
 
             {["vehicleNumber", "brand", "model"].map((field) => (
@@ -295,7 +270,7 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
                 disabled={loading}
                 className="border-2 border-blue-600 px-6 py-2 rounded-lg text-[#266DDF] hover:bg-blue-700 hover:text-white transition disabled:opacity-60"
               >
-                {loading ? "Updating..." : "Update Vehicle"}
+                {loading ? "Updating..." : "Save"}
               </button>
             </div>
           </form>

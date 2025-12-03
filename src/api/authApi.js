@@ -45,13 +45,13 @@ export const logoutUser = async () => {
   return response.data;
 };
 
-export const getActiveCities = async () => {
-  const response = await axiosInstance.get(`/amc-admin-city/active`);
+export const getActiveZones = async () => {
+  const response = await axiosInstance.get(`/zone-map/active`);
   return response;
 };
 
-export const updateCity = async (cityData) => {
-  const response = await axiosInstance.put(`/users/update-city`, cityData);
+export const updateCity = async (zoneData) => {
+  const response = await axiosInstance.put(`/users/update-city`, zoneData);
   return response.data;
 };
 

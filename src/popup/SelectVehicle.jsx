@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAmcData } from "../context/AmcDataContext";
+import { useCity } from "../context/CityContext";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import carImg from "../assets/vehicle.webp";
@@ -15,6 +16,7 @@ import { selectAMCVehicle } from "../api/amcApi";
 
 const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehicleBrand, addedVehicleModel, addedVehicleType, plan }) => {
   const navigate = useNavigate();
+  const { selectedCityName } = useCity(); 
   const { vehicleType, amcType, activateFilter } = useAmcData();
   const [formData, setFormData] = useState({
     vehicleNumber: "",
@@ -157,7 +159,7 @@ const handleSearch = async () => {
     setErrors({ vehicleNumber: errorMsg });
     return;
   }
-   
+
   const vehicleNumber = formData.vehicleNumber.toUpperCase();
     
   if (addedVehicles.find((v) => v.number === vehicleNumber)) {
@@ -234,6 +236,7 @@ const handleAddVehicle = async () => {
       vehicleNumber: normalized,
       brand: formData.brand,
       model: formData.model,
+      vehicleType
     });
     setIsLoading(false);
     const msg = res?.data?.message;
@@ -289,15 +292,20 @@ const handleProceed = async () => {
     brand: vehicleData.brand,
     model: vehicleData.model,
     vehicleType: vehicleData.vehicleType,
-    amcPlanCategory: amcType,
+    cityName: selectedCityName, 
   })
     .then((response) => {
-
       if (response?.success) {
-        const { hasActiveAMC, plans, vehicle } = response.data;
-
+        const { hasActiveAMC, plans, vehicle, planCategory } = response.data;
+        
         if (hasActiveAMC) {
           alert("This vehicle already has an active AMC plan.");
+          setIsProceeding(false);
+          return;
+        }
+
+        if (!plans || plans.length === 0) {
+          alert("No AMC plans available for your vehicle Brand or City.");
           setIsProceeding(false);
           return;
         }
@@ -305,13 +313,20 @@ const handleProceed = async () => {
         const vehicleDataToStore = {
           vehicle: vehicle,
           vehicleType: vehicleType,
+          amcType: planCategory,
           plans: plans,
           timestamp: Date.now()
         };
           
         localStorage.setItem('selectedVehicleData', JSON.stringify(vehicleDataToStore));
 
-        const filterData = { plans, vehicle, selectedPlan: plan };
+        const filterData = { 
+          plans, 
+          vehicle, 
+          selectedPlan: plan,
+          vehicleType: vehicleType,
+          amcType: planCategory
+        };
         activateFilter(filterData);
         navigate("/vehicle-amc-filter", { state: filterData });
       } else {
@@ -337,11 +352,19 @@ const handleCancelAdd = () => {
     setErrors({});
   };
 
+   const handleClose = () => {
+    onClose();
+  };
+
+  const handleBack = () => {
+    onBack();
+  };
+
 const filteredVehicles = addedVehicles.filter(v => v.vehicleType === vehicleType);
 const hasMatchingVehicles = filteredVehicles.length > 0;
 
 return (
-  <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
+  <Modal isOpen={isOpen} onClose={handleClose} onBack={handleBack}>
     <div className="w-full max-w-[550px] flex flex-col items-center p-2 relative">
       <div className="w-full flex items-center gap-2 bg-green-50 border border-green-200 text-[#21830F] rounded-lg px-4 py-3 mb-4">
       <img src={verifyIcon} alt="verify" className="w-5 h-5" />
@@ -371,8 +394,8 @@ return (
                     className="font-medium text-[18px] text-gray-900"
                     title={`${vehicle.brand} ${vehicle.model}`}
                   >
-                    {truncateText(vehicle.brand, 9)}{" "}
-                    {truncateText(vehicle.model, 9)}
+                    {truncateText(vehicle.brand, 60)}{" "}
+                    {truncateText(vehicle.model, 60)}
                   </div>
                   <div className="text-xs md:text-[17px] text-gray-500">
                     {vehicle.number}

@@ -15,7 +15,7 @@ const Banner = React.memo(() => {
     <div className="relative w-full">
       <div>
         <div
-          className="relative w-full h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] bg-center bg-cover overflow-hidden bg-gray-100"
+          className="relative w-full h-[300px] md:h-[500px]  bg-center bg-cover overflow-hidden bg-gray-100"
           style={{
             backgroundImage: `url(${S3_IMAGES.HOME_BANNER})`,
             willChange: "background-image",
@@ -25,9 +25,10 @@ const Banner = React.memo(() => {
           <div className="container">
             <div className="absolute md:left-0 left-3.5 top-1/2 -translate-y-1/2 text-white w-full">
               <div className="container">
-                <h1 className="text-3xl sm:text-5xl md:text-5xl leading-tight drop-shadow-lg py-2 md:my-6 font-semibold">
+                <h1 className="text-3xl sm:text-5xl md:text-5xl leading-tight drop-shadow-lg py-2 md:my-4 font-semibold">
                   Your One-Stop <br /> Solution for
                 </h1>
+                
 
                 <div className="max-w-[350px] md:max-w-[450px]">
                   <Suspense fallback={<div className="h-16 md:h-24"></div>}>
@@ -43,11 +44,11 @@ const Banner = React.memo(() => {
                   </Suspense>
                 </div>
 
-                <p className="md:my-4 lg:py-4 sm:mt-0 mt-3  py-2 text-sm sm:text-lg md:text-xl max-w-2xl drop-shadow-md leading-relaxed">
+                {/* <p className="md:my-4 lg:py-4 sm:mt-0 mt-3  py-2 text-sm sm:text-lg md:text-xl max-w-2xl drop-shadow-md leading-relaxed">
                   Book trusted professionals near you for on-time, affordable,
                   <br />
                   and hassle-free vehicle & home services — anytime, anywhere.
-                </p>
+                </p> */}
               </div>
             </div>
           </div>

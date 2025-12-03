@@ -1,6 +1,5 @@
 import React from "react";
 import { S3_IMAGES } from "../constants/images";
-
 import PageBanner from "../components/PageBanner";  
 
 const blankImg =
@@ -15,79 +14,57 @@ export default function Mechanic() {
         useDarkOverlay={false}
         height="0px"
         showTicker={true}
+         className="pt-0 mt-0"
       />
 
       <div className="container">
-        <div className="grid xl:grid-cols-2 grid-cols-1 gap-x-5 gap-y-40 px-2 lg:pt-30 pt-10 items-center">
-
-          <div className="relative xl:text-start text-center">
-            <div className="absolute -top-[60px] translate-y-[30px] xl:right-5 lg:right-20 md:right-40 right-2 translate-x-5 lg:w-[150px] md:w-[100px] w-[50px]">
-              <img className="w-full h-full" src={S3_IMAGES.COMMING_SOON} alt="" />
-            </div>
-
-            <h2 className="font-bold lg:text-5xl md:text-3xl text-xl py-1 mb-3">
-              We're Coming With
-            </h2>
-
-            <div className="flex gap-6 items-center xl:justify-start justify-center pb-1 mb-3">
-              <h3 className="font-bold lg:text-8xl md:text-5xl text-4xl text-transparent bg-clip-text bg-[linear-gradient(to_right,#dc2626_0%,#ca8a04_20%,#16a34a_40%,#2563eb_100%)]">
-                BIDDING
-              </h3>
-              <span className="h-2 px-7 md:block hidden bg-black"></span>
-            </div>
-
-            <p className="lg:text-2xl md:text-xl text-[17px]">
-              Choose Your Mechanic, Your Price, Your Way!
-            </p>
-
-            <p className="lg:mt-10 mt-4 text-lg">
-              Coming Soon on App Store & Play Store
-            </p>
-
-            <div className="flex gap-5 mt-3 flex-wrap items-center xl:justify-start justify-center">
-              <div className="w-[170px]">
-                <a href="https://www.apple.com/in/app-store/">
-                  <img className="w-full h-full object-cover" src={S3_IMAGES.APPSTORE} alt="" />
-                </a>
+        <div className="flex flex-col items-center justify-center px-2 pt-5">
+          <div className="relative w-full max-w-6xl mx-auto">
+            <div className="lg:grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center flex flex-col-reverse">
+              <div className="relative text-center lg:text-left">
+                <h2 className="font-bold lg:text-5xl md:text-3xl text-xl py-1 mb-3">
+                  We're Coming With
+                </h2>
+                <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-end pb-1 mb-3">
+                  <h3 className="font-bold lg:text-8xl md:text-6xl text-4xl text-transparent bg-clip-text bg-[linear-gradient(to_right,#dc2626_0%,#ca8a04_20%,#16a34a_40%,#2563eb_100%)]">
+                    BIDDING
+                  </h3>
+                  {/* <span className="h-2 lg:w-20 w-32 bg-black lg:block hidden"></span>
+                  <span className="h-2 lg:w-0 w-32 bg-black block lg:hidden"></span> */}
+                </div>
+                <p className="lg:text-2xl md:text-xl text-[17px] mb-6">
+                  Choose Your Mechanic, Your Price, Your Way!
+                </p>
+                <p className="lg:mt-6 mt-4 text-lg mb-8">
+                  Coming Soon on App Store & Play Store
+                </p>
+                <div className="flex gap-5 items-center justify-center lg:justify-start">
+                  <div className="w-[170px] md:w-[180px]">
+                    <a href="https://www.apple.com/in/app-store/" target="_blank" rel="noopener noreferrer">
+                      <img className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src={S3_IMAGES.APPSTORE} alt="Download on App Store" />
+                    </a>
+                  </div>
+                  <div className="w-[170px] md:w-[180px]">
+                    <a href="https://play.google.com/store/games?device=windows" target="_blank" rel="noopener noreferrer">
+                      <img className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" src={S3_IMAGES.PLAYSTORE} alt="Get it on Google Play" />
+                    </a>
+                  </div>
+                </div>
               </div>
-
-              <div className="w-[170px]">
-                <a href="https://play.google.com/store/games?device=windows">
-                  <img className="w-full h-full object-cover" src={S3_IMAGES.PLAYSTORE} alt="" />
-                </a>
+              <div className="relative flex justify-center lg:justify-end">
+                <div className="lg:w-full w-3/4 max-w-[400px]">
+                  <img 
+                    className="w-full h-auto object-contain animate-float" 
+                    src={S3_IMAGES.COMMING_SOON} 
+                    alt="Coming Soon" 
+                  />
+                </div>
               </div>
             </div>
+
+      
+
           </div>
-
-          {/* Right Section */}
-          <div className="relative px-3 aspect-[4/3]">
-            <img
-              className="h-full p-2 w-full md:object-cover"
-              src={S3_IMAGES.MOBILE_ASIDE}
-              alt=""
-            />
-
-            <div className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
-              <div className="mech-img-animation3 absolute lg:block hidden top-1/2 z-10">
-                <img className="h-full w-full" src={S3_IMAGES.CARD385} alt="" />
-              </div>
-
-              <div className="mech-img-animation4 absolute lg:block hidden z-10">
-                <img className="h-full w-full" src={S3_IMAGES.CARD485} alt="" />
-              </div>
-
-              <div className="mech-img-animation6 absolute lg:block hidden bottom-10 z-10">
-                <img className="h-full w-full" src={S3_IMAGES.CARD685} alt="" />
-              </div>
-
-              <img
-                className="xl:h-full w-full lg:scale-110 xl:scale-100 object-cover"
-                src={S3_IMAGES.MOBILE_CENTERED}
-                alt=""
-              />
-            </div>
-          </div>
-
         </div>
       </div>
     </div>

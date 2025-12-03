@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 body {
-margin: 0;
-padding: 0;
-overflow-x: hidden;
-cursor: pointer;
-overflow-y: auto;
-font-family: Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  cursor: pointer;
+  overflow-y: auto;
+  font-family: Roboto, sans-serif;
   -webkit-text-size-adjust: 100%;
-   text-size-adjust: 100%;
- }
+  text-size-adjust: 100%;
+}
 
 @keyframes gradientFlow {
   0% {
@@ -28,10 +28,10 @@ font-family: Roboto, sans-serif;
   animation: gradientFlow 3s ease infinite;
 }
 
-.container{
+.container {
   padding: 0 6px;
-  margin:0 auto;
-  @apply max-w-screen-xl
+  margin: 0 auto;
+  @apply max-w-screen-xl;
 }
 
 .swiper {
@@ -148,6 +148,7 @@ font-family: Roboto, sans-serif;
   color: rgb(100, 176, 206);
   width: 15px;
   height: 15px;
+  @apply hidden lg:block;
 }
 .swiper-button-prev svg,
 .swiper-button-next svg {
@@ -183,10 +184,10 @@ font-family: Roboto, sans-serif;
   overflow: hidden;
   background: linear-gradient(
     to right,
-    #F80200 10%,
-    #F8BA01 30%,
-    #32AB15 60%,
-    #4184ED 90%
+    #f80200 10%,
+    #f8ba01 30%,
+    #32ab15 60%,
+    #4184ed 90%
   );
   padding: 5px 0;
 }
@@ -226,10 +227,10 @@ font-family: Roboto, sans-serif;
 .gradient-text {
   background-image: linear-gradient(
     to right,
-    #F80200 10%,
-    #F8BA01 40%,
-    #32AB15 50%,
-    #4184ED 90%
+    #f80200 10%,
+    #f8ba01 40%,
+    #32ab15 50%,
+    #4184ed 90%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -248,7 +249,6 @@ font-family: Roboto, sans-serif;
   animation: scaleOutward3 2s ease infinite;
   animation-delay: 0.6s;
 }
-
 
 @keyframes scaleOutward {
   0% {
@@ -296,4 +296,3 @@ font-family: Roboto, sans-serif;
     bottom: 40px;
   }
 }
-

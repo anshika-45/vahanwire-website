@@ -1,5 +1,5 @@
 import React from "react";
-import { Download } from "lucide-react";
+import { Eye } from "lucide-react";
 const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onDownloadInvoice }) => {
   return (
     <div className="flex flex-col items-center w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px] mx-auto">
@@ -9,7 +9,7 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
         <div className="absolute left-0 top-3 sm:top-4 bg-white rounded-r-full w-12 sm:w-14 md:w-16 h-10 sm:h-12 md:h-14 flex items-center justify-end pr-2 sm:pr-3 shadow-md z-10">
           <img
             src={logoSrc || "/src/assets/Logo-AMC.svg"}
-            alt="VahanWire Logo"
+            alt="Vahanwire Logo"
             loading="lazy"
             className="w-6 sm:w-7 md:w-8 h-6 sm:h-7 md:h-8 object-contain"
           />
@@ -48,8 +48,8 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
           onClick={onDownloadInvoice}
           className="w-full flex items-center justify-center gap-2 text-[#266DDF] font-semibold transition text-xs sm:text-sm md:text-base hover:opacity-80"
         >
-          <Download size={16} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]"/>
-          Download Invoice
+          <Eye size={16} className="sm:w-4 sm:h-4 md:w-[18px] md:h-[18px]"/>
+          View Invoice
         </button>
       </div>
     </div>

@@ -15,7 +15,10 @@ const FailedPurchase = ({ onClose, error, errorCode, errorReason}) => {
     };
   }, []);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b100e1796efa8078cd461900e725c0bac1817c54
   return (
     <div className="flex flex-col items-center justify-center py-10">
       <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">

@@ -9,9 +9,9 @@ import mobile from "../assets/Mobile.svg";
 
 const ChooseUs = () => {
   return (
-    <section className="bg-[#FAFCFF] overflow-hidden md:mt-8">
+    <section className="overflow-hidden md:mt-8">
       <div className="mx-auto px-4 sm:px-6 md:px-4 md:max-w-lg lg:max-w-4xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-8 md:gap-6 items-center justify-items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-15 sm:gap-8 md:gap-6 items-center justify-items-center">
           <div className="bg-white rounded-2xl border border-[#BCD2F5] py-4 sm:py-6 md:py-8 px-4 sm:px-6 sm:space-y-5 text-left w-full">
             <div>
               <h2 className="text-xl sm:text-xl md:text-[20px] text-[#222222] mb-4 sm:mb-6 font-semibold text-center">
@@ -56,7 +56,7 @@ const ChooseUs = () => {
                   href="https://apps.apple.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Download VahanWire on App Store"
+                  aria-label="Download Vahanwire on App Store"
                   className="inline-block hover:opacity-80 transition"
                 >
                   <img
@@ -74,7 +74,7 @@ const ChooseUs = () => {
                   href="https://play.google.com/store/apps/details?id=com.vahanwireprovider"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Get VahanWire on Google Play"
+                  aria-label="Get Vahanwire on Google Play"
                   className="inline-block hover:opacity-80 transition cursor-pointer"
                 >
                   <img
@@ -128,15 +128,15 @@ const ChooseUs = () => {
           </div>
 
           <div className="w-full flex justify-center lg:justify-end">
-            <div className="aspect-[2/3]">
+            <div className="aspect-[2/3.5]">
               <img
                 src={mobile}
-                alt="VahanWire mobile app preview"
+                alt="Vahanwire mobile app preview"
                 loading="lazy"
                 decoding="async"
                 width="250"
                 height="500"
-                className="w-full h-[450px] drop-shadow-xl"
+                className="w-full h-[430px] drop-shadow-xl"
               />
             </div>
           </div>

@@ -10,7 +10,7 @@ import { createAMCPurchase } from "../api/amcApi";
 import { getPaymentError, getPaymentStatus } from "../api/paymentApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import AMC from "../components/AMC";
-import useAmcData from "../hooks/useAmcData";
+import { useAmcData } from "../context/AmcDataContext";
 
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -26,6 +26,7 @@ const ComponentLoader = () => (
 
 const VehicleAmcFilter = () => {
   const { isLoggedIn } = useAuth();
+  const {clearFilter} = useAmcData();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,6 +39,7 @@ const VehicleAmcFilter = () => {
     vehicle: locationVehicle,
     selectedPlan: initialSelectedPlan,
     vehicleType: locationVehicleType,
+    amcType: locationAmcType,
   } = location.state || {};
 
   const {
@@ -57,22 +59,22 @@ const VehicleAmcFilter = () => {
     if (locationVehicle) {
       return locationVehicle;
     }
-    
-    const saved = localStorage.getItem('selectedVehicleData');
+
+    const saved = localStorage.getItem("selectedVehicleData");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
           return parsed.vehicle;
         } else {
-          localStorage.removeItem('selectedVehicleData');
+          localStorage.removeItem("selectedVehicleData");
         }
       } catch (e) {
-        console.error('Error parsing saved vehicle data:', e);
-        localStorage.removeItem('selectedVehicleData');
+        console.error("Error parsing saved vehicle data:", e);
+        localStorage.removeItem("selectedVehicleData");
       }
     }
-    
+
     return null;
   });
 
@@ -80,8 +82,8 @@ const VehicleAmcFilter = () => {
     if (locationPlans) {
       return locationPlans;
     }
-    
-    const saved = localStorage.getItem('selectedVehicleData');
+
+    const saved = localStorage.getItem("selectedVehicleData");
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -89,10 +91,10 @@ const VehicleAmcFilter = () => {
           return parsed.plans || [];
         }
       } catch (e) {
-        console.error('Error parsing saved plans:', e);
+        console.error("Error parsing saved plans:", e);
       }
     }
-    
+
     return [];
   });
 
@@ -100,29 +102,91 @@ const VehicleAmcFilter = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
 
+<<<<<<< HEAD
+=======
+useEffect(() => {
+  const saved = localStorage.getItem("selectedVehicleData");
+  
+  if (!saved) {
+    clearFilter(); 
+    navigate("/vehicle-amc", { replace: true });
+    return;
+  }
+  
+  try {
+    const parsed = JSON.parse(saved);
+    const isExpired = Date.now() - parsed.timestamp >= 24 * 60 * 60 * 1000;
+    const hasInvalidData = !parsed.vehicle || !parsed.plans || parsed.plans.length === 0;
+    
+    if (isExpired || hasInvalidData) {
+      clearFilter();
+      navigate("/vehicle-amc", { replace: true });
+    }
+  } catch (e) {
+    console.error("Error parsing saved data:", e);
+    clearFilter(); 
+    navigate("/vehicle-amc", { replace: true });
+  }
+}, []);
+
+  useEffect(() => {
+    if (locationVehicleType) {
+      setVehicleType(locationVehicleType);
+    }
+    if (locationAmcType) {
+      setAmcType(locationAmcType);
+    }
+    
+    if (!locationVehicleType || !locationAmcType) {
+      const saved = localStorage.getItem("selectedVehicleData");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+            if (!locationVehicleType && parsed.vehicleType) {
+              setVehicleType(parsed.vehicleType);
+            }
+            if (!locationAmcType && parsed.amcType) {
+              setAmcType(parsed.amcType);
+            }
+          }
+        } catch (e) {
+          console.error("Error parsing saved data:", e);
+        }
+      }
+    }
+  }, [locationVehicleType, locationAmcType, setVehicleType, setAmcType]);
+>>>>>>> b100e1796efa8078cd461900e725c0bac1817c54
 
   useEffect(() => {
     if (locationVehicle && locationPlans) {
       const newVehicleData = {
         vehicle: locationVehicle,
         vehicleType: locationVehicleType || vehicleType,
+        amcType: locationAmcType || amcType,
         plans: locationPlans,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
-      
-      localStorage.setItem('selectedVehicleData', JSON.stringify(newVehicleData));
-      
+
+      localStorage.setItem(
+        "selectedVehicleData",
+        JSON.stringify(newVehicleData)
+      );
+
       setVehicle(locationVehicle);
       setPlans(locationPlans);
 
-      if(locationVehicleType){
+      if (locationVehicleType) {
         setVehicleType(locationVehicleType);
       }
+      if (locationAmcType) {
+        setAmcType(locationAmcType);
+      }
     }
-  }, [locationVehicle, locationPlans, locationVehicleType]);
+  }, [locationVehicle, locationPlans, locationVehicleType, locationAmcType]);
 
   useEffect(() => {
-    const saved = localStorage.getItem('selectedVehicleData');
+    const saved = localStorage.getItem("selectedVehicleData");
     if (saved && !vehicleType) {
       try {
         const parsed = JSON.parse(saved);
@@ -130,7 +194,7 @@ const VehicleAmcFilter = () => {
           setVehicleType(parsed.vehicleType);
         }
       } catch (e) {
-        console.error('Error parsing vehicle type:', e);
+        console.error("Error parsing vehicle type:", e);
       }
     }
   }, []);
@@ -187,7 +251,7 @@ const VehicleAmcFilter = () => {
           console.error("Error fetching payment error:", error);
         }
       }
-      
+
       if (status === "success" || status === "failed") {
         setShowPopup(status);
       }
@@ -195,7 +259,6 @@ const VehicleAmcFilter = () => {
 
     fetchErrorData();
   }, [status, txnid]);
-
 
   const handleBuyNow = async (plan) => {
     if (!vehicle?.vehicleNumber) {
@@ -219,7 +282,6 @@ const VehicleAmcFilter = () => {
       purchaseId: purchaseData._id,
       vehicleNumber: vehicle.vehicleNumber,
     };
-
     setSelectedPlanState(planData);
     setIsPopupOpen(true);
   };
@@ -237,8 +299,8 @@ const VehicleAmcFilter = () => {
   };
 
   const handleSuccessClose = () => {
-    localStorage.removeItem('selectedVehicleData');
-    
+    localStorage.removeItem("selectedVehicleData");
+    clearFilter(); 
     setShowPopup(null);
     setVehicle(null);
     setPlans([]);
@@ -301,6 +363,7 @@ const VehicleAmcFilter = () => {
             isOpen={isPopupOpen}
             plan={selectedPlanState}
             onClose={handleClosePopup}
+            onBack={handleClosePopup}
             vehicle={vehicle}
           />
         </Suspense>
@@ -323,9 +386,9 @@ const VehicleAmcFilter = () => {
             <FailedPurchase
               reason="Your UPI payment was not completed or cancelled."
               onClose={handleClosePaymentPopup}
-              error = {error}
-              errorCode = {errorCode}
-              errorReason = {errorReason}
+              error={error}
+              errorCode={errorCode}
+              errorReason={errorReason}
             />
           </Suspense>
         </div>

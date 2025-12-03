@@ -25,15 +25,17 @@ const Header = () => {
 
   const pages = {
     home: "/",
-    about: "/about-us",
-    amc: "/my-account?view=amc",
+    "about us": "/about-us",
+    "vehicle amc": "/vehicle-amc",
+    "my amc": "/my-account?view=amc",
     mechanic: "/mechanic",
-    Ecommerce: "/service-center",
-    petrol: "/petrol-pump",
-    service: "service-center",
-    profile: "/my-account?view=profile",
-    vehicle: "/my-account?view=vehicles",
-    contact: "/contact-us",
+    ecommerce: "/e-commerce",
+    "petrol pump": "/petrol-pump",
+    "tow truck": "/tow-truck",
+    "service center": "/service-center",
+    "my profile": "/my-account?view=profile",
+    "my vehicle": "/my-account?view=vehicles",
+    "contact us": "/contact-us",
   };
 
   const handleChange = (e) => {
@@ -124,10 +126,10 @@ const Header = () => {
               <button
                 onClick={handleClick}
                 aria-label="Toggle search"
-                className="md:hidden block mr-1 border-r border-gray-300 pr-2 bg-transparent cursor-pointer min-w-[25px]"
+                className="md:hidden block mr-2.5 pr-1 border-r border-gray-300 bg-transparent cursor-pointer min-w-[25px]"
               >
                 <img
-                  className="w-6.5 h-6.5 object-contain"
+                  className="w-full h-full object-contain"
                   src={searchIcon}
                   alt="search icon"
                 />
@@ -156,7 +158,7 @@ const Header = () => {
                   aria-label="Open profile menu"
                   onKeyDown={(e) => e.key === "Enter" && handleProfileClick()}
                 >
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-7 rounded-full flex items-center justify-center">
                     <User
                       size={16}
                       className="w-full h-full object-contain text-gray-800"
@@ -200,7 +202,7 @@ const Header = () => {
                 src={searchIcon}
                 loading="lazy"
                 alt="Search"
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 w-6 h-6"
               />
               <input
                 id="search-input"
@@ -245,6 +247,7 @@ const Header = () => {
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
+          onBack={()=>setIsVerifyOpen(true)}
           isFromLogin={true}
         />
       </Suspense>

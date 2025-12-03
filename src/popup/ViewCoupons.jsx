@@ -92,9 +92,9 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button className="text-blue-600" role="apply">
+        {/* <button className="text-blue-600" role="apply">
           Apply
-        </button>
+        </button> */}
       </div>
 
       {filteredCoupons.length > 0 ? (
@@ -141,7 +141,7 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
 
       <div
         onClick={handleApply}
-        className="bg-sky-700 rounded-lg mt-4 text-white flex justify-center items-center py-3 cursor-pointer"
+        className="bg-blue-600 rounded-lg mt-4 text-white flex justify-center items-center py-3 cursor-pointer"
         role="button"
       >
         Tap To Apply

@@ -4,10 +4,10 @@ import closeIcon from "../assets/x.webp";
 const Modal = ({ isOpen, onClose, onBack, children, proceedButton }) => {
   useEffect(() => {
     if (isOpen) {
-      const prev = document.body.style.overflow;
+      // const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => {
-        document.body.style.overflow = prev;
+        document.body.style.overflow = "";
       };
     }
   }, [isOpen]);
@@ -17,7 +17,7 @@ const Modal = ({ isOpen, onClose, onBack, children, proceedButton }) => {
       <div className="ml-auto lg:w-[45vw] md:w-[60vw] max-w-[700px] sm:w-[50vw] w-[100vw] h-full bg-[#EFEFEF] flex flex-col relative">
         <div className="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-6 pb-1">
           <button
-            onClick={onBack || onClose}
+            onClick={onBack}
             className="text-gray-700 hover:text-gray-900 flex items-center gap-2 text-xs sm:text-sm"
           >
             <img src={backIcon} loading="lazy" alt="Back" className="w-4 sm:w-5 h-4 sm:h-5" />Back

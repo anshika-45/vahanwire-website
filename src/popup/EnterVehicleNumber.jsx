@@ -41,7 +41,7 @@ useEffect(()=> {
     setVehicleData(null);
     setShowSelectVehicle(false);
   }
-},[])
+},[isOpen])
 
 if (!isOpen && !showSelectVehicle) return null;
 
@@ -173,7 +173,7 @@ const handleAddVehicle = async () => {
       vehicleNumber: formData.vehicleNumber,
       brand: formData.brand,
       model: formData.model,
-      vehicleType
+      vehicleType:vehicleType
     }
 
     const response = await addUserVehicleWithoutAMC(payload);
@@ -200,10 +200,12 @@ const handleAddVehicle = async () => {
 }
   const handleClose = () => {
     onClose();
+    setShowSelectVehicle(false);
   };
 
   const handleBack = () => {
     onBack();
+    setShowSelectVehicle(false);
   };
 
   return (
@@ -290,7 +292,12 @@ const handleAddVehicle = async () => {
                   ? "Add Vehicle"
                   : "Search"
               }
-              onClick={showModel ? handleAddVehicle : handleSearch}
+              // onClick={showModel ? handleAddVehicle : handleSearch}
+               onClick={() => {
+    console.log("BUTTON CLICKED");
+    console.log("showModel =", showModel);
+    showModel ? handleAddVehicle() : handleSearch();
+  }}
               disabled={isLoading}
               className="self-start w-1/2 bg-[#266DDF] text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400"
             />
@@ -303,7 +310,7 @@ const handleAddVehicle = async () => {
           <SelectVehicle
             isOpen={showSelectVehicle}
             onClose={handleClose}
-            onBack={() => setShowSelectVehicle(false)}
+            onBack={handleBack}
             addedVehicleNumber={vehicleData.vehicleNumber}
             addedVehicleBrand={vehicleData.brand}
             addedVehicleModel={vehicleData.model}

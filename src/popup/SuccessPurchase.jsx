@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
+import { useAmcData } from "../context/AmcDataContext";
+
 const SuccessPurchase = ({ onClose, selectedPlan }) => {
   const navigate = useNavigate();
-
+  const {clearFilter} = useAmcData();
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -12,21 +14,8 @@ const SuccessPurchase = ({ onClose, selectedPlan }) => {
     };
   }, []);
 
-  useEffect(() => {
-    const handlePopState = (event) => {
-      event.preventDefault();
-      navigate("/vehicle-amc", { replace: true });
-    };
-
-    window.history.pushState(null, "", window.location.pathname);
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [navigate]);
-
   const handleClose = () => {
+    clearFilter();
     if (onClose) {
       onClose(selectedPlan);
     }

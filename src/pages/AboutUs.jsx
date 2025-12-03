@@ -34,7 +34,7 @@ const AboutUs = () => {
             </p>
 
             <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed mb-4 text-justify">
-              VahanWire enables users to connect with mechanics, multi-branded
+              Vahanwire enables users to connect with mechanics, multi-branded
               service centers, tow providers, and petrol pump establishments
               offering varied automotive services. Through our platform, users
               can easily book, track, and manage services with trusted
@@ -44,7 +44,7 @@ const AboutUs = () => {
             <p className="text-sm sm:text-base text-[#5C5C5C] leading-relaxed text-jusify">
               These terms and conditions govern your access to and use of the
               Website and Application. By using the Website/Application, you
-              acknowledge that VahanWire acts as a digital platform facilitating
+              acknowledge that Vahanwire acts as a digital platform facilitating
               the connection between users and service providers, and holds no
               liability for the quality, fitness, or conduct of the services
               provided.
@@ -54,7 +54,7 @@ const AboutUs = () => {
             <div className="relative">
               <img
                 src={aboutAppImage}
-                alt="VahanWire App Interface"
+                alt="Vahanwire App Interface"
                 className="w-[140px] md:w-[120px] lg:w-[140px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200"
                 loading="lazy"
                 width={300}  

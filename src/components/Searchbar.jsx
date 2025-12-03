@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import searchIcon from "../assets/SearchIcon.svg";
@@ -10,22 +9,19 @@ function SearchBar({ placeholder = "Search..." }) {
 
   const pages = {
     home: "/",
-    about: "/about-us",
+    "about us": "/about-us",
     "vehicle amc": "/vehicle-amc",
-    amc: "/vehicle-amc",
+    "my amc": "/my-account?view=amc",
     mechanic: "/mechanic",
     ecommerce: "/e-commerce",
     "petrol pump": "/petrol-pump",
-    petrol: "/petrol-pump",
     "tow truck": "/tow-truck",
-    tow: "/tow-truck",
     "service center": "/service-center",
-    service: "/service-center",
-    profile: "/my-account?view=profile",
-    vehicle: "/my-account?view=vehicles",
-    contact: "/contact-us",
+    "my profile": "/my-account?view=profile",
+    "my vehicle": "/my-account?view=vehicles",
+    "contact us": "/contact-us",
   };
-  
+
   const handleChange = (e) => {
     const value = e.target.value;
     setQuery(value);
