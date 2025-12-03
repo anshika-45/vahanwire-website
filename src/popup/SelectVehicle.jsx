@@ -477,12 +477,6 @@ localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
 
     return (
       <div className="w-full max-w-[550px] flex flex-col items-center p-2 relative">
-        <div className="w-full flex items-center gap-2 bg-green-50 border border-green-200 text-[#21830F] rounded-lg px-4 py-3 mb-4">
-          <img src={verifyIcon} alt="verify" className="w-5 h-5" />
-          <span className="font-medium text-sm text-[#333333]">
-            Account Verified
-          </span>
-        </div>
         <div className="w-full bg-white rounded-xl p-6 mb-4">
           <h2 className="text-xl font-semibold text-[#242424] mb-4">
             Select Vehicle

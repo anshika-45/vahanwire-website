@@ -212,13 +212,6 @@ const handleAddVehicle = async () => {
     <>
       <Modal isOpen={isOpen && !showSelectVehicle} onClose={handleClose} onBack={handleBack}>
         <div className="w-full max-w-[550px] flex flex-col items-center p-5">
-          <div className="w-full flex items-center gap-3 bg-green-50 border border-green-200 text-[#6AAC5E] rounded-lg px-3 py-4 mb-4">
-            <img src={verifyIcon} alt="verify" className="w-5 h-5" />
-            <span className="font-medium text-sm text-[#333333]">
-              Account is Verified
-            </span>
-          </div>
-
           <div className="bg-white rounded-xl p-6 w-full flex flex-col items-center mb-10">
             <h2 className="text-2xl font-semibold text-[#242424] mb-4 w-full text-left">
               Add Your Vehicle
