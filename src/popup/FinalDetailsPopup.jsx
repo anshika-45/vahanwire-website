@@ -51,6 +51,12 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
                         <X size={25} />
                     </button>
                 </header> */}
+
+                <div className='py-3 px-2 my-1'>
+                    <h2 className='text-center text-3xl font-semibold'>Thank You For Your Purchase!</h2>
+                    
+
+                </div>
                 <div className=' p-5 h-[80vh] hide-scrollbar overflow-y-scroll relative'>
                     <main className='mb-2'>
 
