@@ -6,6 +6,7 @@ import Payment from "./Payment";
 import { initiatePayment } from "../api/paymentApi";
 import couponImg from "../assets/coupon.png";
 import ViewCoupons from "./ViewCoupons";
+import FinalDetailsPopup from "./FinalDetailsPopup";
 const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
 const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
@@ -14,7 +15,8 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
   const [paymentData, setPaymentData] = useState(null);
   const [viewCouponOpen, setViewCouponOpen] = useState(false);
   const [coupon, setCoupon] = useState(null);
-
+  console.log('plan from plan sum',plan);
+  console.log('vehicel from plan summ',vehicle)
   const handleViewCoupon = () => {
     setViewCouponOpen(!viewCouponOpen);
   };
@@ -135,7 +137,9 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
     }
 
     if (currentView === "success") {
-      return <SuccessPurchase onClose={onClose} plan={plan} />;
+      // return <SuccessPurchase onClose={onClose} plan={plan} />;
+      console.log('hit in plan summary')
+      return <FinalDetailsPopup onClose={onClose} plan={plan} vehicle={vehicle} />
     }
 
     return (
@@ -278,7 +282,8 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
   if (currentView === "success") {
     return (
       <React.Suspense fallback={<div>Loading...</div>}>
-        <SuccessPurchase onClose={onClose} plan={plan} />
+        {/* <SuccessPurchase onClose={onClose} plan={plan} /> */}
+        <FinalDetailsPopup onClose={onClose}  plan={plan} />
       </React.Suspense>
     );
   }

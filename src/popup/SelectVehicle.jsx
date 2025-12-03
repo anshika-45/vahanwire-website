@@ -308,7 +308,7 @@ const handleProceed = async () => {
           alert("No AMC plans available for your vehicle Brand or City.");
           setIsProceeding(false);
           return;
-        }
+        }   // i have done this to test in local in order to buy a plan and show new popup
 
         const vehicleDataToStore = {
           vehicle: vehicle,

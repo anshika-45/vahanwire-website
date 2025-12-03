@@ -100,6 +100,7 @@ const VehicleAmcFilter = () => {
   });
 
   const [selectedPlanState, setSelectedPlanState] = useState(null);
+  const [purchasedPlanState,setPurchasedPlanState] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
 
@@ -275,16 +276,20 @@ useEffect(() => {
     }
 
     const purchaseData = purchaseResponse.data;
+    console.log("sacjjagca",purchaseData);
     const planData = {
       ...plan,
       purchaseId: purchaseData._id,
       vehicleNumber: vehicle.vehicleNumber,
     };
+    console.log("dkhkshzcjsx",planData);
     setSelectedPlanState(planData);
+    setPurchasedPlanState(planData);
     setIsPopupOpen(true);
   };
 
   const handleClosePopup = () => {
+    console.log('new state of purchase',purchasedPlanState)
     setSelectedPlanState(null);
     setIsPopupOpen(false);
   };
@@ -374,7 +379,7 @@ useEffect(() => {
               onClose={handleSuccessClose}
               purchaseData={selectedPlanState}
             /> */}
-            <FinalDetailsPopup />
+            <FinalDetailsPopup onClose={handleSuccessClose} plan={selectedPlanState}vehicle={vehicle} purchaseData={selectedPlanState} calledFrom={'vehicle amc filtr'} />
           </Suspense>
         </div>
       )}
