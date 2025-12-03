@@ -73,7 +73,7 @@ const AMCCard = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="relative overflow-visible flex justify-center flex-shrink-0">
+    <div className="relative overflow-visible flex justify-center flex-shrink-0"   onClick={onBuy}>
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
