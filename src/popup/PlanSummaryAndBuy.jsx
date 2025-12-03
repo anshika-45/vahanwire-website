@@ -60,7 +60,8 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
         { label: "Plan Start After", value: planStart ? `${planStart} Hours` : "24 Hours" }
     ];
 
-    const features = plan?.servicesIncluded?.map(s => ({
+    const excludedServices = ["Validity", "Number of Service Per Year"];
+    const features = plan?.servicesIncluded?.filter(s => !excludedServices.includes(s.serviceName)).map(s => ({
         label: s.serviceName,
         value: s.value,
         serviceType: s.serviceType
@@ -99,8 +100,7 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
                 vehicleNumber: vehicle.vehicleNumber,
                 couponCode: coupon?.code || null,
             });
-                        localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
-
+            localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
 
             if (paymentResponse.success) {
                 setPaymentData(paymentResponse.data);
@@ -136,13 +136,14 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
                     <X size={13} className="text-white" />
                 </div>
             );
-        } else {
-            return (
-                <span className="font-medium text-[#242424]">
-                    {feature.value}
-                </span>
-            );
+        } else if (feature.serviceType === "range") {
+            return <span className="font-semibold">{feature.value} KM</span>;
+        } else if (feature.serviceType === "unlimited") {
+            return <span className="font-semibold">Unlimited</span>;
+        } else if (feature.serviceType === "days") {
+            return <span className="font-semibold">{feature.value} Days</span>;
         }
+        return <span className="font-semibold">{feature.value}</span>;
     };
 
     const renderContent = () => {
@@ -191,15 +192,14 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
                 </div>
 
                 <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
-                <div className="flex justify-between items-center bg-[#E9F0FC] text-black md:px-8 px-2 py-3">
-            <div className="text-base font-semibold">Service Name</div>
-            <div className="text-base font-semibold">Service Quantity</div>
-          </div>
+                    <div className="flex justify-between items-center bg-[#E9F0FC] text-black md:px-8 px-2 py-3">
+                        <div className="text-base font-semibold">Service Name</div>
+                        <div className="text-base font-semibold">Service Quantity</div>
+                    </div>
                     {features.map((feature, i) => (
                         <div
                             key={i}
-                            className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-t-1 ${i === 0 ? 'border-t-0' : ''} ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"
-                                }`}
+                            className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] ${i === 0 ? 'border-t-0.5' : 'border-t-1'} ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"}`}
                         >
                             <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
                                 <span>{feature.label}</span>
