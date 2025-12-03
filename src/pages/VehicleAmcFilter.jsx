@@ -1,16 +1,18 @@
 import React, { useState, useEffect, Suspense } from "react";
-const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
 const AmcCard = React.lazy(() => import("../components/AmcCard"));
 const CompareTable = React.lazy(() => import("../components/CompareTable"));
-const PlanSummaryPage = React.lazy(() => import("../popup/PlanSummaryPage"));
+const PlanSummaryAndBuy = React.lazy(() => import("../popup/PlanSummaryAndBuy"));
 const SuccessPurchase = React.lazy(() => import("../popup/SuccessPurchase"));
 const FailedPurchase = React.lazy(() => import("../popup/FailedPurchase"));
+const SelectVehicle = React.lazy(() => import("../popup/SelectVehicle"));
 import { useAuth } from "../context/AuthContext";
 import { createAMCPurchase } from "../api/amcApi";
 import { getPaymentError, getPaymentStatus } from "../api/paymentApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
-import AMC from "../components/AMC";
 import { useAmcData } from "../context/AmcDataContext";
+import Button from "../components/Button";
+import { Edit } from "lucide-react";
+import { useAMCPlans } from "../context/AmcPlanContext";
 
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -18,15 +20,10 @@ const CardLoader = () => (
 const TableLoader = () => (
   <div className="h-96 bg-gray-200 animate-pulse rounded-lg"></div>
 );
-const ComponentLoader = () => (
-  <div className="flex justify-center items-center py-8">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]"></div>
-  </div>
-);
 
 const VehicleAmcFilter = () => {
   const { isLoggedIn } = useAuth();
-  const {clearFilter} = useAmcData();
+  const { clearFilter } = useAmcData();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,8 +44,6 @@ const VehicleAmcFilter = () => {
     setVehicleType,
     amcType,
     setAmcType,
-    getAmcTabs,
-    comparePlans,
     features,
   } = useAmcData();
 
@@ -70,7 +65,6 @@ const VehicleAmcFilter = () => {
           localStorage.removeItem("selectedVehicleData");
         }
       } catch (e) {
-        console.error("Error parsing saved vehicle data:", e);
         localStorage.removeItem("selectedVehicleData");
       }
     }
@@ -91,7 +85,7 @@ const VehicleAmcFilter = () => {
           return parsed.plans || [];
         }
       } catch (e) {
-        console.error("Error parsing saved plans:", e);
+        return [];
       }
     }
 
@@ -101,62 +95,36 @@ const VehicleAmcFilter = () => {
   const [selectedPlanState, setSelectedPlanState] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
+  const [isSelectVehicleOpen, setIsSelectVehicleOpen] = useState(false);
 
-<<<<<<< HEAD
-=======
-useEffect(() => {
-  const saved = localStorage.getItem("selectedVehicleData");
-  
-  if (!saved) {
-    clearFilter(); 
-    navigate("/vehicle-amc", { replace: true });
-    return;
-  }
-  
-  try {
-    const parsed = JSON.parse(saved);
-    const isExpired = Date.now() - parsed.timestamp >= 24 * 60 * 60 * 1000;
-    const hasInvalidData = !parsed.vehicle || !parsed.plans || parsed.plans.length === 0;
-    
-    if (isExpired || hasInvalidData) {
+  const {
+      setSelectedPlan,
+      selectedPlan
+    } = useAMCPlans();
+
+  useEffect(() => {
+    const saved = localStorage.getItem("selectedVehicleData");
+
+    if (!saved) {
+      clearFilter();
+      navigate("/vehicle-amc", { replace: true });
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(saved);
+      const isExpired = Date.now() - parsed.timestamp >= 24 * 60 * 60 * 1000;
+      const hasInvalidData = !parsed.vehicle || !parsed.plans || parsed.plans.length === 0;
+
+      if (isExpired || hasInvalidData) {
+        clearFilter();
+        navigate("/vehicle-amc", { replace: true });
+      }
+    } catch (e) {
       clearFilter();
       navigate("/vehicle-amc", { replace: true });
     }
-  } catch (e) {
-    console.error("Error parsing saved data:", e);
-    clearFilter(); 
-    navigate("/vehicle-amc", { replace: true });
-  }
-}, []);
-
-  useEffect(() => {
-    if (locationVehicleType) {
-      setVehicleType(locationVehicleType);
-    }
-    if (locationAmcType) {
-      setAmcType(locationAmcType);
-    }
-    
-    if (!locationVehicleType || !locationAmcType) {
-      const saved = localStorage.getItem("selectedVehicleData");
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
-            if (!locationVehicleType && parsed.vehicleType) {
-              setVehicleType(parsed.vehicleType);
-            }
-            if (!locationAmcType && parsed.amcType) {
-              setAmcType(parsed.amcType);
-            }
-          }
-        } catch (e) {
-          console.error("Error parsing saved data:", e);
-        }
-      }
-    }
-  }, [locationVehicleType, locationAmcType, setVehicleType, setAmcType]);
->>>>>>> b100e1796efa8078cd461900e725c0bac1817c54
+  }, []);
 
   useEffect(() => {
     if (locationVehicle && locationPlans) {
@@ -193,9 +161,7 @@ useEffect(() => {
         if (parsed.vehicleType) {
           setVehicleType(parsed.vehicleType);
         }
-      } catch (e) {
-        console.error("Error parsing vehicle type:", e);
-      }
+      } catch (e) {}
     }
   }, []);
 
@@ -227,7 +193,6 @@ useEffect(() => {
             }
           }
         } catch (error) {
-          console.error("Status check failed:", error);
         } finally {
           setIsCheckingStatus(false);
         }
@@ -247,9 +212,7 @@ useEffect(() => {
             setErrorCode(errorData.data.errorCode);
             setErrorReason(errorData.data.errorReason);
           }
-        } catch (error) {
-          console.error("Error fetching payment error:", error);
-        }
+        } catch (error) {}
       }
 
       if (status === "success" || status === "failed") {
@@ -300,13 +263,31 @@ useEffect(() => {
 
   const handleSuccessClose = () => {
     localStorage.removeItem("selectedVehicleData");
-    clearFilter(); 
+    clearFilter();
     setShowPopup(null);
     setVehicle(null);
     setPlans([]);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
+  };
+
+  const handleChangeVehicle = () => {
+    setIsSelectVehicleOpen(true);
+  };
+
+  const handleVehicleSelect = (selectedVehicle) => {
+    setVehicle(selectedVehicle);
+    setIsSelectVehicleOpen(false);
+    
+    const saved = localStorage.getItem("selectedVehicleData");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        parsed.vehicle = selectedVehicle;
+        localStorage.setItem("selectedVehicleData", JSON.stringify(parsed));
+      } catch (e) {}
+    }
   };
 
   if (!isLoggedIn) {
@@ -326,21 +307,24 @@ useEffect(() => {
 
   return (
     <section className="bg-white w-full min-h-screen">
-      <AMC
-        vehicleType={vehicleType}
-        setVehicleType={setVehicleType}
-        isFilter={true}
-      />
-      <Suspense fallback={<ComponentLoader />}>
-        <AmcTabs
-          amcType={amcType}
-          setAmcType={setAmcType}
-          showRemoveFilter
-          tabs={getAmcTabs}
-          vehicleType={vehicleType}
-        />
-      </Suspense>
+      <section className="bg-[#172E53] text-white w-full py-6 sm:py-8 md:py-10 lg:py-12 text-center">
+        <div className="max-w-[600px] text-center mx-auto px-4 sm:px-6 md:px-8 lg:px-8">
+          <h2 className="md:text-3xl font-semibold text-2xl">Selected AMC isn’t supported for your vehicle. Please choose a valid AMC from the list.</h2>
+          <p className="mt-2 sm:mt-3 md:mt-4 flex justify-center sm:text-[17px]">
+            <Button
+              onClick={handleChangeVehicle}
+              className="flex items-center gap-1 px-1 py-0 bg-[#EFEFEF] text-[#333333] text-xs rounded-full border border-gray-200 hover:bg-gray-200 transition-all mb-4"
+            >
+              <span className="flex items-center justify-center">
+                <Edit size={12} className="text-[#242424]" />
+              </span>
+              <span className="text-xs text-[#333333] ">Change Vehicle</span>
+            </Button>
+          </p>
+        </div>
+      </section>
       <Suspense fallback={<CardLoader />}>
+        <div className="mt-10"/>
         <AmcCard
           vehicleType={vehicleType}
           onBuy={handleBuyNow}
@@ -359,7 +343,7 @@ useEffect(() => {
 
       {isPopupOpen && (
         <Suspense fallback={null}>
-          <PlanSummaryPage
+          <PlanSummaryAndBuy
             isOpen={isPopupOpen}
             plan={selectedPlanState}
             onClose={handleClosePopup}
@@ -392,6 +376,17 @@ useEffect(() => {
             />
           </Suspense>
         </div>
+      )}
+
+      {isSelectVehicleOpen && (
+        <Suspense fallback={null}>
+          <SelectVehicle
+            isOpen={isSelectVehicleOpen}
+            onClose={() => setIsSelectVehicleOpen(false)}
+            onBack={() => setIsSelectVehicleOpen(false)}
+            onSelect={handleVehicleSelect}
+          />
+        </Suspense>
       )}
     </section>
   );

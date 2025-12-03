@@ -4,15 +4,13 @@ import { useAmcData } from "../context/AmcDataContext";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AMCCards from "../components/AmcCard";
-import { useCity } from "../context/CityContext"; 
-import BreadcrumbBar from "../components/BreadcrumbBar";
-import { getUserVehicleWithoutAMC  } from "../api/vehicleApi";
+import { useCity } from "../context/CityContext";
+import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
+import PlanSummaryPage from "../popup/PlanSummaryPage";
+import { useAMCPlans } from "../context/AmcPlanContext";
+
 const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
-const AmcCard = React.lazy(() => import("../components/AmcCard"));
 const CompareTable = React.lazy(() => import("../components/CompareTable"));
-const LatestOffer = React.lazy(() => import("../components/LatestOffer"));
-const AmcBanner = React.lazy(() => import("../components/AmcBanner"));
-const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const VerifyNumberPopup = React.lazy(() =>
   import("../popup/VerifyNumberPopup")
 );
@@ -20,15 +18,19 @@ const EnterVehicleNumber = React.lazy(() =>
   import("../popup/EnterVehicleNumber")
 );
 const SelectVehicle = React.lazy(() => import("../popup/SelectVehicle"));
+
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
 );
+
 const TableLoader = () => (
   <div className="h-96 bg-gray-200 animate-pulse rounded-lg"></div>
 );
+
 const BannerLoader = () => (
   <div className="h-48 bg-gray-200 animate-pulse rounded-lg"></div>
 );
+
 const ComponentLoader = () => (
   <div className="flex justify-center items-center py-8">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#266DDF]"></div>
@@ -41,10 +43,18 @@ const VehicleAmc = () => {
   const { isLoggedIn } = useAuth();
   const { selectedCityName } = useCity();
   const navigate = useNavigate();
+
+  const {
+    setSelectedPlan,
+    selectedPlan
+  } = useAMCPlans();
+
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isVehicleOpen, setIsVehicleOpen] = useState(false);
   const [isSelectVehicleOpen, setIsSelectVehicleOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+
+  const [isPlanSummaryOpen, setIsPlanSummaryOpen] = useState(false);
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
 
   useEffect(() => {
     const checkFilterValidity = async () => {
@@ -53,10 +63,10 @@ const VehicleAmc = () => {
         const vehicleExists = vehicles.some(
           v => v.vehicleNumber === filterData.vehicle?.vehicleNumber
         );
-        
+
         if (vehicleExists) {
           navigate("/vehicle-amc-filter", {
-            state: {...filterData, vehicleType, amcType: filterData.amcType},
+            state: { ...filterData, vehicleType, amcType: filterData.amcType },
             replace: true,
           });
         } else {
@@ -64,9 +74,44 @@ const VehicleAmc = () => {
         }
       }
     };
-    
+
     checkFilterValidity();
   }, [filterActive, filterData, navigate, vehicleType]);
+
+  const handlePlanBuy = async (plan, vehicle = null) => {
+
+    setSelectedPlan(plan);
+
+    if (vehicle) {
+      setSelectedVehicle(vehicle);
+    }
+
+    setIsVehicleOpen(false);
+    setIsSelectVehicleOpen(false);
+    setIsVerifyOpen(false);
+
+
+    setIsPlanSummaryOpen(true);
+  };
+
+  const handleClosePlanSummary = () => {
+    setIsPlanSummaryOpen(false);
+  };
+
+  const handleBackPlanSummary = () => {
+    setIsPlanSummaryOpen(false);
+
+  };
+
+  const handleVehicleSelect = (vehicle, plan) => {
+    setSelectedVehicle(vehicle);
+    handlePlanBuy(plan, vehicle);
+  };
+
+  const handleEnterVehicleNumberSuccess = (vehicleData, plan) => {
+    setSelectedVehicle(vehicleData);
+    handlePlanBuy(plan, vehicleData);
+  };
 
   const checkUserVehicles = async () => {
     try {
@@ -78,11 +123,10 @@ const VehicleAmc = () => {
     }
   };
 
-  const handleGenericBuy = async () => {
-    setSelectedPlan(null);
-    setIsVehicleOpen(false);
-    setIsSelectVehicleOpen(false);
-    
+  const handleBuyAmc = async () => {
+
+    handleClosePlanSummary()
+
     if (isLoggedIn) {
       const hasVehicles = await checkUserVehicles();
       if (hasVehicles) {
@@ -95,27 +139,8 @@ const VehicleAmc = () => {
     } else {
       setIsVerifyOpen(true);
     }
-  };
 
-  const handlePlanBuy = async (plan) => {
-    setSelectedPlan(plan);
-
-    setIsVehicleOpen(false);
-    setIsSelectVehicleOpen(false);
-    
-    if (isLoggedIn) {
-      const hasVehicles = await checkUserVehicles();
-      if (hasVehicles) {
-        setIsVehicleOpen(false);
-        setIsSelectVehicleOpen(true);
-      } else {
-        setIsSelectVehicleOpen(false);
-        setIsVehicleOpen(true);
-      }
-    } else {
-      setIsVerifyOpen(true);
-    }
-  };
+  }
 
   return (
     <section className="w-full">
@@ -128,41 +153,56 @@ const VehicleAmc = () => {
       </div>
 
       <Suspense fallback={<CardLoader />}>
-        <AMCCards onBuy={handlePlanBuy}  selectedCityName={selectedCityName}  />
+        <AMCCards
+          onBuy={handlePlanBuy}
+          selectedCityName={selectedCityName}
+        />
       </Suspense>
-      <Suspense fallback={<TableLoader />}>
-        <CompareTable features={features} onBuy={handlePlanBuy} selectedCityName={selectedCityName}/>
-      </Suspense>
-      {/* <Suspense fallback={<BannerLoader />}>
-        <LatestOffer />
-      </Suspense> */}
 
-      {/* <div className="flex flex-col lg:flex-col gap-6">
-        <Suspense fallback={<BannerLoader />}>
-          <AmcBanner onBuy={handleGenericBuy} />
-        </Suspense>
-      </div> */}
+      <Suspense fallback={<TableLoader />}>
+        <CompareTable
+          features={features}
+          onBuy={handlePlanBuy}
+          selectedCityName={selectedCityName}
+        />
+      </Suspense>
+
       <Suspense fallback={null}>
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
-          onBack= {()=>setIsVerifyOpen(false)}
+          onBack={() => setIsVerifyOpen(false)}
         />
       </Suspense>
+
       <Suspense fallback={null}>
         <EnterVehicleNumber
           isOpen={isVehicleOpen}
           onClose={() => setIsVehicleOpen(false)}
           plan={selectedPlan}
-          onBack={()=>setIsVehicleOpen(false)}
+          onBack={() => setIsVehicleOpen(false)}
+          onSuccess={handleEnterVehicleNumberSuccess}
         />
       </Suspense>
+
       <Suspense fallback={null}>
         <SelectVehicle
           isOpen={isSelectVehicleOpen}
           onClose={() => setIsSelectVehicleOpen(false)}
-          onBack={()=> setIsSelectVehicleOpen(false)}
+          onBack={() => setIsSelectVehicleOpen(false)}
           plan={selectedPlan}
+          onSelect={handleVehicleSelect}
+        />
+      </Suspense>
+
+      <Suspense fallback={null}>
+        <PlanSummaryPage
+          isOpen={isPlanSummaryOpen}
+          plan={selectedPlan}
+          onClose={handleClosePlanSummary}
+          onBack={handleBackPlanSummary}
+          vehicle={selectedVehicle}
+          onBuyAmc={handleBuyAmc}
         />
       </Suspense>
     </section>

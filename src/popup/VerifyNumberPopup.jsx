@@ -4,7 +4,7 @@ import phoneGif from "../assets/Animation.svg";
 import OtpVerifypopup from "./OtpVerifypopup";
 import Modal from "../components/Modal";
 import { sendOtp } from "../api/authApi";
-const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false }) => {
+const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false, seletedPlan }) => {
   const [number, setNumber] = useState("");
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
@@ -107,6 +107,7 @@ return (
           onBack={()=>setShowOtp(false)}
           phoneNumber={number}
           isFromLogin={isFromLogin}
+          seletedPlan={seletedPlan}
         />
       )}
       
