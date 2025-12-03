@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 8003",
-    "build": "vite build",
+    "build": "rimraf dist && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -43,6 +43,7 @@
     "postcss": "^8.5.6",
     "postcss-cli": "^11.0.1",
     "purgecss": "^7.0.2",
+    "rimraf": "^6.1.2",
     "rollup-plugin-visualizer": "^6.0.5",
     "tailwindcss": "^4.1.14",
     "terser": "^5.44.0",
