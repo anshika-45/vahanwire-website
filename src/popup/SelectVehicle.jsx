@@ -25,7 +25,6 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
     selectedPlan
   } = useAMCPlans();
 
-
   const plan = selectedPlan
 
   const navigate = useNavigate();
@@ -123,7 +122,7 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
   useEffect(() => {
     if (!initialized.current && isOpen) {
       initialized.current = true;
-      setCurrentView("select"); // Reset to select view when modal opens
+      setCurrentView("select");
 
       if (addedVehicleNumber && addedVehicleModel) {
         const preAddedVehicle = {
@@ -305,7 +304,6 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
 
     setPaymentLoading(true);
     try {
-      // First create AMC purchase
       const purchaseData = await createAMCPurchase({
         planId: plan._id,
         vehicleNumber: vehicle.vehicleNumber,
@@ -413,7 +411,7 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
           activateFilter(filterData);
           navigate("/vehicle-amc-filter", { state: filterData });
           
-          alert("Select Plan is not for this Selected Vehicle");
+          alert("Selected Plan is not for your Selected Vehicle");
 
         }
       } else {
@@ -470,9 +468,10 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
       );
     }
 
-    // Default select vehicle view
     const filteredVehicles = addedVehicles.filter(v => v.vehicleType === vehicleType);
     const hasMatchingVehicles = filteredVehicles.length > 0;
+
+    const isAddButtonDisabled = !formData.vehicleNumber.trim() || isLoading;
 
     return (
       <div className="w-full max-w-[550px] flex flex-col items-center p-2 relative">
@@ -591,8 +590,9 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
           {!showModel && (
             <Button
               text={isLoading ? "Searching..." : "Add New Vehicle"}
-              className="w-full bg-[#266DDF] text-white py-3 rounded-lg"
+              className={`w-full py-3 rounded-lg font-semibold ${isAddButtonDisabled ? "bg-gray-300 text-gray-700 cursor-not-allowed" : "bg-[#266DDF] text-white"}`}
               onClick={handleSearch}
+              disabled={isAddButtonDisabled}
             />
           )}
         </div>
@@ -612,10 +612,8 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
 
   const handleModalClose = () => {
     if (currentView === "success") {
-      // If success view is showing, close the entire modal
       onClose();
     } else {
-      // Otherwise, go back or close based on current view
       handleClose();
     }
   };
@@ -627,7 +625,7 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
       onBack={currentView === "payment" ? handlePaymentBack : onBack}
       showBackButton={currentView !== "success"}
       showCloseButton={currentView !== "success"}
-      proceedButton={null} // We handle proceed button in the content
+      proceedButton={null}
     >
       {renderContent()}
     </Modal>

@@ -190,10 +190,15 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) =
         </div>
 
         <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
+          <div className="flex justify-between items-center bg-[#E9F0FC] text-black md:px-8 px-2 py-3">
+            <div className="text-base font-semibold">Service Name</div>
+            <div className="text-base font-semibold">Service Quantity</div>
+          </div>
+          
           {features.map((feature, i) => (
             <div
               key={i}
-              className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] ${i === 0 ? 'border-0.5' : 'border-t-1'} ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"}`}
+              className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] ${i === 0 ? 'border-t-0.5' : 'border-t-1'} ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"}`}
             >
               <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
                 <span>{feature.label}</span>
