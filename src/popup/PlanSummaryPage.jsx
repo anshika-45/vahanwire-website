@@ -60,8 +60,10 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) =
     { label: "Plan Start After", value: planStart ? `${planStart} Hours` : "24 Hours" }
   ];
 
-  const features = plan?.servicesIncluded?.filter(s => s.serviceType === "bool").map(s => ({
+  const excludedServices = ["Validity", "Number of Service Per Year"];
+  const features = plan?.servicesIncluded?.filter(s => !excludedServices.includes(s.serviceName)).map(s => ({
     label: s.serviceName,
+    type: s.serviceType,
     value: s.value
   })) || [];
 
@@ -121,6 +123,27 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) =
     setPaymentData(null);
   };
 
+  const renderFeatureValue = (feature) => {
+    if (feature.type === "bool") {
+      return feature.value === 1 ? (
+        <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
+          <Check size={13} className="text-white" />
+        </div>
+      ) : (
+        <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center">
+          <X size={13} className="text-white" />
+        </div>
+      );
+    } else if (feature.type === "range") {
+      return <span className="font-semibold">{feature.value} KM</span>;
+    } else if (feature.type === "unlimited") {
+      return <span className="font-semibold">Unlimited</span>;
+    } else if (feature.type === "days") {
+      return <span className="font-semibold">{feature.value} Days</span>;
+    }
+    return <span className="font-semibold">{feature.value}</span>;
+  };
+
   const renderContent = () => {
     if (currentView === "payment") {
       return (
@@ -167,33 +190,15 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) =
         </div>
 
         <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
-          <div className="flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
-            {/* <p className="">Number of Service Per Year</p>
-            <div className="w-5 h-5 flex items-center justify-center mr-20">
-              <span>{servicePerYear?.value || "Unlimited"}</span>
-            </div> */}
-            <p className="whitespace-normal">Number of Service Per Year</p>
-            <p className="">{servicePerYear?.value || "Unlimited"}</p>
-          </div>
-
           {features.map((feature, i) => (
             <div
               key={i}
-              className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-t-1 ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"
-                }`}
+              className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] ${i === 0 ? 'border-0.5' : 'border-t-1'} ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"}`}
             >
               <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
                 <span>{feature.label}</span>
               </div>
-              {feature.value === 1 ? (
-                <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
-                  <Check size={13} className="text-white" />
-                </div>
-              ) : (
-                <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center ">
-                  <X size={13} className="text-white" />
-                </div>
-              )}
+              {renderFeatureValue(feature)}
             </div>
           ))}
         </div>
