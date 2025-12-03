@@ -13,6 +13,7 @@ import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import { Edit } from "lucide-react";
 import { useAMCPlans } from "../context/AmcPlanContext";
+import FinalDetailsPopup from "../popup/FinalDetailsPopup";
 
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -93,6 +94,7 @@ const VehicleAmcFilter = () => {
   });
 
   const [selectedPlanState, setSelectedPlanState] = useState(null);
+  const [purchasedPlanState,setPurchasedPlanState] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
   const [isSelectVehicleOpen, setIsSelectVehicleOpen] = useState(false);
@@ -177,6 +179,7 @@ const VehicleAmcFilter = () => {
         setIsCheckingStatus(true);
         try {
           const result = await getPaymentStatus(txnid);
+          localStorage.setItem('paymentResults',JSON.stringify(result))
 
           if (result.success) {
             const paymentStatus = result.data.status;
@@ -240,25 +243,37 @@ const VehicleAmcFilter = () => {
     }
 
     const purchaseData = purchaseResponse.data;
+    console.log("sacjjagca",purchaseData);
     const planData = {
       ...plan,
       purchaseId: purchaseData._id,
       vehicleNumber: vehicle.vehicleNumber,
     };
+    console.log("dkhkshzcjsx",planData);
     setSelectedPlanState(planData);
+    setPurchasedPlanState(planData);
     setIsPopupOpen(true);
   };
 
   const handleClosePopup = () => {
+    console.log('new state of purchase',purchasedPlanState)
     setSelectedPlanState(null);
     setIsPopupOpen(false);
   };
 
   const handleClosePaymentPopup = () => {
+
+    const isPlanValid = JSON.parse(localStorage.getItem('isPlanValid'))
+
     setShowPopup(null);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
+
+    if(isPlanValid?.isPlanValid){
+       navigate("/vehicle-amc");
+    }
+
   };
 
   const handleSuccessClose = () => {
@@ -356,10 +371,11 @@ const VehicleAmcFilter = () => {
       {showPopup === "success" && (
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <Suspense fallback={<div className="text-white">Loading...</div>}>
-            <SuccessPurchase
+            {/* <SuccessPurchase
               onClose={handleSuccessClose}
               purchaseData={selectedPlanState}
-            />
+            /> */}
+            <FinalDetailsPopup onClose={handleSuccessClose} plan={selectedPlan}vehicle={vehicle} purchaseData={selectedPlanState} calledFrom={'vehicle amc filtr'} />
           </Suspense>
         </div>
       )}

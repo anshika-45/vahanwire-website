@@ -310,12 +310,13 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
       });
 
       if (purchaseData) {
+        localStorage.setItem('selectedPlanOfSuccess',JSON.stringify(plan))
         const paymentResponse = await initiatePayment({
           planId: plan._id,
           vehicleNumber: vehicle.vehicleNumber,
           couponCode: null,
         });
-
+localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
         if (paymentResponse.success) {
           setPaymentData(paymentResponse.data);
           setCurrentView("payment");
@@ -383,7 +384,7 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
           alert("No AMC plans available for your vehicle Brand or City.");
           setIsProceeding(false);
           return;
-        }
+        }   // i have done this to test in local in order to buy a plan and show new popup
 
         const vehicleDataToStore = {
           vehicle: vehicle,
@@ -396,6 +397,8 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
         localStorage.setItem('selectedVehicleData', JSON.stringify(vehicleDataToStore));
 
         const isPlanValid = plans.some((p)=>p._id === plan._id)
+
+        localStorage.setItem("isPlanValid",JSON.stringify({isPlanValid}))
 
         if (isPlanValid) {
           await handleProceedToPayment(plan, vehicle);
