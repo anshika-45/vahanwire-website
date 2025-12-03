@@ -297,6 +297,7 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
             isOpen={isOpen}
             onClose={onClose}
             onBack={currentView === "payment" ? handlePaymentBack : onBack}
+            hideBackButton={true}
             proceedButton={
                 currentView === "summary" ? (
                     <Button

@@ -298,6 +298,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) =
       isOpen={isOpen}
       onClose={onClose}
       onBack={onBack}
+      hideBackButton={true}
       proceedButton={
         currentView === "summary" ? (
           <Button
