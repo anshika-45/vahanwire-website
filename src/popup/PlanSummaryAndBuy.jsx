@@ -92,12 +92,14 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
 
         setIsLoading(true);
         try {
-            
+            localStorage.setItem('selectedPlanOfSuccess',JSON.stringify(plan))
             const paymentResponse = await initiatePayment({
                 planId: plan._id,
                 vehicleNumber: vehicle.vehicleNumber,
                 couponCode: coupon?.code || null,
             });
+                        localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
+
 
             if (paymentResponse.success) {
                 setPaymentData(paymentResponse.data);

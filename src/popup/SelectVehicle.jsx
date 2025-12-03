@@ -312,12 +312,13 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
       });
 
       if (purchaseData) {
+        localStorage.setItem('selectedPlanOfSuccess',JSON.stringify(plan))
         const paymentResponse = await initiatePayment({
           planId: plan._id,
           vehicleNumber: vehicle.vehicleNumber,
           couponCode: null,
         });
-
+localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
         if (paymentResponse.success) {
           setPaymentData(paymentResponse.data);
           setCurrentView("payment");

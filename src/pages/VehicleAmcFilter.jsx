@@ -13,6 +13,7 @@ import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import { Edit } from "lucide-react";
 import { useAMCPlans } from "../context/AmcPlanContext";
+import FinalDetailsPopup from "../popup/FinalDetailsPopup";
 
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -178,6 +179,7 @@ const VehicleAmcFilter = () => {
         setIsCheckingStatus(true);
         try {
           const result = await getPaymentStatus(txnid);
+          localStorage.setItem('paymentResults',JSON.stringify(result))
 
           if (result.success) {
             const paymentStatus = result.data.status;
@@ -365,7 +367,7 @@ const VehicleAmcFilter = () => {
               onClose={handleSuccessClose}
               purchaseData={selectedPlanState}
             /> */}
-            <FinalDetailsPopup onClose={handleSuccessClose} plan={selectedPlanState}vehicle={vehicle} purchaseData={selectedPlanState} calledFrom={'vehicle amc filtr'} />
+            <FinalDetailsPopup onClose={handleSuccessClose} plan={selectedPlan}vehicle={vehicle} purchaseData={selectedPlanState} calledFrom={'vehicle amc filtr'} />
           </Suspense>
         </div>
       )}
