@@ -19,6 +19,7 @@ const OtpVerifypopup = ({
   onBack,
   phoneNumber,
   isFromLogin = false,
+  seletedPlan 
 }) => {
   const { setIsLoggedIn, setUser } = useAuth();
   const [showVehiclePopup, setShowVehiclePopup] = useState(false);
@@ -265,6 +266,8 @@ return (
             isOpen={showSelectVehicle}
             onClose={handleClose}
             onBack={handleBack}
+            plan={seletedPlan}
+            
           />
         </React.Suspense>
       )}

@@ -9,7 +9,7 @@ import ViewCoupons from "./ViewCoupons";
 import FinalDetailsPopup from "./FinalDetailsPopup";
 const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
-const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
+const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) => {
   const [currentView, setCurrentView] = useState("summary");
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
@@ -292,13 +292,13 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      onBack={currentView === "payment" ? handlePaymentBack : onBack}
+      onBack={onBack}
       proceedButton={
         currentView === "summary" ? (
           <Button
-            text={isLoading ? "Processing..." : "Proceed to Payment"}
+            text={"Buy Amc"}
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg disabled:bg-blue-400"
-            onClick={handleProceedToPayment}
+            onClick={onBuyAmc}
             disabled={isLoading}
           />
         ) : null
