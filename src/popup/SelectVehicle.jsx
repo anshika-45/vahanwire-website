@@ -484,7 +484,7 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
         </div>
         <div className="w-full bg-white rounded-xl p-6 mb-4">
           <h2 className="text-xl font-semibold text-[#242424] mb-4">
-            Select a Vehicle to Subscribe
+            Select Vehicle
           </h2>
 
           {hasMatchingVehicles ? (
@@ -527,9 +527,9 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
 
         <div className="bg-white rounded-xl p-6 w-full border border-gray-100 mb-20">
           <h2 className="text-xl font-semibold text-[#242424] mb-3">
-            Add Vehicle
+            Add New Vehicle
           </h2>
-          <label className="text-sm lg:text-[16px] mb-3">Vehicle Number</label>
+          <label className="text-sm lg:text-[16px] mb-3">Enter Vehicle Number</label>
           <input
             type="text"
             name="vehicleNumber"
@@ -590,7 +590,7 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
 
           {!showModel && (
             <Button
-              text={isLoading ? "Searching..." : "Search Vehicle"}
+              text={isLoading ? "Searching..." : "Add New Vehicle"}
               className="w-full bg-[#266DDF] text-white py-3 rounded-lg"
               onClick={handleSearch}
             />
