@@ -309,7 +309,7 @@ const VehicleAmcFilter = () => {
     <section className="bg-white w-full min-h-screen">
       <section className="bg-[#172E53] text-white w-full py-6 sm:py-8 md:py-10 lg:py-12 text-center">
         <div className="max-w-[600px] text-center mx-auto px-4 sm:px-6 md:px-8 lg:px-8">
-          <h2 className="md:text-3xl font-semibold text-2xl">Selected AMC isn’t supported for your vehicle. Please choose a valid AMC from the list.</h2>
+          <h2 className="md:text-3xl font-semibold text-2xl">Selected AMC isn’t supported for your vehicle. Please choose a valid AMC Plan</h2>
           <p className="mt-2 sm:mt-3 md:mt-4 flex justify-center sm:text-[17px]">
             <Button
               onClick={handleChangeVehicle}

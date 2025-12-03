@@ -221,7 +221,7 @@ const handleAddVehicle = async () => {
 
           <div className="bg-white rounded-xl p-6 w-full flex flex-col items-center mb-10">
             <h2 className="text-2xl font-semibold text-[#242424] mb-4 w-full text-left">
-              Vehicle not listed?
+              Add Your Vehicle
             </h2>
 
             <label className="w-full text-xs text-[#333333] mb-1">
@@ -290,7 +290,7 @@ const handleAddVehicle = async () => {
                   ? "Searching..."
                   : showModel
                   ? "Add Vehicle"
-                  : "Search"
+                  : "Add Vehicle"
               }
               // onClick={showModel ? handleAddVehicle : handleSearch}
                onClick={() => {
