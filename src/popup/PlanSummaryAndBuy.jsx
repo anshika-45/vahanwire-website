@@ -189,6 +189,10 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
                 </div>
 
                 <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
+                <div className="flex justify-between items-center bg-[#E9F0FC] text-black md:px-8 px-2 py-3">
+            <div className="text-base font-semibold">Service Name</div>
+            <div className="text-base font-semibold">Service Quantity</div>
+          </div>
                     {features.map((feature, i) => (
                         <div
                             key={i}
