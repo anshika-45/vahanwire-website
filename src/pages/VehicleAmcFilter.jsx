@@ -11,6 +11,7 @@ import { getPaymentError, getPaymentStatus } from "../api/paymentApi";
 import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import AMC from "../components/AMC";
 import { useAmcData } from "../context/AmcDataContext";
+import FinalDetailsPopup from "../popup/FinalDetailsPopup";
 
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -369,10 +370,11 @@ useEffect(() => {
       {showPopup === "success" && (
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <Suspense fallback={<div className="text-white">Loading...</div>}>
-            <SuccessPurchase
+            {/* <SuccessPurchase
               onClose={handleSuccessClose}
               purchaseData={selectedPlanState}
-            />
+            /> */}
+            <FinalDetailsPopup />
           </Suspense>
         </div>
       )}
