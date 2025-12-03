@@ -56,31 +56,32 @@ const VehicleAmc = () => {
   const [isPlanSummaryOpen, setIsPlanSummaryOpen] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
 
-  useEffect(() => {
-    const checkFilterValidity = async () => {
-      if (filterActive && filterData) {
-        const vehicles = await getUserVehicleWithoutAMC();
-        const vehicleExists = vehicles.some(
-          v => v.vehicleNumber === filterData.vehicle?.vehicleNumber
-        );
+  // useEffect(() => {
+  //   const checkFilterValidity = async () => {
+  //     if (filterActive && filterData) {
+  //       const vehicles = await getUserVehicleWithoutAMC();
+  //       const vehicleExists = vehicles.some(
+  //         v => v.vehicleNumber === filterData.vehicle?.vehicleNumber
+  //       );
 
-        if (vehicleExists) {
-          navigate("/vehicle-amc-filter", {
-            state: { ...filterData, vehicleType, amcType: filterData.amcType },
-            replace: true,
-          });
-        } else {
-          clearFilter();
-        }
-      }
-    };
+  //       if (vehicleExists) {
+  //         navigate("/vehicle-amc-filter", {
+  //           state: { ...filterData, vehicleType, amcType: filterData.amcType },
+  //           replace: true,
+  //         });
+  //       } else {
+  //         clearFilter();
+  //       }
+  //     }
+  //   };
 
-    checkFilterValidity();
-  }, [filterActive, filterData, navigate, vehicleType]);
+  //   checkFilterValidity();
+  // }, [filterActive, filterData, navigate, vehicleType]);
 
   const handlePlanBuy = async (plan, vehicle = null) => {
-
+    
     setSelectedPlan(plan);
+    localStorage.setItem("selectedPlan", JSON.stringify(plan))
 
     if (vehicle) {
       setSelectedVehicle(vehicle);

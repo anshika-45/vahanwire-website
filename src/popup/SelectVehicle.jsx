@@ -21,9 +21,8 @@ const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
 const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehicleBrand, addedVehicleModel, addedVehicleType }) => {
 
-  const {
-    selectedPlan
-  } = useAMCPlans();
+
+ const selectedPlan =  JSON.parse(localStorage.getItem("selectedPlan"))
 
   const plan = selectedPlan
 
@@ -410,8 +409,8 @@ const SelectVehicle = ({ isOpen, onClose, onBack, addedVehicleNumber, addedVehic
           };
           activateFilter(filterData);
           navigate("/vehicle-amc-filter", { state: filterData });
-          
-          alert("Selected Plan is not for your Selected Vehicle");
+          alert('Selected Plan is not for your vehicle')
+          handleClose()
 
         }
       } else {
