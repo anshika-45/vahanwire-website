@@ -285,10 +285,8 @@ const handleAddVehicle = async () => {
                   ? "Add Vehicle"
                   : "Add Vehicle"
               }
-              // onClick={showModel ? handleAddVehicle : handleSearch}
+
                onClick={() => {
-    console.log("BUTTON CLICKED");
-    console.log("showModel =", showModel);
     showModel ? handleAddVehicle() : handleSearch();
   }}
               disabled={isLoading}

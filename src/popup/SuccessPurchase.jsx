@@ -14,8 +14,6 @@ const SuccessPurchase = ({ onClose, selectedPlan }) => {
     };
   }, []);
 
-  console.log(selectedPlan);
-
   const handleClose = () => {
     clearFilter();
     if (onClose) {

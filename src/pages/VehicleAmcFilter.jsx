@@ -243,20 +243,20 @@ const VehicleAmcFilter = () => {
     }
 
     const purchaseData = purchaseResponse.data;
-    console.log("sacjjagca",purchaseData);
+
     const planData = {
       ...plan,
       purchaseId: purchaseData._id,
       vehicleNumber: vehicle.vehicleNumber,
     };
-    console.log("dkhkshzcjsx",planData);
+
     setSelectedPlanState(planData);
     setPurchasedPlanState(planData);
     setIsPopupOpen(true);
   };
 
   const handleClosePopup = () => {
-    console.log('new state of purchase',purchasedPlanState)
+
     setSelectedPlanState(null);
     setIsPopupOpen(false);
   };

@@ -4,7 +4,7 @@ export default function useBlockBackButton(redirectTo = null) {
   console.log(redirectTo);
   useEffect(() => {
     const disableBack = () => {
-      console.log("jkecbwjbhjed",window.location.href);
+     
       window.history.pushState({ page: "block" }, "", window.location.pathname + "#block-back");
      
       window.onpopstate = function () {
