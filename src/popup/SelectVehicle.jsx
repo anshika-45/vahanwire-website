@@ -365,8 +365,7 @@ const SelectVehicle = ({
     const originalVehicle = addedVehicles.find(
       (v) => v.number === editingVehicle
     );
-
-
+    
     if (normalizedVehicleNumber !== editingVehicle) {
       const isDuplicate = addedVehicles.some(
         (v) =>
