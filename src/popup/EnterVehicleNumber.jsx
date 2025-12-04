@@ -144,6 +144,7 @@ const handleSearch = async () => {
         brand: data.vehicle.brand,
         model: data.vehicle.model,
         vehicleType: data.vehicle.vehicleType || DEFAULT_VEHICLE_TYPE,
+        id: data.vehicle._id || data.vehicle.id 
       });
       setShowSelectVehicle(true);
     }
@@ -184,7 +185,8 @@ const handleAddVehicle = async () => {
 
     if (response.status === 201 || data.statusCode === 201) {
       setVehicleData({...data.data,
-        vehicleType: data.data.vehicleType || DEFAULT_VEHICLE_TYPE});
+        vehicleType: data.data.vehicleType || DEFAULT_VEHICLE_TYPE,
+        id: data.data._id || data.data.id});
       setShowSelectVehicle(true);
     }else {
       setErrors((prev) => ({
@@ -307,6 +309,7 @@ const handleAddVehicle = async () => {
             addedVehicleModel={vehicleData.model}
             addedVehicleType={vehicleData.vehicleType}
             plan={plan}
+            addedVehicleId={vehicleData.id}
           />
         </Suspense>
       )}

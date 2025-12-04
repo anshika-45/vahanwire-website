@@ -8,7 +8,6 @@ import bikeIconDark from "../assets/motorbike-1.svg";
 const AmcTabs = ({ showRemoveFilter }) => {
   const { amcType, setAmcType, getAmcTabs, vehicleType, clearFilter } = useAmcData();
   const navigate = useNavigate();
-
   const handleRemoveFilter = () => {
     clearFilter();
     navigate("/vehicle-amc");

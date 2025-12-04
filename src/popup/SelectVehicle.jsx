@@ -29,6 +29,7 @@ const SelectVehicle = ({
   addedVehicleBrand,
   addedVehicleModel,
   addedVehicleType,
+  addedVehicleId
 }) => {
   const selectedPlan = JSON.parse(localStorage.getItem("selectedPlan"));
   const plan = selectedPlan;
@@ -149,6 +150,7 @@ const SelectVehicle = ({
 
       if (addedVehicleNumber && addedVehicleModel) {
         const preAddedVehicle = {
+          id: addedVehicleId || addedVehicleNumber,
           number: addedVehicleNumber.toUpperCase(),
           model: addedVehicleModel,
           brand: addedVehicleBrand,
@@ -363,6 +365,7 @@ const SelectVehicle = ({
     const originalVehicle = addedVehicles.find(
       (v) => v.number === editingVehicle
     );
+
 
     if (normalizedVehicleNumber !== editingVehicle) {
       const isDuplicate = addedVehicles.some(
