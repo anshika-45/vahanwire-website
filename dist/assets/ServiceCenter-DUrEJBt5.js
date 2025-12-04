@@ -1,1 +1,0 @@
-import{j as e}from"./index-CwN6xw2H.js";import{S as t}from"./images-ErPs11Bh.js";import r from"./PageBanner-BrNu0jKP.js";const n=()=>e.jsx(e.Fragment,{children:e.jsxs("div",{children:[e.jsx(r,{title:"Coming Soon",image:t.SERVICE_BANNER,useGradientTitle:!0}),e.jsx("div",{className:"mt-6 md:mt-12 lg:mt-12 xl:mt-0"})]})});export{n as default};

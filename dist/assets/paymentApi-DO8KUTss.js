@@ -1,1 +1,0 @@
-import{l as t}from"./index-CwN6xw2H.js";const n=async a=>(await t.post("/amc-pay/initiate-payment",a)).data,r=async a=>(await t.get(`/amc-pay/payment-status/${a}`)).data,o=async a=>(await t.get(`/amc-pay/error/${a}`)).data;export{o as a,r as g,n as i};
