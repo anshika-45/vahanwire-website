@@ -15,8 +15,7 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) =
   const [paymentData, setPaymentData] = useState(null);
   const [viewCouponOpen, setViewCouponOpen] = useState(false);
   const [coupon, setCoupon] = useState(null);
-  console.log('plan from plan sum',plan);
-  console.log('vehicel from plan summ',vehicle)
+
   const handleViewCoupon = () => {
     setViewCouponOpen(!viewCouponOpen);
   };
@@ -163,8 +162,6 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) =
     }
 
     if (currentView === "success") {
-      // return <SuccessPurchase onClose={onClose} plan={plan} />;
-      console.log('hit in plan summary')
       return <FinalDetailsPopup onClose={onClose} plan={plan} vehicle={vehicle} />
     }
 

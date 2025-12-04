@@ -96,7 +96,6 @@ const LocationDropdown = ({ onLocationSelect }) => {
 
     try {
       await updateCity({ zoneId: firstZone._id }); 
-      console.log("Default zone saved:", firstZone.zoneName);
     } catch (error) {
       console.error("Error saving default zone:", error);
     }

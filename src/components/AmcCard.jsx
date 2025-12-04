@@ -199,7 +199,6 @@ const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
     const loadPlans = async () => {
       if (plans && Array.isArray(plans) && plans.length > 0) {
         const mapped = mapPlansToCards(plans, vehicle);
-        console.log('mapped',mapped)
         mapped.sort((a, b) => a.sorting - b.sorting);
         setCards(mapped);
         if(mapped.length < 3){
