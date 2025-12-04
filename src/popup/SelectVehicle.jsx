@@ -298,6 +298,7 @@ const SelectVehicle = ({
         model: formData.model,
         vehicleType,
       });
+
       setIsLoading(false);
       const msg = res?.data?.message;
 
@@ -348,7 +349,6 @@ const SelectVehicle = ({
   };
 
   const handleSaveEdit = async () => {
-    // Validate all fields
     const e = {
       vehicleNumber: validateVehicleNumber(editFormData.vehicleNumber),
       brand: validateBrand(editFormData.brand),
@@ -364,7 +364,6 @@ const SelectVehicle = ({
       (v) => v.number === editingVehicle
     );
 
-    // Check if the new vehicle number already exists (excluding the current vehicle)
     if (normalizedVehicleNumber !== editingVehicle) {
       const isDuplicate = addedVehicles.some(
         (v) =>
@@ -441,7 +440,7 @@ const SelectVehicle = ({
     }
 
     if (!vehicle?.vehicleNumber) {
-      alert("Vehicle information is missing. Please select a vehicle.");
+      alert("Vehicle information is missing. Please select a vehiclesss.");
       return;
     }
 
@@ -511,7 +510,7 @@ const SelectVehicle = ({
         vehicleType: vehicleData.vehicleType,
         cityName: selectedCityName,
       });
-
+   
       if (response?.success) {
         const { hasActiveAMC, plans, vehicle, planCategory } = response.data;
 
