@@ -1,4 +1,4 @@
-name: Deploy Vite App to EC2
+name: Deploy QA Web (Vite React) to EC2
 
 on:
   push:
@@ -6,35 +6,39 @@ on:
       - dev-new
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - run: npm install
-      - run: npm run build
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: Upload dist to EC2
-        uses: appleboy/scp-action@v0.1.4
+      - name: Build Vite App
+        run: npm run build
+
+      - name: Send dist folder to EC2
+        uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.QA_EC2_HOST }}
+          username: ${{ secrets.QA_EC2_USER }}
+          key: ${{ secrets.QA_EC2_SSH_KEY }}
           source: "dist/*"
-          target: "/home/ubuntu/app-dist/"
+          target: "/home/ubuntu/vahanwire-website/dist"
+          strip_components: 1
 
-      - name: Deploy on EC2
+      - name: Restart NGINX
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.QA_EC2_HOST }}
+          username: ${{ secrets.QA_EC2_USER }}
+          key: ${{ secrets.QA_EC2_SSH_KEY }}
           script: |
-            sudo rm -rf /var/www/html/*
-            sudo cp -r /home/ubuntu/app-dist/* /var/www/html/
             sudo systemctl restart nginx
