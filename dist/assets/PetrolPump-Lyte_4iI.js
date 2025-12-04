@@ -1,1 +1,0 @@
-import{j as t}from"./index-CwN6xw2H.js";import{S as m}from"./images-ErPs11Bh.js";import e from"./PageBanner-BrNu0jKP.js";const i=()=>t.jsxs("div",{children:[t.jsx(e,{title:"Coming Soon",image:m.PETROL_PUMP_BANNER,useGradientTitle:!0}),t.jsx("div",{className:"mt-6 md:mt-12 lg:mt-12 xl:mt-0"})]});export{i as default};
