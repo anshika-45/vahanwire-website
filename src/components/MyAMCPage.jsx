@@ -113,6 +113,8 @@ const mapApiDataToAMC = (apiData) => {
       plan: item.planName,
       validity: `${item.planDuration} Months`,
       orderId: item.purchaseId,
+      planFeatures:item.planFeatures,
+      planServices:item.planServices,
       features: item.planFeatures.join(", "),
       statusBadge: statusBadge.label,
       statusColor: statusBadge.color,
@@ -336,7 +338,7 @@ export default function MyAMCPage() {
     activeTab === "All" ? true : getTabStatus(a) === activeTab
   );
 
-  const handleViewCoverage = (item) => {
+  const handleViewCoverage = (item,index) => {
     const planData = {
       name: item.plan,
       description: item.description,
@@ -353,7 +355,7 @@ export default function MyAMCPage() {
         { name: "Starting Problem", available: true },
       ],
     };
-    setSelectedAMC(planData);
+    setSelectedAMC(item);
     setShowCoverageModal(true);
   };
 
@@ -532,7 +534,7 @@ export default function MyAMCPage() {
               <p className="text-gray-500">No AMC plans found</p>
             </div>
           ) : (
-            filtered.map((item) => {
+            filtered.map((item,index) => {
               const timelineStatus = getTimelineStatus(
                 item.refundStatus,
                 item.refundTimeline
@@ -606,6 +608,7 @@ export default function MyAMCPage() {
                       <div className="flex flex-col md:flex-row gap-2 md:gap-4 p-2 md:p-3 mt-2 flex-wrap">
                         <button
                           onClick={() => handleViewCoverage(item)}
+                          
                           className="flex items-center justify-center gap-2 px-3 md:px-4 py-2 border border-[#266DDF] text-[#266DDF] rounded-lg hover:bg-[#D9E7FE] transition text-xs md:text-sm font-medium"
                         >
                           <Eye size={16} className="md:w-[18px] md:h-[18px]" />
@@ -960,6 +963,7 @@ export default function MyAMCPage() {
           isOpen={showCoverageModal}
           onClose={() => setShowCoverageModal(false)}
           plan={selectedAMC}
+          
         />
       )}
 

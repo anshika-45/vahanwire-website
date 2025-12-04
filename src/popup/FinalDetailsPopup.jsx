@@ -31,10 +31,33 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
     //     const result = await getPaymentStatus(txnid);
     // },[])
 
-     const features = purchaseData?.servicesIncluded?.filter(s => s.serviceType === "bool").map(s => ({
-        label: s.serviceName,
-        value: s.value
-    })) || [];
+     const excludedServices = ["Validity", "Number of Service Per Year"];
+         const features = purchaseData?.servicesIncluded?.filter(s => !excludedServices.includes(s.serviceName)).map(s => ({
+             label: s.serviceName,
+             type: s.serviceType,
+             value: s.value
+         })) || [];
+         const renderFeatureValue = (feature) => {
+             if (feature.type === "bool") {
+                 return feature.value === 1 ? (
+                     <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
+                         <Check size={13} className="text-white" />
+                     </div>
+                 ) : (
+                     <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center">
+                         <X size={13} className="text-white" />
+                     </div>
+                 );
+             } else if (feature.type === "range") {
+                 return <span className="font-semibold">{feature.value} KM</span>;
+             } else if (feature.type === "unlimited") {
+                 return <span className="font-semibold">Unlimited</span>;
+             } else if (feature.type === "days") {
+                 return <span className="font-semibold">{feature.value} Days</span>;
+             }
+             return <span className="font-semibold">{feature.value}</span>;
+         };
+     
 
     useEffect(() => {
         const prev = document.body.style.overflow;
@@ -86,20 +109,7 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
                             </div>
                         </div>
 
-                        {/* <div className='grid grid-cols-3 gap-3 my-5'>
-                            <div className='bg-white  border border-blue-500 rounded-xl py-3 px-3'>
-                                <h3>Services</h3>
-                                <p>Unlimited</p>
-                            </div>
-                            <div className='bg-white border border-blue-500 rounded-xl py-3 px-3'>
-                                <h3>Validity</h3>
-                                <p>365 Days</p>
-                            </div>
-                            <div className='bg-white border border-blue-500 rounded-xl py-3 px-3'>
-                                <h3>Plan Start After</h3>
-                                <p>48 Hours</p>
-                            </div>
-                        </div> */}
+                        
 
                         <div className="grid md:grid-cols-3 grid-cols-2 gap-x-4 gap-y-4 my-5">
                     {stats.map((item, i) => (
@@ -116,62 +126,27 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
                 </div>
 
 
-                        {/* <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
-                            <div className="flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
-                                
-                                <p className="whitespace-normal">Number of Service Per Year</p>
-                                <p className="">{"Unlimited"}</p>
-                            </div>
-
-
-                            <div
-
-                                className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-t-1 `}
-                            >
-                                <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
-                                    <span>{ }</span>
-                                </div>
-                                {/* {feature.value === 1 ? ( */}
-                                {/* <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
-                                    <Check size={13} className="text-white" />
-                                </div> */}
-                                {/* ) : ( */}
-                                {/* <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center ">
-                  <X size={13} className="text-white" />
-                </div> */}
-                                {/* )} */}
-                            {/* </div>
-
-                        </div> */} 
 
                         <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden my-5">
-                                            <div className="flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
-                                               
-                                                <p className="whitespace-normal">Number of Service Per Year</p>
-                                                <p className="">{servicePerYear?.value || "Unlimited"}</p>
-                                            </div>
-                        
-                                            {features.map((feature, i) => (
-                                                <div
-                                                    key={i}
-                                                    className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-t-1 ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"
-                                                        }`}
-                                                >
-                                                    <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
-                                                        <span>{feature.label}</span>
-                                                    </div>
-                                                    {feature.value === 1 ? (
-                                                        <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
-                                                            <Check size={13} className="text-white" />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center ">
-                                                            <X size={13} className="text-white" />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
+                            <div className="flex justify-between items-center bg-[#E9F0FC] text-black md:px-8 px-2 py-3">
+            <div className="text-base font-semibold">Service Name</div>
+            <div className="text-base font-semibold">Service Quantity</div>
+          </div>
+
+                            {features.map((feature, i) => (
+                                 <div
+              key={i}
+              className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] ${i === 0 ? 'border-t-0.5' : 'border-t-1'} ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"}`}
+            >
+              <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
+                <span>{feature.label}</span>
+              </div>
+              {renderFeatureValue(feature)}
+            </div>
+                            ))}
+                            
+
+                        </div>
 
                         <div className="bg-white rounded-xl overflow-hidden mb-20 mt-5">
                             <div className="px-6 py-5">
