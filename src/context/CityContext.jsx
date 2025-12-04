@@ -7,8 +7,6 @@ export const CityProvider = ({ children }) => {
   const [selectedCityName, setSelectedCityName] = useState("");
   const [selectedCityId, setSelectedCityId] = useState("");
  
-console.log("jdbchvshvcgs",selectedCityName);
-console.log("ejdbchjebhsb",selectedCityId);
   const updateCity = (zone) => {
     if (zone) {
       setSelectedCityName(zone.zoneName); 

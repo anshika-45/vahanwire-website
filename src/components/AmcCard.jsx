@@ -73,7 +73,7 @@ const AMCCard = ({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="relative overflow-visible flex justify-center flex-shrink-0">
+    <div className="relative overflow-visible flex justify-center flex-shrink-0"   onClick={onBuy}>
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -185,6 +185,7 @@ const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
   const { fetchPlans, loading } = useAMCPlans();
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [cards, setCards] = useState([]);
+  const [updateClass,setUpdateClass] = useState(false);
 
   const handleBuy = (card) => {
     if (onBuy) {
@@ -200,6 +201,11 @@ const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
         const mapped = mapPlansToCards(plans, vehicle);
         mapped.sort((a, b) => a.sorting - b.sorting);
         setCards(mapped);
+        if(mapped.length < 3){
+          setUpdateClass(false);
+        }else{
+          setUpdateClass(true);
+        }
         return;
       }
 
@@ -214,6 +220,11 @@ const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
 
       const fetched = await fetchPlans(vehicleType, amcType, selectedCityName);
       const mapped = mapPlansToCards(fetched, vehicle);
+      if(mapped.length < 3){
+          setUpdateClass(true);
+        }else{
+          setUpdateClass(false);
+        }
       mapped.sort((a, b) => a.sorting - b.sorting);
       setCards(mapped);
     };
@@ -234,14 +245,11 @@ const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
   return (
     <div className="mt-0">
       <div className="max-w-[1180px] mx-auto px-4 sm:px-6 md:px-8">
-        <div className="flex overflow-x-auto scroll-smooth gap-4 sm:gap-6 max-w-[1180px]  justify-around">
+        <div className={`flex overflow-x-auto scroll-smooth gap-4 sm:gap-6 max-w-[1180px] ${cards.length < 3 ? 'justify-center':'justify-around'}`}>
           {cards.map((card, index) => (
-            <AMCCard
-              key={card._id || index}
-              {...card}
-              onBuy={() => handleBuy(card)}
-              vehicleType={vehicleType}
-            />
+             
+        <AMCCard key={card._id || index} {...card} onBuy={() => handleBuy(card)} vehicleType={vehicleType} />
+      
           ))}
         </div>
       </div>
@@ -249,6 +257,7 @@ const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
+          onBack= {()=>setIsVerifyOpen(false)}
         />
       )}
       <style>

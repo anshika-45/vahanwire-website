@@ -180,7 +180,7 @@ if (!isOpen && !showVehiclePopup && !showSelectVehicle) return null;
 return (
   <>
     {!showVehiclePopup && !showSelectVehicle && (
-      <Modal isOpen={isOpen} onClose={onClose} onBack={onBack}>
+      <Modal isOpen={isOpen} onClose={onClose} onBack={onBack} hideBackButton={true}>
         <div className="bg-white rounded-xl p-5 flex flex-col items-center m-8">
           <img src={otpImg} loading="lazy" alt="OTP Animation" className="md:w-60 md:h-60 w-40 h-40 mb-4" width={160} height={160} decoding="async" />
             <h1 className="text-xl font-semibold text-[#242424] text-center mb-2">

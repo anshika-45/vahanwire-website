@@ -9,6 +9,7 @@ import deleteIcon from "../assets/DeleteIcon.svg";
 import editIcon from "../assets/EditIcon.svg";
 import checkIcon from "../assets/check2.svg";
 import { getUserVehiclesAMC, deleteUserVehicle } from "../api/vehicleApi";
+import { useNavigate } from "react-router-dom";
 
 const VehicleCard = ({
   title,
@@ -18,9 +19,17 @@ const VehicleCard = ({
   tone = "bg-rose-100",
   onEdit,
   onDelete,
+  onCardClick
 }) => {
+
+  const handleButtonClick = (e, callBack) => {
+    e.stopPropagation(); 
+    callBack();
+  }
+
   return (
-    <div className="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm">
+    <div  className="rounded-xl border border-slate-200 overflow-hidden bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow duration-200"
+    onClick={onCardClick}>
       <div
         className={`${tone} p-3 sm:p-4 md:p-6 flex items-center justify-center`}
       >
@@ -58,7 +67,7 @@ const VehicleCard = ({
 
         <div className="mt-3 sm:mt-4 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
           <button
-            onClick={onDelete}
+            onClick={(e) => handleButtonClick(e, onDelete)} 
             aria-label={`Delete ${title}`}
             className="flex items-center justify-center h-9 sm:h-10 px-4 sm:px-6 rounded-lg border border-[#FB0200] text-[#FB0200] hover:bg-rose-50 text-xs sm:text-sm whitespace-nowrap w-full"
           >
@@ -73,7 +82,7 @@ const VehicleCard = ({
           </button>
 
           <button
-            onClick={onEdit}
+            onClick={(e) => handleButtonClick(e, onEdit)} 
             aria-label={`Edit ${title}`}
             className="flex items-center justify-center h-9 sm:h-10 px-4 sm:px-6 rounded-lg border border-[#266DDF] text-[#266DDF] hover:bg-[#D9E7FE] text-xs sm:text-sm whitespace-nowrap w-full"
           >
@@ -108,6 +117,7 @@ const VehicleCardShimmer = () => (
 );
 
 const CarCards = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
@@ -186,6 +196,9 @@ const CarCards = () => {
     window.dispatchEvent(new Event("vehicleCountChanged"));
   };
 
+  const handleCardClick = () => {
+    navigate('/vehicle-amc')
+  }
   return (
     <section className="w-full px-3 sm:px-4 md:px-0">
       <EditVehicleModal
@@ -242,6 +255,7 @@ const CarCards = () => {
                   setOpen(true);
                 }}
                 onDelete={() => handleDelete(car.id)}
+                onCardClick={handleCardClick}
               />
             ))}
           </div>

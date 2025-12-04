@@ -13,6 +13,7 @@ import { useAmcData } from "../context/AmcDataContext";
 import Button from "../components/Button";
 import { Edit } from "lucide-react";
 import { useAMCPlans } from "../context/AmcPlanContext";
+import FinalDetailsPopup from "../popup/FinalDetailsPopup";
 
 const CardLoader = () => (
   <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -93,6 +94,7 @@ const VehicleAmcFilter = () => {
   });
 
   const [selectedPlanState, setSelectedPlanState] = useState(null);
+  const [purchasedPlanState,setPurchasedPlanState] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
   const [isSelectVehicleOpen, setIsSelectVehicleOpen] = useState(false);
@@ -177,6 +179,7 @@ const VehicleAmcFilter = () => {
         setIsCheckingStatus(true);
         try {
           const result = await getPaymentStatus(txnid);
+          localStorage.setItem('paymentResults',JSON.stringify(result))
 
           if (result.success) {
             const paymentStatus = result.data.status;
@@ -240,25 +243,37 @@ const VehicleAmcFilter = () => {
     }
 
     const purchaseData = purchaseResponse.data;
+
     const planData = {
       ...plan,
       purchaseId: purchaseData._id,
       vehicleNumber: vehicle.vehicleNumber,
     };
+
     setSelectedPlanState(planData);
+    setPurchasedPlanState(planData);
     setIsPopupOpen(true);
   };
 
   const handleClosePopup = () => {
+
     setSelectedPlanState(null);
     setIsPopupOpen(false);
   };
 
   const handleClosePaymentPopup = () => {
+
+    const isPlanValid = JSON.parse(localStorage.getItem('isPlanValid'))
+
     setShowPopup(null);
     searchParams.delete("status");
     searchParams.delete("txnid");
     setSearchParams(searchParams, { replace: true });
+
+    if(isPlanValid?.isPlanValid){
+       navigate("/vehicle-amc");
+    }
+
   };
 
   const handleSuccessClose = () => {
@@ -309,7 +324,7 @@ const VehicleAmcFilter = () => {
     <section className="bg-white w-full min-h-screen">
       <section className="bg-[#172E53] text-white w-full py-6 sm:py-8 md:py-10 lg:py-12 text-center">
         <div className="max-w-[600px] text-center mx-auto px-4 sm:px-6 md:px-8 lg:px-8">
-          <h2 className="md:text-3xl font-semibold text-2xl">Selected AMC isn’t supported for your vehicle. Please choose a valid AMC from the list.</h2>
+          <h2 className="md:text-3xl font-semibold text-2xl">Selected AMC isn’t supported for your vehicle. Please choose a valid AMC Plan</h2>
           <p className="mt-2 sm:mt-3 md:mt-4 flex justify-center sm:text-[17px]">
             <Button
               onClick={handleChangeVehicle}
@@ -356,10 +371,11 @@ const VehicleAmcFilter = () => {
       {showPopup === "success" && (
         <div className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50">
           <Suspense fallback={<div className="text-white">Loading...</div>}>
-            <SuccessPurchase
+            {/* <SuccessPurchase
               onClose={handleSuccessClose}
               purchaseData={selectedPlanState}
-            />
+            /> */}
+            <FinalDetailsPopup onClose={handleSuccessClose} plan={selectedPlan}vehicle={vehicle} purchaseData={selectedPlanState} calledFrom={'vehicle amc filtr'} />
           </Suspense>
         </div>
       )}

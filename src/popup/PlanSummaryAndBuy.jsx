@@ -60,9 +60,11 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
         { label: "Plan Start After", value: planStart ? `${planStart} Hours` : "24 Hours" }
     ];
 
-    const features = plan?.servicesIncluded?.filter(s => s.serviceType === "bool").map(s => ({
+    const excludedServices = ["Validity", "Number of Service Per Year"];
+    const features = plan?.servicesIncluded?.filter(s => !excludedServices.includes(s.serviceName)).map(s => ({
         label: s.serviceName,
-        value: s.value
+        value: s.value,
+        serviceType: s.serviceType
     })) || [];
 
     const originalPrice = plan?.originalPrice || 0;
@@ -92,12 +94,13 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
 
         setIsLoading(true);
         try {
-            
+            localStorage.setItem('selectedPlanOfSuccess',JSON.stringify(plan))
             const paymentResponse = await initiatePayment({
                 planId: plan._id,
                 vehicleNumber: vehicle.vehicleNumber,
                 couponCode: coupon?.code || null,
             });
+            localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
 
             if (paymentResponse.success) {
                 setPaymentData(paymentResponse.data);
@@ -120,6 +123,27 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
     const handlePaymentBack = () => {
         setCurrentView("summary");
         setPaymentData(null);
+    };
+
+    const renderFeatureValue = (feature) => {
+        if (feature.serviceType === "bool") {
+            return feature.value === 1 ? (
+                <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
+                    <Check size={13} className="text-white" />
+                </div>
+            ) : (
+                <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center">
+                    <X size={13} className="text-white" />
+                </div>
+            );
+        } else if (feature.serviceType === "range") {
+            return <span className="font-semibold">{feature.value} KM</span>;
+        } else if (feature.serviceType === "unlimited") {
+            return <span className="font-semibold">Unlimited</span>;
+        } else if (feature.serviceType === "days") {
+            return <span className="font-semibold">{feature.value} Days</span>;
+        }
+        return <span className="font-semibold">{feature.value}</span>;
     };
 
     const renderContent = () => {
@@ -168,33 +192,19 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
                 </div>
 
                 <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
-                    <div className="flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
-                        {/* <p className="">Number of Service Per Year</p>
-            <div className="w-5 h-5 flex items-center justify-center mr-20">
-              <span>{servicePerYear?.value || "Unlimited"}</span>
-            </div> */}
-                        <p className="whitespace-normal">Number of Service Per Year</p>
-                        <p className="">{servicePerYear?.value || "Unlimited"}</p>
+                    <div className="flex justify-between items-center bg-[#E9F0FC] text-black md:px-8 px-2 py-3">
+                        <div className="text-base font-semibold">Service Name</div>
+                        <div className="text-base font-semibold">Service Quantity</div>
                     </div>
-
                     {features.map((feature, i) => (
                         <div
                             key={i}
-                            className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-t-1 ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"
-                                }`}
+                            className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] ${i === 0 ? 'border-t-0.5' : 'border-t-1'} ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"}`}
                         >
                             <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
                                 <span>{feature.label}</span>
                             </div>
-                            {feature.value === 1 ? (
-                                <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
-                                    <Check size={13} className="text-white" />
-                                </div>
-                            ) : (
-                                <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center ">
-                                    <X size={13} className="text-white" />
-                                </div>
-                            )}
+                            {renderFeatureValue(feature)}
                         </div>
                     ))}
                 </div>
@@ -289,6 +299,7 @@ const PlanSummaryAndBuy = ({ isOpen, onClose, onBack, plan, vehicle }) => {
             isOpen={isOpen}
             onClose={onClose}
             onBack={currentView === "payment" ? handlePaymentBack : onBack}
+            hideBackButton={true}
             proceedButton={
                 currentView === "summary" ? (
                     <Button

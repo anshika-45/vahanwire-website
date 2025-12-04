@@ -201,6 +201,12 @@ const CompareTable = ({ plansAre, onBuy, vehicle , selectedCityName}) => {
         return;
       }
       const purchaseData = purchaseResponse.data;
+
+      localStorage.setItem("selectedPlan", JSON.stringify({
+        ...plan,
+        purchaseId: purchaseData._id,
+        vehicleNumber: vehicle.vehicleNumber}))
+
       setSelectedPlan({
         ...plan,
         purchaseId: purchaseData._id,
@@ -212,7 +218,7 @@ const CompareTable = ({ plansAre, onBuy, vehicle , selectedCityName}) => {
 
   const handleClosePopup = () => {
     setIsPopupOpen(false);
-    setSelectedPlan(null);
+    localStorage.remove("selectedPlan")
   };
 
   if (loading) {
