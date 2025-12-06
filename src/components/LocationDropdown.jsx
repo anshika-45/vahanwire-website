@@ -17,7 +17,6 @@ const LocationDropdown = ({ onLocationSelect }) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("Noida");
   const [selectedCityId, setSelectedCityId] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [zones, setZones] = useState([]);
   const [showAllZones, setShowAllZones] = useState(false);
   const [apiLoaded, setApiLoaded] = useState(false);
@@ -58,7 +57,6 @@ const LocationDropdown = ({ onLocationSelect }) => {
         setZones(zoneList);
         setApiLoaded(true);
       } else {
-        setLoading(true);
         const zoneResponse = await getActiveZones();
         if (zoneResponse.data.success) {
           zoneList = zoneResponse.data.data || [];
@@ -68,10 +66,8 @@ const LocationDropdown = ({ onLocationSelect }) => {
           sessionStorage.setItem("zonesTimestamp", Date.now().toString());
         } else {
           setError("Failed to load active zones");
-          setLoading(false);
           return;
         }
-        setLoading(false);
       }
 
       if (isLoggedIn) {
@@ -128,7 +124,6 @@ const LocationDropdown = ({ onLocationSelect }) => {
     } catch (error) {
       console.error("Error initializing location:", error);
       setError("Failed to load zones");
-      setLoading(false);
     }
   }, [onLocationSelect, isLoggedIn, updateCityContext]);
 
@@ -276,11 +271,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
             </div>
           )}
 
-          {loading && !apiLoaded ? (
-            <div className="px-3 py-4 text-center text-sm text-gray-500">
-              Loading zones...
-            </div>
-          ) : filteredZones.length === 0 ? (
+          {filteredZones.length === 0 ? (
             <div className="px-3 py-4 text-center text-sm text-gray-500">
               No zones found
             </div>
