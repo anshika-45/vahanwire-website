@@ -21,11 +21,11 @@ export const AMCPlansProvider = ({ children }) => {
         return [];
       }
 
-      if (!cityName) {
-        return [];
-      }
+      // if (!cityName) {
+      //   return [];
+      // }
 
-      const cacheKey = `${vehicleType}-${amcType}-${cityName}`;
+      const cacheKey = `${vehicleType}-${amcType}-${cityName ? cityName : "Noida" }`;
       const cached = plansCache[cacheKey];
 
       if (
