@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from "react";
 const ChooseUs = React.lazy(() => import("./ChooseUs"));
 const WhyChooseUs = () => {
   return (
-    <div className="justify-items-center md:pt-12 pt-9 pb-8 md:pb-10 h-auto bg-[#FAFCFF]">
+    <div className="justify-items-center md:pt-9 pt-5 pb-6 md:pb-5 h-auto bg-[#FAFCFF]">
       <div className="container">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]">
           Why Choose Us?
@@ -21,7 +21,7 @@ const WhyChooseUs = () => {
         </div>
         
       </div>
-      <div className="mt-5 md:mt-10 lg:mt-6 w-full">
+      <div className="mt-5 mb-1 md:mt-10 lg:mt-6 w-full">
           <Suspense
             fallback={
               <div className="flex items-center justify-center py-4">

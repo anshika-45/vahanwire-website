@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { S3_IMAGES } from "../constants/images";
+import towCount from "../assets/towCount.svg"
+import serviceCenterCount from "../assets/serviceCenterCount.svg"
+import petrolPumpCount from "../assets/petrolPumpCount.svg"
+
 const AnimatedCounter = ({ targetValue, isPercentage, isRating, isSuffix }) => {
   const [displayValue, setDisplayValue] = useState(0);
 
@@ -14,7 +18,7 @@ const AnimatedCounter = ({ targetValue, isPercentage, isRating, isSuffix }) => {
       } else {
         setDisplayValue(currentValue);
       }
-    }, 150);
+    }, 300);
 
     return () => clearInterval(timer);
   }, [targetValue]);
@@ -24,38 +28,40 @@ const AnimatedCounter = ({ targetValue, isPercentage, isRating, isSuffix }) => {
   if (isSuffix) return `${displayValue.toLocaleString()}+`;
   return displayValue.toLocaleString();
 };
-
+// ★
 const YellowCards = () => {
   const cardData = [
     {
-      image: S3_IMAGES.CARD_1,
-      title: 98,
-      description: "Customer Satisfaction",
-      isPercentage: true,
-    },
-    {
       image: S3_IMAGES.CARD_2,
       title: 5000,
-      description: "Active Service Providers",
+      description: "Mechanics",
+      isPercentage: false,
+       isSuffix: true
+    },
+    {
+      image: towCount,
+      title: 1200,
+      description: "Tow Providers",
       isSuffix: true,
     },
     {
-      image: S3_IMAGES.CARD_3,
-      title: 48,
-      description: "Average App Rating",
-      isRating: true,
+      image: serviceCenterCount,
+      title: 3000,
+      description: "Service Centers",
+      isRating: false,
+       isSuffix: true
     },
     {
-      image:  S3_IMAGES.CARD_4,
-      title: 100000,
-      description: "Services Completed",
+      image:  petrolPumpCount,
+      title: 4600,
+      description: "Petrol Pumps",
       isSuffix: true,
     },
   ];
   return (
     <div
       className="
-                 grid grid-cols-2 lg:grid-cols-4 gap-5 mt-7"
+                 grid grid-cols-2 lg:grid-cols-4 gap-5 md:mt-8 mt-6"
     >
       {cardData.map((card, index) => (
         <div
