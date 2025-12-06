@@ -26,7 +26,7 @@ const HoverCards = () => {
       style={{ backgroundImage: `url(${S3_IMAGES.GET_HELP})` }}
     >
       <div className="container relative z-10 flex flex-col items-center justify-center md:min-h-[400px] px-4 py-16">
-        <div className="grid lg:grid-cols-3 grid-cols-1 md:gap-6 gap-6 px-1 lg:-mb-130">
+        <div className="grid lg:grid-cols-3 grid-cols-1 md:gap-6 gap-6 px-1 lg:-mb-100">
           {steps.map((step, index) => (
             <div
               key={index}

@@ -92,7 +92,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/about-us" className="hover:text-white transition py-1 block">
-                  About
+                  About Us
                 </Link>
               </li>
               <li>
@@ -247,7 +247,7 @@ const Footer = () => {
                   href="mailto:info@vahanwire.com"
                   className="hover:text-white transition"
                 >
-                  Info@Vahanwire.Com
+                  info@vahanwire.com
                 </a>
               </li>
               <li className="flex items-center gap-2">

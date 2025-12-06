@@ -48,18 +48,16 @@ const AboutUs = () => {
               provided.
             </p>
           </div>
-          <div className="flex justify-center md:justify-center">
-            <div className="relative">
-              <img
-                src={S3_IMAGES.MOBILE_ASIDE_HOME}
-                alt="Vahanwire App Interface"
-                className="w-[140px] md:w-[120px] lg:w-[140px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200"
-                loading="lazy"
-                width={300}  
-                height={600}
-                decoding="async"
-              />
-            </div>
+          <div className="flex justify-center md:justify-center mt-10 md:mt-0">
+            <div className="aspect-[2/3.5]">
+                         <img
+                           src={S3_IMAGES.MOBILE_ASIDE_HOME}
+                           alt="Vahanwire mobile app preview"
+                           loading="lazy"
+                           decoding="async"
+                           className="w-full object-cover h-[450px] drop-shadow-xl"
+                         />
+                       </div>
           </div>
         </div>
       </div>
