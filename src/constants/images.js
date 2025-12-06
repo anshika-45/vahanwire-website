@@ -74,5 +74,5 @@ export const S3_IMAGES = {
   NO_FALL_BACK:`${S3_BASE_URL}/uploads/1765005925520_015nh.svg`,
   TRUST_BG:`${S3_BASE_URL}/uploads/1765006016770_7ryyeg.webp`,
   BIKE_AMC:`${S3_BASE_URL}/uploads/1765006456271_7rdnx8.svg`,
-  CAR_AMC:`${S3_BASE_URL}uploads/1765006609062_3wn35h.svg`,
+  CAR_AMC:`${S3_BASE_URL}/uploads/1765006609062_3wn35h.svg`,
 };
