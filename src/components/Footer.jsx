@@ -252,20 +252,6 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-2">
                 <div className="bg-[#FBBA01] rounded-full p-2 flex-shrink-0">
-                  <MailOpenIcon
-                    size={14}
-                    className="text-[#000000] sm:w-4 md:w-4"
-                  />
-                </div>
-                <a
-                  href="mailto:amc@vahanwire.com"
-                  className="hover:text-white transition"
-                >
-                  Amc@Vahanwire.Com
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <div className="bg-[#FBBA01] rounded-full p-2 flex-shrink-0">
                   <Phone size={14} className="text-[#000000] sm:w-4 md:w-4" />
                 </div>
                 <a
