@@ -75,4 +75,5 @@ export const S3_IMAGES = {
   TRUST_BG:`${S3_BASE_URL}/uploads/1765006016770_7ryyeg.webp`,
   BIKE_AMC:`${S3_BASE_URL}/uploads/1765006456271_7rdnx8.svg`,
   CAR_AMC:`${S3_BASE_URL}/uploads/1765006609062_3wn35h.svg`,
+  BACK_LOGO:`${S3_BASE_URL}/uploads/1765021253988_zzpl1.webp`,
 };

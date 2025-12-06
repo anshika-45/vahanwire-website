@@ -96,7 +96,7 @@ const AMCCard = ({
         <div className="flex justify-end items-start mb-4 relative">
           <img
             loading="lazy"
-            src="/src/assets/back-logo.webp"
+            src={S3_IMAGES.BACK_LOGO}
             alt="Background decorative logo"
             className="absolute right-8 -top-10 w-34 h-32 object-contain opacity-60"
           />
