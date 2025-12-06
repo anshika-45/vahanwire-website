@@ -6,7 +6,7 @@ import { useCity } from "../context/CityContext";
 
 const LocationDropdown = ({ onLocationSelect }) => {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState("Select Location");
+  const [selected, setSelected] = useState("Noida");
   const [selectedCityId, setSelectedCityId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [zones, setZones] = useState([]);
@@ -55,8 +55,10 @@ const LocationDropdown = ({ onLocationSelect }) => {
           sessionStorage.setItem("zonesTimestamp", Date.now().toString());
         } else {
           setError("Failed to load active zones");
+          setLoading(false);
           return;
         }
+        setLoading(false);
       }
 
       if (isLoggedIn) {
@@ -69,8 +71,19 @@ const LocationDropdown = ({ onLocationSelect }) => {
           setSelectedCityId(userZone._id);
           updateCityContext(userZone);
           if (onLocationSelect) onLocationSelect(userZone);
-        } else if (zoneList.length > 0) {
-          await setDefaultZone(zoneList);
+        } else {
+          const noidaZone = zoneList.find((z) => z.zoneName.toLowerCase().includes("noida"));
+          if (noidaZone) {
+            setSelected(noidaZone.zoneName);
+            setSelectedCityId(noidaZone._id);
+            updateCityContext(noidaZone);
+            if (onLocationSelect) onLocationSelect(noidaZone);
+            updateCity({ zoneId: noidaZone._id }).catch(error => {
+              console.error("Error saving default zone:", error);
+            });
+          } else if (zoneList.length > 0) {
+            await setDefaultZone(zoneList);
+          }
         }
       } else {
         const savedZone = localStorage.getItem("guestZone");
@@ -82,17 +95,26 @@ const LocationDropdown = ({ onLocationSelect }) => {
             setSelectedCityId(zone._id);
             updateCityContext(zone);
             if (onLocationSelect) onLocationSelect(zone);
+          } else {
+            const noidaZone = zoneList.find((z) => z.zoneName.toLowerCase().includes("noida"));
+            if (noidaZone) {
+              setDefaultZoneForGuest([noidaZone]);
+            } else if (zoneList.length > 0) {
+              setDefaultZoneForGuest(zoneList);
+            }
+          }
+        } else {
+          const noidaZone = zoneList.find((z) => z.zoneName.toLowerCase().includes("noida"));
+          if (noidaZone) {
+            setDefaultZoneForGuest([noidaZone]);
           } else if (zoneList.length > 0) {
             setDefaultZoneForGuest(zoneList);
           }
-        } else if (zoneList.length > 0) {
-          setDefaultZoneForGuest(zoneList);
         }
       }
     } catch (error) {
       console.error("Error initializing location:", error);
       setError("Failed to load zones");
-    } finally {
       setLoading(false);
     }
   }, [onLocationSelect, isLoggedIn, updateCityContext]);
@@ -174,7 +196,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
           />
         </div>
         <span className="flex-1 truncate text-sm font-medium">
-          {loading ? "Loading..." : selected}
+          {selected}
         </span>
         <div className="flex-shrink-0 ml-2">
           <img
@@ -189,22 +211,14 @@ const LocationDropdown = ({ onLocationSelect }) => {
 
       <div id="mobileScreen" className="md:hidden block">
         <div onClick={handleClick} role="button" className="flex items-center">
-          {selected === "Select Location" ? (
+          <span className="text-[12px] px-1 leading-4 border-b-2 border-black flex items-center gap-1 font-medium max-w-[120px] truncate">
             <img
-              className="w-6 h-6 object-cover shrink-0"
+              className="w-4 h-4 object-contain shrink-0"
               src={locationIcon}
-              alt="location"
+              alt=""
             />
-          ) : (
-            <span className="text-[12px] px-1 leading-4 border-b-2 border-black flex items-center gap-1 font-medium max-w-[120px] truncate">
-              <img
-                className="w-4 h-4 object-contain shrink-0"
-                src={locationIcon}
-                alt=""
-              />
-              {loading ? "Loading..." : selected}
-            </span>
-          )}
+            {selected}
+          </span>
         </div>
       </div>
 
