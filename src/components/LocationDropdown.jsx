@@ -16,11 +16,10 @@ const STATIC_CITIES = [
 const LocationDropdown = ({ onLocationSelect }) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("Noida");
-  const [selectedCityId, setSelectedCityId] = useState(null);
+  const [selectedCityId, setSelectedCityId] = useState("static_noida");
   const [zones, setZones] = useState([]);
   const [showAllZones, setShowAllZones] = useState(false);
   const [apiLoaded, setApiLoaded] = useState(false);
-  const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [searchTerm, setSearchTerm] = useState("");
   const { updateCity: updateCityContext } = useCity();
@@ -41,10 +40,11 @@ const LocationDropdown = ({ onLocationSelect }) => {
   }, []);
 
   useEffect(() => {
-    initializeLocation();
+    loadZonesInBackground();
+    initializeLocationFromStorage();
   }, [isLoggedIn]);
 
-  const initializeLocation = useCallback(async () => {
+  const loadZonesInBackground = useCallback(async () => {
     const cachedZones = sessionStorage.getItem("activeZones");
     const cachedTimestamp = sessionStorage.getItem("zonesTimestamp");
     const cacheValid = cachedTimestamp && (Date.now() - parseInt(cachedTimestamp)) < 300000;
@@ -56,6 +56,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
         zoneList = JSON.parse(cachedZones);
         setZones(zoneList);
         setApiLoaded(true);
+        syncUserProfileWithZones(zoneList);
       } else {
         const zoneResponse = await getActiveZones();
         if (zoneResponse.data.success) {
@@ -64,92 +65,80 @@ const LocationDropdown = ({ onLocationSelect }) => {
           setApiLoaded(true);
           sessionStorage.setItem("activeZones", JSON.stringify(zoneList));
           sessionStorage.setItem("zonesTimestamp", Date.now().toString());
-        } else {
-          setError("Failed to load active zones");
-          return;
-        }
-      }
-
-      if (isLoggedIn) {
-        const profileResponse = await getMyProfile();
-        const userData = profileResponse.data;
-        const userZone = zoneList.find((z) => z._id === userData?.selectedCity);
-
-        if (userZone) {
-          setSelected(userZone.zoneName);
-          setSelectedCityId(userZone._id);
-          updateCityContext(userZone);
-          if (onLocationSelect) onLocationSelect(userZone);
-        } else {
-          const noidaZone = zoneList.find((z) => z.zoneName.toLowerCase().includes("noida"));
-          if (noidaZone) {
-            setSelected(noidaZone.zoneName);
-            setSelectedCityId(noidaZone._id);
-            updateCityContext(noidaZone);
-            if (onLocationSelect) onLocationSelect(noidaZone);
-            updateCity({ zoneId: noidaZone._id }).catch(error => {
-              console.error("Error saving default zone:", error);
-            });
-          } else if (zoneList.length > 0) {
-            await setDefaultZone(zoneList);
-          }
-        }
-      } else {
-        const savedZone = localStorage.getItem("guestZone");
-        if (savedZone) {
-          const zoneData = JSON.parse(savedZone);
-          const zone = zoneList.find((z) => z._id === zoneData._id);
-          if (zone) {
-            setSelected(zone.zoneName);
-            setSelectedCityId(zone._id);
-            updateCityContext(zone);
-            if (onLocationSelect) onLocationSelect(zone);
-          } else {
-            const noidaZone = zoneList.find((z) => z.zoneName.toLowerCase().includes("noida"));
-            if (noidaZone) {
-              setDefaultZoneForGuest([noidaZone]);
-            } else if (zoneList.length > 0) {
-              setDefaultZoneForGuest(zoneList);
-            }
-          }
-        } else {
-          const noidaZone = zoneList.find((z) => z.zoneName.toLowerCase().includes("noida"));
-          if (noidaZone) {
-            setDefaultZoneForGuest([noidaZone]);
-          } else if (zoneList.length > 0) {
-            setDefaultZoneForGuest(zoneList);
-          }
+          syncUserProfileWithZones(zoneList);
         }
       }
     } catch (error) {
-      console.error("Error initializing location:", error);
-      setError("Failed to load zones");
+      console.error("Error loading zones:", error);
+      setApiLoaded(true);
     }
-  }, [onLocationSelect, isLoggedIn, updateCityContext]);
+  }, [isLoggedIn]);
 
-  const setDefaultZone = async (zoneList) => {
-    const firstZone = zoneList[0];
-    if (!firstZone) return;
+  const syncUserProfileWithZones = async (zoneList) => {
+    if (!isLoggedIn) return;
 
-    setSelected(firstZone.zoneName);
-    setSelectedCityId(firstZone._id);
-    updateCityContext(firstZone);
-    if (onLocationSelect) onLocationSelect(firstZone);
+    try {
+      const profileResponse = await getMyProfile();
+      const userData = profileResponse.data;
+      const userZone = zoneList.find((z) => z._id === userData?.selectedCity);
 
-    updateCity({ zoneId: firstZone._id }).catch(error => {
-      console.error("Error saving default zone:", error);
-    });
+      if (userZone) {
+        setSelected(userZone.zoneName);
+        setSelectedCityId(userZone._id);
+        localStorage.setItem("userZone", JSON.stringify(userZone));
+        updateCityContext(userZone);
+        if (onLocationSelect) onLocationSelect(userZone);
+      } else {
+        const noidaZone = zoneList.find((z) => z.zoneName.toLowerCase().includes("noida"));
+        if (noidaZone) {
+          setSelected(noidaZone.zoneName);
+          setSelectedCityId(noidaZone._id);
+          localStorage.setItem("userZone", JSON.stringify(noidaZone));
+          updateCityContext(noidaZone);
+          if (onLocationSelect) onLocationSelect(noidaZone);
+          updateCity({ zoneId: noidaZone._id }).catch(error => {
+            console.error("Error updating user zone:", error);
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error syncing user profile:", error);
+    }
   };
 
-  const setDefaultZoneForGuest = (zoneList) => {
-    const firstZone = zoneList[0];
-    if (!firstZone) return;
-
-    setSelected(firstZone.zoneName);
-    setSelectedCityId(firstZone._id);
-    localStorage.setItem("guestZone", JSON.stringify(firstZone));
-    updateCityContext(firstZone);
-    if (onLocationSelect) onLocationSelect(firstZone);
+  const initializeLocationFromStorage = () => {
+    const defaultCity = STATIC_CITIES[0];
+    
+    if (isLoggedIn) {
+      const savedZone = localStorage.getItem("userZone");
+      if (savedZone) {
+        const zoneData = JSON.parse(savedZone);
+        setSelected(zoneData.zoneName);
+        setSelectedCityId(zoneData._id);
+        updateCityContext(zoneData);
+        if (onLocationSelect) onLocationSelect(zoneData);
+      } else {
+        setSelected(defaultCity.zoneName);
+        setSelectedCityId(defaultCity._id);
+        updateCityContext(defaultCity);
+        if (onLocationSelect) onLocationSelect(defaultCity);
+      }
+    } else {
+      const savedZone = localStorage.getItem("guestZone");
+      if (savedZone) {
+        const zoneData = JSON.parse(savedZone);
+        setSelected(zoneData.zoneName);
+        setSelectedCityId(zoneData._id);
+        updateCityContext(zoneData);
+        if (onLocationSelect) onLocationSelect(zoneData);
+      } else {
+        setSelected(defaultCity.zoneName);
+        setSelectedCityId(defaultCity._id);
+        localStorage.setItem("guestZone", JSON.stringify(defaultCity));
+        updateCityContext(defaultCity);
+        if (onLocationSelect) onLocationSelect(defaultCity);
+      }
+    }
   };
 
   const handleClick = () => {
@@ -163,6 +152,15 @@ const LocationDropdown = ({ onLocationSelect }) => {
       if (actualZone) {
         zone = actualZone;
       } else {
+        setSelected(zone.zoneName);
+        setSelectedCityId(zone._id);
+        setOpen(false);
+        setSearchTerm("");
+        if (isLoggedIn) {
+          localStorage.setItem("userZone", JSON.stringify(zone));
+        } else {
+          localStorage.setItem("guestZone", JSON.stringify(zone));
+        }
         return;
       }
     }
@@ -175,6 +173,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
     if (onLocationSelect) onLocationSelect(zone);
 
     if (isLoggedIn) {
+      localStorage.setItem("userZone", JSON.stringify(zone));
       updateCity({ zoneId: zone._id }).catch(error => {
         console.error("Error updating user zone:", error);
       });
@@ -202,7 +201,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
       );
     }
 
-    if (!apiLoaded || showAllZones) {
+    if (showAllZones) {
       return zones;
     }
 
@@ -265,12 +264,6 @@ const LocationDropdown = ({ onLocationSelect }) => {
             />
           </div>
 
-          {error && (
-            <div className="px-3 py-2 text-xs text-red-600 bg-red-50 border-b border-red-100">
-              <span>{error}</span>
-            </div>
-          )}
-
           {filteredZones.length === 0 ? (
             <div className="px-3 py-4 text-center text-sm text-gray-500">
               No zones found
@@ -292,7 +285,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
                   </li>
                 ))}
               </ul>
-              {!searchTerm && !showAllZones && apiLoaded && zones.length > STATIC_CITIES.length && (
+              {!searchTerm && !showAllZones && apiLoaded && zones.length > 0 && (
                 <div
                   onClick={() => setShowAllZones(true)}
                   className="px-3 py-2.5 text-center text-sm font-medium text-blue-600 hover:bg-blue-50 cursor-pointer border-t border-gray-200"
