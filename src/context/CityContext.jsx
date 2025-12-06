@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from "react";
 const CityContext = createContext();
 
 export const CityProvider = ({ children }) => {
-  const [selectedCityName, setSelectedCityName] = useState("");
+  const [selectedCityName, setSelectedCityName] = useState("Noida");
   const [selectedCityId, setSelectedCityId] = useState("");
  
   const updateCity = (zone) => {
