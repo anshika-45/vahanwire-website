@@ -155,7 +155,8 @@ body {
 }
 
 .homeSlider .swiper .swiper-pagination {
-  bottom: -40px;
+  bottom: -37px;
+  @apply lg:bottom-[-40px] md:bottom-[-30px] bottom-[-20px]
 }
 
 .swiper-pagination-bullet-active {

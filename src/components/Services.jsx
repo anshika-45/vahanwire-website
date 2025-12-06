@@ -48,7 +48,7 @@ const servicesData = [
 ];
 const Services = React.memo(() => {
   return (
-    <div className="justify-items-center pt-7 md:pt-10 pb-10 mt-4 sm:mt-6 md:mt-4 h-auto bg-[#FFFFFF] duration-300 transition-all ease-in">
+    <div className="justify-items-center pt-0 md:pt-7 pb-5 mt-3 sm:mt-6 md:mt-0 h-auto bg-[#FFFFFF] duration-300 transition-all ease-in">
       <div className="container">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium text-center text-[#242424]">
           Our Main Services
@@ -59,7 +59,7 @@ const Services = React.memo(() => {
           from mechanic support to doorstep repairs, towing, payments, and more.
         </p> 
         </div>
-        <div className="mt-7 sm:mt-8 md:mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
+        <div className="mt-5 sm:mt-8 md:mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
           {servicesData.map((service, index) => (
             <Tile key={index} {...service} />
           ))}

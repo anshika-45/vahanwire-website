@@ -59,7 +59,7 @@ const FAQ = () => {
     },
   ];
   return (
-    <div className=" bg-[#F4F4F4] md:py-18 py-10  ">
+    <div className=" bg-[#F4F4F4] md:pt-9 md:pb-11 py-10  ">
       <div className="container">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-4 text-black text-center pb-2 sm:pb-3">
           Frequently Asked Questions
