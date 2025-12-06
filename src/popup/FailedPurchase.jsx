@@ -1,6 +1,6 @@
 import React , {useEffect} from "react";
 import Button from "../components/Button";
-import failureIcon from "../assets/failedpurchase.png";
+import { S3_IMAGES } from "../constants/images";
 import { useNavigate } from "react-router-dom";
 
 const FailedPurchase = ({ onClose, error, errorCode, errorReason}) => {
@@ -19,7 +19,7 @@ const FailedPurchase = ({ onClose, error, errorCode, errorReason}) => {
     <div className="flex flex-col items-center justify-center py-10">
       <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
         <img
-          src={failureIcon}
+          src={S3_IMAGES.FAILED_PURCHASE}
           alt="Payment Failed"
           className="w-30 h-30 mb-6 mx-auto"
           loading="lazy" 

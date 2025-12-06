@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import termsConditionBanner from "../assets/TermsConditions.svg";
+import { S3_IMAGES } from "../constants/images";
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 const TwoColumnInfoLayout = React.lazy(() => import("../components/TwoColumnInfoLayout"));
@@ -162,7 +162,7 @@ const TermsCondition = () => {
     <div className="bg-[rgba(244,244,244,1)]">
       <div>
         <Suspense fallback={<ComponentFallback />}>
-          <PageBanner title="Terms & Conditions" image={termsConditionBanner} useGradientTitle={false}
+          <PageBanner title="Terms & Conditions" image={S3_IMAGES.TERMS_CONDITION} useGradientTitle={false}
   useDarkOverlay={false} showTicker={false}
  height="250px" />
         </Suspense>

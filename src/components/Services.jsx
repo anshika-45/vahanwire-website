@@ -1,49 +1,45 @@
 import React from "react";
 import Tile from "./Tile";
-import amcIcon from "../assets/Tile1.svg";
-import mechanicIcon from "../assets/Tile2.svg";
-import patrolIcon from "../assets/Tile3.svg";
-import towtruckIcon from "../assets/Tile4.svg";
-import serviceIcon from "../assets/Tile5.svg";
-import ecommerceIcon from "../assets/Tile6.svg";
+
+import { S3_IMAGES } from "../constants/images";
 const servicesData = [
   {
-    icon: amcIcon,
+    icon: S3_IMAGES.TILE_1,
     title: "AMC",
     desc: "Your vehicle's yearly care plan - simple, affordable, dependable.",
     linkText: "Buy AMC",
     linkHref: "/vehicle-amc",
   },
   {
-    icon: mechanicIcon,
+    icon: S3_IMAGES.TILE_2,
     title: "Mechanic",
     desc: "Locate verified mechanics near you for instant repairs at home or on-road.",
     linkText: "View Details",
     linkHref: "/mechanic",
   },
   {
-    icon: towtruckIcon,
+    icon: S3_IMAGES.TILE_3,
     title: "Tow Truck",
     desc: "Stuck on the road? Get fast, GPS-tracked towing support anytime.",
     linkText: "View Details",
     linkHref: "/tow-truck",
   },
   {
-    icon: ecommerceIcon,
-    title: "E-Commerce",
+    icon: S3_IMAGES.TILE_4,
+    title: "Vahan Shop",
     desc: "One-stop shop for all your vehicle accessories, parts & maintenance products.",
     linkText: "View Details",
-    linkHref: "/e-commerce",
+    linkHref: "/vahan-shop",
   },
   {
-    icon: patrolIcon,
+    icon: S3_IMAGES.TILE_5,
     title: "Petrol Pump",
     desc: "Find nearby fuel stations and get fuel delivery in selected areas.",
     linkText: "View Details",
     linkHref: "/petrol-pump",
   },
   {
-    icon: serviceIcon,
+    icon: S3_IMAGES.TILE_6,
     title: "Service Center",
     desc: "Book appointments with trusted car & bike service centers in your city.",
     linkText: "View Details",

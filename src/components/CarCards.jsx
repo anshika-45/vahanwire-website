@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import EditVehicleModal from "./EditVehicleModal";
 import AddVehicleModal from "./AddVehicleModal";
 import EditVehicle from "../popup/EditVehicle";
-import vehicleImage1 from "../assets/acar-2.svg";
-import vehicleImage2 from "../assets/acar-1.svg";
-import BikeImage from "../assets/Bike1.png";
-import deleteIcon from "../assets/DeleteIcon.svg";
-import editIcon from "../assets/EditIcon.svg";
-import checkIcon from "../assets/check2.svg";
+import { S3_IMAGES } from "../constants/images";
 import { getUserVehiclesAMC, deleteUserVehicle } from "../api/vehicleApi";
 import { useNavigate } from "react-router-dom";
 
@@ -56,7 +51,7 @@ const VehicleCard = ({
           <p className="text-xs text-slate-600 flex items-center gap-2">
             <img
               loading="lazy"
-              src={checkIcon}
+              src={S3_IMAGES.CHECK_ICON}
               alt="AMC active"
               className="w-4 sm:w-5 h-4 sm:h-5"
               decoding="async"
@@ -73,7 +68,7 @@ const VehicleCard = ({
           >
             <img
               loading="lazy"
-              src={deleteIcon}
+              src={S3_IMAGES.DELETE_ICON}
               alt="Delete icon"
               className="w-4 sm:w-5 h-4 sm:h-5 mr-2"
               decoding="async"
@@ -88,7 +83,7 @@ const VehicleCard = ({
           >
             <img
               loading="lazy"
-              src={editIcon}
+              src={S3_IMAGES.EDIT_ICON}
               alt="Edit icon"
               className="w-4 sm:w-5 h-4 sm:h-5 mr-2"
               decoding="async"
@@ -144,8 +139,8 @@ const CarCards = () => {
           year: v.year,
           amcLabel: "",
           image: isBike 
-            ? (index % 2 === 0 ? BikeImage : BikeImage)
-            : (index % 2 === 0 ? vehicleImage1 : vehicleImage2),
+            ? (index % 2 === 0 ? S3_IMAGES.BIKE_CARD : S3_IMAGES.BIKE_CARD)
+            : (index % 2 === 0 ? S3_IMAGES.CAR_CARD_1 : S3_IMAGES.CAR_CARD_2),
           tone: index % 2 === 0 ? "bg-[#FFD9D9]" : "bg-[#FFD88D]",
         };
       });

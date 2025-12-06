@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Card1Img from "../assets/Card1.svg";
-import Card2Img from "../assets/Card2.svg";
-import Card3Img from "../assets/Card3.svg";
-import Card4Img from "../assets/Card4.svg";
-
+import { S3_IMAGES } from "../constants/images";
 const AnimatedCounter = ({ targetValue, isPercentage, isRating, isSuffix }) => {
   const [displayValue, setDisplayValue] = useState(0);
 
@@ -32,25 +28,25 @@ const AnimatedCounter = ({ targetValue, isPercentage, isRating, isSuffix }) => {
 const YellowCards = () => {
   const cardData = [
     {
-      image: Card1Img,
+      image: S3_IMAGES.CARD_1,
       title: 98,
       description: "Customer Satisfaction",
       isPercentage: true,
     },
     {
-      image: Card2Img,
+      image: S3_IMAGES.CARD_2,
       title: 5000,
       description: "Active Service Providers",
       isSuffix: true,
     },
     {
-      image: Card3Img,
+      image: S3_IMAGES.CARD_3,
       title: 48,
       description: "Average App Rating",
       isRating: true,
     },
     {
-      image: Card4Img,
+      image:  S3_IMAGES.CARD_4,
       title: 100000,
       description: "Services Completed",
       isSuffix: true,

@@ -9,7 +9,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
   const [selected, setSelected] = useState("Select Location");
   const [selectedCityId, setSelectedCityId] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [zones, setZones] = useState([]); 
+  const [zones, setZones] = useState([]);
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,49 +35,59 @@ const LocationDropdown = ({ onLocationSelect }) => {
   }, [isLoggedIn]);
 
   const initializeLocation = useCallback(async () => {
+    const cachedZones = sessionStorage.getItem("activeZones");
+    const cachedTimestamp = sessionStorage.getItem("zonesTimestamp");
+    const cacheValid = cachedTimestamp && (Date.now() - parseInt(cachedTimestamp)) < 300000;
+
     try {
-      setLoading(true);
-      setError(null);
+      let zoneList = [];
 
-      const zoneResponse = await getActiveZones();
-
-      if (zoneResponse.data.success) {
-        const zoneList = zoneResponse.data.data || [];
-        setZones(zoneList); 
-
-        if (isLoggedIn) {
-          const profileResponse = await getMyProfile();
-          const userData = profileResponse.data;
-    
-          const userZone = zoneList.find((z) => z._id === userData?.selectedCity);
-
-          if (userZone) {
-            setSelected(userZone.zoneName);
-            setSelectedCityId(userZone._id);
-            updateCityContext(userZone); 
-            if (onLocationSelect) onLocationSelect(userZone); 
-          } else if (zoneList.length > 0) {
-            await setDefaultZone(zoneList); 
-          }
+      if (cachedZones && cacheValid) {
+        zoneList = JSON.parse(cachedZones);
+        setZones(zoneList);
+      } else {
+        setLoading(true);
+        const zoneResponse = await getActiveZones();
+        if (zoneResponse.data.success) {
+          zoneList = zoneResponse.data.data || [];
+          setZones(zoneList);
+          sessionStorage.setItem("activeZones", JSON.stringify(zoneList));
+          sessionStorage.setItem("zonesTimestamp", Date.now().toString());
         } else {
-          const savedZone = localStorage.getItem("guestZone"); 
-          if (savedZone) {
-            const zoneData = JSON.parse(savedZone);
-            const zone = zoneList.find((z) => z._id === zoneData._id);
-            if (zone) {
-              setSelected(zone.zoneName);
-              setSelectedCityId(zone._id);
-              updateCityContext(zone);
-              if (onLocationSelect) onLocationSelect(zone); 
-            } else if (zoneList.length > 0) {
-              setDefaultZoneForGuest(zoneList);
-            }
+          setError("Failed to load active zones");
+          return;
+        }
+      }
+
+      if (isLoggedIn) {
+        const profileResponse = await getMyProfile();
+        const userData = profileResponse.data;
+        const userZone = zoneList.find((z) => z._id === userData?.selectedCity);
+
+        if (userZone) {
+          setSelected(userZone.zoneName);
+          setSelectedCityId(userZone._id);
+          updateCityContext(userZone);
+          if (onLocationSelect) onLocationSelect(userZone);
+        } else if (zoneList.length > 0) {
+          await setDefaultZone(zoneList);
+        }
+      } else {
+        const savedZone = localStorage.getItem("guestZone");
+        if (savedZone) {
+          const zoneData = JSON.parse(savedZone);
+          const zone = zoneList.find((z) => z._id === zoneData._id);
+          if (zone) {
+            setSelected(zone.zoneName);
+            setSelectedCityId(zone._id);
+            updateCityContext(zone);
+            if (onLocationSelect) onLocationSelect(zone);
           } else if (zoneList.length > 0) {
             setDefaultZoneForGuest(zoneList);
           }
+        } else if (zoneList.length > 0) {
+          setDefaultZoneForGuest(zoneList);
         }
-      } else {
-        setError("Failed to load active zones"); 
       }
     } catch (error) {
       console.error("Error initializing location:", error);
@@ -93,15 +103,12 @@ const LocationDropdown = ({ onLocationSelect }) => {
 
     setSelected(firstZone.zoneName);
     setSelectedCityId(firstZone._id);
-
-    try {
-      await updateCity({ zoneId: firstZone._id }); 
-    } catch (error) {
-      console.error("Error saving default zone:", error);
-    }
-
     updateCityContext(firstZone);
     if (onLocationSelect) onLocationSelect(firstZone);
+
+    updateCity({ zoneId: firstZone._id }).catch(error => {
+      console.error("Error saving default zone:", error);
+    });
   };
 
   const setDefaultZoneForGuest = (zoneList) => {
@@ -125,22 +132,16 @@ const LocationDropdown = ({ onLocationSelect }) => {
     setSelectedCityId(zone._id);
     setOpen(false);
     setSearchTerm("");
-
-    if (isLoggedIn) {
-      try {
-        const response = await updateCity({ zoneId: zone._id }); 
-        if (response.success) {
-          console.log("Zone updated successfully:", zone.zoneName);
-        }
-      } catch (error) {
-        console.error("Error updating user zone:", error);
-      }
-    } else {
-      localStorage.setItem("guestZone", JSON.stringify(zone)); 
-    }
-
     updateCityContext(zone);
     if (onLocationSelect) onLocationSelect(zone);
+
+    if (isLoggedIn) {
+      updateCity({ zoneId: zone._id }).catch(error => {
+        console.error("Error updating user zone:", error);
+      });
+    } else {
+      localStorage.setItem("guestZone", JSON.stringify(zone));
+    }
   };
 
   useEffect(() => {
@@ -230,7 +231,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
             <div className="px-3 py-4 text-center text-sm text-gray-500">
               Loading zones...
             </div>
-          ) : filteredZones.length === 0 ? ( 
+          ) : filteredZones.length === 0 ? (
             <div className="px-3 py-4 text-center text-sm text-gray-500">
               No zones found
             </div>
@@ -246,7 +247,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
                       : "text-gray-800"
                   }`}
                 >
-                  {zone.zoneName} 
+                  {zone.zoneName}
                 </li>
               ))}
             </ul>

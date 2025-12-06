@@ -9,7 +9,7 @@ import RefundRequestModal from "./RefundRequestModal";
 import { useAmcData } from "../context/AmcDataContext";
 import { getMyAMCPlans } from "../api/amcApi";
 import { checkRefundStatus, cancelRefundRequest } from "../api/amcRefund";
-
+import { S3_IMAGES } from "../constants/images";
 const STATUS_CONFIG = {
   ACTIVE: { label: "Active AMC", color: "bg-[#E0F2DC] text-[#32AB15]" },
   PENDING_ACTIVATION: {
@@ -126,9 +126,9 @@ const mapApiDataToAMC = (apiData) => {
       refundStatus: item.refundStatus || "none",
       refundTimeline: item.refundTimeline || [],
       planStatus: item.planStatus,
-      logoSrc: "/src/assets/Logo-AMC.svg",
-      carImageSrc: "/src/assets/Car-AMC.svg",
-      bikeImageSrc: "/src/assets/Bike-AMC.svg",
+      logoSrc: S3_IMAGES.LOGO_AMC,
+      carImageSrc: S3_IMAGES.CAR_AMC,
+      bikeImageSrc: S3_IMAGES.BIKE_AMC,
       planPrice: item.planPrice,
       planStartDate: item.planStartDate,
       planEndDate: item.planEndDate,

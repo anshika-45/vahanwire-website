@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { AlertTriangle, Trash2 } from "lucide-react";
-import bin from "../assets/bin.png"; 
+import { S3_IMAGES } from "../constants/images";
 export default function EditVehicle({ isOpen, onClose, type = "edit" }) {
   useEffect(() => {
     if (isOpen) {
@@ -23,7 +23,7 @@ export default function EditVehicle({ isOpen, onClose, type = "edit" }) {
     },
     delete: {
       icon: (<img
-        src={bin}
+        src={S3_IMAGES.BIN_IMAGE}
         alt="Delete Icon"
          className="w-20 h-20 object-contain"
       />),

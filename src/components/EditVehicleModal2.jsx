@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import carColor from "../assets/CarFill.svg";
-import carOutline from "../assets/CarFade.svg";
-import bikeColor from "../assets/BikeFill.svg";
-import bikeOutline from "../assets/BikeFade.svg";
 import { updateAMCPurchaseVehicle } from "../api/vehicleApi";
-
+import { S3_IMAGES } from "../constants/images";
 const EditVehicleModal2 = ({
   open,
   onClose = () => {},
@@ -223,7 +219,7 @@ const EditVehicleModal2 = ({
 
   if (!open) return null;
 
-  const displayedSrc = vehicleType === "car" ? carColor : bikeColor;
+  const displayedSrc = vehicleType === "car" ? S3_IMAGES.CAR_FILL : S3_IMAGES.BIKE_FILL;
   const displayedAlt = vehicleType === "car" ? "Car" : "Bike";
 
   return (

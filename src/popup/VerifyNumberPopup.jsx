@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Button from "../components/Button";
-import phoneGif from "../assets/Animation.svg";
 import OtpVerifypopup from "./OtpVerifypopup";
 import Modal from "../components/Modal";
 import { sendOtp } from "../api/authApi";
+import { S3_IMAGES } from "../constants/images";
+
 const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false, seletedPlan }) => {
   const [number, setNumber] = useState("");
   const [error, setError] = useState("");
@@ -58,7 +59,7 @@ return (
         <div className="bg-white rounded-xl p-8 sm:p-8 md:p-10 flex flex-col items-center m-4 my-10">
           <div className="flex justify-center mb-5 sm:mb-7">
             <img
-              src={phoneGif}
+              src={S3_IMAGES.PHONE_GIF}
               alt="Phone Animation"
               className="w-40 h-40  md:w-60 md:h-60"
               width={240}

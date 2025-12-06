@@ -1,24 +1,19 @@
 import React from "react";
-import carGrey from "../assets/CarFade.svg";
-import carColor from "../assets/CarFill.svg";
-import bikeGrey from "../assets/BikeFade.svg";
-import bikeColor from "../assets/BikeFill.svg";
-import vector from "../assets/radio-unchecked.svg";
-import image from "../assets/radio-checked.svg";
+import { S3_IMAGES } from "../constants/images";
 
 const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
   const options = [
     {
       id: "car",
       label: "Car",
-      imgGrey: carGrey,
-      imgColor: carColor,
+      imgGrey: S3_IMAGES.CAR_FADE,
+      imgColor: S3_IMAGES.CAR_FILL,
     },
     {
       id: "bike",
       label: "Bike",
-      imgGrey: bikeGrey,
-      imgColor: bikeColor,
+      imgGrey: S3_IMAGES.BIKE_FADE,
+      imgColor: S3_IMAGES.BIKE_FILL,
     },
   ];
  
@@ -49,14 +44,14 @@ const VehicleToggle = ({ vehicleType, setVehicleType, disabled = false }) => {
             <div className="flex items-center gap-1 md:gap-2">
               <span className="w-5 md:w-[35px] h-6 md:h-[35px] relative flex-shrink-0">
                 <img
-                  src={vector}
+                  src={S3_IMAGES.RADIO_UNCHECKED}
                   alt="Radio outer"
                   loading="lazy"
                   className="absolute top-0 left-0 w-full h-full"
                 />
                 {isSelected && (
                   <img
-                    src={image}
+                    src={S3_IMAGES.RADIO_CHECKED}
                     alt="Radio inner"
                     loading="lazy"
                     className="absolute top-0 left-0 w-full h-full"

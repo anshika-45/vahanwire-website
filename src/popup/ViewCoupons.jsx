@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import couponLogo from "../assets/Logo-AMC.svg";
-import cross from "../assets/x.webp";
-import checked from "../assets/radio-checked.svg";
-import unchecked from "../assets/radio-unchecked.svg";
+import { S3_IMAGES } from "../constants/images";
 
 export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
   const [selectedCoupon, setSelectedCoupon] = useState(null);
@@ -24,7 +21,7 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
       description: "Get 100 Cashback with this code",
       discountAmount: "100",
       code: "NEWUSER100",
-      logo: couponLogo,
+      logo: S3_IMAGES.LOGO_AMC,
     },
     {
       id: 2,
@@ -32,7 +29,7 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
       discountAmount: "50",
       description: "Use this coupon to save instantly!",
       code: "SAVE50",
-      logo: couponLogo,
+      logo: S3_IMAGES.LOGO_AMC,
     },
     {
       id: 3,
@@ -40,7 +37,7 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
       discountAmount: "45",
       description: "Limited-time offer for new users.",
       code: "FIRST15",
-      logo: couponLogo,
+      logo: S3_IMAGES.LOGO_AMC,
     },
   ];
 
@@ -80,7 +77,7 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
           onClick={handleRemoveCoupon}
           className="justify-self-end cursor-pointer"
         >
-          <img src={cross} alt="cross" className="w-4 h-4 " />
+          <img src={S3_IMAGES.X} alt="cross" className="w-4 h-4 " />
         </span>
       </h2>
 
@@ -127,9 +124,9 @@ export default function ViewCoupons({ handleClick, couponDetails, coupon }) {
                   readOnly
                 />
                 {selectedCoupon === c.id ? (
-                  <img src={checked} alt="" />
+                  <img src={S3_IMAGES.RADIO_CHECKED} alt="" />
                 ) : (
-                  <img src={unchecked} alt="" />
+                  <img src={S3_IMAGES.RADIO_UNCHECKED} alt="" />
                 )}
               </label>
             </div>

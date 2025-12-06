@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import logo from "../assets/LogoFooter.svg";
-import bgImg from "../assets/Footerbg.webp";
+import { S3_IMAGES } from "../constants/images";
 import { Link } from "react-router-dom";
 import FooterIcons from "./FooterIcons";
 import { MapPin, Phone, MailOpenIcon, ChevronDown } from "lucide-react";
@@ -25,7 +24,7 @@ const Footer = () => {
       <div className="absolute inset-0 bg-black z-0"></div>
       <div
         className="absolute inset-0 bg-cover bg-center opacity-80 z-0"
-        style={{ backgroundImage: `url(${bgImg})` }}
+        style={{ backgroundImage: `url(${S3_IMAGES.FOOTER_BG})` }}
       ></div>
 
       <div className="relative container flex flex-col justify-between">
@@ -37,7 +36,7 @@ const Footer = () => {
             >
               <img
                 loading="lazy"
-                src={logo}
+                src={S3_IMAGES.LOGO_FOOTER}
                 alt="Logo"
                 className="w-40 sm:w-48 md:w-54 mb-4 sm:mb-6 cursor-pointer"
               />
@@ -184,22 +183,22 @@ const Footer = () => {
               }`}
             >
               <li>
-                <Link to="/mechanic" className="hover:text-white transition py-1 block">
+                <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
                   Register As A Mechanic
                 </Link>
               </li>
               <li>
-                <Link to="/tow-truck" className="hover:text-white transition py-1 block">
+                <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
                   Register As A Tow
                 </Link>
               </li>
               <li>
-                <Link to="/service-center" className="hover:text-white transition py-1 block">
+                <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
                   Register Your Service Station
                 </Link>
               </li>
               <li>
-                <Link to="/petrol-pump" className="hover:text-white transition py-1 block">
+                <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
                   Register Petrol Pump
                 </Link>
               </li>

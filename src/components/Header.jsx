@@ -29,7 +29,7 @@ const Header = () => {
     "vehicle amc": "/vehicle-amc",
     "my amc": "/my-account?view=amc",
     mechanic: "/mechanic",
-    ecommerce: "/e-commerce",
+    vahanshop: "/vahan-shop",
     "petrol pump": "/petrol-pump",
     "tow truck": "/tow-truck",
     "service center": "/service-center",

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import carColor from "../assets/CarFill.svg";
-import carOutline from "../assets/CarFade.svg";
-import bikeColor from "../assets/BikeFill.svg";
-import bikeOutline from "../assets/BikeFade.svg";
 import {addUserVehicleWithoutAMC } from "../api/vehicleApi";
-
+import { S3_IMAGES } from "../constants/images";
 const Backdrop = ({ onClose }) => (
   <div
     className="fixed inset-0 bg-black/40 z-[9998]"
@@ -228,11 +224,11 @@ return (
                     src={
                       type === "car"
                         ? vehicleType === "car"
-                          ? carColor
-                          : carOutline
+                          ? S3_IMAGES.CAR_FILL
+                          : S3_IMAGES.CAR_FADE
                         : vehicleType === "bike"
-                        ? bikeColor
-                        : bikeOutline
+                        ? S3_IMAGES.BIKE_FILL
+                        : S3_IMAGES.BIKE_FADE
                     }
                     alt={type}
                     className="h-7 mt-8"

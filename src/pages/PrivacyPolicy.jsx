@@ -1,9 +1,8 @@
 import React, { Suspense } from "react";
-import privacyPolicyBanner from "../assets/PrivacyPolicy.svg";
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 const TwoColumnInfoLayout = React.lazy(() => import("../components/TwoColumnInfoLayout"));
-
+import { S3_IMAGES } from "../constants/images";
 const ComponentFallback = () => (
   <div className="flex items-center justify-center md:py-8 sm:py-3 py-8">
     <div className="animate-pulse bg-gray-200 rounded-lg h-32 w-full max-w-4xl"></div>
@@ -84,7 +83,7 @@ const PrivacyPolicy = () => {
     <div className="bg-[rgba(244,244,244,1)]">
       <div>
         <Suspense fallback={<ComponentFallback />}>
-          <PageBanner title="Privacy Policy" subtitle="We may update or amend this Privacy Policy at any time without prior notice. We encourage you to review this page periodically for any changes."  image={privacyPolicyBanner} useGradientTitle={false}
+          <PageBanner title="Privacy Policy" subtitle="We may update or amend this Privacy Policy at any time without prior notice. We encourage you to review this page periodically for any changes."  image={S3_IMAGES.PRIVACY_POLICY} useGradientTitle={false}
   useDarkOverlay={false} showTicker={false}
  height="250px"/>
         </Suspense>
