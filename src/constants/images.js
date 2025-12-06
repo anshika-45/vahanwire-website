@@ -25,7 +25,7 @@ export const S3_IMAGES = {
   CHOOSE_1:`${S3_BASE_URL}/uploads/1764998421383_cvpe1.svg`,
   CHOOSE_2:`${S3_BASE_URL}/uploads/1764998465879_z8swi.svg`,
   CHOOSE_3:`${S3_BASE_URL}/uploads/1764998487692_ow2469.svg`,
-  GET_HELP:`${S3_BASE_URL}/uploads/1764998622256_ht9uf.svg`,
+  GET_HELP:`${S3_BASE_URL}/uploads/1765015280480_gsnxzd.webp`,
   PHONE_GIF:`${S3_BASE_URL}/uploads/1764998855844_aljxts.svg`,
   TERMS_CONDITION:`${S3_BASE_URL}/uploads/1764999114965_0ek6x.svg`,
   PRIVACY_POLICY:`${S3_BASE_URL}/uploads/1764999114965_0ek6x.svg`,

@@ -4,12 +4,23 @@ import dropdownIcon from "../assets/down-arrow.svg";
 import { getActiveZones, getMyProfile, updateCity } from "../api/authApi";
 import { useCity } from "../context/CityContext";
 
+const STATIC_CITIES = [
+  { _id: "static_noida", zoneName: "Noida" },
+  { _id: "static_delhi", zoneName: "Delhi" },
+  { _id: "static_gurgaon", zoneName: "Gurgaon" },
+  { _id: "static_bangalore", zoneName: "Bengaluru" },
+  { _id: "static_mumbai", zoneName: "Mumbai" },
+  { _id: "static_pune", zoneName: "Pune" }
+];
+
 const LocationDropdown = ({ onLocationSelect }) => {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("Noida");
   const [selectedCityId, setSelectedCityId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [zones, setZones] = useState([]);
+  const [showAllZones, setShowAllZones] = useState(false);
+  const [apiLoaded, setApiLoaded] = useState(false);
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,12 +56,14 @@ const LocationDropdown = ({ onLocationSelect }) => {
       if (cachedZones && cacheValid) {
         zoneList = JSON.parse(cachedZones);
         setZones(zoneList);
+        setApiLoaded(true);
       } else {
         setLoading(true);
         const zoneResponse = await getActiveZones();
         if (zoneResponse.data.success) {
           zoneList = zoneResponse.data.data || [];
           setZones(zoneList);
+          setApiLoaded(true);
           sessionStorage.setItem("activeZones", JSON.stringify(zoneList));
           sessionStorage.setItem("zonesTimestamp", Date.now().toString());
         } else {
@@ -150,6 +163,15 @@ const LocationDropdown = ({ onLocationSelect }) => {
   };
 
   const handleLocationClick = async (zone) => {
+    if (zone._id.startsWith("static_")) {
+      const actualZone = zones.find((z) => z.zoneName.toLowerCase() === zone.zoneName.toLowerCase());
+      if (actualZone) {
+        zone = actualZone;
+      } else {
+        return;
+      }
+    }
+
     setSelected(zone.zoneName);
     setSelectedCityId(zone._id);
     setOpen(false);
@@ -171,15 +193,28 @@ const LocationDropdown = ({ onLocationSelect }) => {
       if (open && !event.target.closest("#locationDropdown")) {
         setOpen(false);
         setSearchTerm("");
+        setShowAllZones(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  const filteredZones = zones.filter((zone) =>
-    zone.zoneName?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getDisplayZones = () => {
+    if (searchTerm) {
+      return zones.filter((zone) =>
+        zone.zoneName?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (!apiLoaded || showAllZones) {
+      return zones;
+    }
+
+    return STATIC_CITIES;
+  };
+
+  const filteredZones = getDisplayZones();
 
   return (
     <div id="locationDropdown" className="relative">
@@ -241,7 +276,7 @@ const LocationDropdown = ({ onLocationSelect }) => {
             </div>
           )}
 
-          {loading ? (
+          {loading && !apiLoaded ? (
             <div className="px-3 py-4 text-center text-sm text-gray-500">
               Loading zones...
             </div>
@@ -250,21 +285,31 @@ const LocationDropdown = ({ onLocationSelect }) => {
               No zones found
             </div>
           ) : (
-            <ul className="max-h-[280px] overflow-y-auto">
-              {filteredZones.map((zone) => (
-                <li
-                  key={zone._id}
-                  onClick={() => handleLocationClick(zone)}
-                  className={`px-3 py-2.5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer text-sm font-medium transition-colors last:border-b-0 ${
-                    selectedCityId === zone._id
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-gray-800"
-                  }`}
+            <>
+              <ul className="max-h-[280px] overflow-y-auto">
+                {filteredZones.map((zone) => (
+                  <li
+                    key={zone._id}
+                    onClick={() => handleLocationClick(zone)}
+                    className={`px-3 py-2.5 border-b border-gray-100 hover:bg-gray-50 cursor-pointer text-sm font-medium transition-colors last:border-b-0 ${
+                      selectedCityId === zone._id
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-gray-800"
+                    }`}
+                  >
+                    {zone.zoneName}
+                  </li>
+                ))}
+              </ul>
+              {!searchTerm && !showAllZones && apiLoaded && zones.length > STATIC_CITIES.length && (
+                <div
+                  onClick={() => setShowAllZones(true)}
+                  className="px-3 py-2.5 text-center text-sm font-medium text-blue-600 hover:bg-blue-50 cursor-pointer border-t border-gray-200"
                 >
-                  {zone.zoneName}
-                </li>
-              ))}
-            </ul>
+                  View More
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
