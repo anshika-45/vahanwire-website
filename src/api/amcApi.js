@@ -1,7 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
-export const getAMCPlansByCategory = async (vehicleType, category, cityName) => {
-   const params = cityName ? { cityName } : {};
+export const getAMCPlansByCategory = async (vehicleType, category, cityName='Noida') => {
+  const params = cityName ? { cityName } : {};
   const response = await axiosInstance.get(`/amc-plans/${vehicleType}/${category}`,{params});
   return response.data;
 };
