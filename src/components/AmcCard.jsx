@@ -181,7 +181,7 @@ const AMCCard = ({
   );
 };
 
-const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
+const AMCCards = ({ onBuy, plans, vehicle, selectedCityName = "Noida"}) => {
   const { vehicleType, amcType } = useAmcData();
   const { fetchPlans, loading } = useAMCPlans();
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
@@ -211,11 +211,6 @@ const AMCCards = ({ onBuy, plans, vehicle, selectedCityName }) => {
       }
 
       if (!vehicleType || !amcType) {
-        return;
-      }
-
-      if (!selectedCityName) {
-        setCards([]);
         return;
       }
 
