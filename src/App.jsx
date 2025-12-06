@@ -53,7 +53,7 @@ function App() {
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/petrol-pump" element={<PetrolPump />} />
                   <Route path="/mechanic" element={<Mechanic />} />
-                  <Route path="/e-commerce" element={<Ecommerce />} />
+                  <Route path="/vahan-shop" element={<Ecommerce />} />
                   <Route path="/tow-truck" element={<TowTruck />} />
                   <Route path="/service-center" element={<ServiceCenter />} />
                   <Route 

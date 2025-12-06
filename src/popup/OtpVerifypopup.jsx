@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "../components/Modal";
 import Button from "../components/Button";
-import otpImg from "../assets/Animation.svg";
 import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { verifyOtp, sendOtp } from "../api/authApi";
 import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
 import { useNavigate } from "react-router-dom";
-
+import { S3_IMAGES } from "../constants/images";
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
 
@@ -182,7 +181,7 @@ return (
     {!showVehiclePopup && !showSelectVehicle && (
       <Modal isOpen={isOpen} onClose={onClose} onBack={onBack} hideBackButton={true}>
         <div className="bg-white rounded-xl p-5 flex flex-col items-center m-8">
-          <img src={otpImg} loading="lazy" alt="OTP Animation" className="md:w-60 md:h-60 w-40 h-40 mb-4" width={160} height={160} decoding="async" />
+          <img src={S3_IMAGES.PHONE_GIF} loading="lazy" alt="OTP Animation" className="md:w-60 md:h-60 w-40 h-40 mb-4" width={160} height={160} decoding="async" />
             <h1 className="text-xl font-semibold text-[#242424] text-center mb-2">
               Verify Your Number
             </h1>

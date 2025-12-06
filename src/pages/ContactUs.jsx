@@ -1,8 +1,7 @@
 import React, { useState, Suspense } from "react";
 import { createContact } from "../api/authApi";
 import { MailOpen, Phone, MapPin } from "lucide-react";
-import contactBanner from "../assets/ContactUs.svg";
-import contactImage from "../assets/ContactUs2.svg";
+import { S3_IMAGES } from "../constants/images";
 
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
@@ -28,7 +27,6 @@ const ContactUs = () => {
   const validateForm = () => {
   let newErrors = {};
 
-  // Full Name Validation
   if (!formData.fullName.trim()) {
     newErrors.fullName = "Full name is required.";
   } else if (/\d/.test(formData.fullName)) {
@@ -37,14 +35,12 @@ const ContactUs = () => {
     newErrors.fullName = "Name must be at least 3 characters.";
   }
 
-  // Email Validation
   if (!formData.email.trim()) {
     newErrors.email = "Email is required.";
   } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$/.test(formData.email)) {
     newErrors.email = "Enter a valid email.";
   }
 
-  // Phone Number Validation
   if (!formData.phoneNumber.trim()) {
     newErrors.phoneNumber = "Phone number is required.";
   } else if (!/^[6-9]\d{9}$/.test(formData.phoneNumber)) {
@@ -52,7 +48,6 @@ const ContactUs = () => {
       "Phone must start with 6-9 and be exactly 10 digits.";
   }
 
-  // Reason Validation
   if (!formData.reason.trim()) {
     newErrors.reason = "Reason is required.";
   }
@@ -100,7 +95,7 @@ const ContactUs = () => {
       <Suspense fallback={<ComponentFallback />}>
         <PageBanner
           title="Contact Us"
-          image={contactBanner}
+          image={S3_IMAGES.CONTACT_BANNER}
           useGradientTitle={false}
           useDarkOverlay={false}
           showTicker={false}
@@ -110,11 +105,10 @@ const ContactUs = () => {
 
       <div className="max-w-[1300px] mx-auto px-4 sm:px-6 md:px-10 py-10 md:py-20 grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-10 items-stretch">
 
-        {/* LEFT SIDE CARD */}
         <div className="relative rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] overflow-hidden">
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${contactImage})` }}
+            style={{ backgroundImage: `url(${S3_IMAGES.CONTACT_US_IMAGE})` }}
           ></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
           <div className="relative md:top-26 z-10 p-8 md:p-10 flex flex-col justify-end h-[360px] md:h-[420px]">

@@ -1,12 +1,12 @@
 import React from "react";
 import Button from "../components/Button";
-import successIcon from "../assets/successpurchase.png";
+import { S3_IMAGES } from "../constants/images";
 
 const SuccessPurchase = ({ onClose }) => {
   return (
     <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
       <img
-        src={successIcon}
+        src={S3_IMAGES.SUCCESS_PURCHASE}
         alt="Payment Success"
         className="w-30 h-30 mb-6 mx-auto"
       />

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logoImg from "../assets/Logo.svg";
+import { S3_IMAGES } from "../constants/images";
 const Logo = React.memo(() => {
   return (
     <Link
@@ -9,7 +9,7 @@ const Logo = React.memo(() => {
       className="flex"
     >
       <img
-        src={logoImg}
+        src={S3_IMAGES.HOME_LOGO}
         loading="eager"
         alt="Vahanwire Logo"
         className="md:w-[270px] w-[250px] object-contain"

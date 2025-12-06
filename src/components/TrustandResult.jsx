@@ -1,5 +1,5 @@
 import React from "react";
-import bgImage from "../assets/result.webp";
+import { S3_IMAGES } from "../constants/images";
 import Card from "./Card";
 const TrustandResult = () => {
   return (
@@ -7,7 +7,7 @@ const TrustandResult = () => {
       <div className="absolute inset-0 bg-[#183f7f]"></div>
       <div
         className="absolute inset-0 bg-cover bg-center opacity-80"
-        style={{ backgroundImage: `url(${bgImage})` }}
+        style={{ backgroundImage: `url(${S3_IMAGES.TRUST_BG})` }}
       ></div>
       <div className="relative z-10 justify-items-center pt-1">
         <div className="container   ">

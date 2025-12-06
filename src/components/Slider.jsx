@@ -1,90 +1,83 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import mechanic from "../assets/oMechanic-Service.webp";
-import amc from "../assets/oAMC.webp";
-import mechanicNewImage from "../assets/mechanic.jpg";
-import post2 from "../assets/Post2.jpg";
-import post3 from "../assets/Post3.jpg";
-import post4 from "../assets/Post4.jpg";
-import leftIcon from "../assets/leftarrow.webp";
-import rightIcon from "../assets/rightarrow.webp";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { S3_IMAGES } from "../constants/images";
 const slides = [
   {
     id: 7,
     title: "AMC Plan",
     desc: "Annual Maintenance Contract.",
-    img: post3,
+    img: S3_IMAGES.POST_3,
   },
 
   {
     id: 9,
     title: "Battery Jumpstart",
     desc: "Quick and safe power boost.",
-    img: post2,
+    img: S3_IMAGES.POST_2,
   },
   {
     id: 10,
     title: "Flat Tyre Fix",
     desc: "On-the-spot repair and inflation.",
-    img: mechanicNewImage,
+    img: S3_IMAGES.MECHANIC_SERVICE_SLIDER,
   },
   {
     id: 11,
     title: "Mechanic Service",
     desc: "Instant roadside assistance.",
-    img: mechanic,
+    img: S3_IMAGES.MECHANIC_SLIDER,
   },
   {
     id: 12,
     title: "AMC Plan",
     desc: "Annual Maintenance Contract.",
-    img: post2,
+    img: S3_IMAGES.POST_2,
   },
 
   {
     id: 13,
     title: "Battery Jumpstart",
     desc: "Quick and safe power boost.",
-    img: post4,
+    img: S3_IMAGES.POST_4,
   },
   {
     id: 17,
     title: "Mechanic Service",
     desc: "Instant roadside assistance.",
-    img: amc,
+    img: S3_IMAGES.AMC_SLIDER,
   },
   {
     id: 18,
     title: "AMC Plan",
     desc: "Annual Maintenance Contract.",
-    img: post3,
+    img: S3_IMAGES.POST_3,
   },
   {
     id: 20,
     title: "Flat Tyre Fix",
     desc: "On-the-spot repair and inflation.",
-    img: mechanicNewImage,
+    img: S3_IMAGES.MECHANIC_SERVICE_SLIDER,
   },
   {
     id: 21,
     title: "Mechanic Service",
     desc: "Instant roadside assistance.",
-    img: mechanic,
+    img: S3_IMAGES.MECHANIC_SLIDER,
   },
   {
     id: 22,
     title: "AMC Plan",
     desc: "Annual Maintenance Contract.",
-    img: post2,
+    img: S3_IMAGES.POST_2,
   },
   {
     id: 23,
     title: "Battery Jumpstart",
     desc: "Quick and safe power boost.",
-    img: post4,
+    img: S3_IMAGES.POST_4,
   },
 ];
 
@@ -150,10 +143,10 @@ export default function Slider() {
             );
           })} 
           <div slot="container-start" className="swiper-button-prev hidden lg:block">
-            <img src={leftIcon} alt="Prev" />
+            <img src={S3_IMAGES.LEFT_ARROW} alt="Prev" />
           </div>
           <div slot="container-start" className="swiper-button-next hidden lg:block">
-            <img src={rightIcon} alt="Next" />
+            <img src={S3_IMAGES.RIGHT_ARROW} alt="Next" />
           </div>
         </Swiper>
       </div>

@@ -1,7 +1,5 @@
 import React, { Suspense } from "react";
-import aboutBanner from "../assets/AboutUs.svg";
-import aboutAppImage from "../assets/Mobile.svg";
-
+import { S3_IMAGES } from "../constants/images";
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
 
 const ComponentFallback = () => (
@@ -15,7 +13,7 @@ const AboutUs = () => {
     <>
       <div>
         <Suspense fallback={<ComponentFallback />}>
-          <PageBanner title="About Us" image={aboutBanner} useGradientTitle={false}
+          <PageBanner title="About Us" image={S3_IMAGES.ABOUT_US_IMAGE} useGradientTitle={false}
   useDarkOverlay={false} showTicker={false}
  height="250px"/>
         </Suspense>
@@ -53,7 +51,7 @@ const AboutUs = () => {
           <div className="flex justify-center md:justify-center">
             <div className="relative">
               <img
-                src={aboutAppImage}
+                src={S3_IMAGES.MOBILE_ASIDE_HOME}
                 alt="Vahanwire App Interface"
                 className="w-[140px] md:w-[120px] lg:w-[140px] drop-shadow-2xl h-full rounded-[2rem] lg:scale-200"
                 loading="lazy"

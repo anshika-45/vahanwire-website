@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import VerifyNumberPopup from "../popup/VerifyNumberPopup";
 import essentialPlanImg from "../assets/Essentialplan.svg";
 import NoPlansFound from "../components/NoPlanFound";
+import { S3_IMAGES } from "../constants/images";
 const mapPlansToCards = (plans = [], vehicle = {}) => {
   if (!Array.isArray(plans) || plans.length === 0) return [];
   return plans.map((plan) => ({
@@ -87,7 +88,7 @@ const AMCCard = ({
         <div className="absolute left-0 top-4 bg-white rounded-r-full w-20 h-13 flex items-center justify-end pr-5 shadow-md z-10">
           <img
             loading="lazy"
-            src="/src/assets/Logo-AMC.svg"
+            src={S3_IMAGES.LOGO_AMC}
             alt="Vahanwire Logo"
             className="w-9 h-9 object-contain"
           />
@@ -104,8 +105,8 @@ const AMCCard = ({
               loading="lazy"
               src={
                 vehicleType === "bike"
-                  ? "/src/assets/Bike-AMC.svg"
-                  : "/src/assets/Car-AMC.svg"
+                  ? S3_IMAGES.BIKE_AMC
+                  : S3_IMAGES.CAR_AMC
               }
               alt={
                 vehicleType === "bike" ? "Motorcycle AMC plan" : "Car AMC plan"

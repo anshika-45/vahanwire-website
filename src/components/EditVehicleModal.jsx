@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import carColor from "../assets/CarFill.svg";
-import carOutline from "../assets/CarFade.svg";
-import bikeColor from "../assets/BikeFill.svg";
-import bikeOutline from "../assets/BikeFade.svg";
 import { updateAMCVehicle } from "../api/vehicleApi";
-
+import { S3_IMAGES } from "../constants/images";
 const Backdrop = ({ onClose }) => (
   <div
     className="fixed inset-0 bg-black/40 z-[9998]"
@@ -221,7 +217,7 @@ const EditVehicleModal = ({ open, onClose, onSubmit, initial }) => {
                   {vehicleType === "car" ? "Car" : "Bike"}
                 </span>
                 <img
-                  src={vehicleType === "car" ? carColor : bikeColor}
+                  src={vehicleType === "car" ? S3_IMAGES.CAR_FILL : S3_IMAGES.BIKE_FILL}
                   alt={vehicleType}
                   className="h-10 mt-8"
                 />

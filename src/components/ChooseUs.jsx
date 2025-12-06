@@ -1,11 +1,5 @@
 import React from "react";
-import Applogo from "../assets/Apple.svg";
-import Playlogo from "../assets/Playstore.svg";
-import checkIcon from "../assets/CheckIcon.svg";
-import Choose1 from "../assets/Choose1.svg";
-import Choose2 from "../assets/Choose2.svg";
-import Choose3 from "../assets/Choose3.svg";
-import mobile from "../assets/Mobile.svg";
+import { S3_IMAGES } from "../constants/images";
 
 const ChooseUs = () => {
   return (
@@ -33,7 +27,7 @@ const ChooseUs = () => {
                 >
                   <img
                     loading="lazy"
-                    src={checkIcon}
+                    src={S3_IMAGES.CHECK_ICON}
                     alt=""
                     decoding="async"
                     width="24"
@@ -61,7 +55,7 @@ const ChooseUs = () => {
                 >
                   <img
                     loading="lazy"
-                    src={Applogo}
+                    src={S3_IMAGES.APPSTORE}
                     alt="Download on App Store"
                     role="img"
                     decoding="async"
@@ -79,7 +73,7 @@ const ChooseUs = () => {
                 >
                   <img
                     loading="lazy"
-                    src={Playlogo}
+                    src={S3_IMAGES.PLAYSTORE}
                     alt="Get it on Google Play"
                     role="img"
                     decoding="async"
@@ -95,7 +89,7 @@ const ChooseUs = () => {
               <div className="flex -space-x-2">
                 <img
                   loading="lazy"
-                  src={Choose1}
+                  src={S3_IMAGES.CHOOSE_1}
                   alt="User testimonial 1"
                   decoding="async"
                   width="40"
@@ -104,7 +98,7 @@ const ChooseUs = () => {
                 />
                 <img
                   loading="lazy"
-                  src={Choose2}
+                  src={S3_IMAGES.CHOOSE_2}
                   alt="User testimonial 2"
                   decoding="async"
                   width="40"
@@ -113,7 +107,7 @@ const ChooseUs = () => {
                 />
                 <img
                   loading="lazy"
-                  src={Choose3}
+                  src={S3_IMAGES.CHOOSE_3}
                   alt="User testimonial 3"
                   decoding="async"
                   width="40"
@@ -130,7 +124,7 @@ const ChooseUs = () => {
           <div className="w-full flex justify-center lg:justify-end">
             <div className="aspect-[2/3.5]">
               <img
-                src={mobile}
+                src={S3_IMAGES.MOBILE_ASIDE_HOME}
                 alt="Vahanwire mobile app preview"
                 loading="lazy"
                 decoding="async"

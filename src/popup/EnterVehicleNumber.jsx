@@ -1,6 +1,5 @@
 import React, { useState, Suspense, useEffect } from "react";
 import Button from "../components/Button";
-import verifyIcon from "../assets/verify.webp";
 import Modal from "../components/Modal";
 import { addUserVehicleWithoutAMC, searchUserVehicle } from "../api/vehicleApi";
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
