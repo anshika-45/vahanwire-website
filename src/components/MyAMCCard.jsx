@@ -1,5 +1,6 @@
 import React from "react";
 import { Eye } from "lucide-react";
+import { S3_IMAGES } from "../constants/images";
 const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onDownloadInvoice }) => {
   return (
     <div className="flex flex-col items-center w-[240px] sm:w-[280px] md:w-[320px] lg:w-[360px] mx-auto">
@@ -17,7 +18,7 @@ const MyAMCCard = ({ plan, vehicle, validity, bgColor, logoSrc, carImageSrc, onD
 
         <div className="relative flex justify-end items-start pr-2 mt-1 sm:mt-2">
           <img
-            src="/src/assets/back-logo.webp"
+            src={S3_IMAGES.BACK_LOGO}
             alt="Background decorative logo"
             loading="lazy"
             className="absolute right-4 sm:right-6 -top-16 sm:-top-12 md:-top-8 w-24 sm:w-28 md:w-32 opacity-60 pointer-events-none"
