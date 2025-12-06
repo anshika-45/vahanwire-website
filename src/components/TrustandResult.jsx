@@ -12,7 +12,7 @@ const TrustandResult = () => {
       <div className="relative z-10 justify-items-center pt-1">
         <div className="container   ">
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium text-center text-white mb-1">
-            Powered by Trust & Results
+            Vahanwire Partners
           </h1>
           <div className="flex justify-center items-center">
             <p className="text-[14px] sm:text-lg text-white text-center pt-2 md:pt-4 lg:w-[50%] md:w-[60%] w-[90%]">
