@@ -40,11 +40,11 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
          const renderFeatureValue = (feature) => {
              if (feature.type === "bool") {
                  return feature.value === 1 ? (
-                     <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
+                     <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center mr-3">
                          <Check size={13} className="text-white" />
                      </div>
                  ) : (
-                     <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center">
+                     <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center mr-3">
                          <X size={13} className="text-white" />
                      </div>
                  );
@@ -53,9 +53,9 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
              } else if (feature.type === "unlimited") {
                  return <span className="font-semibold">Unlimited</span>;
              } else if (feature.type === "days") {
-                 return <span className="font-semibold">{feature.value} Days</span>;
+                 return <span className="font-semibold mr-3">{feature.value} Days</span>;
              }
-             return <span className="font-semibold">{feature.value}</span>;
+             return <span className="font-semibold mr-3">{feature.value}</span>;
          };
      
 
@@ -68,30 +68,33 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
     }, []);
     return (
         <div className='fixed inset-0 bg-black/40 top-0 bottom-0 left-0 right-0 h-full w-full flex justify-center items-center'>
-            <div className='bg-gray-50 md:w-[50vw] w-full rounded-md'>
+           <div className="bg-gray-50 md:w-[50vw] w-[90vw] max-w-[600px] rounded-md max-h-[90dvh] flex flex-col">
+
+
                 {/* <header className='mb-2 flex justify-end p-4 py-1'>
                     <button onClick={() => { onClose() }}>
                         <X size={25} />
                     </button>
                 </header> */}
 
-                <div className='py-3 px-2 my-1'>
-                    <h2 className='text-center text-3xl font-semibold'>Thank You For Your Purchase!</h2>
+                <div className='py-1 px-2 my-1 border-b border-gray-200'>
+                    <h2 className='text-center md:text-3xl text-xl font-semibold'>Thank You For Your Purchase!</h2>
                     
 
                 </div>
-                <div className=' p-5 h-[80vh] hide-scrollbar overflow-y-scroll relative'>
+               <div className="p-3 flex-1 overflow-y-auto hide-scrollbar">
+
                     <main className='mb-2'>
 
-                        <div className='flex gap-3 items-center justify-between bg-blue-500 py-4 text-white px-5 rounded-md'>
-                            <div><h1 className='font-semibold text-3xl'>{paymentResult?.purchase?.planName}</h1>
+                        <div className='flex md:flex-row flex-col gap-3 items-center md:justify-between justify-center bg-blue-500 md:py-4 py-2 text-white md:px-5 px-2 rounded-md'>  
+                            <div><h1 className='font-semibold md:text-3xl text-xl'>{paymentResult?.purchase?.planName}</h1>
                                 <p className='py-1'>Your Plan is Valid for {purchaseData?.validFor}</p>
                                 <p className='py-1'>Order ID : {paymentResult.purchase._id}</p>
                             </div>
-                            <div className='text-2xl self-start'>₹{purchaseData.price}</div>
+                            <div className='text-2xl md:self-start'>₹{purchaseData.price}</div>
                         </div>
-                        <div className='px-5 py-2 bg-white my-5 shadow-md rounded-md'>
-                            <h2 className='font-semibold py-1 text-2xl border-b border-gray-200'>Vehicle Details</h2>
+                        <div className='md:px-5 px-3 py-2 bg-white md:my-5 my-2 shadow-md rounded-md'>
+                            <h2 className='font-semibold py-1 md:text-2xl text-lg border-b border-gray-200'>Vehicle Details</h2>
                             <div className='flex justify-between items-center'
                             >
                                 <p className='py-1 text-[16px]'>Vehicle Number</p>
@@ -111,7 +114,7 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
 
                         
 
-                        <div className="grid md:grid-cols-3 grid-cols-2 gap-x-4 gap-y-4 my-5">
+                        <div className="grid md:grid-cols-3 grid-cols-2 gap-x-4 gap-y-4 md:my-5 my-2">
                     {stats.map((item, i) => (
                         <div
                             key={i}
@@ -148,9 +151,9 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
 
                         </div>
 
-                        <div className="bg-white rounded-xl overflow-hidden mb-20 mt-5">
+                        <div className="bg-white rounded-xl overflow-hidden md:mb-20  mb-7 mt-5">
                             <div className="px-6 py-5">
-                                <h3 className="font-semibold text-[#333333] mb-4 text-2xl">
+                                <h3 className="font-semibold text-[#333333] mb-4 md:text-2xl text-lg ">
                                     Billing Details
                                 </h3>
                                 {billing.map((item, i) => (
