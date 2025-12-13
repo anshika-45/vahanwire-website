@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { S3_IMAGES } from "../constants/images";
 import { useNavigate } from "react-router-dom";
 import AnimatedText from "./AnimatedText";
+import SantaSleigh from "./SantaSleigh";
 
 const bannerTexts = [
   "Car Service",
@@ -15,15 +16,18 @@ const Banner = React.memo(() => {
     <div className="relative w-full">
       <div>
         <div
-          className="relative w-full h-[300px] md:h-[500px]  bg-center bg-cover overflow-hidden bg-gray-100"
+          className="relative w-full h-[300px] md:h-[500px]  bg-center bg-cover bg-gray-100"
           style={{
             backgroundImage: `url(${S3_IMAGES.HOME_BANNER})`,
             willChange: "background-image",
             contentVisibility: "auto",
           }}
         >
-          <div className="container">
-            <div className="absolute md:left-0 left-3.5 top-1/2 -translate-y-1/2 text-white w-full">
+           <div className="absolute inset-0 overflow-hidden">
+             <SantaSleigh />
+           </div>
+           <div className="container">
+             <div className="absolute md:left-0 left-3.5 top-1/2 -translate-y-1/2 text-white w-full">
               <div className="container">
                 <h1 className="text-3xl sm:text-5xl md:text-5xl leading-tight drop-shadow-lg py-2 md:my-4 font-semibold">
                   Your One-Stop <br /> Solution for
