@@ -28,9 +28,9 @@ body {
 }
 
 .container {
-  padding: 0 6px;
+  
   margin: 0 auto;
-  @apply max-w-screen-xl;
+  @apply max-w-screen-xl md:px-4 px-1.5;
 }
 
 .swiper {

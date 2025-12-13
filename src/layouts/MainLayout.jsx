@@ -5,6 +5,9 @@ import Announcementbanner from "../components/Announcementbanner";
 import Header from "../components/Header";
 import Navvar from "../components/Navvar";
 import Footer from "../components/Footer";
+import Snowfall from "../components/Snowfall";
+import ChristmasAnimation from "../components/ChristmasAnimation";
+import SantaSleigh from "../components/SantaSleigh";
 
 const BreadcrumbBar = lazy(() => import("../components/BreadcrumbBar"));
 const AddBanner = lazy(() => import("../components/AddBanner"));
@@ -38,7 +41,9 @@ export default function MainLayout() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-hidden">
+      <Snowfall />
+      <SantaSleigh />
 
       {/* These render instantly (no loader) */}
       <Announcementbanner />
@@ -46,6 +51,7 @@ export default function MainLayout() {
       <div ref={stackRef} className="sticky top-0 w-full left-0 right-0 z-40">
         <Header />
         <Navvar />
+        <ChristmasAnimation />
       </div>
 
       {!isHome && (
