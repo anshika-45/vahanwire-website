@@ -7,9 +7,11 @@ const Button = lazy(() => import("./Button"));
 const Logo = lazy(() => import("./Logo"));
 const VerifyNumberPopup = lazy(() => import("../popup/VerifyNumberPopup"));
 const AccountSidebar = lazy(() => import("./AccountSidebar"));
-import { User } from "lucide-react";
+import { ChevronRight, User } from "lucide-react";
 import dropdownIcon from "../assets/down-arrow.svg";
 import searchIcon from "../assets/SearchIcon.svg";
+import christmasWind from "../assets/santa sleigh/Christmas wind chimes.json"
+import Lottie from "lottie-react";
 
 const LazyFallback = () => (
   <div className="w-4 h-4 bg-[#ffffff] animate-pulse"></div>
@@ -23,19 +25,19 @@ const Header = () => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
-  const pages = {
-    home: "/",
-    "about us": "/about-us",
-    "vehicle amc": "/vehicle-amc",
-    "my amc": "/my-account?view=amc",
-    mechanic: "/mechanic",
-    vahanshop: "/vahan-shop",
-    "petrol pump": "/petrol-pump",
-    "tow truck": "/tow-truck",
-    "service center": "/service-center",
-    "my profile": "/my-account?view=profile",
-    "my vehicle": "/my-account?view=vehicles",
-    "contact us": "/contact-us",
+   const pages = {
+    "Home": "/",
+    "About Us": "/about-us",
+    "Vehicle AMC": "/vehicle-amc",
+    "My AMC": "/my-account?view=amc",
+    "Mechanic": "/mechanic",
+    "Vahan Shop": "/vahan-shop",
+    "Petrol Pump": "/petrol-pump",
+    "Tow Truck": "/tow-truck",
+    "Service Center": "/service-center",
+    "My Profile": "/my-account?view=profile",
+    "My Vehicles": "/my-account?view=vehicles",
+    "Contact Us": "/contact-us",
   };
 
   const handleChange = (e) => {
@@ -109,9 +111,9 @@ const Header = () => {
     setQuery("");
   };
   return (
-    <div className="bg-white md:py-6 py-3.5 z-50">
+    <div className="bg-white md:py-6 py-3 z-50 relative">
       <div className="container">
-        <div className="flex items-center md:justify-between">
+        <div className="flex items-center md:justify-between px-2.5">
           <Suspense fallback={<LazyFallback />}>
             <Logo />
           </Suspense>
@@ -206,11 +208,10 @@ const Header = () => {
               />
               <input
                 id="search-input"
-                className={`py-2 pl-10 pr-4 text-sm ${
-                  open
+                className={`py-2 pl-10 pr-4 text-sm ${open
                     ? "w-full rounded-[6px] border-2 border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
                     : ""
-                }`}
+                  }`}
                 value={query}
                 type="text"
                 onChange={handleChange}
@@ -232,9 +233,9 @@ const Header = () => {
                     <div
                       key={index}
                       onClick={() => handleSuggestionClick(item)}
-                      className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      className="px-4 py-2 cursor-pointer hover:bg-gray-100 flex items-center justify-between"
                     >
-                      {item}
+                      {item} <ChevronRight size={20}/>
                     </div>
                   )
                 )}
@@ -247,10 +248,17 @@ const Header = () => {
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
-          onBack={()=>setIsVerifyOpen(true)}
+          onBack={() => setIsVerifyOpen(true)}
           isFromLogin={true}
         />
       </Suspense>
+      {/* <div className="fixed top-0 right-0 pointer-events-none z-[-1] w-45 h-45">
+        <Lottie
+          animationData={christmasWind}
+          loop
+          autoPlay
+        />
+      </div> */}
     </div>
   );
 };

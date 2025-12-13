@@ -91,20 +91,16 @@ function Navbar() {
             aria-label={isOpen ? "Close menu" : "Open menu"}
             className="flex items-center justify-center py-3 px-5 self-start"
           >
-            {isOpen ? (
-              <X size={24} className="text-[#000000]" />
-            ) : (
-              <Menu size={24} className="text-[#000000]" />
-            )}
+            <Menu size={24} className="text-[#000000]" />
           </button>
         </header>
       </nav>
       <main
-        className={`w-[70vw] max-w-[500px] transition-all duration-300 ease fixed right-0 top-0 bottom-0 min-h-screen flex flex-col gap-7 bg-white z-30 ${
+        className={`w-[70vw] max-w-[500px] transition-all duration-300 ease fixed right-0 top-0 bottom-0 min-h-screen flex flex-col gap-7 bg-white z-50 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="py-8  relative">
+        <div className="py-8 relative">
           <button
             onClick={() => setIsOpen(!isOpen)}
             aria-label={isOpen ? "Close menu" : "Open menu"}

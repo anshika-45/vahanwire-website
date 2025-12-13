@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import searchIcon from "../assets/SearchIcon.svg";
+import { ArrowRight, ArrowRightIcon, ArrowRightSquare, ChevronRight } from "lucide-react";
 
 function SearchBar({ placeholder = "Search..." }) {
   const [query, setQuery] = useState("");
@@ -8,18 +9,18 @@ function SearchBar({ placeholder = "Search..." }) {
   const navigate = useNavigate();
 
   const pages = {
-    home: "/",
-    "about us": "/about-us",
-    "vehicle amc": "/vehicle-amc",
-    "my amc": "/my-account?view=amc",
-    mechanic: "/mechanic",
-    vahanshop: "/vahan-shop",
-    "petrol pump": "/petrol-pump",
-    "tow truck": "/tow-truck",
-    "service center": "/service-center",
-    "my profile": "/my-account?view=profile",
-    "my vehicle": "/my-account?view=vehicles",
-    "contact us": "/contact-us",
+    "Home": "/",
+    "About Us": "/about-us",
+    "Vehicle AMC": "/vehicle-amc",
+    "My AMC": "/my-account?view=amc",
+    "Mechanic": "/mechanic",
+    "Vahan Shop": "/vahan-shop",
+    "Petrol Pump": "/petrol-pump",
+    "Tow Truck": "/tow-truck",
+    "Service Center": "/service-center",
+    "My Profile": "/my-account?view=profile",
+    "My Vehicles": "/my-account?view=vehicles",
+    "Contact Us": "/contact-us",
   };
 
   const handleChange = (e) => {
@@ -92,8 +93,6 @@ function SearchBar({ placeholder = "Search..." }) {
           className="pl-10 pr-6 py-2.5 w-full rounded-[6px] border border-[#E3EDFC] focus:outline-none focus:ring-1 focus:ring-[#E3EDFC]"
         />
       </div>
-
-      {/* 🔽 Suggestion Dropdown */}
       {query.trim() !== "" && suggestions.length > 0 && (
         <div className="absolute bg-white border border-[#E3EDFC] rounded-md mt-1 w-full shadow-sm z-20 hidden md:block">
           {suggestions.map((item, index) =>
@@ -108,9 +107,9 @@ function SearchBar({ placeholder = "Search..." }) {
               <div
                 key={index}
                 onClick={() => handleSuggestionClick(item)}
-                className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                className="px-4 py-2 cursor-pointer hover:bg-gray-100 flex items-center justify-between"
               >
-                {item}
+                {item} <ChevronRight size={20}/>
               </div>
             )
           )}
