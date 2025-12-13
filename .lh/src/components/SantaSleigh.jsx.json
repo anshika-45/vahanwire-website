@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 4,
+            "activePatchIndex": 6,
             "patches": [
                 {
                     "date": 1765611555956,
@@ -24,6 +24,14 @@
                 {
                     "date": 1765611619532,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -7,9 +7,9 @@\n       <Lottie\n         animationData={santaSleighAnimation}\n         loop={true}\n         autoplay={true}\n-        speed={10}\n+        speed={1}\n       />\n     </div>\n   );\n }\n"
+                },
+                {
+                    "date": 1765618944548,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n export default function SantaSleigh() {\n   return (\n     <div className=\"absolute inset-0 w-full h-full z-50 pointer-events-none flex items-center justify-center\">\n-      <div style={{ transform: 'scale(2)' }}>\n+      <div style={{ transform: 'scale()' }}>\n         <Lottie\n           animationData={santaSleighAnimation}\n           loop={true}\n           autoplay={true}\n"
+                },
+                {
+                    "date": 1765618977437,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n \n export default function SantaSleigh() {\n   return (\n     <div className=\"absolute inset-0 w-full h-full z-50 pointer-events-none flex items-center justify-center\">\n-      <div style={{ transform: 'scale(1)' }}>\n+      <div style={{ transform: 'scale(2)' }}>\n         <Lottie\n           animationData={santaSleighAnimation}\n           loop={true}\n           autoplay={true}\n"
                 }
             ],
             "date": 1765611555956,
