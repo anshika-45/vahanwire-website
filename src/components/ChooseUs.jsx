@@ -85,7 +85,7 @@ const ChooseUs = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 pt-2 sm:pt-4">
+            {/* <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 pt-2 sm:pt-4">
               <div className="flex -space-x-2">
                 <img
                   loading="lazy"
@@ -118,7 +118,7 @@ const ChooseUs = () => {
               <p className="text-[#242424] text-[16px]">
                 <b>400k+</b> users around the globe
               </p>
-            </div>
+            </div> */}
           </div>
 
           <div className="w-full flex justify-center lg:justify-end">
