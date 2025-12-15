@@ -11,12 +11,12 @@ const WhyChooseUs = () => {
           <p className="text-[14px] sm:text-lg text-[#5C5C5C] text-center pt-2 md:pt-4 hidden lg:block">
           Vahanwire began in 2019 to simplify access to mechanics, fuel, and
           vehicle services. Today, we lead India's app-based <br /> automotive
-          service market with a 70% share, helping the nation move smarter.
+          service market, helping the nation move smarter.
         </p>
           <p className="text-[14px] sm:text-lg text-[#5C5C5C] text-center pt-2 md:pt-4 md:w-[60%] w-[90%] block lg:hidden">
           Vahanwire began in 2019 to simplify access to mechanics, fuel, and
           vehicle services. Today, we lead India's app-based automotive
-          service market with a 70% share, helping the nation move smarter.
+          service market, helping the nation move smarter.
         </p>
         </div>
         
