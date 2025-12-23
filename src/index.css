@@ -60,11 +60,11 @@ body {
 }
 
 .homeSlider .swiper .swiper-button-prev {
-  position: absolute;
-  color: white;
-  padding: 5px;
-  border-radius: 100px;
-  @apply bg-white border border-blue-300 md:left-[9%] left-5 z-30;
+   position: absolute;
+   color: white;
+   padding: 5px;
+   border-radius: 100px;
+   @apply bg-white border border-blue-300 md:left-[9%] left-5 z-30;
 }
 .homeSlider .swiper .swiper-button-next {
   position: absolute;
@@ -128,18 +128,18 @@ body {
 }
 
 .homeSlider .swiper .swiper-button-prev {
-  position: absolute;
-  color: white;
-  padding: 5px;
-  border-radius: 100px;
-  @apply bg-white border border-blue-300 left-5 z-30;
+   position: absolute;
+   color: white;
+   padding: 5px;
+   border-radius: 100px;
+   @apply bg-white border border-blue-300 left-5 z-30;
 }
 .homeSlider .swiper .swiper-button-next {
-  position: absolute;
-  color: white;
-  padding: 5px;
-  border-radius: 100px;
-  @apply bg-white border border-blue-300 right-5;
+   position: absolute;
+   color: white;
+   padding: 5px;
+   border-radius: 100px;
+   @apply bg-white border border-blue-300 right-5;
 }
 
 .homeSlider .swiper .swiper-button-prev .swiper-navigation-icon,
@@ -296,3 +296,8 @@ body {
     bottom: 40px;
   }
 }
+
+
+
+
+
