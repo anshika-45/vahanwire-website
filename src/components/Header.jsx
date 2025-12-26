@@ -10,8 +10,6 @@ const AccountSidebar = lazy(() => import("./AccountSidebar"));
 import { ChevronRight, User } from "lucide-react";
 import dropdownIcon from "../assets/down-arrow.svg";
 import searchIcon from "../assets/SearchIcon.svg";
-import christmasWind from "../assets/santa sleigh/Christmas wind chimes.json"
-import Lottie from "lottie-react";
 
 const LazyFallback = () => (
   <div className="w-4 h-4 bg-[#ffffff] animate-pulse"></div>

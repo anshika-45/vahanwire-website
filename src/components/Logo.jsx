@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { S3_IMAGES } from "../constants/images";
-import santaHat from "../assets/santa sleigh/Christmas hat.json"
-import Lottie from "lottie-react";
+// import santaHat from "../assets/santa sleigh/Christmas hat.json"
+// import Lottie from "lottie-react";
 const Logo = React.memo(() => {
   return (
     <Link
@@ -21,7 +21,7 @@ const Logo = React.memo(() => {
           decoding="async"
           fetchPriority="high"
         />
-        <div
+        {/* <div
           className="
             absolute 
             -top-[55%] 
@@ -33,7 +33,7 @@ const Logo = React.memo(() => {
           "
         >
           <Lottie animationData={santaHat} autoplay loop />
-        </div>
+        </div> */}
       </div>
     </Link>
   );
