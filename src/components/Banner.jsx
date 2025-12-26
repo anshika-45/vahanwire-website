@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { S3_IMAGES } from "../constants/images";
 import { useNavigate } from "react-router-dom";
 import AnimatedText from "./AnimatedText";
-import SantaSleigh from "./SantaSleigh";
+// import SantaSleigh from "./SantaSleigh";
 
 const bannerTexts = [
   "Car Service",
@@ -23,9 +23,9 @@ const Banner = React.memo(() => {
             contentVisibility: "auto",
           }}
         >
-           <div className="absolute inset-0 overflow-hidden">
+           {/* <div className="absolute inset-0 overflow-hidden">
              <SantaSleigh />
-           </div>
+           </div> */}
            <div className="container">
              <div className="absolute md:left-0 left-3.5 top-1/2 -translate-y-1/2 text-white w-full">
               <div className="container">
