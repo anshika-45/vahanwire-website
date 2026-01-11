@@ -14,19 +14,22 @@ const CompareTable = ({ plansAre, onBuy, vehicle , selectedCityName}) => {
   const [hoverStyle, setHoverStyle] = useState({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
-  const [selectedPlan, setSelectedPlan] = useState(null);
+  
   const [plans, setPlans] = useState([]);
   const [rawPlans, setRawPlans] = useState([]);
 
   const tableRef = useRef(null);
   const firstColumnRef = useRef(null);
-
   const keyMapping = {
     "premium care": "premium",
     "premiuim care": "premium",
     "standard care": "standard",
     "basic care": "basic",
   };
+  const {
+      setSelectedPlan,
+      selectedPlan
+    } = useAMCPlans();
 
   const getPlanKey = (planName) => {
     const normalized = planName?.toLowerCase();

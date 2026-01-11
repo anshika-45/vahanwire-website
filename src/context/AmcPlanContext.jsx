@@ -13,6 +13,7 @@ const CACHE_EXPIRY_TIME = 5 * 60 * 1000;
 export const AMCPlansProvider = ({ children }) => {
   const [plansCache, setPlansCache] = useState({});
   const [loading, setLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null)
 
   const fetchPlans = useCallback(
     async (vehicleType, amcType, cityName) => {
@@ -65,8 +66,14 @@ export const AMCPlansProvider = ({ children }) => {
   }, []);
 
   const value = useMemo(
-    () => ({ fetchPlans, loading, clearCache }),
-    [fetchPlans, loading, clearCache]
+    () => ({ 
+      fetchPlans, 
+      loading, 
+      clearCache,
+      setSelectedPlan,
+      selectedPlan 
+    }),
+    [fetchPlans, loading, clearCache, selectedPlan, setSelectedPlan ]
   );
 
   return (

@@ -6,15 +6,17 @@ import Payment from "./Payment";
 import { initiatePayment } from "../api/paymentApi";
 import couponImg from "../assets/coupon.png";
 import ViewCoupons from "./ViewCoupons";
+import FinalDetailsPopup from "./FinalDetailsPopup";
 const SuccessPurchase = React.lazy(() => import("./SuccessPurchase"));
 
-const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
+const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle, onBuyAmc }) => {
   const [currentView, setCurrentView] = useState("summary");
   const [isLoading, setIsLoading] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
   const [viewCouponOpen, setViewCouponOpen] = useState(false);
   const [coupon, setCoupon] = useState(null);
-
+  console.log('plan from plan sum',plan);
+  console.log('vehicel from plan summ',vehicle)
   const handleViewCoupon = () => {
     setViewCouponOpen(!viewCouponOpen);
   };
@@ -60,8 +62,10 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
     { label: "Plan Start After", value: planStart ? `${planStart} Hours` : "24 Hours" }
   ];
 
-  const features = plan?.servicesIncluded?.filter(s => s.serviceType === "bool").map(s => ({
+  const excludedServices = ["Validity", "Number of Service Per Year"];
+  const features = plan?.servicesIncluded?.filter(s => !excludedServices.includes(s.serviceName)).map(s => ({
     label: s.serviceName,
+    type: s.serviceType,
     value: s.value
   })) || [];
 
@@ -92,13 +96,16 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
 
     setIsLoading(true);
     try {
+      localStorage.setItem('selectedPlanOfSuccess',JSON.stringify(plan))
       const paymentResponse = await initiatePayment({
         planId: plan._id,
         vehicleNumber: vehicle.vehicleNumber,
         couponCode: coupon?.code || null,
       });
+      localStorage.setItem('paymentResponse',JSON.stringify(paymentResponse.data))
 
       if (paymentResponse.success) {
+        
         setPaymentData(paymentResponse.data);
         setCurrentView("payment");
       } else {
@@ -121,6 +128,27 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
     setPaymentData(null);
   };
 
+  const renderFeatureValue = (feature) => {
+    if (feature.type === "bool") {
+      return feature.value === 1 ? (
+        <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
+          <Check size={13} className="text-white" />
+        </div>
+      ) : (
+        <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center">
+          <X size={13} className="text-white" />
+        </div>
+      );
+    } else if (feature.type === "range") {
+      return <span className="font-semibold">{feature.value} KM</span>;
+    } else if (feature.type === "unlimited") {
+      return <span className="font-semibold">Unlimited</span>;
+    } else if (feature.type === "days") {
+      return <span className="font-semibold">{feature.value} Days</span>;
+    }
+    return <span className="font-semibold">{feature.value}</span>;
+  };
+
   const renderContent = () => {
     if (currentView === "payment") {
       return (
@@ -135,7 +163,9 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
     }
 
     if (currentView === "success") {
-      return <SuccessPurchase onClose={onClose} plan={plan} />;
+      // return <SuccessPurchase onClose={onClose} plan={plan} />;
+      console.log('hit in plan summary')
+      return <FinalDetailsPopup onClose={onClose} plan={plan} vehicle={vehicle} />
     }
 
     return (
@@ -167,33 +197,20 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
         </div>
 
         <div className="bg-white rounded-xl border-0.5 border-[#BCD2F5] overflow-hidden">
-          <div className="flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-0.5 text-[#242424] font-bold text-base">
-            {/* <p className="">Number of Service Per Year</p>
-            <div className="w-5 h-5 flex items-center justify-center mr-20">
-              <span>{servicePerYear?.value || "Unlimited"}</span>
-            </div> */}
-            <p className="whitespace-normal">Number of Service Per Year</p>
-            <p className="">{servicePerYear?.value || "Unlimited"}</p>
+          <div className="flex justify-between items-center bg-[#E9F0FC] text-black md:px-8 px-2 py-3">
+            <div className="text-base font-semibold">Service Name</div>
+            <div className="text-base font-semibold">Service Quantity</div>
           </div>
-
+          
           {features.map((feature, i) => (
             <div
               key={i}
-              className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] border-t-1 ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"
-                }`}
+              className={`flex justify-between items-center md:px-8 px-2 py-4 border-[#BCD2F5] ${i === 0 ? 'border-t-0.5' : 'border-t-1'} ${i % 2 === 0 ? "bg-[#F8F8F8]" : "bg-white"}`}
             >
               <div className="flex items-center gap-2 text-[#242424] text-base font-semibold">
                 <span>{feature.label}</span>
               </div>
-              {feature.value === 1 ? (
-                <div className="w-5 h-5 rounded-full bg-[#21830F] flex items-center justify-center">
-                  <Check size={13} className="text-white" />
-                </div>
-              ) : (
-                <div className="w-5 h-5 rounded-full bg-red-600 flex items-center justify-center ">
-                  <X size={13} className="text-white" />
-                </div>
-              )}
+              {renderFeatureValue(feature)}
             </div>
           ))}
         </div>
@@ -278,7 +295,8 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
   if (currentView === "success") {
     return (
       <React.Suspense fallback={<div>Loading...</div>}>
-        <SuccessPurchase onClose={onClose} plan={plan} />
+        {/* <SuccessPurchase onClose={onClose} plan={plan} /> */}
+        <FinalDetailsPopup onClose={onClose}  plan={plan} />
       </React.Suspense>
     );
   }
@@ -287,13 +305,14 @@ const PlanSummaryPage = ({ isOpen, onClose, onBack, plan, vehicle }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      onBack={currentView === "payment" ? handlePaymentBack : onBack}
+      onBack={onBack}
+      hideBackButton={true}
       proceedButton={
         currentView === "summary" ? (
           <Button
-            text={isLoading ? "Processing..." : "Proceed to Payment"}
+            text={"Buy Amc"}
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg disabled:bg-blue-400"
-            onClick={handleProceedToPayment}
+            onClick={onBuyAmc}
             disabled={isLoading}
           />
         ) : null

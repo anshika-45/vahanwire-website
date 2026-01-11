@@ -12,7 +12,7 @@ export const S3_IMAGES = {
   APPSTORE: `${S3_BASE_URL}/uploads/1763531785920_f12dzp.svg`,
   PLAYSTORE: `${S3_BASE_URL}/uploads/1763531807305_vqb06i.svg`,
   ECOMMERCE_BANNER: `${S3_BASE_URL}/uploads/1763624596044_pwx3xy.png`,
-  ADD_BANNER: `${S3_BASE_URL}/uploads/1763532829891_gquxig.webp`,  
+  ADD_BANNER: `${S3_BASE_URL}/uploads/1763532829891_gquxig.webp`,
   ACCOUNT_BANNER: `${S3_BASE_URL}/uploads/1763624537662_12mdum.png`,
   USER_ICON: `${S3_BASE_URL}/uploads/1763533457863_cyhvf.svg`,
   VEHICLE_ICON: `${S3_BASE_URL}/uploads/1763533616654_pfsawr.svg`,
