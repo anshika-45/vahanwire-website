@@ -1,13 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { S3_IMAGES } from "../constants/images";
 import { Link } from "react-router-dom";
 import FooterIcons from "./FooterIcons";
 import { MapPin, Phone, MailOpenIcon, ChevronDown } from "lucide-react";
-import RegisterMechanic from "../forms/Mechanic";
+import RegisterMechanicForm from "../forms/RegisterMechanicForm";
+import RegisterTowPartnerForm from "../forms/RegisterTowPartnerForm";
+import RegisterServiceStationForm from "../forms/RegisterServiceStationForm";
+import RegisterPetrolPumpForm from "../forms/RegisterPetrolPumpForm";
 
 const Footer = () => {
   const [expandedSections, setExpandedSections] = useState({});
   const [showMechanicForm, setShowMechanicForm] = useState(false);
+  const [showTowForm, setShowTowForm] = useState(false);
+  const [showServiceStationForm, setShowServiceStationForm] = useState(false);
+  const [showPetrolPumpForm, setShowPetrolPumpForm] = useState(false);
+
+  useEffect(() => {
+    const isAnyFormOpen = showMechanicForm || showTowForm || showServiceStationForm || showPetrolPumpForm;
+    if (isAnyFormOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showMechanicForm, showTowForm, showServiceStationForm, showPetrolPumpForm]);
+  
   const toggleSection = (section) => {
     setExpandedSections((prev) => {
       const newState = {
@@ -23,7 +43,7 @@ const Footer = () => {
 
   return (
     <>
-    {showMechanicForm && <RegisterMechanic onClose={() => setShowMechanicForm(false)} />}
+    {showMechanicForm && <RegisterMechanicForm onClose={() => setShowMechanicForm(false)} />}
     <footer className="relative h-auto text-white px-3">
       <div className="absolute inset-0 bg-black z-0"></div>
       <div
@@ -187,24 +207,24 @@ const Footer = () => {
               }`}
             >
               <li>
-                 <button onClick={() => setShowMechanicForm(true)} className="hover:text-white transition py-1 block">
+                 <button onClick={() => setShowMechanicForm(true)} className="hover:text-white transition py-1 block text-left">
                    Register As A Mechanic
                  </button>
                </li>
               <li>
-                <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
+                <button onClick={() => setShowTowForm(true)} className="hover:text-white transition py-1 block text-left">
                   Register As A Tow
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
+                <button onClick={() => setShowServiceStationForm(true)} className="hover:text-white transition py-1 block text-left">
                   Register Your Service Station
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
+                <button onClick={() => setShowPetrolPumpForm(true)} className="hover:text-white transition py-1 block text-left">
                   Register Petrol Pump
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -282,6 +302,42 @@ const Footer = () => {
           © 2025 Vahanwire Technologies Private Limited - All Rights Reserved.
         </div>
       </div>
+
+
+      {showMechanicForm && (
+        <div className="fixed inset-0 backdrop-blur bg-transparent flex items-center justify-center z-50 px-4">
+          <div className="w-auto max-w-5xl">
+            <RegisterMechanicForm onClose={() => setShowMechanicForm(false)} />
+          </div>
+        </div>
+      )}
+
+
+      {showTowForm && (
+        <div className="fixed inset-0 backdrop-blur bg-transparent flex items-center justify-center z-50 px-4">
+          <div className="w-auto max-w-5xl">
+            <RegisterTowPartnerForm onClose={() => setShowTowForm(false)} />
+          </div>
+        </div>
+      )}
+
+
+      {showServiceStationForm && (
+        <div className="fixed inset-0 backdrop-blur bg-transparent flex items-center justify-center z-50 px-4">
+          <div className="w-auto max-w-5xl">
+            <RegisterServiceStationForm onClose={() => setShowServiceStationForm(false)} />
+          </div>
+        </div>
+      )}
+
+
+      {showPetrolPumpForm && (
+        <div className="fixed inset-0 backdrop-blur bg-transparent flex items-center justify-center z-50 px-4">
+          <div className="w-auto max-w-5xl">
+            <RegisterPetrolPumpForm onClose={() => setShowPetrolPumpForm(false)} />
+          </div>
+        </div>
+      )}
     </footer>
     </>
   );
