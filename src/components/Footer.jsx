@@ -3,9 +3,11 @@ import { S3_IMAGES } from "../constants/images";
 import { Link } from "react-router-dom";
 import FooterIcons from "./FooterIcons";
 import { MapPin, Phone, MailOpenIcon, ChevronDown } from "lucide-react";
+import RegisterMechanic from "../forms/Mechanic";
 
 const Footer = () => {
   const [expandedSections, setExpandedSections] = useState({});
+  const [showMechanicForm, setShowMechanicForm] = useState(false);
   const toggleSection = (section) => {
     setExpandedSections((prev) => {
       const newState = {
@@ -20,6 +22,8 @@ const Footer = () => {
   };
 
   return (
+    <>
+    {showMechanicForm && <RegisterMechanic onClose={() => setShowMechanicForm(false)} />}
     <footer className="relative h-auto text-white px-3">
       <div className="absolute inset-0 bg-black z-0"></div>
       <div
@@ -183,10 +187,10 @@ const Footer = () => {
               }`}
             >
               <li>
-                <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
-                  Register As A Mechanic
-                </Link>
-              </li>
+                 <button onClick={() => setShowMechanicForm(true)} className="hover:text-white transition py-1 block">
+                   Register As A Mechanic
+                 </button>
+               </li>
               <li>
                 <Link to="https://provider.vahanwire.com/"   target="_blank" className="hover:text-white transition py-1 block">
                   Register As A Tow
@@ -228,7 +232,9 @@ const Footer = () => {
                   <MapPin size={14} className="text-[#000000] sm:w-4 md:w-4" />
                 </div>
                 <a
-                  href="#"
+                   href="https://maps.google.com/?q=Tower-B,+Noida+One,+819,+Industrial+Area,+Sector+62,+Noida,+Uttar+Pradesh+201309"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="hover:text-white transition text-xs sm:text-sm"
                 >
                   Tower-B, Noida One, 819,
@@ -277,6 +283,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </>
   );
 };
 
