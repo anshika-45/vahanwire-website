@@ -22,6 +22,7 @@ const TermsCondition = React.lazy(() => import("./pages/TermsCondition"));
 const PrivacyPolicy = React.lazy(() => import("./pages/PrivacyPolicy"));
 const PetrolPump = React.lazy(() => import("./pages/PetrolPump"));
 const Mechanic = React.lazy(() => import("./pages/Mechanic"));
+const MechanicForm = React.lazy(() => import("./forms/Mechanic"));
 const Ecommerce = React.lazy(() => import("./pages/ECommerce"));
 const TowTruck = React.lazy(() => import("./pages/TowTruck"));
 const ServiceCenter = React.lazy(() => import("./pages/ServiceCenter"));
@@ -53,6 +54,7 @@ function App() {
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                   <Route path="/petrol-pump" element={<PetrolPump />} />
                   <Route path="/mechanic" element={<Mechanic />} />
+                  <Route path="/mechanic-app" element={<MechanicForm />} />
                   <Route path="/vahan-shop" element={<Ecommerce />} />
                   <Route path="/tow-truck" element={<TowTruck />} />
                   <Route path="/service-center" element={<ServiceCenter />} />

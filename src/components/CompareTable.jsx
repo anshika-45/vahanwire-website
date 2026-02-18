@@ -7,14 +7,13 @@ import { useAMCPlans } from "../context/AmcPlanContext";
 import { createAMCPurchase } from "../api/amcApi";
 import "../index.css";
 
-const CompareTable = ({ plansAre, onBuy, vehicle , selectedCityName}) => {
+const CompareTable = ({ plansAre, onBuy, vehicle, selectedCityName }) => {
   const { vehicleType, amcType } = useAmcData();
   const { fetchPlans, loading } = useAMCPlans();
   const [hoveredCol, setHoveredCol] = useState(null);
   const [hoverStyle, setHoverStyle] = useState({});
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [hoveredIcon, setHoveredIcon] = useState(null);
-  
   const [plans, setPlans] = useState([]);
   const [rawPlans, setRawPlans] = useState([]);
 
@@ -26,10 +25,7 @@ const CompareTable = ({ plansAre, onBuy, vehicle , selectedCityName}) => {
     "standard care": "standard",
     "basic care": "basic",
   };
-  const {
-      setSelectedPlan,
-      selectedPlan
-    } = useAMCPlans();
+  const { setSelectedPlan, selectedPlan } = useAMCPlans();
 
   const getPlanKey = (planName) => {
     const normalized = planName?.toLowerCase();
@@ -162,25 +158,25 @@ const CompareTable = ({ plansAre, onBuy, vehicle , selectedCityName}) => {
   useEffect(() => {
     const loadPlans = async () => {
       let data = [];
-  
+
       if (Array.isArray(plansAre) && plansAre.length > 0) {
         data = plansAre;
       } else if (vehicleType && amcType) {
         data = await fetchPlans(vehicleType, amcType, selectedCityName);
       }
-     
+
       if (!data || data.length === 0) {
         setRawPlans([]);
         setPlans([]);
         return;
       }
-  
+
       setRawPlans(data);
       const mappedPlans = mapPlansData(data);
       mappedPlans.sort((a, b) => a.sorting - b.sorting);
       setPlans(mappedPlans);
     };
-  
+
     loadPlans();
   }, [plansAre, vehicleType, amcType, fetchPlans, selectedCityName]);
 
@@ -203,9 +199,9 @@ const CompareTable = ({ plansAre, onBuy, vehicle , selectedCityName}) => {
       const purchaseData = purchaseResponse.data;
 
       localStorage.setItem("selectedPlan", JSON.stringify({
-        ...plan,
-        purchaseId: purchaseData._id,
-        vehicleNumber: vehicle.vehicleNumber}))
+          ...plan,
+          purchaseId: purchaseData._id,
+          vehicleNumber: vehicle.vehicleNumber}))
 
       setSelectedPlan({
         ...plan,
