@@ -3,7 +3,7 @@ import { S3_IMAGES } from "../constants/images";
 import { Link } from "react-router-dom";
 import FooterIcons from "./FooterIcons";
 import { MapPin, Phone, MailOpenIcon, ChevronDown } from "lucide-react";
-import RegisterMechanicForm from "../forms/RegisterMechanicForm";
+// import RegisterMechanicForm from "../forms/RegisterMechanicForm";
 // import RegisterTowPartnerForm from "../forms/RegisterTowPartnerForm";
 // import RegisterServiceStationForm from "../forms/RegisterServiceStationForm";
 // import RegisterPetrolPumpForm from "../forms/RegisterPetrolPumpForm";
@@ -239,13 +239,16 @@ const Footer = () => {
                 }`}
               >
                 <li>
-                  <button
-                    onClick={() => setShowMechanicForm(true)}
-                    className="hover:text-white transition py-1 block text-left cursor-pointer"
-                  >
-                    Register As A Mechanic
-                  </button>
-                </li>
+                   <Link
+                     to="/mechanic-app"
+                     className="hover:text-white transition py-1 block text-left cursor-pointer"
+                     onClick={() =>
+                       window.scrollTo({ top: 0, behavior: "smooth" })
+                     }
+                   >
+                     Register As A Mechanic
+                   </Link>
+                 </li>
                 <li>
                   <Link
                     to="/tow-truck"
@@ -357,7 +360,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {showMechanicForm && (
+        {/* {showMechanicForm && (
           <div className="fixed inset-0 backdrop-blur bg-transparent flex items-center justify-center z-50 px-4">
             <div className="w-auto max-w-5xl">
               <RegisterMechanicForm
@@ -365,7 +368,7 @@ const Footer = () => {
               />
             </div>
           </div>
-        )}
+        )} */}
 
         {/* {showTowForm && (
         <div className="fixed inset-0 backdrop-blur bg-transparent flex items-center justify-center z-50 px-4">
