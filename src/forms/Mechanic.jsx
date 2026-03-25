@@ -23,7 +23,10 @@ export default function Mechanic() {
             <div className="lg:grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 lg:gap-16 items-center flex flex-col-reverse">
               <div className="relative text-center lg:text-left">
                 <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl py-1 mb-2 sm:mb-3">
-                  We're Coming With
+                  We're Coming With 
+                </h2>
+                  <h2 className="font-bold text-2xl sm:text-3xl md:text-4xl lg:text-5xl py-1 mb-2 sm:mb-3">
+                  Real time
                 </h2>
                 <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 md:gap-6 items-center lg:items-end pb-1 mb-3 sm:mb-4">
                   <h3 className="font-bold text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-transparent bg-clip-text bg-[linear-gradient(to_right,#dc2626_0%,#ca8a04_20%,#16a34a_40%,#2563eb_100%)]">

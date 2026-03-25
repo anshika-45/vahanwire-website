@@ -11,16 +11,15 @@ import { MapPin, Phone, MailOpenIcon, ChevronDown } from "lucide-react";
 const Footer = () => {
   const [expandedSections, setExpandedSections] = useState({});
   const [showMechanicForm, setShowMechanicForm] = useState(false);
-  const [showTowForm, setShowTowForm] = useState(false);
-  const [showServiceStationForm, setShowServiceStationForm] = useState(false);
-  const [showPetrolPumpForm, setShowPetrolPumpForm] = useState(false);
+  // const [showTowForm, setShowTowForm] = useState(false);
+  // const [showServiceStationForm, setShowServiceStationForm] = useState(false);
+  // const [showPetrolPumpForm, setShowPetrolPumpForm] = useState(false);
 
   useEffect(() => {
-    const isAnyFormOpen =
-      showMechanicForm ||
-      showTowForm ||
-      showServiceStationForm ||
-      showPetrolPumpForm;
+    const isAnyFormOpen = showMechanicForm;
+    // showTowForm ||
+    // showServiceStationForm ||
+    // showPetrolPumpForm;
     if (isAnyFormOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -32,9 +31,9 @@ const Footer = () => {
     };
   }, [
     showMechanicForm,
-    showTowForm,
-    showServiceStationForm,
-    showPetrolPumpForm,
+    // showTowForm,
+    // showServiceStationForm,
+    // showPetrolPumpForm,
   ]);
 
   const toggleSection = (section) => {
@@ -77,8 +76,8 @@ const Footer = () => {
                 />
               </Link>
               <p className="text-gray-300 text-[15px] sm:text-base leading-tight mb-4 space-y-0.5">
-                Vahanwire connects you to nearby mechanics, fuel, services,
-                payments, and auto parts — in one Platform.
+                Vahanwire connects you to nearby mechanics, fuel, service
+                centers — in one Platform.
               </p>
               <h2 className="text-lg sm:text-xl font-bold text-white sm:mb-3 py-2">
                 Follow Us
@@ -177,7 +176,7 @@ const Footer = () => {
               >
                 <li>
                   <Link
-                    to="/"
+                    to="/mechanic"
                     className="hover:text-white transition py-1 block"
                     onClick={() =>
                       window.scrollTo({ top: 0, behavior: "smooth" })
@@ -196,7 +195,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/"
+                    to="/service-center"
                     className="hover:text-white transition py-1 block"
                     onClick={() =>
                       window.scrollTo({ top: 0, behavior: "smooth" })
@@ -207,7 +206,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <Link
-                    to="/"
+                    to="/vahan-shop"
                     className="hover:text-white transition py-1 block"
                     onClick={() =>
                       window.scrollTo({ top: 0, behavior: "smooth" })
@@ -239,16 +238,16 @@ const Footer = () => {
                 }`}
               >
                 <li>
-                   <Link
-                     to="/mechanic-app"
-                     className="hover:text-white transition py-1 block text-left cursor-pointer"
-                     onClick={() =>
-                       window.scrollTo({ top: 0, behavior: "smooth" })
-                     }
-                   >
-                     Register As A Mechanic
-                   </Link>
-                 </li>
+                  <Link
+                    to="/mechanic-app"
+                    className="hover:text-white transition py-1 block text-left cursor-pointer"
+                    onClick={() =>
+                      window.scrollTo({ top: 0, behavior: "smooth" })
+                    }
+                  >
+                    Register As A Mechanic
+                  </Link>
+                </li>
                 <li>
                   <Link
                     to="/tow-truck"
@@ -291,7 +290,7 @@ const Footer = () => {
               className="flex items-center justify-between w-full md:w-auto md:pointer-events-none"
             > */}
               <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-4">
-                Contact For AMC Support
+                Contact For Any Support
               </h3>
               {/* <ChevronDown
                 size={18}
@@ -331,6 +330,20 @@ const Footer = () => {
                     className="hover:text-white transition"
                   >
                     info@vahanwire.com
+                  </a>
+                </li>
+                <li className="flex items-center gap-2">
+                  <div className="bg-[#FBBA01] rounded-full p-2 flex-shrink-0">
+                    <MailOpenIcon
+                      size={14}
+                      className="text-[#000000] sm:w-4 md:w-4"
+                    />
+                  </div>
+                  <a
+                    href="mailto:info@vahanwire.com"
+                    className="hover:text-white transition"
+                  >
+                    support@vahanwire.com
                   </a>
                 </li>
                 <li className="flex items-center gap-2">

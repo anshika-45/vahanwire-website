@@ -11,8 +11,8 @@ function SearchBar({ placeholder = "Search..." }) {
   const pages = {
     "Home": "/",
     "About Us": "/about-us",
-    "Vehicle AMC": "/vehicle-amc",
-    "My AMC": "/my-account?view=amc",
+    // "Vehicle AMC": "/vehicle-amc",
+    // "My AMC": "/my-account?view=amc",
     "Mechanic": "/mechanic",
     "Vahan Shop": "/vahan-shop",
     "Petrol Pump": "/petrol-pump",

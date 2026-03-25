@@ -3,26 +3,40 @@ import Tile from "./Tile";
 
 import { S3_IMAGES } from "../constants/images";
 const servicesData = [
-  {
-    icon: S3_IMAGES.TILE_1,
-    title: "AMC",
-    desc: "Your vehicle's yearly care plan - simple, affordable, dependable.",
-    linkText: "Buy AMC",
-    linkHref: "/vehicle-amc",
-  },
+  // {
+  //   icon: S3_IMAGES.TILE_1,
+  //   title: "AMC",
+  //   desc: "Your vehicle's yearly care plan - simple, affordable, dependable.",
+  //   linkText: "Buy AMC",
+  //   linkHref: "/vehicle-amc",
+  // },
   {
     icon: S3_IMAGES.TILE_2,
-    title: "Mechanic",
+    title: "Find Mechanic",
     desc: "Locate verified mechanics near you for instant repairs at home or on-road.",
     linkText: "View Details",
     linkHref: "/mechanic",
   },
   {
     icon: S3_IMAGES.TILE_3,
-    title: "Tow Truck",
+    title: "Find Tow Truck",
     desc: "Stuck on the road? Get fast, GPS-tracked towing support anytime.",
     linkText: "View Details",
     linkHref: "/tow-truck",
+  },
+  {
+    icon: S3_IMAGES.TILE_5,
+    title: "Find Petrol Pump",
+    desc: "Find nearby fuel stations and get fuel delivery in selected areas.",
+    linkText: "View Details",
+    linkHref: "/petrol-pump",
+  },
+  {
+    icon: S3_IMAGES.TILE_6,
+    title: "Book Service",
+    desc: "Book appointments with trusted car & bike service centers in your city.",
+    linkText: "View Details",
+    linkHref: "/service-center",
   },
   {
     icon: S3_IMAGES.TILE_4,
@@ -31,19 +45,13 @@ const servicesData = [
     linkText: "View Details",
     linkHref: "/vahan-shop",
   },
+
   {
-    icon: S3_IMAGES.TILE_5,
-    title: "Petrol Pump",
-    desc: "Find nearby fuel stations and get fuel delivery in selected areas.",
+    icon: S3_IMAGES.TILE_1,
+    title: "Vahan Money",
+    desc: "A Smart Wallet To Manage Your Service Income And Transactions.",
     linkText: "View Details",
-    linkHref: "/petrol-pump",
-  },
-  {
-    icon: S3_IMAGES.TILE_6,
-    title: "Service Center",
-    desc: "Book appointments with trusted car & bike service centers in your city.",
-    linkText: "View Details",
-    linkHref: "/service-center",
+    linkHref: "/vahan-money",
   },
 ];
 const Services = React.memo(() => {
@@ -55,9 +63,9 @@ const Services = React.memo(() => {
         </h1>
         <div className="flex items-center justify-center">
           <p className="text-[14px] sm:text-lg md:text-md text-[#5C5C5C] text-center pt-2 md:pt-4 lg:w-[50%] md:w-[60%] w-[90%]">
-          Explore a full range of essential vehicle and home services —
-          from mechanic support to doorstep repairs, towing, payments, and more.
-        </p> 
+            Explore a full range of essential vehicle and home services — from
+            mechanic support to doorstep repairs, towing, payments, and more.
+          </p>
         </div>
         <div className="mt-5 sm:mt-8 md:mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-[30px] justify-items-center">
           {servicesData.map((service, index) => (
