@@ -1,7 +1,9 @@
 import React, { Suspense } from "react";
 const AddBanner = React.lazy(() => import("../components/AddBanner"));
 const PageBanner = React.lazy(() => import("../components/PageBanner"));
-const TwoColumnInfoLayout = React.lazy(() => import("../components/TwoColumnInfoLayout"));
+const TwoColumnInfoLayout = React.lazy(
+  () => import("../components/TwoColumnInfoLayout"),
+);
 import { S3_IMAGES } from "../constants/images";
 const ComponentFallback = () => (
   <div className="flex items-center justify-center md:py-8 sm:py-3 py-8">
@@ -52,7 +54,9 @@ const PrivacyPolicy = () => {
     },
     {
       title: "Timeline For Refund",
-      content: ["Refunds, once approved, will be processed within 30 working days."],
+      content: [
+        "Refunds, once approved, will be processed within 30 working days.",
+      ],
     },
     {
       title: "Contact For Refund Requests",
@@ -72,6 +76,12 @@ const PrivacyPolicy = () => {
       ],
     },
     {
+      title: "Location Information",
+      content: [
+        "We may collect and use your device’s location data to provide location-based services, such as identifying nearby service providers, improving user experience, and ensuring accurate service delivery.Location data may be collected when the app is running in the foreground or background, depending on the features you use.We do not share your location data with third parties except as necessary to provide our services or comply with legal obligations.",
+      ],
+    },
+    {
       title: "Security",
       content: [
         "We employ encryption, secure payment gateways, and access control protocols to ensure your data remains protected.",
@@ -83,9 +93,15 @@ const PrivacyPolicy = () => {
     <div className="bg-[rgba(244,244,244,1)]">
       <div>
         <Suspense fallback={<ComponentFallback />}>
-          <PageBanner title="Privacy Policy" subtitle="We may update or amend this Privacy Policy at any time without prior notice. We encourage you to review this page periodically for any changes."  image={S3_IMAGES.PRIVACY_POLICY} useGradientTitle={false}
-  useDarkOverlay={false} showTicker={false}
- height="250px"/>
+          <PageBanner
+            title="Privacy Policy"
+            subtitle="We may update or amend this Privacy Policy at any time without prior notice. We encourage you to review this page periodically for any changes."
+            image={S3_IMAGES.PRIVACY_POLICY}
+            useGradientTitle={false}
+            useDarkOverlay={false}
+            showTicker={false}
+            height="250px"
+          />
         </Suspense>
       </div>
       <div>
@@ -93,7 +109,6 @@ const PrivacyPolicy = () => {
           <TwoColumnInfoLayout title="Privacy Policy" sections={sections} />
         </Suspense>
       </div>
-
     </div>
   );
 };
