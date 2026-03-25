@@ -20,7 +20,7 @@ export default function MainLayout() {
   const isHome = pathname === "/";
   const stackRef = useRef(null);
 
-  const [topOffset, setTopOffset] = useState(0);
+  const [TopOffset, setTopOffset] = useState(0);
 
   useLayoutEffect(() => {
     if (!stackRef.current) return;

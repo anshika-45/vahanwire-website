@@ -8,7 +8,7 @@ const PageBanner = ({
   useGradientTitle = true,
   useDarkOverlay = true,
   height = null,
-  showTicker = true,
+  // showTicker = true,
 }) => {
   const responsiveHeight = "h-[40vh] sm:h-[40vh] md:h-[60vh] lg:h-[70vh]";
 

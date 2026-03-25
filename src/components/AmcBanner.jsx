@@ -1,7 +1,7 @@
 import React from "react";
 import { S3_IMAGES } from "../constants/images";
 import Button from "./Button";
-const AmcBanner = ({ onBuy }) => {
+const AmcBanner = () => {
 
   return (
     <section className="w-full py-6 sm:py-8 md:py-10 bg-white flex justify-center  sm:mb-8">
@@ -9,7 +9,7 @@ const AmcBanner = ({ onBuy }) => {
         <div className="relative rounded-3xl overflow-hidden shadow-lg">
           <img
             src={S3_IMAGES.DRIVE_BANNER}
-            alt="Drive worry-free with Vahanwire AMC. Get annual maintenance, priority support, and on-road assistance. Buy Now."
+            alt="You Drive, We Care, Anytime, Anywhere. Connect With Mechanics, Compare Offers And Get Service At Your Price."
             loading="eager"
             className="w-full h-[200px] sm:h-[280px] md:h-[380px] object-cover"
           />
@@ -19,30 +19,30 @@ const AmcBanner = ({ onBuy }) => {
 
               className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 leading-tight md:block hidden text-justify "
             >
-              DRIVE WORRY-FREE <br /> WITH VAHANWIRE AMC
+              You Drive, We Care<br></br> Anytime, Anywhere
             </h2>
             <h2
 
               className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 leading-tight  md:hidden block "
             >
-              DRIVE WORRY-FREE WITH VAHANWIRE AMC
+              You Drive, We Care, Anytime, Anywhere.
             </h2>
             <p className="text-xs sm:text-sm md:text-[15px] text-justify max-w-xs sm:max-w-lg mb-3 sm:mb-4 md:block hidden">
-              Get Annual Maintenance, Priority Support, And On-Road Assistance
-              <br></br> — All Under One Affordable Plan Designed For Your
-              Vehicle.
+            Connect With Mechanics, Compare Offers 
+              <br></br> — And Get Service At Your Price.
             </p>
             <p className="text-xs sm:text-sm md:text-[15px] text-justify max-w-xs sm:max-w-lg mb-3 sm:mb-4 md:hidden block">
-              Get Annual Maintenance, Priority Support, And On-Road Assistance — All Under One Affordable Plan Designed For Your
-              Vehicle.
+              {/* Get Annual Maintenance, Priority Support, And On-Road Assistance — All Under One Affordable Plan Designed For Your
+              Vehicle. */}
+              Connect With Mechanics, Compare Offers, And Get Service At Your Price.
             </p>
-            <div className="w-fit">
+            {/* <div className="w-fit">
               <Button
                 text="Buy Now"
                 className="text-black font-bold bg-[#FBBA01] p-2 sm:p-3 px-4 sm:px-6 text-xs sm:text-sm"
                 onClick={onBuy}
               />
-            </div>
+            </div> */}
           </div>
           <img
             loading="lazy"

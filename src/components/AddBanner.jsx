@@ -32,12 +32,10 @@ const AddBanner = () => {
                   Your Vehicle's Best Friend In One App
                 </h2>
                 <p className="text-[#5C5C5C] hidden lg:block mt-2 md:mt-4 lg:text-lg text-[14.5px]">
-                  Find nearby mechanics, book services, get on-road <br />
-                  assistance, and manage your vehicle
+                Find Mechanic, Book Service, Find Tow, <br></br> Buy Vehicle Parts.
                 </p>
                 <p className="text-[#5C5C5C] block lg:hidden mt-2 md:mt-4 lg:text-lg text-[14.5px]">
-                  Find nearby mechanics, book services, get on-road assistance,
-                  and manage your vehicle
+                Find Mechanic, Book Service, Find Tow,  Buy Vehicle Parts.
                 </p>
               </div>
               <div className="mt-2 lg:mt-8">
@@ -89,10 +87,10 @@ const AddBanner = () => {
                 </h2>
                 <p className="text-[#5C5C5C] lg:block hidden mt-2 md:mt-4 lg:text-lg text-[14.5px]">
                   Join Vahanwire and start receiving service <br />
-                  requests instantly.
+                  requests.
                 </p>
                 <p className="text-[#5C5C5C] lg:hidden block mt-2 md:mt-4 lg:text-lg text-[14.5px]">
-                  Join Vahanwire and start receiving service requests instantly.
+                  Join Vahanwire and start receiving service requests.
                 </p>
               </div>
               <div className="mt-2 lg:mt-8">

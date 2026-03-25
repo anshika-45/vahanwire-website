@@ -43,12 +43,12 @@ const slides = [
     desc: "Quick and safe power boost.",
     img: S3_IMAGES.POST_4,
   },
-  {
-    id: 17,
-    title: "Mechanic Service",
-    desc: "Instant roadside assistance.",
-    img: S3_IMAGES.AMC_SLIDER,
-  },
+  // {
+  //   id: 17,
+  //   title: "Mechanic Service",
+  //   desc: "Instant roadside assistance.",
+  //   img: S3_IMAGES.AMC_SLIDER,
+  // },
   {
     id: 18,
     title: "AMC Plan",
@@ -129,7 +129,7 @@ export default function Slider() {
           modules={[Autoplay, Pagination, Navigation]}
           className="mySwiper"
         >
-          {slides.map((s, index) => {
+          {slides.map((s) => {
             return (
               <SwiperSlide key={s.id}>
                 <div className=" w-full lg:h-[270px] h-[240px] md:p-0 p-3">

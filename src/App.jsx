@@ -25,6 +25,7 @@ const Mechanic = React.lazy(() => import("./pages/Mechanic"));
 const MechanicForm = React.lazy(() => import("./forms/Mechanic"));
 const Ecommerce = React.lazy(() => import("./pages/ECommerce"));
 const TowTruck = React.lazy(() => import("./pages/TowTruck"));
+const VahanMoney = React.lazy(() => import("./pages/VahanMoney"));
 const ServiceCenter = React.lazy(() => import("./pages/ServiceCenter"));
 
 const LoadingFallback = () => (
@@ -57,6 +58,7 @@ function App() {
                   <Route path="/mechanic-app" element={<MechanicForm />} />
                   <Route path="/vahan-shop" element={<Ecommerce />} />
                   <Route path="/tow-truck" element={<TowTruck />} />
+                  <Route path="/vahan-money" element={<VahanMoney />} />
                   <Route path="/service-center" element={<ServiceCenter />} />
                   <Route 
                     path="/my-account" 

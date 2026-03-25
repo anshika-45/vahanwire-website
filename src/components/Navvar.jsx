@@ -6,12 +6,13 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const menuItems = [
     { name: "Home", path: "/" },
-    { name: "Vehicle AMC", path: "/vehicle-amc" },
-    { name: "Mechanic", path: "/mechanic" },
-    { name: "Tow Truck", path: "/tow-truck" },
+    // { name: "Vehicle AMC", path: "/vehicle-amc" },
+    { name: "Find Mechanic ", path: "/mechanic" },
+    { name: "Find Tow Truck", path: "/tow-truck" },
+    { name: "Find Petrol Pump", path: "/petrol-pump" },
+    { name: "Book Service", path: "/service-center" },
     { name: "Vahan Shop", path: "/vahan-shop" },
-    { name: "Petrol Pump", path: "/petrol-pump" },
-    { name: "Service Center", path: "/service-center" },
+        { name: "Vahan Money", path: "/vahan-money" },
   ];
   const handleLinkClick = () => {
     setIsOpen(false);
