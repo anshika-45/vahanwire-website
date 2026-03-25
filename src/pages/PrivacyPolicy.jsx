@@ -78,9 +78,10 @@ const PrivacyPolicy = () => {
     {
       title: "Location Information",
       content: [
-        "We may collect and use your device’s location data to provide location-based services, such as identifying nearby service providers, improving user experience, and ensuring accurate service delivery.",
-        "Location data may be collected when the app is running in the foreground or background, depending on the features you use.",
-        "We do not share your location data with third parties except as necessary to provide our services or comply with legal obligations.",
+        "Our app collects and uses location data to enable core features such as identifying nearby service providers, assigning service requests, and enabling real-time tracking of services.",
+        "We collect location data while the app is in use (foreground) and, where necessary, even when the app is closed or not in use (background), to ensure uninterrupted service functionality such as live service tracking and updates.",
+        "Background location access is used only for essential features of the app and is not used for advertising or unnecessary tracking.",
+        "We do not sell or rent your location data. Location data is shared only with relevant service providers or partners strictly for fulfilling the requested services and as required by law.",
       ],
     },
     {
