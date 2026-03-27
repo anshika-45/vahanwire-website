@@ -10,9 +10,9 @@ function BreadcrumbBar() {
   if (pathname === "/") return null;
   if (pathname === "/my-account") {
     view = searchParams.get("view") || "profile";
-    const displayView =
-      view === "amc" ? "AMC" : view.charAt(0).toUpperCase() + view.slice(1);
-    pathnames.push(displayView);
+    // const displayView =
+    //   view === "amc" ? "AMC" : view.charAt(0).toUpperCase() + view.slice(1);
+    // pathnames.push(displayView);
   }
   return (
     <div className="hidden md:block bg-[#FAFAFA] text-gray-600 text-sm px-4 md:px-8 lg:px-16 xl:px-[100px] py-2 md:py-2 border-t border-gray-300 w-full overflow-x-auto">

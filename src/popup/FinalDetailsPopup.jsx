@@ -1,9 +1,9 @@
 import { Check, Link, X } from 'lucide-react'
 import React, { useEffect } from 'react'
-import { useAMCPlans } from '../context/AmcPlanContext';
+// import { useAMCPlans } from '../context/AmcPlanContext';
 
-export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
-
+export default function FinalDetailsPopup({ vehicle }) {
+// onClose, plan, in function shift in bractes 
     const purchaseData =JSON.parse(localStorage.getItem('selectedPlanOfSuccess'))
     const paymentResult = JSON.parse(localStorage.getItem('paymentResponse'));
     const vehicleOfSuccessPurchase = paymentResult?.purchase?.vehicle;
@@ -175,9 +175,9 @@ export default function FinalDetailsPopup({ onClose, plan, vehicle }) {
                 </div>
                 <footer>
 
-                    <div className="w-full p-1 border-t rounded-b-md border-gray-200 bg-white sticky bottom-0">
+                    {/* <div className="w-full p-1 border-t rounded-b-md border-gray-200 bg-white sticky bottom-0">
                         <a href={'/my-account?view=amc'} className='w-full p-2  bg-blue-500 rounded-md text-white block text-center  bottom-0'>View My AMC </a>
-                    </div>
+                    </div> */}
                 </footer>
 
 

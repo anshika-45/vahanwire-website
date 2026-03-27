@@ -1,6 +1,7 @@
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense } from "react";
+// , useEffect
 import { useNavigate } from "react-router-dom";
-import { useAmcData } from "../context/AmcDataContext";
+// import { useAmcData } from "../context/AmcDataContext";
 
 const Faq = React.lazy(() => import("../components/Faq"));
 const Banner = React.lazy(() => import("../components/Banner"));
@@ -21,11 +22,11 @@ const ComponentFallback = () => (
 const Homepage = () => {
   const navigate = useNavigate();
 
-  const { clearFilter } = useAmcData();
+  // const { clearFilter } = useAmcData();
 
-  useEffect(() => {
-    clearFilter();
-  }, []);
+  // useEffect(() => {
+  //   clearFilter();
+  // }, []);
 
 
   const handleBuyAmc = () => {

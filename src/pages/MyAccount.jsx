@@ -5,8 +5,8 @@ import AccountBanner from "../components/AccountBanner";
 import AccountSidebar from "../components/AccountSidebar";
 
 const ProfileForm = React.lazy(() => import("../components/ProfileForm"));
-const CarCards = React.lazy(() => import("../components/CarCards"));
-const MyAMCPage = React.lazy(() => import("../components/MyAMCPage"));
+// const CarCards = React.lazy(() => import("../components/CarCards"));
+// const MyAMCPage = React.lazy(() => import("../components/MyAMCPage"));
 
 const ContentLoader = () => (
   <div className="flex items-center justify-center min-h-64">

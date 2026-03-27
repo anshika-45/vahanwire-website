@@ -1,35 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 
-export default function AnimatedTextTicker({
+export default function AnimatedText({
   texts = [],
   interval = 1600,
-  outMs = 360,   
-  inMs = 560,     
-  className = "", 
+  outMs = 360,
+  inMs = 560,
+  className = "",
 }) {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState("idle");
   const [incomingIndex, setIncomingIndex] = useState(1);
   const timerRef = useRef(null);
 
-  if (!texts || texts.length === 0) return null;
+  const currentText = texts[index];
+  const nextIndex = (index + 1) % texts.length;
 
-  if (texts.length === 1) {
-    return (
-      <div
-        className={`relative overflow-visible h-20 sm:h-24 md:h-26 ${className}`}
-        style={{ lineHeight: 1.2, display: "flex", alignItems: "center", paddingBottom: "8px" }}
-      >
-        <span
-          className="absolute inset-0 flex items-start text-5xl sm:text-7xl md:text-8xl font-medium tracking-tight
-                     bg-gradient-to-r from-[#1E9600] via-[#FFF200] to-[#FF0000]
-                     bg-clip-text text-transparent whitespace-nowrap leading-[1.2] align-middle"
-        >
-          {texts[0]}
-        </span>
-      </div>
-    );
-  }
 
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
@@ -38,9 +23,6 @@ export default function AnimatedTextTicker({
     }
     return () => timerRef.current && clearTimeout(timerRef.current);
   }, [phase, interval]);
-
-  const currentText = texts[index];
-  const nextIndex = (index + 1) % texts.length;
 
   useEffect(() => {
     if (phase === "out") {
@@ -54,10 +36,39 @@ export default function AnimatedTextTicker({
     setPhase("idle");
   };
 
+  if (!texts || texts.length === 0) return null;
+
+  if (texts.length === 1) {
+    return (
+      <div
+        className={`relative overflow-visible h-20 sm:h-24 md:h-26 ${className}`}
+        style={{
+          lineHeight: 1.2,
+          display: "flex",
+          alignItems: "center",
+          paddingBottom: "8px",
+        }}
+      >
+        <span
+          className="absolute inset-0 flex items-start text-5xl sm:text-7xl md:text-8xl font-medium tracking-tight
+                     bg-gradient-to-r from-[#1E9600] via-[#FFF200] to-[#FF0000]
+                     bg-clip-text text-transparent whitespace-nowrap leading-[1.2] align-middle"
+        >
+          {texts[0]}
+        </span>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`relative overflow-hidden h-20 sm:h-24 md:h-28 pl-5 ${className}`}
-      style={{ lineHeight: 1.2, display: "flex", alignItems: "center", paddingBottom: "8px" }}
+      style={{
+        lineHeight: 1.2,
+        display: "flex",
+        alignItems: "center",
+        paddingBottom: "8px",
+      }}
       aria-live="polite"
     >
       {phase === "idle" && (
@@ -91,7 +102,9 @@ export default function AnimatedTextTicker({
       {phase === "in" && (
         <div
           className="absolute inset-0 flex items-center will-change-transform"
-          style={{ animation: `slideUpInBounce ${inMs}ms cubic-bezier(0.22,1,0.36,1) forwards` }}
+          style={{
+            animation: `slideUpInBounce ${inMs}ms cubic-bezier(0.22,1,0.36,1) forwards`,
+          }}
           onAnimationEnd={handleInEnd}
         >
           <span
