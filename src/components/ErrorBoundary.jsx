@@ -6,6 +6,7 @@ class ErrorBoundary extends React.Component {
     this.state = { hasError: false, error: null, errorInfo: null };
   }
 
+  // eslint-disable-next-line no-unused-vars
   static getDerivedStateFromError(error) {
     return { hasError: true };
   }
@@ -37,7 +38,7 @@ class ErrorBoundary extends React.Component {
               Refresh Page
             </button>
 
-            {process.env.NODE_ENV === "development" && (
+            {import.meta.env.MODE === "development" && (
               <details className="mt-4 text-left">
                 <summary className="cursor-pointer text-red-700 hover:text-red-800">
                   Error Details (Development Only)
