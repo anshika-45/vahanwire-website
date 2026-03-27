@@ -26,16 +26,17 @@ const Header = () => {
    const pages = {
     "Home": "/",
     "About Us": "/about-us",
-    "Vehicle AMC": "/vehicle-amc",
-    "My AMC": "/my-account?view=amc",
+    // "Vehicle AMC": "/vehicle-amc",
+    // "My AMC": "/my-account?view=amc",
     "Mechanic": "/mechanic",
     "Vahan Shop": "/vahan-shop",
     "Petrol Pump": "/petrol-pump",
     "Tow Truck": "/tow-truck",
+    "Vahan Money": "/vahan-money",
     "Service Center": "/service-center",
     "My Profile": "/my-account?view=profile",
-    "My Vehicles": "/my-account?view=vehicles",
-    "Contact Us": "/contact-us",
+    // "My Vehicles": "/my-account?view=vehicles",
+    // "Contact Us": "/contact-us",
   };
 
   const handleChange = (e) => {

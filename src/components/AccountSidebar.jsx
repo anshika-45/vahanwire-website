@@ -2,23 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { S3_IMAGES } from "../constants/images";
 import { LogOut } from "lucide-react";
-import { getUserVehiclesAMC } from "../api/vehicleApi";
+// import { getUserVehiclesAMC } from "../api/vehicleApi";
 import { logoutUser } from "../api/authApi";
 
 const AccountSidebar = ({ activeView, setActiveView }) => {
   const { logout } = useAuth();
-  const [vehicleCount, setVehicleCount] = useState(0);
+  // const [vehicleCount, setVehicleCount] = useState(0);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const fetchVehicleCount = async () => {
-      try {
-        const vehicles = await getUserVehiclesAMC();
-        setVehicleCount(vehicles.length);
-      } catch (error) {
-        setVehicleCount(0);
-        console.error("Error fetching vehicle count:", error);
-      }
+      // try {
+      //   const vehicles = await getUserVehiclesAMC();
+      //   setVehicleCount(vehicles.length);
+      // } catch (error) {
+      //   setVehicleCount(0);
+      //   console.error("Error fetching vehicle count:", error);
+      // }
     };
     fetchVehicleCount();
 
@@ -48,14 +48,14 @@ const AccountSidebar = ({ activeView, setActiveView }) => {
 
   const sidebarItems = [
     { id: "profile", label: "My Profile", img: S3_IMAGES.USER_ICON, alt: "profileIcon" },
-    {
-      id: "vehicles",
-      label: "My Vehicle",
-      img: S3_IMAGES.VEHICLE_ICON,
-      alt: "vehicleIcon",
-      badge: vehicleCount > 0 ? vehicleCount : null,
-    },
-    { id: "amc", label: "My AMC", img: S3_IMAGES.MONEY_ICON, alt: "moneyIcon" },
+    // {
+    //   id: "vehicles",
+    //   label: "My Vehicle",
+    //   img: S3_IMAGES.VEHICLE_ICON,
+    //   alt: "vehicleIcon",
+    //   badge: vehicleCount > 0 ? vehicleCount : null,
+    // },
+    // { id: "amc", label: "My AMC", img: S3_IMAGES.MONEY_ICON, alt: "moneyIcon" },
   ];
 
   return (

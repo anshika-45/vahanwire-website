@@ -326,10 +326,10 @@ const Footer = () => {
                     />
                   </div>
                   <a
-                    href="mailto:info@vahanwire.com"
+                    href="mailto:support@vahanwire.com"
                     className="hover:text-white transition"
                   >
-                    info@vahanwire.com
+                    support@vahanwire.com
                   </a>
                 </li>
                 <li className="flex items-center gap-2">
@@ -343,7 +343,7 @@ const Footer = () => {
                     href="mailto:info@vahanwire.com"
                     className="hover:text-white transition"
                   >
-                    support@vahanwire.com
+                    info@vahanwire.com
                   </a>
                 </li>
                 <li className="flex items-center gap-2">

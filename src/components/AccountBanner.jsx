@@ -1,6 +1,6 @@
 import React from "react";
 import { S3_IMAGES } from "../constants/images";
-const divClasses = 'h-[160px] sm:h-[200px] md:h-[240px] lg:h-[300px] xl:h-[360px] 2xl:h-[420px]'
+// const divClasses = 'h-[160px] sm:h-[200px] md:h-[240px] lg:h-[300px] xl:h-[360px] 2xl:h-[420px]'
 const AccountBanner = () => {
   return (
     <div

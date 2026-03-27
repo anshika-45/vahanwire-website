@@ -1,6 +1,7 @@
-import React, { lazy, Suspense } from "react";
+import React, { Suspense } from "react";
+// lazy,
 import { S3_IMAGES } from "../constants/images";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import AnimatedText from "./AnimatedText";
 // import SantaSleigh from "./SantaSleigh";
 

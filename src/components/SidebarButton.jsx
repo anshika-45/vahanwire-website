@@ -8,8 +8,8 @@ const SidebarButton = ({ iconClass, label, extra }) => {
     (label === "My AMC" && location.pathname === "/account/amc");
   const pathMap = {
     "My Profile": "/account/profile",
-    "My Vehicle's": "/account/vehicles",
-    "My AMC": "/account/amc",
+    // "My Vehicle's": "/account/vehicles",
+    // "My AMC": "/account/amc",
   };
   return (
     <Link

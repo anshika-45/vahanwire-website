@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-import { AmcDataProvider } from "./context/AmcDataContext.jsx";
-import { AMCPlansProvider } from './context/AmcPlanContext.jsx';
+// import { AmcDataProvider } from "./context/AmcDataContext.jsx";
+// import { AMCPlansProvider } from './context/AmcPlanContext.jsx';
 import { CityProvider } from "./context/CityContext";
 import MainLayout from "./layouts/MainLayout";
 import ScrollToTop from "./components/ScrollToTop";
@@ -39,16 +39,16 @@ function App() {
     <ErrorBoundary>
       <CityProvider>
       <AuthProvider>
-        <AmcDataProvider>
-        <AMCPlansProvider>
+        {/* <AmcDataProvider>
+        <AMCPlansProvider> */}
           <BrowserRouter>
             <ScrollToTop />
             <Suspense fallback={<LoadingFallback />}>
               <Routes>
                 <Route element={<MainLayout />}>
                   <Route path="/" element={<Homepage />} />
-                  <Route path="/vehicle-amc" element={<VehicleAmc />} />
-                  <Route path="/vehicle-amc-filter" element={<VehicleAmcFilter />} />
+                  {/* <Route path="/vehicle-amc" element={<VehicleAmc />} />
+                  <Route path="/vehicle-amc-filter" element={<VehicleAmcFilter />} /> */}
                   <Route path="/about-us" element={<AboutUs />} />
                   <Route path="/contact-us" element={<ContactUs />} />
                   <Route path="/terms-condition" element={<TermsCondition />} />
@@ -75,8 +75,8 @@ function App() {
               </Routes>
             </Suspense>
           </BrowserRouter>
-        </AMCPlansProvider>
-        </AmcDataProvider>
+        {/* </AMCPlansProvider>
+        </AmcDataProvider> */}
       </AuthProvider>
       </CityProvider>
     </ErrorBoundary>

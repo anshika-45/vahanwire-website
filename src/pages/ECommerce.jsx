@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import { S3_IMAGES } from "../constants/images";
 import PageBanner from "../components/PageBanner";
 
