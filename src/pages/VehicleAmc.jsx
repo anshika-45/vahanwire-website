@@ -1,13 +1,15 @@
 import React, { useState, Suspense, useEffect } from "react";
-import AMC from "../components/AMC";
-import { useAmcData } from "../context/AmcDataContext";
+// import AMC from "../components/AMC";
+
+// import { useAmcData } from "../context/AmcDataContext";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AMCCards from "../components/AmcCard";
 import { useCity } from "../context/CityContext";
-import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
+// import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
+
 import PlanSummaryPage from "../popup/PlanSummaryPage";
-import { useAMCPlans } from "../context/AmcPlanContext";
+// import { useAMCPlans } from "../context/AmcPlanContext";
 
 const AmcTabs = React.lazy(() => import("../components/AmcTabs"));
 const CompareTable = React.lazy(() => import("../components/CompareTable"));
@@ -38,16 +40,16 @@ const ComponentLoader = () => (
 );
 
 const VehicleAmc = () => {
-  const { features, vehicleType, setVehicleType, filterActive, filterData, clearFilter } =
-    useAmcData();
+// const { features, vehicleType, setVehicleType, filterActive, filterData, clearFilter } =
+  //   useAmcData();
   const { isLoggedIn } = useAuth();
   const { selectedCityName } = useCity();
   const navigate = useNavigate();
 
-  const {
-    setSelectedPlan,
-    selectedPlan
-  } = useAMCPlans();
+  // const {
+    // setSelectedPlan,
+    // selectedPlan
+  // } = useAMCPlans();
 
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isVehicleOpen, setIsVehicleOpen] = useState(false);
@@ -114,40 +116,40 @@ const VehicleAmc = () => {
     handlePlanBuy(plan, vehicleData);
   };
 
-  const checkUserVehicles = async () => {
-    try {
-      const vehicles = await getUserVehicleWithoutAMC();
-      return vehicles && vehicles.length > 0;
-    } catch (error) {
-      console.error("Error checking vehicles:", error);
-      return false;
-    }
-  };
+  // TODO: AMC - checkUserVehicles and handleBuyAmc commented for deployment safety
+  // const checkUserVehicles = async () => {
+  //   try {
+  //     const vehicles = await getUserVehicleWithoutAMC();
+  //     return vehicles && vehicles.length > 0;
+  //   } catch (error) {
+  //     console.error("Error checking vehicles:", error);
+  //     return false;
+  //   }
+  // };
 
-  const handleBuyAmc = async () => {
+  // const handleBuyAmc = async () => {
+  //   handleClosePlanSummary()
+  //   if (isLoggedIn) {
+  //     const hasVehicles = await checkUserVehicles();
+  //     if (hasVehicles) {
+  //       setIsVehicleOpen(false);
+  //       setIsSelectVehicleOpen(true);
+  //     } else {
+  //       setIsSelectVehicleOpen(false);
+  //       setIsVehicleOpen(true);
+  //     }
+  //   } else {
+  //     setIsVerifyOpen(true);
+  //   }
+  // }
 
-    handleClosePlanSummary()
-
-    if (isLoggedIn) {
-      const hasVehicles = await checkUserVehicles();
-      if (hasVehicles) {
-        setIsVehicleOpen(false);
-        setIsSelectVehicleOpen(true);
-      } else {
-        setIsSelectVehicleOpen(false);
-        setIsVehicleOpen(true);
-      }
-    } else {
-      setIsVerifyOpen(true);
-    }
-
-  }
 
   return (
     <section className="w-full">
-      <AMC vehicleType={vehicleType} setVehicleType={setVehicleType} />
+      {/* TODO: AMC Features commented out for safe deployment */}
+      {/* <AMC vehicleType="car" setVehicleType={() => {}} /> */}
 
-      <div className="container space-y-8 sm:space-y-10 mb-12">
+      {/* <div className="container space-y-8 sm:space-y-10 mb-12">
         <Suspense fallback={<ComponentLoader />}>
           <AmcTabs />
         </Suspense>
@@ -162,7 +164,7 @@ const VehicleAmc = () => {
 
       <Suspense fallback={<TableLoader />}>
         <CompareTable
-          features={features}
+          features={[]}
           onBuy={handlePlanBuy}
           selectedCityName={selectedCityName}
         />
@@ -205,7 +207,11 @@ const VehicleAmc = () => {
           vehicle={selectedVehicle}
           onBuyAmc={handleBuyAmc}
         />
-      </Suspense>
+      </Suspense> */}
+      <div className="container py-12 text-center">
+        <h1>AMC Page - Features temporarily disabled for deployment</h1>
+        <p>Will be enabled soon.</p>
+      </div>
     </section>
   );
 };

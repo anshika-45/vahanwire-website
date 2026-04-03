@@ -1,13 +1,15 @@
 import React, { useState, Suspense, useEffect } from "react";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
-import { addUserVehicleWithoutAMC, searchUserVehicle } from "../api/vehicleApi";
+// import { addUserVehicleWithoutAMC, searchUserVehicle } from "../api/vehicleApi";
 const SelectVehicle = React.lazy(() => import("./SelectVehicle"));
-import { useAmcData } from "../context/AmcDataContext";
+ // import { useAmcData } from "../context/AmcDataContext";
 const DEFAULT_VEHICLE_TYPE = "car";
 
 const EnterVehicleNumber = ({ isOpen, onClose, onBack, plan }) => {
-   const { vehicleType } = useAmcData();
+  // TODO: AMC - useAmcData commented for deployment - using DEFAULT_VEHICLE_TYPE
+  // const { vehicleType } = useAmcData();
+  const vehicleType = DEFAULT_VEHICLE_TYPE;
   const [ formData, setFormData ] = useState({
      vehicleNumber: "",
      brand: "",
@@ -99,60 +101,61 @@ const validateModel = (v) => {
 };
 
 
-const handleSearch = async () => {
-  const err = validateVehicleNumber(formData.vehicleNumber);
-
-  if (err) {
-    setErrors((prev) => ({ ...prev, vehicleNumber: err }));
-    return;
-  }
-
-  setIsLoading(true);
-
-  try{
-     const response = await searchUserVehicle(formData.vehicleNumber);
-
-     setIsLoading(false);
-
-     const data = response?.data || response;
-
-     if (!data.found) {
-      setShowModel(true);
-      return;
-    }
-
-    if (data.alreadyRegisteredByOtherUser) {
-      setErrors((prev) => ({
-        ...prev,
-        vehicleNumber: "This vehicle is already registered by another user.",
-      }));
-      return;
-    }
-
-    if (data.hasAMC) {
-      setErrors((prev) => ({
-        ...prev,
-        vehicleNumber: `This vehicle already has an active AMC plan (${data?.amcDetails?.planName || " "})`,
-      }));
-      return;
-    }
-
-    if (data.vehicle) {
-      setVehicleData({
-        vehicleNumber: data.vehicle.vehicleNumber,
-        brand: data.vehicle.brand,
-        model: data.vehicle.model,
-        vehicleType: data.vehicle.vehicleType || DEFAULT_VEHICLE_TYPE,
-        id: data.vehicle._id || data.vehicle.id 
-      });
-      setShowSelectVehicle(true);
-    }
-  }catch(error){
-    setIsLoading(false);
-    const message = error?.response?.data?.message || error?.message || "Error Searching Message";
-    setErrors((prev) => ({ ...prev, vehicleNumber: message })); 
-  }
-}
+// TODO: AMC - handleSearch commented for deployment
+// const handleSearch = async () => {
+//   const err = validateVehicleNumber(formData.vehicleNumber);
+// 
+//   if (err) {
+//     setErrors((prev) => ({ ...prev, vehicleNumber: err }));
+//     return;
+//   }
+// 
+//   setIsLoading(true);
+// 
+//   try{
+//      const response = await searchUserVehicle(formData.vehicleNumber);
+// 
+//      setIsLoading(false);
+// 
+//      const data = response?.data || response;
+// 
+//      if (!data.found) {
+//       setShowModel(true);
+//       return;
+//     }
+// 
+//     if (data.alreadyRegisteredByOtherUser) {
+//       setErrors((prev) => ({
+//         ...prev,
+//         vehicleNumber: "This vehicle is already registered by another user.",
+//       }));
+//       return;
+//     }
+// 
+//     if (data.hasAMC) {
+//       setErrors((prev) => ({
+//         ...prev,
+//         vehicleNumber: `This vehicle already has an active AMC plan (${data?.amcDetails?.planName || " "})`,
+//       }));
+//       return;
+//     }
+// 
+//     if (data.vehicle) {
+//       setVehicleData({
+//         vehicleNumber: data.vehicle.vehicleNumber,
+//         brand: data.vehicle.brand,
+//         model: data.vehicle.model,
+//         vehicleType: data.vehicle.vehicleType || DEFAULT_VEHICLE_TYPE,
+//         id: data.vehicle._id || data.vehicle.id 
+//       });
+//       setShowSelectVehicle(true);
+//     }
+//   }catch(error){
+//     setIsLoading(false);
+//     const message = error?.response?.data?.message || error?.message || "Error Searching Message";
+//     setErrors((prev) => ({ ...prev, vehicleNumber: message })); 
+//   }
+// }
 
 const handleAddVehicle = async () => {
   const e = {
