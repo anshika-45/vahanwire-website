@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import { Edit } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { verifyOtp, sendOtp } from "../api/authApi";
-import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
+ // import { getUserVehicleWithoutAMC } from "../api/vehicleApi";
 import { useNavigate } from "react-router-dom";
 import { S3_IMAGES } from "../constants/images";
 const EnterVehicleNumber = React.lazy(() => import("./EnterVehicleNumber"));
@@ -100,18 +100,19 @@ try {
     if (isFromLogin) {
         onClose();
     } else {
-      try {
-        const vehicles = await getUserVehicleWithoutAMC();
-        setUserVehicles(vehicles);
-
-        if (vehicles && vehicles.length > 0) {
-          setShowSelectVehicle(true);
-        } else {
-          setShowVehiclePopup(true);
-        }
-        } catch (vehicleError) {
-          setShowVehiclePopup(true);
-        }
+      // TODO: AMC - getUserVehicleWithoutAMC commented for deployment
+      // try {
+      //   const vehicles = await getUserVehicleWithoutAMC();
+      //   setUserVehicles(vehicles);
+      //   if (vehicles && vehicles.length > 0) {
+      //     setShowSelectVehicle(true);
+      //   } else {
+      //     setShowVehiclePopup(true);
+      //   }
+      // } catch (vehicleError) {
+      //   setShowVehiclePopup(true);
+      // }
+      setShowVehiclePopup(true);
         }
       } else {
         setError(response?.message || "Invalid OTP. Try again.");

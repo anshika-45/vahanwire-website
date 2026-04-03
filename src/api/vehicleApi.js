@@ -30,18 +30,18 @@ export const searchUserVehicle = async (vehicleNumber) => {
   return response.data;
 };
 
+// TODO: AMC-related vehicle APIs commented out for deployment safety - uncomment when backend ready
+/*
 export const getUserVehicleWithoutAMC = async () => {
   const response = await axiosInstance.get("/vehicle/without-amc");
   return response.data?.data?.vehicles || [];
 };
 
 export const updateAMCPurchaseVehicle = async (purchaseId, vehicleData) => {
-
   const response = await axiosInstance.post("/amc-purchase/update-amc-vehicle", {
     purchaseId,
     ...vehicleData
   });
-
   return response.data;
 };
 
@@ -59,3 +59,4 @@ export const getUserVehiclesAMC = async () => {
   const response = await axiosInstance.get("/vehicle/user-vehicles-amc");
   return response.data?.data?.vehicles || [];
 };
+*/

@@ -1,5 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
+// TODO: AMC APIs commented out for deployment safety - uncomment when backend ready
+/*
 export const getAMCPlansByCategory = async (vehicleType, category, cityName='Noida') => {
   const params = cityName ? { cityName } : {};
   const response = await axiosInstance.get(`/amc-plans/${vehicleType}/${category}`,{params});
@@ -20,4 +22,5 @@ export const createAMCPurchase = async (purchaseData) => {
   const response = await axiosInstance.post("/amc-purchase/create-amc-purchase",purchaseData);
   return response.data;
 };
+*/
 

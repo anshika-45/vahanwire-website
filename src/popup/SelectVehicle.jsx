@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAmcData } from "../context/AmcDataContext";
+ // import { useAmcData } from "../context/AmcDataContext";
 import { useCity } from "../context/CityContext";
 import Button from "../components/Button";
 import Modal from "../components/Modal";

@@ -13,9 +13,9 @@ import "./api/axiosInstance.js";
 
 
 const Homepage = React.lazy(() => import("./pages/Homepage"));
-const VehicleAmc = React.lazy(() => import("./pages/VehicleAmc"));
+// const VehicleAmc = React.lazy(() => import("./pages/VehicleAmc"));
 const MyAccount = React.lazy(() => import("./pages/MyAccount"));
-const VehicleAmcFilter = React.lazy(() => import("./pages/VehicleAmcFilter"));
+// const VehicleAmcFilter = React.lazy(() => import("./pages/VehicleAmcFilter"));
 const AboutUs = React.lazy(() => import("./pages/AboutUs"));
 const ContactUs = React.lazy(() => import("./pages/ContactUs"));
 const TermsCondition = React.lazy(() => import("./pages/TermsCondition"));
