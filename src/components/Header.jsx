@@ -5,7 +5,7 @@ const LocationDropdown = lazy(() => import("./LocationDropdown"));
 const SearchBar = lazy(() => import("./Searchbar"));
 const Button = lazy(() => import("./Button"));
 const Logo = lazy(() => import("./Logo"));
-const VerifyNumberPopup = lazy(() => import("../popup/VerifyNumberPopup"));
+// const VerifyNumberPopup = lazy(() => import("../popup/VerifyNumberPopup"));
 const AccountSidebar = lazy(() => import("./AccountSidebar"));
 import { ChevronRight, User } from "lucide-react";
 import dropdownIcon from "../assets/down-arrow.svg";
@@ -18,7 +18,7 @@ const Header = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [isVerifyOpen, setIsVerifyOpen] = useState(false);
+  // const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -243,14 +243,14 @@ const Header = () => {
           </div>
         )}
       </div>
-      <Suspense fallback={<LazyFallback />}>
+      {/* <Suspense fallback={<LazyFallback />}>
         <VerifyNumberPopup
           isOpen={isVerifyOpen}
           onClose={() => setIsVerifyOpen(false)}
           onBack={() => setIsVerifyOpen(true)}
           isFromLogin={true}
         />
-      </Suspense>
+      </Suspense> */}
       {/* <div className="fixed top-0 right-0 pointer-events-none z-[-1] w-45 h-45">
         <Lottie
           animationData={christmasWind}
