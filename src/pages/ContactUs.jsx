@@ -121,14 +121,14 @@ const ContactUs = () => {
                 <div className="bg-[#FBBA01] rounded-full p-2">
                   <MailOpen size={16} className="text-black" />
                 </div>
-                <span>Info@Vahanwire.com</span>
+                <span>info@vahanwire.com</span>
               </div>
 
               <div className="flex items-center gap-2">
                 <div className="bg-[#FBBA01] rounded-full p-2">
                   <MailOpen size={16} className="text-black" />
                 </div>
-                <span>Amc@Vahanwire.com</span>
+                <span>support@vahanwire.com</span>
               </div>
 
               <div className="flex items-center gap-2">
