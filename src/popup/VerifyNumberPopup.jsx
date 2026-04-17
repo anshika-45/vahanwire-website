@@ -1,119 +1,119 @@
-import React, { useState, useEffect } from "react";
-import Button from "../components/Button";
-import OtpVerifypopup from "./OtpVerifypopup";
-import Modal from "../components/Modal";
-import { sendOtp } from "../api/authApi";
-import { S3_IMAGES } from "../constants/images";
+// import React, { useState, useEffect } from "react";
+// import Button from "../components/Button";
+// import OtpVerifypopup from "./OtpVerifypopup";
+// import Modal from "../components/Modal";
+// import { sendOtp } from "../api/authApi";
+// import { S3_IMAGES } from "../constants/images";
 
-const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false, seletedPlan }) => {
-  const [number, setNumber] = useState("");
-  const [error, setError] = useState("");
-  const [showError, setShowError] = useState(false);
-  const [showOtp, setShowOtp] = useState(false);
-  const [loading, setLoading] = useState(false);
+// const VerifyNumberPopup = ({ isOpen, onClose, isFromLogin = false, seletedPlan }) => {
+//   const [number, setNumber] = useState("");
+//   const [error, setError] = useState("");
+//   const [showError, setShowError] = useState(false);
+//   const [showOtp, setShowOtp] = useState(false);
+//   const [loading, setLoading] = useState(false);
 
-useEffect(() => {
-  if (!isOpen) {
-    setNumber("");
-    setError("");
-    setShowError(false);
-  }
-}, [isOpen]);
+// useEffect(() => {
+//   if (!isOpen) {
+//     setNumber("");
+//     setError("");
+//     setShowError(false);
+//   }
+// }, [isOpen]);
 
-if (!isOpen && !showOtp) return null;
+// if (!isOpen && !showOtp) return null;
 
-const validatePhone = (num) => /^[6-9]\d{9}$/.test(num);
+// const validatePhone = (num) => /^[6-9]\d{9}$/.test(num);
 
-const handleVerify = async () => {
-  setShowError(true);
-  if (!validatePhone(number)) {
-    return setError("Please enter a valid 10-digit phone number.");
-  }
-  try {
-    setLoading(true);
-    setError("");
+// const handleVerify = async () => {
+//   setShowError(true);
+//   if (!validatePhone(number)) {
+//     return setError("Please enter a valid 10-digit phone number.");
+//   }
+//   try {
+//     setLoading(true);
+//     setError("");
 
-    const response = await sendOtp(number);
+//     const response = await sendOtp(number);
 
-    if (response?.success && response?.message === "OTP sent successfully") {
-      setShowOtp(true);
-    } else {
-      throw new Error(response?.message || "Failed to send OTP. Try again.");
-      }
-    } catch (err) {
-      console.error("OTP Error:", err);
-      setError(err.message || "Something went wrong while sending OTP.");
-    } finally {
-      setLoading(false);
-    }
-};
+//     if (response?.success && response?.message === "OTP sent successfully") {
+//       setShowOtp(true);
+//     } else {
+//       throw new Error(response?.message || "Failed to send OTP. Try again.");
+//       }
+//     } catch (err) {
+//       console.error("OTP Error:", err);
+//       setError(err.message || "Something went wrong while sending OTP.");
+//     } finally {
+//       setLoading(false);
+//     }
+// };
 
-const handleOtpBack = () => {
-  setShowOtp(false);
-  onClose()
-}
-return (
-    <>
-    {!showOtp && (
-      <Modal isOpen={isOpen} onBack={handleOtpBack} onClose={onClose}  hideBackButton={true} >
-        <div className="bg-white rounded-xl p-8 sm:p-8 md:p-10 flex flex-col items-center m-4 my-10">
-          <div className="flex justify-center mb-5 sm:mb-7">
-            <img
-              src={S3_IMAGES.PHONE_GIF}
-              alt="Phone Animation"
-              className="w-40 h-40  md:w-60 md:h-60"
-              width={240}
-              height={240}
-              decoding="async"
-            />
-          </div>
-            <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#242424] text-center mb-3 sm:mb-4">
-              Verify Your Number
-            </h1>
-            <label htmlFor="phone" className="w-full text-base text-[#5C5C5C] mb-2">
-              Phone Number*
-            </label>
-            <input id="phone" type="tel" placeholder="Phone Number" value={number}
-                onChange={(e) => {
-                setNumber(e.target.value.replace(/[^0-9]/g, ""));
-                if (showError) setShowError(false);
-              }}
-              maxLength={10}
-              className="w-full border border-[#BCD2F5] rounded-lg px-3 py-2 sm:py-3 mb-2 focus:outline-none focus:ring-1 focus:ring-[#BCD2F5] 
-              text-left text-sm bg-[#F8F8F8] text-[#5C5C5C] "/>
+// const handleOtpBack = () => {
+//   setShowOtp(false);
+//   onClose()
+// }
+// return (
+//     <>
+//     {!showOtp && (
+//       <Modal isOpen={isOpen} onBack={handleOtpBack} onClose={onClose}  hideBackButton={true} >
+//         <div className="bg-white rounded-xl p-8 sm:p-8 md:p-10 flex flex-col items-center m-4 my-10">
+//           <div className="flex justify-center mb-5 sm:mb-7">
+//             <img
+//               src={S3_IMAGES.PHONE_GIF}
+//               alt="Phone Animation"
+//               className="w-40 h-40  md:w-60 md:h-60"
+//               width={240}
+//               height={240}
+//               decoding="async"
+//             />
+//           </div>
+//             <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-[#242424] text-center mb-3 sm:mb-4">
+//               Verify Your Number
+//             </h1>
+//             <label htmlFor="phone" className="w-full text-base text-[#5C5C5C] mb-2">
+//               Phone Number*
+//             </label>
+//             <input id="phone" type="tel" placeholder="Phone Number" value={number}
+//                 onChange={(e) => {
+//                 setNumber(e.target.value.replace(/[^0-9]/g, ""));
+//                 if (showError) setShowError(false);
+//               }}
+//               maxLength={10}
+//               className="w-full border border-[#BCD2F5] rounded-lg px-3 py-2 sm:py-3 mb-2 focus:outline-none focus:ring-1 focus:ring-[#BCD2F5] 
+//               text-left text-sm bg-[#F8F8F8] text-[#5C5C5C] "/>
 
-            {showError && error && (
-              <div className="text-[#CB0200] text-left text-xs mb-2">
-                {error}
-              </div>
-            )}
+//             {showError && error && (
+//               <div className="text-[#CB0200] text-left text-xs mb-2">
+//                 {error}
+//               </div>
+//             )}
 
-            <Button
-              text={loading ? "Sending..." : "Verify"}
-              disabled={loading}
-              className=" w-full bg-[#266DDF] text-white font-semibold py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition-colors mt-2 disabled:opacity-60"
-              onClick={handleVerify}
-            />
-          </div>
-        </Modal>
-      )}
+//             <Button
+//               text={loading ? "Sending..." : "Verify"}
+//               disabled={loading}
+//               className=" w-full bg-[#266DDF] text-white font-semibold py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition-colors mt-2 disabled:opacity-60"
+//               onClick={handleVerify}
+//             />
+//           </div>
+//         </Modal>
+//       )}
 
-      {showOtp && (
-        <OtpVerifypopup
-          isOpen={showOtp}
-          onClose={() => {
-            setShowOtp(false);
-            onClose();
-          }}
-          onBack={()=>setShowOtp(false)}
-          phoneNumber={number}
-          isFromLogin={isFromLogin}
-          seletedPlan={seletedPlan}
-        />
-      )}
+//       {showOtp && (
+//         <OtpVerifypopup
+//           isOpen={showOtp}
+//           onClose={() => {
+//             setShowOtp(false);
+//             onClose();
+//           }}
+//           onBack={()=>setShowOtp(false)}
+//           phoneNumber={number}
+//           isFromLogin={isFromLogin}
+//           seletedPlan={seletedPlan}
+//         />
+//       )}
       
-    </>
-  );
-};
+//     </>
+//   );
+// };
 
-export default VerifyNumberPopup;
+// export default VerifyNumberPopup;
