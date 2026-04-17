@@ -18,7 +18,7 @@ function SearchBar({ placeholder = "Search..." }) {
     "Petrol Pump": "/petrol-pump",
     "Tow Truck": "/tow-truck",
     "Service Center": "/service-center",
-    "My Profile": "/my-account?view=profile",
+    // "My Profile": "/my-account?view=profile",
     // "My Vehicles": "/my-account?view=vehicles",
     "Contact Us": "/contact-us",
   };
