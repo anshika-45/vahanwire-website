@@ -61,20 +61,20 @@ const PrivacyPolicy = () => {
     {
       title: "Contact For Refund Requests",
       content: [
-        "To initiate a refund request, please contact our support team at: Email: amc@vahanwire.com",
+        "To initiate a refund request, please contact our support team at: Email: support@vahanwire.com",
         "In the case of a refund request after buying AMC, after careful scrutiny, Vahanwire will be liable to pay to the customer after deducting all applicable charges.",
         "Additional Services: Vahanwire may provide information about extra services available at listed petrol pumps, at its discretion.",
         "Defective Services: Vahanwire is not responsible for any issues or faulty services provided by petrol pump staff.",
       ],
     },
-    {
-      title: "AMC (Annual Maintenance Contract) Plan Privacy",
-      content: [
-        "Data Collection: When subscribing to an AMC plan, you must submit vehicle, contact, and payment information. This data is stored securely and used solely to fulfill contract obligations.",
-        "Use of Data: Your data will be used to track service history, schedule maintenance, provide reminders, and generate relevant offers. No data will be sold or misused.",
-        "Third-party Disclosure: Information may be shared with authorized service centers strictly for the execution of AMC services. All partners are contractually obligated to comply with data protection standards.",
-      ],
-    },
+    // {
+    //   title: "AMC (Annual Maintenance Contract) Plan Privacy",
+    //   content: [
+    //     "Data Collection: When subscribing to an AMC plan, you must submit vehicle, contact, and payment information. This data is stored securely and used solely to fulfill contract obligations.",
+    //     "Use of Data: Your data will be used to track service history, schedule maintenance, provide reminders, and generate relevant offers. No data will be sold or misused.",
+    //     "Third-party Disclosure: Information may be shared with authorized service centers strictly for the execution of AMC services. All partners are contractually obligated to comply with data protection standards.",
+    //   ],
+    // },
     {
       title: "Location Information",
       content: [
