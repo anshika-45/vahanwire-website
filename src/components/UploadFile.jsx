@@ -29,6 +29,7 @@ const SingleImageUpload = () => {
       alert('Image uploaded successfully');
     } catch (error) {
       alert('Upload failed');
+      console.log("Upload error:", error);
     } finally {
       setLoading(false);
     }

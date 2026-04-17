@@ -102,9 +102,9 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const handleLogin = () => {
-    setIsVerifyOpen(true);
-  };
+  // const handleLogin = () => {
+  //   setIsVerifyOpen(true);
+  // };
   const handleClick = () => {
     setOpen(!open);
     setQuery("");
@@ -142,10 +142,10 @@ const Header = () => {
             {!isLoggedIn && (
               <div className="md:w-auto w-[80px]">
                 <Suspense fallback={<LazyFallback />}>
-                  <Button
+                  {/* <Button
                     className="w-full text-white py-1 text-sm sm:text-base"
                     onClick={handleLogin}
-                  />
+                  /> */}
                 </Suspense>
               </div>
             )}
